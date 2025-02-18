@@ -1,5 +1,5 @@
 package learning;
-import javax.swing.JFrame; //gọi container JFrame từ thư viện swing
+import javax.swing.JFrame; //gọi class JFrame từ thư viện swing
 import javax.swing.ImageIcon; //gọi class ImageIcon từ thư viện swing
 import java.awt.Color; //gọi class color từ thư viện awt
 
@@ -14,6 +14,6 @@ public class Jframe extends JFrame {
     
         ImageIcon icon = new ImageIcon("D:/IT/GitHub Projects/ThienTam/logo.png"); //tạo icon
         this.setIconImage(icon.getImage()); //thiết lập icon cho cửa sổ
-        this.getContentPane().setBackground(new Color(0,0,0)); //thiết lập màu nền cho cửa sổ
+        this.getContentPane().setBackground(new Color(255,255,255)); //thiết lập màu nền cho cửa sổ
     }
 }
