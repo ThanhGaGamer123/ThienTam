@@ -1,6 +1,5 @@
 package learning;
 
-import java.awt.*;
 import javax.swing.*;
 
 public class Joptionpane {
