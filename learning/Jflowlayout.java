@@ -9,7 +9,7 @@ public class Jflowlayout {
         frame.setSize(600, 600);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new FlowLayout());
+        frame.setLayout(new FlowLayout(FlowLayout.LEADING,20,20));
 
         JPanel pnl1 = new JPanel();
         pnl1.setBackground(Color.gray);
