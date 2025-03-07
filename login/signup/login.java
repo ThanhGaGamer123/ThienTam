@@ -1,11 +1,15 @@
+package login.signup;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import employee.employee;
+import employee.employeeArr;
+
 public class login extends JFrame {
-    login() {
+    public login() {
         this.setSize(1280, 720);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -44,7 +48,7 @@ public class login extends JFrame {
         user_field.setBounds(170, 172, 230, 30);
         user_field.setForeground(Color.BLACK);
 
-        JTextField pass_field = new JTextField();
+        JPasswordField pass_field = new JPasswordField();
         pass_field.setFont(new Font(null, Font.PLAIN, 20));
         pass_field.setBounds(170, 232, 230, 30);
         pass_field.setForeground(Color.BLACK);
@@ -57,11 +61,24 @@ public class login extends JFrame {
         login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,
-                 user_field.getText() + " " + pass_field.getText(),
-                  "Thông báo",
-                   JOptionPane.INFORMATION_MESSAGE);
-
+                String username = user_field.getText();
+                String password = String.valueOf(pass_field.getPassword());
+                employeeArr employ = new employeeArr();
+                employ.readFile();
+                Boolean flag = false;
+                for(employee nv : employ.getArr()) {
+                    if(username.equals(nv.getUsername()) && password.equals(nv.getPassword())) {
+                        flag = true;
+                        JOptionPane.showMessageDialog(null, 
+                        "Đăng nhập thành công!");
+                    }
+                }
+                if(!flag) {
+                    JOptionPane.showMessageDialog(null, 
+                    "Tài khoản hoặc mật khẩu không chính xác. Vui lòng nhập lại!");
+                    user_field.requestFocus(true);
+                }
+                pass_field.setText("");
             }
         });
 

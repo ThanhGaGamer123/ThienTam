@@ -1,3 +1,4 @@
+package login.signup;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -5,7 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class signup extends JFrame {
-    signup() {
+    public signup() {
         this.setSize(1280, 720);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
