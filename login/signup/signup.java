@@ -12,7 +12,7 @@ public class signup extends JFrame {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
         this.setTitle("Đăng Ký");
-        ImageIcon logo = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\logo.png");
+        ImageIcon logo = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\logo.png");
         this.setIconImage(logo.getImage());
         this.getContentPane().setBackground(Color.LIGHT_GRAY);
 
