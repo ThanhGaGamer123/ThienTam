@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import employee.employGUI;
 import employee.employee;
 import employee.employeeArr;
 
@@ -71,6 +72,8 @@ public class login extends JFrame {
                         flag = true;
                         JOptionPane.showMessageDialog(null, 
                         "Đăng nhập thành công!");
+                        new employGUI(nv);
+                        dispose();
                     }
                 }
                 if(!flag) {
