@@ -10,11 +10,12 @@ public class signup extends JFrame {
         this.setSize(1280, 720);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setResizable(false);
         
         this.setTitle("Đăng Ký");
         ImageIcon logo = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\logo.png");
         this.setIconImage(logo.getImage());
-        this.getContentPane().setBackground(Color.LIGHT_GRAY);
+        this.getContentPane().setBackground(new Color(0,153,102));
 
         this.setLayout(null);
         JPanel form = new JPanel();

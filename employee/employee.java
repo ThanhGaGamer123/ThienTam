@@ -5,7 +5,7 @@ public class employee {
     private String tennv;
     private String chucvu;
 
-    private int sdt;
+    private String sdt;
     private String masonha;
     private String duong;
     private String phuong;
@@ -18,7 +18,7 @@ public class employee {
 
     public employee() {}
 
-    public employee(String manv, String tennv, String chucvu, int sdt, String masonha, 
+    public employee(String manv, String tennv, String chucvu, String sdt, String masonha, 
     String duong, String phuong, String quan, String tinh, String username, String password,
     String manhathuoc) {
         this.manv = manv;
@@ -61,11 +61,11 @@ public class employee {
         this.chucvu = chucvu;
     }
 
-    public int getSdt() {
+    public String getSdt() {
         return sdt;
     }
 
-    public void setSdt(int sdt) {
+    public void setSdt(String sdt) {
         this.sdt = sdt;
     }
 
