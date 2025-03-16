@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 
 public class storeGUI extends JFrame {
     public storeGUI(store nt) {
-        this.setSize(700, 580);
+        this.setSize(1000, 580);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setResizable(false);
@@ -21,7 +21,7 @@ public class storeGUI extends JFrame {
         JLabel title = new JLabel("Thông tin cửa hàng");
         title.setForeground(Color.BLACK);
         title.setFont(new Font(null, Font.BOLD, 30));
-        title.setBounds(200, 80, 300, 50);
+        title.setBounds(340, 80, 300, 50);
         this.add(title);
 
         JLabel mant = new JLabel("Mã nhà thuốc: ");
@@ -39,14 +39,19 @@ public class storeGUI extends JFrame {
         JLabel manql = new JLabel("Mã quản lý: ");
         manql.setForeground(Color.BLACK);
         manql.setFont(new Font(null, Font.PLAIN, 20));
-        manql.setBounds(100, 300, 500, 20);
+        manql.setBounds(100, 300, 500, 25);
         this.add(manql);
 
         JButton thoat = new JButton("Thoát");
         thoat.setForeground(Color.BLACK);
         thoat.setFont(new Font(null, Font.BOLD, 20));
-        thoat.setBounds(280, 400, 120, 40);
+        thoat.setBounds(420, 400, 120, 40);
         this.add(thoat);
+
+        JLabel background = new JLabel();
+        background.setIcon(new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\backgrounds.jpg"));
+        background.setBounds(0,0, 1000, 700);
+        this.add(background);
 
         this.setVisible(true);
 
