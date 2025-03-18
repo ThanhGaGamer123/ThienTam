@@ -58,8 +58,17 @@ public class login extends JFrame {
         JButton login = new JButton();
         login.setText("Đăng Nhập");
         login.setFont(new Font(null, Font.PLAIN, 18));
-        login.setBounds(170, 300, 150, 30);
+        login.setBounds(170, 300, 150, 50);
         login.setForeground(Color.BLACK);
+        login.setBackground(new Color(76, 175, 80));
+        login.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                login.setBackground(new Color(100, 221, 23)); // Màu khi di chuột vào
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                login.setBackground(new Color(76, 175, 80)); // Màu trở lại
+            }
+        });
         login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

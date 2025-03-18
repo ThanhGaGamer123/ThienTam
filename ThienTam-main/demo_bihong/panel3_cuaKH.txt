@@ -1,0 +1,95 @@
+    public void createPanel_3() {
+        p3 = new JPanel();
+        p3.setBounds(0, 180, 1280, 40);
+        p3.setBackground(new Color(255, 215, 215));
+        p3.setLayout(null);
+
+        int buttonWidth = 150;
+        int buttonHeight = 30;
+        int gap = 88;
+        int yPosition = (40 - buttonHeight) / 2;
+
+        omega = new JButton("omega");
+        omega.setBounds(gap, yPosition, buttonWidth, buttonHeight);
+        p3.add(omega);
+
+        canxi = new JButton("canxi");
+        canxi.setBounds(gap * 2 + buttonWidth, yPosition, buttonWidth, buttonHeight);
+        p3.add(canxi);
+
+        tnm = new JButton("tnm");
+        tnm.setBounds(gap * 3 + buttonWidth * 2, yPosition, buttonWidth, buttonHeight);
+        p3.add(tnm);
+
+        ddvs = new JButton("ddvs");
+        ddvs.setBounds(gap * 4 + buttonWidth * 3, yPosition, buttonWidth, buttonHeight);
+        p3.add(ddvs);
+
+        siro = new JButton("siro");
+        siro.setBounds(gap * 5 + buttonWidth * 4, yPosition, buttonWidth, buttonHeight);
+        p3.add(siro);
+
+        // Thiết lập màu mặc định và thêm sự kiện
+        JButton[] topic_btn = { omega, canxi, tnm, ddvs, siro };
+        for (JButton btn : topic_btn) {
+            btn.setBackground(new Color(255, 215, 215));
+            btn.setBorder(null);
+            btn.addMouseListener(this);
+            btn.addActionListener(e -> create_topicPanel(btn.getText()));
+
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+// ham chay
+
+    public void create_topicPanel(String topic) {
+        JPanel topicPanel = new JPanel();
+        topicPanel.setLayout(null);
+        topicPanel.setBackground(Color.LIGHT_GRAY);
+
+        JLabel topicLabel = new JLabel(topic.toUpperCase(), SwingConstants.CENTER);
+        topicLabel.setFont(new Font("Times New Roman", Font.BOLD, 24));
+        topicLabel.setBounds(400, 50, 500, 40);
+        topicPanel.add(topicLabel);
+
+        // Nội dung giả định cho từng loại sản phẩm
+        switch (topic.toLowerCase()) {
+            case "omega":
+
+                break;
+            case "canxi":
+
+                break;
+            case "tnm":
+
+                break;
+            case "ddvs":
+
+                break;
+            case "siro":
+
+                break;
+            default:
+
+                break;
+        }
+
+        JButton backButton = new JButton("Quay Lại");
+        backButton.setBounds(550, 650, 150, 40);
+        backButton.addActionListener(e -> switchToMainPanel());
+        topicPanel.add(backButton);
+
+        setContentPane(topicPanel);
+        revalidate();
+        repaint();
+    }
