@@ -10,13 +10,15 @@ public class customer {
     private String quankh;
     private String tinhkh;
     private int diemkm;
+
+    private String userkh;
     private String password;
 
     public customer() {
     }
 
     public customer(String makh, String tenkh, int sdtkh, String email, String soNhakhach, String phuongkh,
-            String quankh, String tinhkh, int diemkm, String password) {
+            String quankh, String tinhkh, int diemkm, String userkh, String password) {
         this.makh = makh;
         this.tenkh = tenkh;
         this.sdtkh = sdtkh;
@@ -26,6 +28,7 @@ public class customer {
         this.quankh = quankh;
         this.tinhkh = tinhkh;
         this.diemkm = diemkm;
+        this.userkh = userkh;
         this.password = password;
     }
 
@@ -99,6 +102,14 @@ public class customer {
 
     public void setDiemkm(int diemkm) {
         this.diemkm = diemkm;
+    }
+
+    public String getUserkh() {
+        return userkh;
+    }
+
+    public void setUserkh(String userkh) {
+        this.userkh = userkh;
     }
 
     public String getPassword() {

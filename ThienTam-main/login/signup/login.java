@@ -1,13 +1,16 @@
 package login.signup;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.*;
-
+//them vào
+import customer.customer;
+import customer.customerArr;
+import customer.customerGUI;
 import employee.employGUI;
 import employee.employee;
 import employee.employeeArr;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class login extends JFrame {
     public login() {
@@ -15,18 +18,18 @@ public class login extends JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setResizable(false);
-        
+
         this.setTitle("Đăng Nhập");
         ImageIcon logo = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\logo.png");
         this.setIconImage(logo.getImage());
-        this.getContentPane().setBackground(new Color(0,153,102));
+        this.getContentPane().setBackground(new Color(0, 153, 102));
 
         this.setLayout(null);
         JPanel form = new JPanel();
         form.setBackground(Color.white);
         form.setBounds(370, 85, 500, 500);
         form.setLayout(null);
-        
+
         JLabel title = new JLabel();
         title.setText("ĐĂNG NHẬP");
         title.setFont(new Font(null, Font.BOLD, 30));
@@ -65,10 +68,12 @@ public class login extends JFrame {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 login.setBackground(new Color(100, 221, 23)); // Màu khi di chuột vào
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 login.setBackground(new Color(76, 175, 80)); // Màu trở lại
             }
         });
+
         login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,23 +82,61 @@ public class login extends JFrame {
                 employeeArr employ = new employeeArr();
                 employ.readFile();
                 Boolean flag = false;
-                for(employee nv : employ.getArr()) {
-                    if(username.equals(nv.getUsername()) && password.equals(nv.getPassword())) {
+                System.out.println("Username nhập: " + username);
+                System.out.println("Password nhập: " + password);
+                for (employee nv : employ.getArr()) {
+                    if (username.equals(nv.getUsername()) &&
+                            password.equals(nv.getPassword())) {
                         flag = true;
-                        JOptionPane.showMessageDialog(null, 
-                        "Đăng nhập thành công!");
+                        JOptionPane.showMessageDialog(null,
+                                "Đăng nhập thành công!");
                         new employGUI(nv);
                         dispose();
                     }
                 }
-                if(!flag) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Tài khoản hoặc mật khẩu không chính xác. Vui lòng nhập lại!");
+
+                // start fix
+                customerArr khach = new customerArr();
+                khach.readFile();
+                // System.out.println("Danh sách khách hàng: " + employ.getArr().size());
+
+                khach.printCustomers();
+
+                for (customer kh : khach.getA()) {
+                    if (username.equals(kh.getUserkh()) && password.equals(kh.getPassword())) {
+                        flag = true;
+                        JOptionPane.showMessageDialog(null,
+                                "Đăng nhập thành công với tư cách khách hàng!");
+                        new customerGUI(kh);
+                        dispose();
+
+                    }
+                }
+                // end
+
+                if (!flag) {
+                    JOptionPane.showMessageDialog(null,
+                            "Tài khoản hoặc mật khẩu không chính xác. Vui lòng nhập lại!");
                     user_field.requestFocus(true);
                 }
                 pass_field.setText("");
             }
         });
+
+        /*
+         * // Kiểm tra đăng nhập cho khách hàng
+         * for (customer kh : customer.getA()) {
+         * if (username.equals(kh.getUserkh()) && password.equals(kh.getPassword())) {
+         * isAuthenticated = true;
+         * JOptionPane.showMessageDialog(null,
+         * "Đăng nhập thành công với tư cách khách hàng!");
+         * new customerGUI(kh);
+         * dispose();
+         * return; // Thoát khi đã đăng nhập thành công
+         * }
+         * }
+         */
+        // Nếu không tìm thấy tài khoản
 
         JButton signup = new JButton();
         signup.setText("Chưa có tài khoản? Đăng ký ngay!");
@@ -105,12 +148,12 @@ public class login extends JFrame {
         signup.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //lien ket toi sign up page
+                // lien ket toi sign up page
                 new signup();
                 dispose();
             }
         });
-        
+
         form.add(title);
         form.add(username);
         form.add(password);

@@ -7,27 +7,29 @@ import login.signup.login;
 
 public class customerGUI extends JFrame implements MouseListener, ActionListener {
 
-    JLabel title, hotline, sdt, price, price_in, vnd;
+    JLabel title, hotline, sdt, price, nameuser;
     JPanel p1, p2, p0, p3, cartPanel;
-    JTextField timkiem, min_price, max_price;
+    JTextField timkiem;
     JScrollPane scr;
     JButton search, cart, logout;
-    JComboBox cb1, cb2, cb3;
+    JComboBox cb1, cb2, cb3, cb4;
 
     private static final Color xanhla = new Color(76, 181, 81);
     private static final Color xanhla_btn = new Color(48, 156, 62);
     private static final Color xanhbien = new Color(27, 101, 197);
     private static final Color vang = new Color(252, 212, 59);
     private static final Color hong = new Color(234, 185, 170);
+    private customer khachhang;
 
-    public customerGUI() {
+    public customerGUI(customer kh) {
+        this.khachhang = kh;
         create();
     }
 
     public void create() {
         setTitle("Customer");
         setSize(1280, 720);
-        setResizable(true);
+        setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -68,6 +70,17 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         title.setBounds(380, 30, 500, 40);
         p1.add(title);
 
+        customerArr khach = new customerArr();
+        khach.readFile();
+        nameuser = new JLabel();
+
+        nameuser = new JLabel("Xin chào, " + khachhang.getUserkh());
+        nameuser.setForeground(Color.WHITE);
+        nameuser.setFont(new Font("Arial", Font.BOLD, 18));
+        nameuser.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        nameuser.setBounds(840, 15, 350, 48);
+        p1.add(nameuser);
+
         ImageIcon icon_logout = new ImageIcon(
                 "D:\\ThienTam-main\\ThienTam-main\\customer\\img_xt\\icons8-log-out-48.png");
 
@@ -100,7 +113,6 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
 
     }
 
-    // panel2 => height 80
     public void createPanel_2() {
         p2 = new JPanel();
         p2.setBounds(0, 100, 1280, 80);
@@ -114,6 +126,23 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         timkiem.addMouseListener(this);
 
         p2.add(timkiem);
+
+        timkiem.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (timkiem.getText().equals("Nhập tên sản phẩm thuốc ...")) {
+                    timkiem.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (timkiem.getText().isEmpty()) {
+                    timkiem.setText("Nhập tên sản phẩm thuốc ...");
+                }
+            }
+
+        });
 
         search = new JButton("TÌM KIẾM");
         search.setBounds(750, 20, 100, 40);
@@ -170,44 +199,24 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         cb2.setBounds(x_cbb * 2 + cbb_weight, y_cbb, cbb_weight, cbb_height);
         p3.add(cb2);
 
-        String[] cb3_item = { "         Xuất sứ thương hiệu", "Anh", "Pháp", "Pháp", "Mỹ", "Úc", "Việt Nam",
+        String[] cb3_item = { "         Xuất sứ thương hiệu", "Anh", "Pháp", "Mỹ", "Úc", "Việt Nam",
                 "Hà Lan" };
         cb3 = new JComboBox<>(cb3_item);
         cb3.setBounds(x_cbb * 3 + 2 * cbb_weight, y_cbb, cbb_weight, cbb_height);
         p3.add(cb3);
 
         price = new JLabel();
-        price.setText("Giá từ: ");
+        price.setText("Lọc: ");
         price.setFont(new Font("Ariel", Font.BOLD, 18));
         price.setForeground(Color.WHITE);
         price.setBounds(x_cbb * 4 + 3 * cbb_weight - 5, y_cbb, 100, cbb_height);
         p3.add(price);
 
-        min_price = new JTextField();
-        min_price.setBounds(x_cbb * 5 + 3 * cbb_weight + 10, y_cbb, 120, cbb_height);
-        min_price.setFont(new java.awt.Font("Ariel", 1, 15));
-        min_price.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        p3.add(min_price);
-
-        price_in = new JLabel();
-        price_in.setText(" đến");
-        price_in.setFont(new Font("Ariel", Font.BOLD, 14));
-        price_in.setForeground(Color.WHITE);
-        price_in.setBounds(x_cbb * 5 + 3 * cbb_weight + 135, y_cbb, 50, cbb_height);
-        p3.add(price_in);
-
-        max_price = new JTextField();
-        max_price.setBounds(x_cbb * 5 + 3 * cbb_weight + 170, y_cbb, 120, cbb_height);
-        max_price.setFont(new java.awt.Font("Ariel", 1, 15));
-        max_price.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        p3.add(max_price);
-
-        vnd = new JLabel();
-        vnd.setText("VND");
-        vnd.setFont(new Font("Ariel", Font.BOLD, 16));
-        vnd.setForeground(Color.WHITE);
-        vnd.setBounds(x_cbb * 5 + 3 * cbb_weight + 295, y_cbb, 50, cbb_height);
-        p3.add(vnd);
+        String[] cb4_item = { "Giá từ thấp đến cao", "Giá từ cao đến thấp " };
+        cb4 = new JComboBox<>(cb4_item);
+        cb4.setBounds(x_cbb * 4 + 3 * cbb_weight + 50, y_cbb, cbb_weight,
+                cbb_height);
+        p3.add(cb4);
 
     }
 
@@ -272,9 +281,9 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getSource() == timkiem) {
-            timkiem.setText("");
-        }
+        // if (e.getSource() == timkiem) {
+        // timkiem.setText("");
+        // }
     }
 
     @Override
@@ -296,7 +305,4 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         }
     }
 
-    public static void main(String[] args) {
-        new customerGUI();
-    }
 }
