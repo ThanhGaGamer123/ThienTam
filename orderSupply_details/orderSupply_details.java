@@ -5,14 +5,14 @@ public class orderSupply_details {
     private String mahdnhap;
     private String mathuoc;
 
-    private int slnhap;
-    private int dongia;
+    private int[] slnhap;
+    private int[] dongia;
     private int thanhtien;
     
     public orderSupply_details() {
     }
 
-    public orderSupply_details(String macthdnhap, String mahdnhap, String mathuoc, int slnhap, int dongia,
+    public orderSupply_details(String macthdnhap, String mahdnhap, String mathuoc, int[] slnhap, int[] dongia,
             int thanhtien) {
         this.macthdnhap = macthdnhap;
         this.mahdnhap = mahdnhap;
@@ -46,19 +46,19 @@ public class orderSupply_details {
         this.mathuoc = mathuoc;
     }
 
-    public int getSlnhap() {
+    public int[] getSlnhap() {
         return slnhap;
     }
 
-    public void setSlnhap(int slnhap) {
+    public void setSlnhap(int[] slnhap) {
         this.slnhap = slnhap;
     }
 
-    public int getDongia() {
+    public int[] getDongia() {
         return dongia;
     }
 
-    public void setDongia(int dongia) {
+    public void setDongia(int[] dongia) {
         this.dongia = dongia;
     }
 

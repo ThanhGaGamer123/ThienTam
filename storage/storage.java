@@ -2,12 +2,12 @@ package storage;
 
 public class storage {
     private String maton;
-    private int slton;
+    private int[] slton;
     
     public storage() {
     }
 
-    public storage(String maton, int slton) {
+    public storage(String maton, int[] slton) {
         this.maton = maton;
         this.slton = slton;
     }
@@ -20,11 +20,11 @@ public class storage {
         this.maton = maton;
     }
 
-    public int getSlton() {
+    public int[] getSlton() {
         return slton;
     }
 
-    public void setSlton(int slton) {
+    public void setSlton(int[] slton) {
         this.slton = slton;
     }
 }

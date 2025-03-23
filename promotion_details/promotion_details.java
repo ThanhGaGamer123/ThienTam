@@ -5,20 +5,17 @@ public class promotion_details {
     private String madon;
     private String makm;
 
-    private String ngaybatdau;
-    private String ngayketthuc;
+    private String ngayapdung;
     private String noidung;
     
     public promotion_details() {
     }
 
-    public promotion_details(String mactkm, String madon, String makm, String ngaybatdau, String ngayketthuc,
-            String noidung) {
+    public promotion_details(String mactkm, String madon, String makm, String ngayapdung, String noidung) {
         this.mactkm = mactkm;
         this.madon = madon;
         this.makm = makm;
-        this.ngaybatdau = ngaybatdau;
-        this.ngayketthuc = ngayketthuc;
+        this.ngayapdung = ngayapdung;
         this.noidung = noidung;
     }
 
@@ -46,22 +43,13 @@ public class promotion_details {
         this.makm = makm;
     }
 
-    public String getNgaybatdau() {
-        return ngaybatdau;
+    public String getNgayapdung() {
+        return ngayapdung;
     }
 
-    public void setNgaybatdau(String ngaybatdau) {
-        this.ngaybatdau = ngaybatdau;
+    public void setNgayapdung(String ngayapdung) {
+        this.ngayapdung = ngayapdung;
     }
-
-    public String getNgayketthuc() {
-        return ngayketthuc;
-    }
-
-    public void setNgayketthuc(String ngayketthuc) {
-        this.ngayketthuc = ngayketthuc;
-    }
-
     public String getNoidung() {
         return noidung;
     }

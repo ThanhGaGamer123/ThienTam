@@ -5,22 +5,24 @@ public class medicine {
     private String maton;
     private String tenthuoc;
 
-    private String donvi;
-    private String thanhphan;
+    private String danhmuc;
+    private String[] donvi;
+    private String[] thanhphan;
     private String thongtin;
     private String xuatxu;
 
-    private String gianhap;
-    private String giaban;
+    private int[] gianhap;
+    private int[] giaban;
     
     public medicine() {
     }
 
-    public medicine(String mathuoc, String maton, String tenthuoc, String donvi, String thanhphan, String thongtin,
-            String xuatxu, String gianhap, String giaban) {
+    public medicine(String mathuoc, String maton, String tenthuoc, String danhmuc, String[] donvi, String[] thanhphan,
+            String thongtin, String xuatxu, int[] gianhap, int[] giaban) {
         this.mathuoc = mathuoc;
         this.maton = maton;
         this.tenthuoc = tenthuoc;
+        this.danhmuc = danhmuc;
         this.donvi = donvi;
         this.thanhphan = thanhphan;
         this.thongtin = thongtin;
@@ -53,19 +55,19 @@ public class medicine {
         this.tenthuoc = tenthuoc;
     }
 
-    public String getDonvi() {
+    public String[] getDonvi() {
         return donvi;
     }
 
-    public void setDonvi(String donvi) {
+    public void setDonvi(String[] donvi) {
         this.donvi = donvi;
     }
 
-    public String getThanhphan() {
+    public String[] getThanhphan() {
         return thanhphan;
     }
 
-    public void setThanhphan(String thanhphan) {
+    public void setThanhphan(String[] thanhphan) {
         this.thanhphan = thanhphan;
     }
 
@@ -85,19 +87,27 @@ public class medicine {
         this.xuatxu = xuatxu;
     }
 
-    public String getGianhap() {
+    public int[] getGianhap() {
         return gianhap;
     }
 
-    public void setGianhap(String gianhap) {
+    public void setGianhap(int[] gianhap) {
         this.gianhap = gianhap;
     }
 
-    public String getGiaban() {
+    public int[] getGiaban() {
         return giaban;
     }
 
-    public void setGiaban(String giaban) {
+    public void setGiaban(int[] giaban) {
         this.giaban = giaban;
+    }
+
+    public String getDanhmuc() {
+        return danhmuc;
+    }
+
+    public void setDanhmuc(String danhmuc) {
+        this.danhmuc = danhmuc;
     }
 }

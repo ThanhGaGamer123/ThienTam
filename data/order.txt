@@ -1,11 +1,4 @@
-DH0001, KH0001, NV0001, 27/3, Mã Lò, Bình Trị Đông A, Bình Tân, TPHCM, 16/03/2025, Tiền mặt, 200000, true
-DH0002, KH0002, NV0001, 28/3, Mã Lò, Bình Trị Đông A, Bình Tân, TPHCM, 17/03/2025, Chuyển khoản, 300000, false
-DH0003, KH0003, NV0001, 29/3, Mã Lò, Bình Trị Đông B, Bình Tân, TPHCM, 18/03/2025, Tiền mặt, 250000, true
-DH0004, KH0004, NV0001, 30/3, Mã Lò, Bình Trị Đông C, Bình Tân, TPHCM, 19/03/2025, Chuyển khoản, 400000, false
-DH0005, KH0005, NV0001, 31/3, Mã Lò, Bình Trị Đông D, Bình Tân, TPHCM, 20/03/2025, Tiền mặt, 150000, true
-DH0006, KH0006, NV0001, 1/4, Mã Lò, Bình Trị Đông E, Bình Tân, TPHCM, 21/03/2025, Chuyển khoản, 500000, false
-DH0007, KH0007, NV0002, 2/4, Mã Lò, Bình Trị Đông F, Bình Tân, TPHCM, 22/03/2025, Tiền mặt, 350000, true
-DH0008, KH0008, NV0002, 3/4, Mã Lò, Bình Trị Đông G, Bình Tân, TPHCM, 23/03/2025, Chuyển khoản, 450000, false
-DH0009, KH0009, NV0002, 4/4, Mã Lò, Bình Trị Đông H, Bình Tân, TPHCM, 24/03/2025, Tiền mặt, 300000, true
-DH0010, KH0010, NV0002, 5/4, Mã Lò, Bình Trị Đông I, Bình Tân, TPHCM, 25/03/2025, Chuyển khoản, 600000, false
-DH0011, KH0011, NV0002, 6/4, Mã Lò, Bình Trị Đông J, Bình Tân, TPHCM, 26/03/2025, Tiền mặt, 700000, true
+DH0001, KH0001, NV0001, 27/3, Mã Lò, Bình Trị Đông A, Bình Tân, TPHCM, 16/03/2025, Tiền mặt, 114000, true
+DH0002, KH0002, NV0001, 28/3, Mã Lò, Bình Trị Đông A, Bình Tân, TPHCM, 17/03/2025, Chuyển khoản, 12000, false
+DH0003, KH0003, NV0002, 29/3, Mã Lò, Bình Trị Đông B, Bình Tân, TPHCM, 18/03/2025, Tiền mặt, 12000, true
+DH0004, KH0004, NV0002, 30/3, Mã Lò, Bình Trị Đông C, Bình Tân, TPHCM, 19/03/2025, Chuyển khoản, 120000, false

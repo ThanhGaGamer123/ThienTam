@@ -32,7 +32,7 @@ public class promotion_detailsArr {
             while ((line = br.readLine()) != null) {
                 String[] part = line.split(", ");
                 promotion_details nv = new promotion_details(part[0], part[1], part[2], 
-                part[3], part[4], part[5]);
+                part[3], part[4]);
                 arr.add(nv);
             }
         } catch (IOException e) {
