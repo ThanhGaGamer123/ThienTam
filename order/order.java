@@ -4,11 +4,13 @@ public class order {
     private String madon;
     private String makh;
     private String manv;
+
     private String masonha;
     private String duong;
     private String phuong;
     private String quan;
     private String tinh;
+    
     private String ngaydat;
     private String pttt;
     private String tongtien;
