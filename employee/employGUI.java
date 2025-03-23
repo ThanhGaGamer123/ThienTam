@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 import javax.swing.table.*;
 
 import login.signup.login;
@@ -62,7 +63,11 @@ public class employGUI extends JFrame {
         ImageIcon resize_deleteButton = new ImageIcon(deleteButton.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         ImageIcon Package = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\package.png");
         ImageIcon resize_package = new ImageIcon(Package.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        
+        ImageIcon Medic = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\medic.png");
+        ImageIcon resize_medic = new ImageIcon(Medic.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+        ImageIcon Statistic = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\statistic.png");
+        ImageIcon resize_statistic = new ImageIcon(Statistic.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+
         ImageIcon fileIcon = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\file.png");
         ImageIcon resize_fileIcon = new ImageIcon(fileIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         ImageIcon systemIcon = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\system.png");
@@ -79,6 +84,11 @@ public class employGUI extends JFrame {
         ImageIcon resize_check = new ImageIcon(Check.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         ImageIcon eye = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\eyes.png");
         ImageIcon resize_eye = new ImageIcon(eye.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+
+        ImageIcon Wallet = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\wallet.png");
+        ImageIcon resize_wallet = new ImageIcon(Wallet.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
+        ImageIcon Customer = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\customer.png");
+        ImageIcon resize_customer = new ImageIcon(Customer.getImage().getScaledInstance(120, 100, Image.SCALE_SMOOTH));
 
         //Panel Thông tin nhân viên
         JPanel employeeStatus = new JPanel();
@@ -267,6 +277,116 @@ public class employGUI extends JFrame {
         backgroundCollect.setBounds(0,0, 1280, 720);
         orderCollect.add(backgroundCollect);
 
+        //Panel Thuốc
+        JPanel medic = new JPanel();
+        medic.setBackground(Color.white);
+        medic.setLayout(null);
+
+        JLabel titleMedic = new JLabel("Danh Sách Thuốc");
+        titleMedic.setForeground(Color.BLACK);
+        titleMedic.setFont(new Font(null, Font.BOLD, 30));
+        titleMedic.setBounds(450, 20, 500, 50);
+        medic.add(titleMedic);
+
+        String columnsMedic[] = {"Mã thuốc", "Mã tồn", "Tên thuốc", "Danh mục", 
+        "Xuất xứ", "Xem chi tiết"};
+        DefaultTableModel modelMedic = new DefaultTableModel(columnsMedic,0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        JTable tableMedic = new JTable(modelMedic);
+        tableMedic.setFont(new Font(null, Font.PLAIN, 18));
+        tableMedic.getTableHeader().setBackground(new Color(0, 154, 102)); // Màu nền tiêu đề
+        tableMedic.getTableHeader().setForeground(Color.WHITE); // Màu chữ tiêu đề
+        tableMedic.getTableHeader().setResizingAllowed(false);
+        tableMedic.getTableHeader().setReorderingAllowed(false);
+        tableMedic.getTableHeader().setFont(new Font(null, Font.BOLD, 18)); // Font tiêu đề
+        tableMedic.getColumnModel().getColumn(0).setPreferredWidth(10);
+        tableMedic.getColumnModel().getColumn(1).setPreferredWidth(10);
+        tableMedic.getColumnModel().getColumn(4).setPreferredWidth(10);
+        tableMedic.setRowHeight(30);
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < tableMedic.getColumnCount(); i++) {
+            tableMedic.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        JScrollPane scrollMedic = new JScrollPane(tableMedic);
+        scrollMedic.setBounds(40, 90, 1050, 500);
+        medic.add(scrollMedic);
+
+        JButton themMedic = new JButton("Thêm");
+        themMedic.setFont(new Font(null, Font.PLAIN, 18));
+        themMedic.setForeground(Color.BLACK);
+        themMedic.setBounds(1120, 90, 115, 50);
+        themMedic.setIcon(resize_addButton);
+        medic.add(themMedic);
+
+        JButton suaMedic = new JButton("Sửa");
+        suaMedic.setFont(new Font(null, Font.PLAIN, 18));
+        suaMedic.setForeground(Color.BLACK);
+        suaMedic.setBounds(1120, 180, 115, 50);
+        suaMedic.setIcon(resize_fixButton);
+        medic.add(suaMedic);
+
+        JButton xoaMedic = new JButton("Xóa");
+        xoaMedic.setFont(new Font(null, Font.PLAIN, 18));
+        xoaMedic.setForeground(Color.BLACK);
+        xoaMedic.setBounds(1120, 270, 115, 50);
+        xoaMedic.setIcon(resize_deleteButton);
+        medic.add(xoaMedic);
+
+        JLabel backgroundMedic = new JLabel();
+        backgroundMedic.setIcon(new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\backgrounds.jpg"));
+        backgroundMedic.setBounds(0,0, 1280, 720);
+        medic.add(backgroundMedic);
+
+        //Panel Thống kê
+        JPanel statistic = new JPanel();
+        statistic.setBackground(Color.white);
+        statistic.setLayout(null);
+
+        JLabel titleStatistic = new JLabel("Thống Kê Nhân Viên");
+        titleStatistic.setForeground(Color.BLACK);
+        titleStatistic.setFont(new Font(null, Font.BOLD, 30));
+        titleStatistic.setBounds(450, 20, 500, 50);
+        statistic.add(titleStatistic);
+
+        
+        JLabel wallet = new JLabel();
+        wallet.setIcon(resize_wallet);
+        wallet.setBounds(70, 150, 100, 100);
+        statistic.add(wallet);
+
+        JPanel sellStatistic = new JPanel();
+        sellStatistic.setBackground(Color.white);
+        sellStatistic.setBounds(100, 100, 300, 200);
+        sellStatistic.setBorder(new LineBorder(Color.green, 3));
+        statistic.add(sellStatistic);
+
+        JLabel customer = new JLabel();
+        customer.setIcon(resize_customer);
+        customer.setBounds(70, 390, 120, 100);
+        statistic.add(customer);
+
+        JPanel customerStatistic = new JPanel();
+        customerStatistic.setBackground(Color.white);
+        customerStatistic.setBounds(100, 340, 300, 200);
+        customerStatistic.setBorder(new LineBorder(Color.blue,3));
+        statistic.add(customerStatistic);
+
+        JPanel columnStatistic = new JPanel();
+        columnStatistic.setBackground(Color.white);
+        columnStatistic.setBounds(500, 100, 700, 440);
+        columnStatistic.setBorder(new LineBorder(Color.red, 3));
+        statistic.add(columnStatistic);
+
+        JLabel backgroundStatistic = new JLabel();
+        backgroundStatistic.setIcon(new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\backgrounds.jpg"));
+        backgroundStatistic.setBounds(0,0, 1280, 720);
+        statistic.add(backgroundStatistic);
+
         //Menu
         JMenuBar menuBar = new JMenuBar();
         JMenu file = new JMenu("Tập tin");
@@ -310,6 +430,8 @@ public class employGUI extends JFrame {
         tab.addTab("Thông tin", resize_statusIcon, employeeStatus);
         tab.addTab("Hóa đơn bán", resize_orderSell, orderSell);
         tab.addTab("Hóa đơn nhập", resize_package, orderCollect);
+        tab.addTab("Thuốc", resize_medic, medic);
+        tab.addTab("Thống kê", resize_statistic, statistic);
         this.add(tab);
         
         this.setVisible(true);
@@ -420,7 +542,7 @@ public class employGUI extends JFrame {
         });
     }
 
-    // public static void main(String[] args) {
-    //     new employGUI(null);
-    // }
+    public static void main(String[] args) {
+        new employGUI(null);
+    }
 } 
