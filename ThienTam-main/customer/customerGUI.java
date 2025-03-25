@@ -2,13 +2,20 @@ package customer;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
+
+import cart.Cart;
+import cart.cartGUI;
 import login.signup.login;
+import products.product;
+import products.productsArr;
 
 public class customerGUI extends JFrame implements MouseListener, ActionListener {
 
-    JLabel title, hotline, sdt, price, nameuser;
-    JPanel p1, p2, p0, p3, cartPanel;
+    JLabel title, hotline, sdt, price, nameuser, logo1;
+    JPanel p1, p2, p0, p3, cartPanel, logo;
     JTextField timkiem;
     JScrollPane scr;
     JButton search, cart, logout;
@@ -20,9 +27,13 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
     private static final Color vang = new Color(252, 212, 59);
     private static final Color hong = new Color(234, 185, 170);
     private customer khachhang;
+    private productsArr sanpham;
 
     public customerGUI(customer kh) {
+
         this.khachhang = kh;
+        this.sanpham = new productsArr(); // Khởi tạo
+        sanpham.readFile(); // Đọc dữ liệu
         create();
     }
 
@@ -49,7 +60,6 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
 
         setContentPane(scr);
 
-        createCartPanel();
         create_tail();
         setVisible(true);
     }
@@ -58,10 +68,24 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
     // panel1 => height 100
     public void createPanel_1() {
         p1 = new JPanel();
+        p1.setLayout(null);
         p1.setBounds(0, 0, 1280, 100);
         p1.setBackground(xanhla);
-        p1.setLayout(null);
+
         p0.add(p1);
+        int logoWidth = 50;
+        int logoHeight = 50;
+        int p1Height = p1.getHeight();
+        int y = (p1Height - logoHeight) / 2;
+
+        logo1 = new JLabel(new ImageIcon("D:\\ThienTam-main\\ThienTam-main\\customer\\img_xt\\logo (1).png"));
+
+        logo = new JPanel();
+        logo.setLayout(null);
+        logo.setBounds(50, y, logoWidth, logoHeight);
+        logo1.setBounds(0, 0, logoWidth, logoHeight);
+        logo.add(logo1);
+        p1.add(logo);
 
         title = new JLabel("NHÀ THUỐC THIỆN TÂM");
         title.setForeground(Color.WHITE);
@@ -79,21 +103,19 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         nameuser.setFont(new Font("Arial", Font.BOLD, 18));
         nameuser.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         nameuser.setBounds(840, 15, 350, 48);
+
         p1.add(nameuser);
 
         ImageIcon icon_logout = new ImageIcon(
                 "D:\\ThienTam-main\\ThienTam-main\\customer\\img_xt\\icons8-log-out-48.png");
 
-        // Lấy ảnh từ ImageIcon và thay đổi kích thước
         Image img = icon_logout.getImage();
-        Image scaledImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH); // Điều chỉnh kích thước theo nút
+        Image scaledImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
 
-        // Tạo ImageIcon mới với ảnh đã chỉnh kích thước
         ImageIcon scaledIcon = new ImageIcon(scaledImg);
 
         logout = new JButton(scaledIcon);
-        // logout = new JButton(icon_logout);
-        // logout.setForeground(Color.white);
+
         logout.setBounds(1190, 15, 48, 48);
         logout.setBackground(xanhla);
         logout.setBorder(null);
@@ -148,8 +170,8 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         search.setBounds(750, 20, 100, 40);
         search.setForeground(Color.white);
         search.setBackground(hong);
-
         p2.add(search);
+        search.addMouseListener(this);
 
         cart = new JButton("GIỎ HÀNG");
         cart.setBounds(900, 20, 100, 40);
@@ -221,42 +243,6 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
     }
 
     // GIO HANG
-    public void createCartPanel() {
-        cartPanel = new JPanel();
-        cartPanel.setBackground(Color.lightGray);
-        cartPanel.setLayout(null);
-
-        p1 = new JPanel();
-        p1.setBounds(0, 0, 1280, 100);
-        p1.setBackground(xanhla);
-        p1.setLayout(null);
-        cartPanel.add(p1);
-
-        title = new JLabel("NHÀ THUỐC THIỆN TÂM");
-        title.setForeground(Color.WHITE);
-        title.setHorizontalAlignment(SwingConstants.CENTER);
-        title.setFont(new Font("Times New Roman", Font.BOLD, 24));
-        title.setBounds(380, 30, 500, 40);
-        p1.add(title);
-
-        JButton backButton = new JButton("Quay Lại");
-        backButton.setBounds(15, 650, 100, 20);
-        backButton.addActionListener(e -> switchToMainPanel());
-        cartPanel.add(backButton);
-
-    }
-
-    public void switchToCartPanel() {
-        setContentPane(cartPanel);
-        revalidate();
-        repaint();
-    }
-
-    public void switchToMainPanel() {
-        setContentPane(scr);
-        revalidate();
-        repaint();
-    }
 
     public void create_tail() {
         JPanel tail_pn = new JPanel();
@@ -281,9 +267,23 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // if (e.getSource() == timkiem) {
-        // timkiem.setText("");
-        // }
+        if (e.getSource() == search) {
+            String temp = timkiem.getText();
+            ArrayList<product> foundProducts = sanpham.findName(temp); // Tìm tất cả sản phẩm chứa từ khóa
+
+            if (foundProducts.isEmpty()) {
+                System.out.println("Không tìm thấy sản phẩm nào chứa: " + temp);
+            } else {
+                System.out.println("Danh sách sản phẩm chứa: " + temp);
+                for (product p : foundProducts) {
+                    System.out.println("Mã thuốc: " + p.getMathuoc());
+                    System.out.println("Tên thuốc: " + p.getTenthuoc());
+                    System.out.println("Giá bán: " + p.getGiaban());
+                    System.out.println("Xuất xứ: " + p.getXuatxu());
+                    System.out.println("----------------------------------");
+                }
+            }
+        }
     }
 
     @Override
@@ -301,7 +301,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == cart) {
-            switchToCartPanel();
+            new cartGUI(this, khachhang.getTenkh());
         }
     }
 

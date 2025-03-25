@@ -11,11 +11,14 @@ public class product {
     private String xuatxu;
     private String mahangton;
 
+    private String doituongsd;
+    private String chidinh;
+
     public product() {
     }
 
     public product(String mathuoc, String tenthuoc, String donvi, String thanhphan, String thongtinsp, float giaban,
-            float gianhap, String xuatxu, String mahangton) {
+            float gianhap, String xuatxu, String mahangton, String doituongsd, String chidinh) {
         this.mathuoc = mathuoc;
         this.tenthuoc = tenthuoc;
         this.donvi = donvi;
@@ -25,6 +28,8 @@ public class product {
         this.gianhap = gianhap;
         this.xuatxu = xuatxu;
         this.mahangton = mahangton;
+        this.doituongsd = doituongsd;
+        this.chidinh = chidinh;
     }
 
     public String getMathuoc() {
@@ -97,5 +102,21 @@ public class product {
 
     public void setMahangton(String mahangton) {
         this.mahangton = mahangton;
+    }
+
+    public String getChidinh() {
+        return chidinh;
+    }
+
+    public String getDoituongsd() {
+        return doituongsd;
+    }
+
+    public void setChidinh(String chidinh) {
+        this.chidinh = chidinh;
+    }
+
+    public void setDoituongsd(String doituongsd) {
+        this.doituongsd = doituongsd;
     }
 }

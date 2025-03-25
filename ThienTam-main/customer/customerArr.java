@@ -9,7 +9,7 @@ public class customerArr {
     private ArrayList<customer> a;
 
     public customerArr() {
-        this.a = new ArrayList<>(); // Khởi tạo danh sách tránh NullPointerException
+        this.a = new ArrayList<>();
     }
 
     public customerArr(ArrayList<customer> a) {

@@ -1,0 +1,23 @@
+sp1,Viên uống hỗ trợ ngủ ngon,Hộp,Melatonin; L-Theanine,Hỗ trợ giấc ngủ sâu; giảm căng thẳng,250000,280000,Mỹ,ton01,Người lớn,Mất ngủ
+sp2,Men vi sinh hỗ trợ tiêu hóa,Hộp,Lactobacillus; Bifidobacterium,Cân bằng hệ vi sinh đường ruột; hỗ trợ tiêu hóa,300000,320000,Mỹ,ton02,Mọi lứa tuổi,Rối loạn tiêu hóa
+sp3,Viên uống bổ sung Vitamin C,Hộp,Vitamin C; Bioflavonoid,Tăng cường miễn dịch; chống oxy hóa,120000,135000,Mỹ,ton03,Mọi lứa tuổi,Suy giảm hệ miễn dịch
+sp4,Trà thảo mộc nhuận tràng,Hộp,Trà Senna; Cam thảo,Hỗ trợ giảm táo bón; nhuận tràng tự nhiên,100000,120000,Việt Nam,ton04,Người lớn,Táo bón
+sp5,Si-rô ăn ngon cho bé,Chai,Lysine; Vitamin B1; Kẽm,Hỗ trợ kích thích ăn ngon; tăng cân,150000,170000,Việt Nam,ton05,Trẻ em,Biếng ăn
+sp6,Viên uống Ginkgo Biloba,Hộp,Chiết xuất lá bạch quả,Hỗ trợ tăng cường trí nhớ; tuần hoàn não,350000,380000,Đức,ton06,Người lớn; Người cao tuổi,Suy giảm trí nhớ
+sp7,Viên uống hỗ trợ tim mạch Omega 3,Hộp,Dầu cá; EPA; DHA,Hỗ trợ giảm cholesterol; tốt cho tim mạch,280000,300000,Mỹ,ton07,Người lớn,Bệnh tim mạch
+sp8,Viên uống tăng sức bền CoQ10,Hộp,Coenzyme Q10; Vitamin E,Hỗ trợ sản sinh năng lượng; giảm mệt mỏi,320000,350000,Nhật Bản,ton08,Người lớn; Vận động viên,Mệt mỏi
+sp9,Viên uống giảm đau đầu Paracetamol,Hộp,Paracetamol,Giảm đau đầu; hạ sốt,50000,60000,Việt Nam,ton09,Mọi lứa tuổi,Đau đầu
+sp10,Si-rô giảm ho có đàm,Hộp,Bạc hà; Cam thảo; Cát cánh,Hỗ trợ giảm ho; long đờm,90000,110000,Việt Nam,ton10,Mọi lứa tuổi,Ho có đàm
+sp11,Viên uống hỗ trợ ngủ sâu,Hộp,Valerian Root; Chamomile,Hỗ trợ thư giãn; ngủ ngon,280000,300000,Mỹ,ton11,Người lớn,Mất ngủ
+sp12,Men tiêu hóa cho trẻ,Hộp,Probiotic; Kẽm,Hỗ trợ hệ tiêu hóa khỏe mạnh,150000,180000,Nhật Bản,ton12,Trẻ em,Rối loạn tiêu hóa
+sp13,Viên uống tỏi đen,Hộp,Chiết xuất tỏi đen,Tăng cường hệ miễn dịch; hỗ trợ tim mạch,320000,340000,Nhật Bản,ton13,Người lớn,Suy giảm hệ miễn dịch
+sp14,Trà hỗ trợ tiêu hóa,Hộp,Trà gừng; Tiêu đen,Hỗ trợ tiêu hóa; giảm đầy hơi,120000,140000,Việt Nam,ton14,Người lớn,Rối loạn tiêu hóa
+sp15,Si-rô tăng sức đề kháng,Hộp,Vitamin C; Kẽm; Beta-glucan,Hỗ trợ tăng sức đề kháng,180000,200000,Mỹ,ton15,Trẻ em,Suy giảm hệ miễn dịch
+sp16,Viên uống bổ sung chất xơ,Hộp,Inulin; Psyllium Husk,Hỗ trợ tiêu hóa; giảm táo bón,220000,250000,Mỹ,ton16,Người lớn,Táo bón
+sp17,Viên nhai kích thích ăn ngon,Hộp,L-Lysine; Vitamin B Complex,Hỗ trợ bé ăn ngon; phát triển chiều cao,190000,210000,Úc,ton17,Trẻ em,Biếng ăn
+sp18,Viên uống bổ não,Hộp,Omega 3; DHA; Phosphatidylserine,Hỗ trợ tăng cường trí nhớ; giảm stress,420000,450000,Mỹ,ton18,Người lớn; Học sinh,Suy giảm trí nhớ
+sp19,Viên uống hỗ trợ tim mạch Red Yeast Rice,Hộp,Chiết xuất men gạo đỏ; CoQ10,Hỗ trợ giảm cholesterol; bảo vệ tim mạch,550000,600000,Mỹ,ton19,Người lớn,Bệnh tim mạch
+sp20,Viên uống bổ sung năng lượng,Hộp,Vitamin B Complex; Iron; Magnesium,Hỗ trợ giảm mệt mỏi; tăng sức bền,320000,340000,Nhật Bản,ton20,Người lớn,Mệt mỏi
+sp21,Viên uống chống đau nửa đầu,Hộp,Magnesium; Riboflavin; Feverfew,Hỗ trợ giảm đau nửa đầu,450000,500000,Pháp,ton21,Người lớn,Đau đầu
+sp22,Si-rô trị ho có đờm,Hộp,Cam thảo; Mật ong; Cát cánh,Hỗ trợ giảm ho; làm dịu cổ họng,110000,130000,Việt Nam,ton22,Mọi lứa tuổi,Ho có đàm
+sp50,Viên uống hỗ trợ sức khỏe tim mạch,Hộp,Omega 3; Coenzyme Q10,Hỗ trợ tăng cường sức khỏe tim mạch,500000,550000,Mỹ,ton50,Người lớn,Bệnh tim mạch
