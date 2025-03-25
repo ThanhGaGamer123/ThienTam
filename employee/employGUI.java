@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -19,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.table.*;
@@ -156,8 +158,35 @@ public class employGUI extends JFrame {
         JLabel titleSell = new JLabel("Danh Sách Hóa Đơn Bán");
         titleSell.setForeground(Color.BLACK);
         titleSell.setFont(new Font(null, Font.BOLD, 30));
-        titleSell.setBounds(450, 20, 500, 50);
+        titleSell.setBounds(450, 2, 500, 40);
         orderSell.add(titleSell);
+
+        JTextField search_bar = new JTextField("Nhập mã đơn...");
+        search_bar.setForeground(Color.BLACK);
+        search_bar.setFont(new Font(null, Font.PLAIN, 18));
+        search_bar.setBounds(200, 45, 200, 30);
+        orderSell.add(search_bar);
+
+        JButton search = new JButton("Tìm Kiếm");
+        search.setForeground(Color.BLACK);
+        search.setFont(new Font(null, Font.PLAIN, 18));
+        search.setBounds(420, 45, 120, 30);
+        orderSell.add(search);
+
+        JButton search_advance = new JButton("Tìm Kiếm Nâng Cao");
+        search_advance.setForeground(Color.BLACK);
+        search_advance.setFont(new Font(null, Font.PLAIN, 18));
+        search_advance.setBounds(560, 45, 220, 30);
+        orderSell.add(search_advance);
+
+        String[] option = {"Tùy chọn", "Tổng tiền từ cao tới thấp", "Tổng tiền từ thấp tới cao",
+        "Thời gian gần nhất", "Thời gian xa nhất"};
+        JComboBox loc = new JComboBox<>(option);
+        loc.setForeground(Color.BLACK);
+        loc.setFont(new Font(null, Font.PLAIN, 18));
+        loc.setBounds(800, 45, 230, 30);
+        orderSell.add(loc);
+
 
         String columns[] = {"Mã đơn", "Mã khách", "Mã nhân viên", "Ngày đặt", 
         "Tổng tiền", "Tình trạng", "Xem chi tiết"};
@@ -222,8 +251,34 @@ public class employGUI extends JFrame {
         JLabel titleCollect = new JLabel("Danh Sách Hóa Đơn Nhập");
         titleCollect.setForeground(Color.BLACK);
         titleCollect.setFont(new Font(null, Font.BOLD, 30));
-        titleCollect.setBounds(450, 20, 500, 50);
+        titleCollect.setBounds(450, 2, 500, 40);
         orderCollect.add(titleCollect);
+
+        JTextField search_bar_2 = new JTextField("Nhập mã đơn...");
+        search_bar_2.setForeground(Color.BLACK);
+        search_bar_2.setFont(new Font(null, Font.PLAIN, 18));
+        search_bar_2.setBounds(200, 45, 200, 30);
+        orderCollect.add(search_bar_2);
+
+        JButton search_2 = new JButton("Tìm Kiếm");
+        search_2.setForeground(Color.BLACK);
+        search_2.setFont(new Font(null, Font.PLAIN, 18));
+        search_2.setBounds(420, 45, 120, 30);
+        orderCollect.add(search_2);
+
+        JButton search_advance_2 = new JButton("Tìm Kiếm Nâng Cao");
+        search_advance_2.setForeground(Color.BLACK);
+        search_advance_2.setFont(new Font(null, Font.PLAIN, 18));
+        search_advance_2.setBounds(560, 45, 220, 30);
+        orderCollect.add(search_advance_2);
+
+        String[] option_2 = {"Tùy chọn", "Tổng tiền từ cao tới thấp", "Tổng tiền từ thấp tới cao",
+        "Thời gian gần nhất", "Thời gian xa nhất"};
+        JComboBox loc_2 = new JComboBox<>(option_2);
+        loc_2.setForeground(Color.BLACK);
+        loc_2.setFont(new Font(null, Font.PLAIN, 18));
+        loc_2.setBounds(800, 45, 230, 30);
+        orderCollect.add(loc_2);
 
         String columnsCollect[] = {"Mã đơn", "Mã nhà cung cấp", "Số loại thuốc", "Ngày nhập", 
         "Tổng tiền", "Tình trạng", "Xem chi tiết"};
@@ -285,8 +340,26 @@ public class employGUI extends JFrame {
         JLabel titleMedic = new JLabel("Danh Sách Thuốc");
         titleMedic.setForeground(Color.BLACK);
         titleMedic.setFont(new Font(null, Font.BOLD, 30));
-        titleMedic.setBounds(450, 20, 500, 50);
+        titleMedic.setBounds(450, 2, 500, 40);
         medic.add(titleMedic);
+
+        JTextField search_bar_3 = new JTextField("Nhập mã thuốc...");
+        search_bar_3.setForeground(Color.BLACK);
+        search_bar_3.setFont(new Font(null, Font.PLAIN, 18));
+        search_bar_3.setBounds(300, 45, 200, 30);
+        medic.add(search_bar_3);
+
+        JButton search_3 = new JButton("Tìm Kiếm");
+        search_3.setForeground(Color.BLACK);
+        search_3.setFont(new Font(null, Font.PLAIN, 18));
+        search_3.setBounds(520, 45, 120, 30);
+        medic.add(search_3);
+
+        JButton search_advance_3 = new JButton("Tìm Kiếm Nâng Cao");
+        search_advance_3.setForeground(Color.BLACK);
+        search_advance_3.setFont(new Font(null, Font.PLAIN, 18));
+        search_advance_3.setBounds(660, 45, 220, 30);
+        medic.add(search_advance_3);
 
         String columnsMedic[] = {"Mã thuốc", "Mã tồn", "Tên thuốc", "Danh mục", 
         "Xuất xứ", "Xem chi tiết"};
