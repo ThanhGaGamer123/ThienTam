@@ -86,6 +86,9 @@ public class employGUI extends JFrame {
         ImageIcon resize_check = new ImageIcon(Check.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         ImageIcon eye = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\eyes.png");
         ImageIcon resize_eye = new ImageIcon(eye.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        ImageIcon Reset = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\reset.png");
+        ImageIcon resize_reset = new ImageIcon(Reset.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        
 
         ImageIcon Wallet = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\wallet.png");
         ImageIcon resize_wallet = new ImageIcon(Wallet.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
@@ -187,6 +190,12 @@ public class employGUI extends JFrame {
         loc.setBounds(800, 45, 230, 30);
         orderSell.add(loc);
 
+        JButton reset = new JButton();
+        reset.setForeground(Color.BLACK);
+        reset.setFont(new Font(null, Font.PLAIN, 18));
+        reset.setBounds(1050, 45, 30, 30);
+        reset.setIcon(resize_reset);
+        orderSell.add(reset);
 
         String columns[] = {"Mã đơn", "Mã khách", "Mã nhân viên", "Ngày đặt", 
         "Tổng tiền", "Tình trạng", "Xem chi tiết"};
@@ -271,6 +280,13 @@ public class employGUI extends JFrame {
         search_advance_2.setFont(new Font(null, Font.PLAIN, 18));
         search_advance_2.setBounds(560, 45, 220, 30);
         orderCollect.add(search_advance_2);
+
+        JButton reset_2 = new JButton();
+        reset_2.setForeground(Color.BLACK);
+        reset_2.setFont(new Font(null, Font.PLAIN, 18));
+        reset_2.setBounds(1050, 45, 30, 30);
+        reset_2.setIcon(resize_reset);
+        orderCollect.add(reset_2);
 
         String[] option_2 = {"Tùy chọn", "Tổng tiền từ cao tới thấp", "Tổng tiền từ thấp tới cao",
         "Thời gian gần nhất", "Thời gian xa nhất"};
@@ -360,6 +376,13 @@ public class employGUI extends JFrame {
         search_advance_3.setFont(new Font(null, Font.PLAIN, 18));
         search_advance_3.setBounds(660, 45, 220, 30);
         medic.add(search_advance_3);
+
+        JButton reset_3 = new JButton();
+        reset_3.setForeground(Color.BLACK);
+        reset_3.setFont(new Font(null, Font.PLAIN, 18));
+        reset_3.setBounds(900, 45, 30, 30);
+        reset_3.setIcon(resize_reset);
+        medic.add(reset_3);
 
         String columnsMedic[] = {"Mã thuốc", "Mã tồn", "Tên thuốc", "Danh mục", 
         "Xuất xứ", "Xem chi tiết"};
@@ -485,12 +508,12 @@ public class employGUI extends JFrame {
         JMenuItem log_out = new JMenuItem("Đăng xuất");
         log_out.setForeground(Color.BLACK);
         log_out.setFont(new Font(null, Font.PLAIN, 16));
-        log_out.setMnemonic('Q');
+        log_out.setMnemonic('X');
         log_out.setIcon(resize_logOut);
         JMenuItem exit = new JMenuItem("Thoát");
         exit.setForeground(Color.BLACK);
         exit.setFont(new Font(null, Font.PLAIN, 16));
-        exit.setMnemonic('X');
+        exit.setMnemonic('T');
         exit.setIcon(resize_exitIcon);
         file.add(save);
         file.add(export);
