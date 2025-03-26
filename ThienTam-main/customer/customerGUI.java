@@ -1,13 +1,10 @@
 package customer;
 
+import cart.cartGUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
 import javax.swing.*;
-
-import cart.Cart;
-import cart.cartGUI;
 import login.signup.login;
 import products.product;
 import products.productsArr;
@@ -98,7 +95,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         khach.readFile();
         nameuser = new JLabel();
 
-        nameuser = new JLabel("Xin chào, " + khachhang.getUserkh());
+        nameuser = new JLabel("Xin chào, " + khachhang.getTenkh());
         nameuser.setForeground(Color.WHITE);
         nameuser.setFont(new Font("Arial", Font.BOLD, 18));
         nameuser.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -189,7 +186,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         sdt = new JLabel("1900 1572");
         sdt.setBounds(1080, 40, 150, 16);
         sdt.setHorizontalAlignment(SwingConstants.CENTER);
-        sdt.setFont(new Font("Times New Roman", Font.ITALIC, 17));
+        sdt.setFont(new Font("Times New Roman", Font.PLAIN, 17));
         sdt.setForeground(vang);
         p2.add(sdt);
 
