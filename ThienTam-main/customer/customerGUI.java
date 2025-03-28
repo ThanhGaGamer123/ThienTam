@@ -12,7 +12,7 @@ import products.productsArr;
 public class customerGUI extends JFrame implements MouseListener, ActionListener {
 
     JLabel title, hotline, sdt, price, nameuser, logo1;
-    JPanel p1, p2, p0, p3, cartPanel, logo;
+    JPanel p1, p2, p0, p3, cartPanel, logo, top_panel, bot_panel;
     JTextField timkiem;
     JScrollPane scr;
     JButton search, cart, logout;
@@ -37,87 +37,92 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
     public void create() {
         setTitle("Customer");
         setSize(1280, 720);
-        setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         p0 = new JPanel();
-        p0.setLayout(null);
-        p0.setPreferredSize(new Dimension(1280, 1500));
+        p0.setLayout(new BorderLayout());
+        p0.setPreferredSize(new Dimension(1280, 1500)); // Kích thước lớn hơn cửa sổ chính để thử nghiệm thanh cuộn
 
-        // Header
+        top_panel = new JPanel();
+        top_panel.setBackground(xanhla);
+        top_panel.setPreferredSize(new Dimension(0, 230));
+
+        top_panel.setLayout(new BorderLayout());
+        p0.add(top_panel, BorderLayout.NORTH);
+
         createPanel_1();
         createPanel_2();
         createPanel_3();
-
+        bot_panel = new JPanel();
+        bot_panel.setBackground(vang);
+        bot_panel.setLayout(new BorderLayout());
+        bot_panel.setPreferredSize(new Dimension(0, 50));
+        p0.add(bot_panel, BorderLayout.SOUTH);
+        create_footer();
+        // Đặt p0 vào JScrollPane
         scr = new JScrollPane(p0);
         scr.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scr.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scr.getVerticalScrollBar().setUnitIncrement(16);
 
-        setContentPane(scr);
+        // *** Thêm JScrollPane vào JFrame ***
+        getContentPane().add(scr);
 
-        create_tail();
         setVisible(true);
     }
 
-    // HEADER
-    // panel1 => height 100
     public void createPanel_1() {
         p1 = new JPanel();
-        p1.setLayout(null);
-        p1.setBounds(0, 0, 1280, 100);
-        p1.setBackground(xanhla);
+        p1.setLayout(new BorderLayout());
+        p1.setPreferredSize(new Dimension(1280, 90)); // Đặt chiều rộng bằng với frame
+        p1.setBackground(hong);
+        top_panel.add(p1, BorderLayout.NORTH);
 
-        p0.add(p1);
-        int logoWidth = 50;
-        int logoHeight = 50;
-        int p1Height = p1.getHeight();
-        int y = (p1Height - logoHeight) / 2;
-
-        logo1 = new JLabel(new ImageIcon("D:\\ThienTam-main\\ThienTam-main\\customer\\img_xt\\logo (1).png"));
-
-        logo = new JPanel();
-        logo.setLayout(null);
-        logo.setBounds(50, y, logoWidth, logoHeight);
-        logo1.setBounds(0, 0, logoWidth, logoHeight);
-        logo.add(logo1);
-        p1.add(logo);
+        JPanel p1_center = new JPanel();
+        p1_center.setLayout(null);
+        p1_center.setBackground(xanhla);
+        p1.add(p1_center, BorderLayout.CENTER);
 
         title = new JLabel("NHÀ THUỐC THIỆN TÂM");
         title.setForeground(Color.WHITE);
-        title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setFont(new Font("Times New Roman", Font.BOLD, 24));
-        title.setBounds(380, 30, 500, 40);
-        p1.add(title);
+
+        int titleWidth = 500;
+        int titleHeight = 40;
+        int x = (1280 - titleWidth) / 2;
+        int y = (90 - titleHeight) / 2;
+        title.setBounds(x, y, titleWidth, titleHeight);
+        p1_center.add(title);
+
+        JPanel p1_right = new JPanel();
+        p1_right.setLayout(null);
+        p1_right.setPreferredSize(new Dimension(350, 90)); // Kích thước panel
+        p1_right.setBackground(xanhla);
+        p1.add(p1_right, BorderLayout.EAST);
 
         customerArr khach = new customerArr();
         khach.readFile();
-        nameuser = new JLabel();
 
+        // Hiển thị tên người dùng
         nameuser = new JLabel("Xin chào, " + khachhang.getTenkh());
         nameuser.setForeground(Color.WHITE);
         nameuser.setFont(new Font("Arial", Font.BOLD, 18));
-        nameuser.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        nameuser.setBounds(840, 15, 350, 48);
+        nameuser.setHorizontalAlignment(SwingConstants.RIGHT);
+        nameuser.setBounds(0, 15, 250, 48); // Điều chỉnh chiều rộng để không tràn ra ngoài
+        p1_right.add(nameuser);
 
-        p1.add(nameuser);
-
-        ImageIcon icon_logout = new ImageIcon(
-                "D:\\ThienTam-main\\ThienTam-main\\customer\\img_xt\\icons8-log-out-48.png");
-
-        Image img = icon_logout.getImage();
-        Image scaledImg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
-
-        ImageIcon scaledIcon = new ImageIcon(scaledImg);
+        // Nút đăng xuất
+        ImageIcon icon_logout = new ImageIcon(getClass().getResource("/customer/img_xt/icons8-log-out-48.png"));
+        Image img = icon_logout.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(img);
 
         logout = new JButton(scaledIcon);
-
-        logout.setBounds(1190, 15, 48, 48);
+        logout.setBounds(250, 20, 48, 48);
         logout.setBackground(xanhla);
         logout.setBorder(null);
-        p1.add(logout);
-
+        logout.setFocusPainted(false);
+        p1_right.add(logout);
         logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -134,16 +139,15 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
 
     public void createPanel_2() {
         p2 = new JPanel();
-        p2.setBounds(0, 100, 1280, 80);
+        p2.setPreferredSize(new Dimension(1280, 80));
         p2.setBackground(xanhla);
         p2.setLayout(null);
-        p0.add(p2);
+        top_panel.add(p2, BorderLayout.CENTER);
 
         timkiem = new JTextField("Nhập tên sản phẩm thuốc ...");
-        timkiem.setFont(new java.awt.Font("Ariel", 2, 14));
+        timkiem.setFont(new Font("Arial", Font.ITALIC, 14));
         timkiem.setBounds(88, 20, 610, 40);
         timkiem.addMouseListener(this);
-
         p2.add(timkiem);
 
         timkiem.addFocusListener(new FocusAdapter() {
@@ -167,6 +171,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         search.setBounds(750, 20, 100, 40);
         search.setForeground(Color.white);
         search.setBackground(hong);
+        search.setFocusPainted(false);
         p2.add(search);
         search.addMouseListener(this);
 
@@ -175,11 +180,12 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         cart.setForeground(Color.white);
         cart.setBackground(hong);
         cart.addActionListener(this);
+        cart.setFocusPainted(false);
         p2.add(cart);
 
         hotline = new JLabel("Hotline (8:00 - 21:30)");
         hotline.setBounds(1080, 20, 150, 14);
-        hotline.setFont(new Font("Ariel", Font.BOLD, 14));
+        hotline.setFont(new Font("Arial", Font.BOLD, 14));
         hotline.setForeground(Color.black);
         p2.add(hotline);
 
@@ -189,77 +195,70 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         sdt.setFont(new Font("Times New Roman", Font.PLAIN, 17));
         sdt.setForeground(vang);
         p2.add(sdt);
-
     }
 
     public void createPanel_3() {
         p3 = new JPanel();
-        p3.setBounds(0, 180, 1280, 60);
+        p3.setBounds(0, 100, 1280, 60);
         p3.setBackground(xanhla);
 
-        p3.setLayout(null);
-        p0.add(p3);
+        // Sử dụng FlowLayout căn giữa để các phần tử được căn chỉnh đẹp hơn
+        p3.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
 
-        int cbb_weight = 200;
-        int cbb_height = 30;
-        int x_cbb = 50;
-        int y_cbb = (60 - cbb_height) / 2; // 60 la height cua panel
-
-        String[] cb1_item = { "          Đối tượng sử dụng", "Trẻ em", "Người lớn", "Người cao tuổi",
-                "Phụ nữ có thai",
-                "Phụ nữ cho con bú", "Người bị loét dạ dày" };
+        String[] cb1_item = { "              Đối tượng sử dụng", "Trẻ em", "Người lớn", "Người cao tuổi",
+                "Phụ nữ có thai", "Phụ nữ cho con bú", "Người bị loét dạ dày" };
         cb1 = new JComboBox<>(cb1_item);
-        cb1.setBounds(x_cbb, y_cbb, cbb_weight, cbb_height);
+        cb1.setPreferredSize(new Dimension(220, 30));
         p3.add(cb1);
 
-        String[] cb2_item = { "                    Chỉ định ", "Mất ngủ", "Rối loạn tiêu hóa", "Suy giảm hệ miễn dịch",
+        String[] cb2_item = { "                          Chỉ định", "Mất ngủ", "Rối loạn tiêu hóa",
+                "Suy giảm hệ miễn dịch",
                 "Táo bón", "Biếng ăn", "Suy giảm trí nhớ", "Bệnh tim mạch", "Mệt mỏi", "Đau đầu", "Ho có đàm" };
         cb2 = new JComboBox<>(cb2_item);
-        cb2.setBounds(x_cbb * 2 + cbb_weight, y_cbb, cbb_weight, cbb_height);
+        cb2.setPreferredSize(new Dimension(220, 30));
         p3.add(cb2);
 
-        String[] cb3_item = { "         Xuất sứ thương hiệu", "Anh", "Pháp", "Mỹ", "Úc", "Việt Nam",
-                "Hà Lan" };
+        String[] cb3_item = { "            Xuất xứ thương hiệu", "Anh", "Pháp", "Mỹ", "Úc", "Việt Nam", "Hà Lan" };
         cb3 = new JComboBox<>(cb3_item);
-        cb3.setBounds(x_cbb * 3 + 2 * cbb_weight, y_cbb, cbb_weight, cbb_height);
+        cb3.setPreferredSize(new Dimension(220, 30));
         p3.add(cb3);
 
-        price = new JLabel();
-        price.setText("Lọc: ");
-        price.setFont(new Font("Ariel", Font.BOLD, 18));
-        price.setForeground(Color.WHITE);
-        price.setBounds(x_cbb * 4 + 3 * cbb_weight - 5, y_cbb, 100, cbb_height);
-        p3.add(price);
+        // Tạo JPanel để chứa "Lọc" và cb4, giúp giữ bố cục hợp lý
+        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        filterPanel.setBackground(xanhla);
 
-        String[] cb4_item = { "Giá từ thấp đến cao", "Giá từ cao đến thấp " };
+        price = new JLabel("Lọc:");
+        price.setFont(new Font("Arial", Font.PLAIN, 18));
+        price.setForeground(Color.BLACK);
+        filterPanel.add(price);
+
+        String[] cb4_item = { "              Giá từ thấp đến cao", "              Giá từ cao đến thấp" };
         cb4 = new JComboBox<>(cb4_item);
-        cb4.setBounds(x_cbb * 4 + 3 * cbb_weight + 50, y_cbb, cbb_weight,
-                cbb_height);
-        p3.add(cb4);
+        cb4.setPreferredSize(new Dimension(220, 30));
+        filterPanel.add(cb4);
 
+        p3.add(filterPanel);
+
+        // Thêm p3 vào top_panel ngay dưới p2
+        top_panel.add(p3, BorderLayout.SOUTH);
     }
 
-    // GIO HANG
+    private void create_footer() {
+        JPanel tail = new JPanel(new GridBagLayout());
+        tail.setBackground(xanhla);
+        tail.setPreferredSize(new Dimension(0, 80));
 
-    public void create_tail() {
-        JPanel tail_pn = new JPanel();
-        tail_pn.setBounds(0, 1450, 1280, 50);
-        tail_pn.setBackground(xanhla);
-        tail_pn.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 15));
-
-        JLabel detail_tail = new JLabel(
-                "nhathuocthientam@gmail.com.vn");
-
+        JLabel detail_tail = new JLabel("nhathuocthientam@gmail.com.vn");
         detail_tail.setFont(new Font("Arial", Font.ITALIC, 13));
         detail_tail.setForeground(Color.BLACK);
 
-        tail_pn.add(detail_tail);
-        p0.add(tail_pn);
-    }
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 0, 0, 0);
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-
+        tail.add(detail_tail, gbc);
+        bot_panel.add(tail, BorderLayout.CENTER);
     }
 
     @Override
@@ -284,15 +283,23 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
     }
 
     @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
     public void mouseReleased(MouseEvent e) {
+
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
+
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
+
     }
 
     @Override

@@ -83,7 +83,7 @@ public class thanhtoanGUI extends JFrame {
         body.setBackground(xam);
         body.setPreferredSize(new Dimension(400, 400));
         body.setLayout(new BorderLayout());
-        mainPanel.add(body, BorderLayout.CENTER); // Thêm vào panel chính
+        mainPanel.add(body, BorderLayout.CENTER);
 
         JPanel trai = new JPanel();
         trai.setBackground(linen);
@@ -110,29 +110,131 @@ public class thanhtoanGUI extends JFrame {
         body.add(tren, BorderLayout.NORTH);
 
         JPanel giua = new JPanel();
-        giua.setBackground(xam);
-        giua.setLayout(null);
+        giua.setBackground(Color.white);
+        giua.setLayout(new GridBagLayout()); // Sử dụng GridBagLayout để bố cục gọn gàng
         body.add(giua, BorderLayout.CENTER);
 
+        GridBagConstraints gbc1 = new GridBagConstraints();
+        gbc1.insets = new Insets(5, 10, 5, 10); // Khoảng cách giữa các thành phần
+        gbc1.fill = GridBagConstraints.HORIZONTAL; // Giúp các ô giãn theo chiều ngang
+        gbc1.weightx = 1; // Giúp các thành phần kéo dài theo chiều ngang
+
+        // ===== THÔNG TIN NGƯỜI ĐẶT =====
+        gbc1.gridx = 0;
+        gbc1.gridy = 0;
+        gbc1.gridwidth = 2; // Dài hết hàng
+        JLabel thongTinLabel = new JLabel("                     THÔNG TIN NGƯỜI ĐẶT:");
+        thongTinLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        giua.add(thongTinLabel, gbc1);
+
+        // Tạo panel chứa 2 text field cùng 1 hàng
+        gbc1.gridy++;
+        gbc1.gridwidth = 1;
+        JPanel panelNguoiDat = new JPanel(new GridLayout(1, 2, 10, 0)); // GridLayout: 1 hàng, 2 cột
+        panelNguoiDat.setBackground(Color.WHITE);
+        JTextField tenNguoiDat = new JTextField();
+        tenNguoiDat.setBorder(BorderFactory.createTitledBorder("Tên người đặt"));
+        JTextField sdtNguoiDat = new JTextField();
+        sdtNguoiDat.setBorder(BorderFactory.createTitledBorder("SDT người đặt"));
+        panelNguoiDat.add(tenNguoiDat);
+        panelNguoiDat.add(sdtNguoiDat);
+        giua.add(panelNguoiDat, gbc1);
+
+        // ===== ĐỊA CHỈ NHẬN HÀNG =====
+        gbc1.gridy++;
+        gbc1.gridwidth = 2;
+        JLabel diaChiLabel = new JLabel("                     ĐỊA CHỈ NHẬN HÀNG:");
+        diaChiLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        giua.add(diaChiLabel, gbc1);
+
+        // Người nhận và số điện thoại cùng 1 hàng
+        gbc1.gridy++;
+        gbc1.gridwidth = 1;
+        JPanel panelNguoiNhan = new JPanel(new GridLayout(1, 2, 10, 0));
+        panelNguoiNhan.setBackground(Color.WHITE);
+        JTextField tenNguoiNhan = new JTextField();
+        tenNguoiNhan.setBorder(BorderFactory.createTitledBorder("Họ và tên người nhận"));
+        JTextField sdtNguoiNhan = new JTextField();
+        sdtNguoiNhan.setBorder(BorderFactory.createTitledBorder("SDT người nhận"));
+        panelNguoiNhan.add(tenNguoiNhan);
+        panelNguoiNhan.add(sdtNguoiNhan);
+        giua.add(panelNguoiNhan, gbc1);
+
+        // 3 Combobox cùng 1 hàng
+        gbc1.gridy++;
+        JPanel panelDiaChi = new JPanel(new GridLayout(1, 3, 10, 0));
+        Font comboBoxFont = new Font("Arial", Font.PLAIN, 16);
+        JComboBox<String> tinhThanh = new JComboBox<>(new String[] { "Chọn tỉnh/thành phố", "TP Hồ Chí Minh" });
+        tinhThanh.setFont(comboBoxFont);
+        JComboBox<String> quanHuyen = new JComboBox<>(new String[] { "Chọn quận/huyện" });
+        quanHuyen.setFont(comboBoxFont);
+        JComboBox<String> phuongXa = new JComboBox<>(new String[] { "Chọn phường/xã" });
+        phuongXa.setFont(comboBoxFont);
+        panelDiaChi.add(tinhThanh);
+        panelDiaChi.add(quanHuyen);
+        panelDiaChi.add(phuongXa);
+        giua.add(panelDiaChi, gbc1);
+
+        // Địa chỉ cụ thể
+        gbc1.gridy++;
+        gbc1.gridwidth = 2;
+        JTextField diaChiCuThe = new JTextField();
+        diaChiCuThe.setBorder(BorderFactory.createTitledBorder("Nhập địa chỉ cụ thể"));
+        giua.add(diaChiCuThe, gbc1);
+
+        // Ghi chú
+        gbc1.gridy++;
+        JTextArea ghiChu = new JTextArea(3, 20);
+        ghiChu.setBorder(BorderFactory.createTitledBorder("Ghi chú (không bắt buộc)"));
+        giua.add(ghiChu, gbc1);
         // ========= PAY =========
         JPanel pay = new JPanel();
         pay.setBackground(xam);
         pay.setPreferredSize(new Dimension(300, 400));
         pay.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.weightx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 10, 10, 10);
+        GridBagConstraints gbc2 = new GridBagConstraints();
+        gbc2.gridx = 0;
+        gbc2.weightx = 1;
+        gbc2.fill = GridBagConstraints.HORIZONTAL;
+        gbc2.insets = new Insets(10, 10, 10, 10);
 
-        mainPanel.add(pay, BorderLayout.EAST); // Thêm pay vào mainPanel thay vì body
+        // ===== Phương thức thanh toán =====
+        gbc1.gridy++;
+        JPanel paymentPanel = new JPanel(new GridLayout(1, 3, 10, 0));
+        paymentPanel.setBorder(BorderFactory.createTitledBorder("Phương thức thanh toán"));
+        paymentPanel.setBackground(Color.WHITE); // Đặt màu nền trắng
 
+        JRadioButton momoRadio = new JRadioButton("Thanh toán bằng ví MoMo");
+        JRadioButton cashRadio = new JRadioButton("Thanh toán tiền mặt khi nhận hàng");
+        JRadioButton qrRadio = new JRadioButton("Thanh toán bằng chuyển khoản (QR Code)");
+
+        momoRadio.setBackground(Color.white);
+        cashRadio.setBackground(Color.white);
+        qrRadio.setBackground(Color.white);
+
+        momoRadio.setFocusPainted(false);
+        cashRadio.setFocusPainted(false);
+        qrRadio.setFocusPainted(false);
+
+        // Nhóm các radio button lại với nhau
+        ButtonGroup paymentGroup = new ButtonGroup();
+        paymentGroup.add(momoRadio);
+        paymentGroup.add(cashRadio);
+        paymentGroup.add(qrRadio);
+
+        paymentPanel.add(momoRadio);
+        paymentPanel.add(cashRadio);
+        paymentPanel.add(qrRadio);
+
+        giua.add(paymentPanel, gbc1);
+
+        mainPanel.add(pay, BorderLayout.EAST);
         // THANH TOÁN (Tiêu đề)
         JLabel paid = new JLabel("ĐƠN HÀNG", SwingConstants.CENTER);
         paid.setFont(new Font("Arial", Font.BOLD, 20));
         paid.setForeground(Color.BLACK);
-        gbc.gridy = 0;
-        pay.add(paid, gbc);
+        gbc2.gridy = 0;
+        pay.add(paid, gbc2);
 
         // Tổng tiền
         JPanel totalPanel = new JPanel(new GridLayout(1, 2));
@@ -143,8 +245,8 @@ public class thanhtoanGUI extends JFrame {
         cost.setFont(new Font("Arial", Font.PLAIN, 14));
         totalPanel.add(tt);
         totalPanel.add(cost);
-        gbc.gridy = 1;
-        pay.add(totalPanel, gbc);
+        gbc2.gridy = 1;
+        pay.add(totalPanel, gbc2);
 
         // Giảm giá voucher
         JPanel voucherPanel = new JPanel(new GridLayout(1, 2));
@@ -155,8 +257,8 @@ public class thanhtoanGUI extends JFrame {
         costvc.setFont(new Font("Arial", Font.PLAIN, 14));
         voucherPanel.add(vc);
         voucherPanel.add(costvc);
-        gbc.gridy = 2;
-        pay.add(voucherPanel, gbc);
+        gbc2.gridy = 2;
+        pay.add(voucherPanel, gbc2);
 
         // Tổng số sản phẩm
         JPanel tongspPanel = new JPanel(new GridLayout(1, 2));
@@ -167,8 +269,8 @@ public class thanhtoanGUI extends JFrame {
         sosp.setFont(new Font("Arial", Font.PLAIN, 14));
         tongspPanel.add(count);
         tongspPanel.add(sosp);
-        gbc.gridy = 3;
-        pay.add(tongspPanel, gbc);
+        gbc2.gridy = 3;
+        pay.add(tongspPanel, gbc2);
 
         // Thành tiền
         JPanel thanhtienPanel = new JPanel(new GridLayout(1, 2));
@@ -179,8 +281,8 @@ public class thanhtoanGUI extends JFrame {
         costreal.setFont(new Font("Arial", Font.PLAIN, 14));
         thanhtienPanel.add(thantienthantien);
         thanhtienPanel.add(costreal);
-        gbc.gridy = 4;
-        pay.add(thanhtienPanel, gbc);
+        gbc2.gridy = 4;
+        pay.add(thanhtienPanel, gbc2);
 
         // Nút mua hàng
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -190,8 +292,9 @@ public class thanhtoanGUI extends JFrame {
         thanhtoan_btn.setFont(new Font("Arial", Font.BOLD, 20));
         thanhtoan_btn.setPreferredSize(new Dimension(250, 50));
         buttonPanel.add(thanhtoan_btn);
-        gbc.gridy = 5;
-        pay.add(buttonPanel, gbc);
+        gbc2.gridy = 5;
+        pay.add(buttonPanel, gbc2);
+
     }
 
     private void create_footer() {
