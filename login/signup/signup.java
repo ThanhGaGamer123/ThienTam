@@ -65,6 +65,8 @@ public class signup extends JFrame {
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
 
+        gdc.anchor = GridBagConstraints.WEST;
+
         JLabel username = new JLabel();
         username.setText("Tài khoản:");
         username.setFont(new Font(null, Font.PLAIN, 20));
@@ -164,6 +166,7 @@ public class signup extends JFrame {
         // reset
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
+        gdc.anchor = GridBagConstraints.CENTER;
 
         JButton login = new JButton();
         login.setText("Đăng Ký");
