@@ -86,7 +86,7 @@ CREATE TABLE ChiTietHoaDonNhap (
     mahdnhap VARCHAR(10),           
     gianhap VARCHAR(100),         
     thanhtien INT,       
-    slnhap VARCHAR(100),                
+    slnhap VARCHAR(100),
     mathuoc VARCHAR(10),       
 );
 
