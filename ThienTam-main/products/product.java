@@ -1,122 +1,127 @@
 package products;
 
 public class product {
-    private String mathuoc;
-    private String tenthuoc;
-    private String donvi;
-    private String thanhphan;
-    private String thongtinsp;
-    private float giaban;
-    private float gianhap;
-    private String xuatxu;
-    private String mahangton;
-
-    private String doituongsd;
-    private String chidinh;
+    private String maThuoc;
+    private String tenThuoc;
+    private String donVi;
+    private String thanhPhan;
+    private String thongTinThuoc;
+    private float giaBan;
+    private float giaNhap;
+    private String xuatXu;
+    private String maTon;
+    private String doiTuongSD;
 
     public product() {
     }
 
-    public product(String mathuoc, String tenthuoc, String donvi, String thanhphan, String thongtinsp, float giaban,
-            float gianhap, String xuatxu, String mahangton, String doituongsd, String chidinh) {
-        this.mathuoc = mathuoc;
-        this.tenthuoc = tenthuoc;
-        this.donvi = donvi;
-        this.thanhphan = thanhphan;
-        this.thongtinsp = thongtinsp;
-        this.giaban = giaban;
-        this.gianhap = gianhap;
-        this.xuatxu = xuatxu;
-        this.mahangton = mahangton;
-        this.doituongsd = doituongsd;
-        this.chidinh = chidinh;
+    public product(String maThuoc, String tenThuoc, String donVi, String thanhPhan, String thongTinThuoc,
+            float giaBan, float giaNhap, String xuatXu, String maTon, String doiTuongSD) {
+        this.maThuoc = maThuoc;
+        this.tenThuoc = tenThuoc;
+        this.donVi = donVi;
+        this.thanhPhan = thanhPhan;
+        this.thongTinThuoc = thongTinThuoc;
+        this.giaBan = giaBan;
+        this.giaNhap = giaNhap;
+        this.xuatXu = xuatXu;
+        this.maTon = maTon;
+        this.doiTuongSD = doiTuongSD;
     }
 
-    public String getMathuoc() {
-        return mathuoc;
+    public String getMaThuoc() {
+        return maThuoc;
     }
 
-    public void setMathuoc(String mathuoc) {
-        this.mathuoc = mathuoc;
+    public void setMaThuoc(String maThuoc) {
+        this.maThuoc = maThuoc;
     }
 
-    public String getTenthuoc() {
-        return tenthuoc;
+    public String getTenThuoc() {
+        return tenThuoc;
     }
 
-    public void setTenthuoc(String tenthuoc) {
-        this.tenthuoc = tenthuoc;
+    public void setTenThuoc(String tenThuoc) {
+        this.tenThuoc = tenThuoc;
     }
 
-    public String getDonvi() {
-        return donvi;
+    public String getDonVi() {
+        return donVi;
     }
 
-    public void setDonvi(String donvi) {
-        this.donvi = donvi;
+    public void setDonVi(String donVi) {
+        this.donVi = donVi;
     }
 
-    public String getThanhphan() {
-        return thanhphan;
+    public String getThanhPhan() {
+        return thanhPhan;
     }
 
-    public void setThanhphan(String thanhphan) {
-        this.thanhphan = thanhphan;
+    public void setThanhPhan(String thanhPhan) {
+        this.thanhPhan = thanhPhan;
     }
 
-    public String getThongtinsp() {
-        return thongtinsp;
+    public String getThongTinThuoc() {
+        return thongTinThuoc;
     }
 
-    public void setThongtinsp(String thongtinsp) {
-        this.thongtinsp = thongtinsp;
+    public void setThongTinThuoc(String thongTinThuoc) {
+        this.thongTinThuoc = thongTinThuoc;
     }
 
-    public float getGiaban() {
-        return giaban;
+    public float getGiaBan() {
+        return giaBan;
     }
 
-    public void setGiaban(float giaban) {
-        this.giaban = giaban;
+    public void setGiaBan(float giaBan) {
+        this.giaBan = giaBan;
     }
 
-    public float getGianhap() {
-        return gianhap;
+    public float getGiaNhap() {
+        return giaNhap;
     }
 
-    public void setGianhap(float gianhap) {
-        this.gianhap = gianhap;
+    public void setGiaNhap(float giaNhap) {
+        this.giaNhap = giaNhap;
     }
 
-    public String getXuatxu() {
-        return xuatxu;
+    public String getXuatXu() {
+        return xuatXu;
     }
 
-    public void setXuatxu(String xuatxu) {
-        this.xuatxu = xuatxu;
+    public void setXuatXu(String xuatXu) {
+        this.xuatXu = xuatXu;
     }
 
-    public String getMahangton() {
-        return mahangton;
+    public String getMaTon() {
+        return maTon;
     }
 
-    public void setMahangton(String mahangton) {
-        this.mahangton = mahangton;
+    public void setMaTon(String maTon) {
+        this.maTon = maTon;
     }
 
-    public String getChidinh() {
-        return chidinh;
+    public String getDoiTuongSD() {
+        return doiTuongSD;
     }
 
-    public String getDoituongsd() {
-        return doituongsd;
+    public void setDoiTuongSD(String doiTuongSD) {
+        this.doiTuongSD = doiTuongSD;
     }
 
-    public void setChidinh(String chidinh) {
-        this.chidinh = chidinh;
-    }
-
-    public void setDoituongsd(String doituongsd) {
-        this.doituongsd = doituongsd;
+    @Override
+    public String toString() {
+        return "product{" +
+                "maThuoc='" + maThuoc + '\'' +
+                ", tenThuoc='" + tenThuoc + '\'' +
+                ", donVi='" + donVi + '\'' +
+                ", thanhPhan='" + thanhPhan + '\'' +
+                ", thongTinThuoc='" + thongTinThuoc + '\'' +
+                ", giaBan=" + giaBan +
+                ", giaNhap=" + giaNhap +
+                ", xuatXu='" + xuatXu + '\'' +
+                ", maTon='" + maTon + '\'' +
+                ", doiTuongSD='" + doiTuongSD + '\'' +
+                '}';
     }
 }

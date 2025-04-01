@@ -97,16 +97,18 @@ public class login extends JFrame {
 
                 // start fix
                 customerArr khach = new customerArr();
-                khach.readFile();
+                khach.readDatabase();
+
                 // System.out.println("Danh sách khách hàng: " + employ.getArr().size());
 
-                khach.printCustomers();
+                // khach.printCustomers();
 
                 for (customer kh : khach.getA()) {
-                    if (username.equals(kh.getUserkh()) && password.equals(kh.getPassword())) {
+                    if (username.equals(kh.getEmail()) && password.equals(kh.getPasswordkh())) {
                         flag = true;
                         JOptionPane.showMessageDialog(null,
                                 "Đăng nhập thành công với tư cách khách hàng!");
+                        System.out.println(kh.getTenkh());
                         new customerGUI(kh);
                         dispose();
 

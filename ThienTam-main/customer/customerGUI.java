@@ -3,16 +3,20 @@ package customer;
 import cart.cartGUI;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
+
 import javax.swing.*;
+
 import login.signup.login;
 import products.product;
 import products.productsArr;
 
 public class customerGUI extends JFrame implements MouseListener, ActionListener {
 
-    JLabel title, hotline, sdt, price, nameuser, logo1;
-    JPanel p1, p2, p0, p3, cartPanel, logo, top_panel, bot_panel;
+    JLabel title, hotline, sdt, price, nameuser;
+    JPanel p1, p2, p0, p3, cartPanel, logo, top_panel, bot_panel, mid_panel;
     JTextField timkiem;
     JScrollPane scr;
     JButton search, cart, logout;
@@ -23,15 +27,31 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
     private static final Color xanhbien = new Color(27, 101, 197);
     private static final Color vang = new Color(252, 212, 59);
     private static final Color hong = new Color(234, 185, 170);
+    private static final Color xam = new Color(207, 207, 207);
+    private static final Color linen = new Color(250, 240, 230);
+    private static final Color xamnhat = new Color(237, 240, 243);
+    private static final Color dodo = new Color(232, 58, 72);
+
     private customer khachhang;
     private productsArr sanpham;
+    private customer khachCurrent;
 
     public customerGUI(customer kh) {
 
         this.khachhang = kh;
+        this.khachCurrent = kh;
         this.sanpham = new productsArr(); // Khởi tạo
-        sanpham.readFile(); // Đọc dữ liệu
+        sanpham.readDatabase(); // Đọc dữ liệu
         create();
+    }
+
+    public customer getKhachHangDangNhap() {
+        if (khachCurrent == null) {
+            System.out.println("Lỗi: khachCurrent đang null!");
+        } else {
+            System.out.println("Thông tin khách hàng đang đăng nhập: " + khachCurrent);
+        }
+        return this.khachCurrent;
     }
 
     public void create() {
@@ -42,31 +62,45 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
 
         p0 = new JPanel();
         p0.setLayout(new BorderLayout());
-        p0.setPreferredSize(new Dimension(1280, 1500)); // Kích thước lớn hơn cửa sổ chính để thử nghiệm thanh cuộn
+
+        int productCount = sanpham.getSp().size();
+        int rows = (int) Math.ceil(productCount / 4.0); // 4sp 1 dòng
+        int productHeight = 320; // Chiều cao mỗi ô sản phẩm
+        int totalHeight = 300 + rows * productHeight + 100; // Tổng chiều cao p0
+
+        p0.setPreferredSize(new Dimension(1280, totalHeight));
 
         top_panel = new JPanel();
         top_panel.setBackground(xanhla);
         top_panel.setPreferredSize(new Dimension(0, 230));
-
         top_panel.setLayout(new BorderLayout());
         p0.add(top_panel, BorderLayout.NORTH);
+
+        mid_panel = new JPanel();
+        mid_panel.setLayout(new GridLayout(0, 4, 20, 20));
+        mid_panel.setBackground(xamnhat);
+
+        p0.add(mid_panel, BorderLayout.CENTER);
 
         createPanel_1();
         createPanel_2();
         createPanel_3();
+        createProductGrid();
+
         bot_panel = new JPanel();
         bot_panel.setBackground(vang);
         bot_panel.setLayout(new BorderLayout());
         bot_panel.setPreferredSize(new Dimension(0, 50));
         p0.add(bot_panel, BorderLayout.SOUTH);
+
         create_footer();
+
         // Đặt p0 vào JScrollPane
         scr = new JScrollPane(p0);
         scr.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scr.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scr.getVerticalScrollBar().setUnitIncrement(16);
+        scr.getVerticalScrollBar().setUnitIncrement(20);
 
-        // *** Thêm JScrollPane vào JFrame ***
         getContentPane().add(scr);
 
         setVisible(true);
@@ -102,27 +136,40 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         p1.add(p1_right, BorderLayout.EAST);
 
         customerArr khach = new customerArr();
-        khach.readFile();
+        khach.readDatabase();
 
         // Hiển thị tên người dùng
         nameuser = new JLabel("Xin chào, " + khachhang.getTenkh());
         nameuser.setForeground(Color.WHITE);
-        nameuser.setFont(new Font("Arial", Font.BOLD, 18));
+        nameuser.setFont(new Font("Arial", Font.PLAIN, 17));
         nameuser.setHorizontalAlignment(SwingConstants.RIGHT);
-        nameuser.setBounds(0, 15, 250, 48); // Điều chỉnh chiều rộng để không tràn ra ngoài
+        nameuser.setBounds(0, 20, 250, 48); // Điều chỉnh chiều rộng để không tràn ra ngoài
         p1_right.add(nameuser);
 
         // Nút đăng xuất
-        ImageIcon icon_logout = new ImageIcon(getClass().getResource("/customer/img_xt/icons8-log-out-48.png"));
-        Image img = icon_logout.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+        ImageIcon icon_logout = new ImageIcon(getClass().getResource("/customer/img_xt/icons8-log-out-40.png"));
+        Image img = icon_logout.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(img);
 
         logout = new JButton(scaledIcon);
-        logout.setBounds(250, 20, 48, 48);
+        logout.setBounds(260, 20, 40, 40);
         logout.setBackground(xanhla);
         logout.setBorder(null);
         logout.setFocusPainted(false);
         p1_right.add(logout);
+
+        logout.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                logout.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Chuyển thành bàn tay
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                logout.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+            }
+        });
+
         logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -167,21 +214,55 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
 
         });
 
-        search = new JButton("TÌM KIẾM");
-        search.setBounds(750, 20, 100, 40);
+        ImageIcon icon_search = new ImageIcon(
+                "D:\\ThienTam-main\\ThienTam-main\\customer\\img_xt\\icons8-search-40.png");
+        Image img = icon_search.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon search_btn = new ImageIcon(img);
+
+        search = new JButton(search_btn);
+        search.setBounds(750, 20, 80, 40);
         search.setForeground(Color.white);
         search.setBackground(hong);
         search.setFocusPainted(false);
         p2.add(search);
         search.addMouseListener(this);
 
-        cart = new JButton("GIỎ HÀNG");
-        cart.setBounds(900, 20, 100, 40);
+        search.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                search.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Chuyển thành bàn tay
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                search.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+            }
+        });
+
+        ImageIcon icon_cart = new ImageIcon(
+                "D:\\ThienTam-main\\ThienTam-main\\customer\\img_xt\\icons8-shopping-cart-40.png");
+        Image img_cart = icon_cart.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        ImageIcon cart_btn = new ImageIcon(img_cart);
+
+        cart = new JButton(cart_btn);
+        cart.setBounds(900, 20, 80, 40);
         cart.setForeground(Color.white);
         cart.setBackground(hong);
         cart.addActionListener(this);
         cart.setFocusPainted(false);
         p2.add(cart);
+
+        cart.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                cart.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Chuyển thành bàn tay
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                cart.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+            }
+        });
 
         hotline = new JLabel("Hotline (8:00 - 21:30)");
         hotline.setBounds(1080, 20, 150, 14);
@@ -205,7 +286,8 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         // Sử dụng FlowLayout căn giữa để các phần tử được căn chỉnh đẹp hơn
         p3.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
 
-        String[] cb1_item = { "              Đối tượng sử dụng", "Trẻ em", "Người lớn", "Người cao tuổi",
+        String[] cb1_item = { "              Đối tượng sử dụng", "Mọi lứa tuổi", "Trẻ em", "Người lớn",
+                "Người cao tuổi",
                 "Phụ nữ có thai", "Phụ nữ cho con bú", "Người bị loét dạ dày" };
         cb1 = new JComboBox<>(cb1_item);
         cb1.setPreferredSize(new Dimension(220, 30));
@@ -243,6 +325,123 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         top_panel.add(p3, BorderLayout.SOUTH);
     }
 
+    public void createProductGrid() {
+        ArrayList<product> productArr = sanpham.getSp();
+        int productCount = productArr.size();
+
+        // mid_panel.removeAll(); // Xóa các sản phẩm cũ trước khi cập nhật mới
+        mid_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+
+        for (int i = 0; i < productCount; i++) {
+            JPanel productPanel = new JPanel();
+            productPanel.setLayout(new BorderLayout());
+            productPanel.setPreferredSize(new Dimension(250, 300));
+            productPanel.setBorder(BorderFactory.createLineBorder(xanhla, 1));
+
+            // center ô san pham
+            JPanel chinhgiua = new JPanel();
+            chinhgiua.setLayout(new BorderLayout());
+            chinhgiua.setBackground(linen);
+            productPanel.add(chinhgiua, BorderLayout.CENTER);
+
+            JPanel main_center = new JPanel();
+            main_center.setBackground(hong);
+            main_center.setLayout(new BorderLayout());
+            main_center.setPreferredSize(new Dimension(0, 0));
+            chinhgiua.add(main_center, BorderLayout.CENTER);
+
+            JLabel test = new JLabel("" + (i + 1), SwingConstants.CENTER);
+            test.setFont(new Font("Arial", Font.PLAIN, 60));
+            test.setForeground(xanhla);
+            main_center.add(test, BorderLayout.CENTER);
+
+            // TEN SAN PHAM------------------
+            JPanel main_center_tensp = new JPanel();
+            main_center_tensp.setBackground(linen);
+            main_center_tensp.setPreferredSize(new Dimension(0, 30));
+            main_center.add(main_center_tensp, BorderLayout.SOUTH);
+
+            JLabel tensp = new JLabel(productArr.get(i).getTenThuoc(), SwingConstants.CENTER);
+
+            tensp.setFont(new Font("Arial", Font.PLAIN | Font.ITALIC, 13));
+            main_center_tensp.add(tensp, BorderLayout.CENTER);
+
+            JPanel main_center_trai = new JPanel();
+            main_center_trai.setBackground(linen);
+            main_center_trai.setPreferredSize(new Dimension(0, 0));
+            main_center_tensp.add(main_center_trai, BorderLayout.WEST);
+
+            JPanel main_center_phai = new JPanel();
+            main_center_phai.setBackground(linen);
+            main_center_phai.setPreferredSize(new Dimension(0, 0));
+            main_center_tensp.add(main_center_phai, BorderLayout.EAST);
+
+            // ------------------------------
+
+            // Hiển thị tên sản phẩm
+            JPanel main_north = new JPanel();
+            main_north.setBackground(xamnhat);
+            main_north.setPreferredSize(new Dimension(0, 10));
+            chinhgiua.add(main_north, BorderLayout.NORTH);
+
+            JPanel main_east = new JPanel();
+            main_east.setBackground(xamnhat);
+            main_east.setPreferredSize(new Dimension(10, 0));
+            chinhgiua.add(main_east, BorderLayout.EAST);
+
+            JPanel main_west = new JPanel();
+            main_west.setBackground(xamnhat);
+            main_west.setPreferredSize(new Dimension(10, 0));
+            chinhgiua.add(main_west, BorderLayout.WEST);
+
+            JPanel main_south = new JPanel();
+            main_south.setBackground(xamnhat);
+            main_south.setPreferredSize(new Dimension(0, 25));
+            chinhgiua.add(main_south, BorderLayout.SOUTH);
+
+            // gia tien
+            NumberFormat nf = NumberFormat.getInstance(Locale.FRANCE); // Dùng dấu cách thay vì dấu phẩy
+            String formattedPrice = nf.format(productArr.get(i).getGiaBan()) + " / " + productArr.get(i).getDonVi();
+
+            JLabel price_sp = new JLabel(formattedPrice, SwingConstants.LEFT);
+            price_sp.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 17));
+            price_sp.setForeground(dodo);
+            main_south.add(price_sp);
+            // nut mua hang
+            JPanel buy_panel = new JPanel();
+            buy_panel.setPreferredSize(new Dimension(0, 50));
+            buy_panel.setBackground(xamnhat);
+            productPanel.add(buy_panel, BorderLayout.SOUTH);
+
+            JButton buy_btn = new JButton("Chọn mua");
+            buy_btn.setFont(new Font("Arial", Font.BOLD, 17));
+            buy_btn.setForeground(Color.WHITE);
+            buy_btn.setFocusPainted(false);
+            buy_btn.setPreferredSize(new Dimension(170, 35));
+            buy_btn.setBackground(xanhla);
+
+            buy_panel.add(buy_btn);
+
+            buy_btn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    buy_btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Chuyển thành bàn tay
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    buy_btn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+                }
+            });
+
+            // Thêm vào mid_panel
+            mid_panel.add(productPanel);
+        }
+
+        mid_panel.revalidate();
+        mid_panel.repaint();
+    }
+
     private void create_footer() {
         JPanel tail = new JPanel(new GridBagLayout());
         tail.setBackground(xanhla);
@@ -264,18 +463,44 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() == search) {
-            String temp = timkiem.getText();
-            ArrayList<product> foundProducts = sanpham.findName(temp); // Tìm tất cả sản phẩm chứa từ khóa
+            String temp = timkiem.getText().trim(); // Lấy từ khóa tìm kiếm
+            String temp_dtsd = cb1.getSelectedItem().toString().trim();
+            String temp_chidinh = cb2.getSelectedItem().toString().trim();
+            String temp_xuatxu = cb3.getSelectedItem().toString().trim();
 
-            if (foundProducts.isEmpty()) {
-                System.out.println("Không tìm thấy sản phẩm nào chứa: " + temp);
+            ArrayList<product> foundProducts = temp.equals("Nhập tên sản phẩm thuốc ...") ? sanpham.getSp()
+                    : sanpham.findName(temp);
+
+            ArrayList<product> foundProductsFilter = new ArrayList<>();
+            for (product p : foundProducts) {
+                boolean hople = true;
+
+                if (!temp_dtsd.equals("Đối tượng sử dụng") && !p.getDoiTuongSD().contains(temp_dtsd)) {
+                    hople = false;
+                }
+                if (!temp_chidinh.equals("Chỉ định") && !p.getThongTinThuoc().contains(temp_chidinh)) {
+                    hople = false;
+                }
+                if (!temp_xuatxu.equals("Xuất xứ thương hiệu") && !p.getXuatXu().contains(temp_xuatxu)) {
+                    hople = false;
+                }
+
+                if (hople) {
+                    foundProductsFilter.add(p);
+                }
+            }
+
+            if (foundProductsFilter.isEmpty()) {
+                System.out.println("Không tìm thấy sản phẩm phù hợp.");
+                JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm phù hợp");
             } else {
-                System.out.println("Danh sách sản phẩm chứa: " + temp);
-                for (product p : foundProducts) {
-                    System.out.println("Mã thuốc: " + p.getMathuoc());
-                    System.out.println("Tên thuốc: " + p.getTenthuoc());
-                    System.out.println("Giá bán: " + p.getGiaban());
-                    System.out.println("Xuất xứ: " + p.getXuatxu());
+                System.out.println("Danh sách sản phẩm phù hợp:");
+
+                for (product p : foundProductsFilter) {
+                    System.out.println("Mã thuốc: " + p.getMaThuoc());
+                    System.out.println("Tên thuốc: " + p.getTenThuoc()); // Sửa lỗi in sai tên
+                    System.out.println("Giá bán: " + p.getGiaBan());
+                    System.out.println("Xuất xứ: " + p.getXuatXu());
                     System.out.println("----------------------------------");
                 }
             }
@@ -305,7 +530,8 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == cart) {
-            new cartGUI(this, khachhang.getTenkh());
+            new cartGUI(this, khachCurrent);
+            dispose();
         }
     }
 

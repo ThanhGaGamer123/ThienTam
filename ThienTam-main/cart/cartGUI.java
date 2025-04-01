@@ -1,5 +1,6 @@
 package cart;
 
+import customer.customer;
 import customer.customerGUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,6 +12,7 @@ public class cartGUI extends JFrame {
     private JLabel title;
     private JButton back;
     private customerGUI khach;
+    private customer khachCurrent;
 
     // private String ten; // Thêm biến để lưu tên khách hàng
 
@@ -22,8 +24,11 @@ public class cartGUI extends JFrame {
     private static final Color hong = new Color(234, 185, 170);
     private static final Color xam = new Color(207, 207, 207);
 
-    public cartGUI(customerGUI khach, String ten) {
+    public cartGUI(customerGUI khach, customer khachCurrent) {
         this.khach = khach;
+        this.khachCurrent = khachCurrent;
+
+        customer khachDangNhap = getKhachHangDangNhap();
 
         setTitle("Giỏ hàng");
         setSize(1280, 720);
@@ -38,6 +43,10 @@ public class cartGUI extends JFrame {
         setVisible(true);
     }
 
+    public customer getKhachHangDangNhap() {
+        return this.khachCurrent;
+    }
+
     private void create_header() {
         header = new JPanel();
         header.setBackground(xanhla);
@@ -50,11 +59,16 @@ public class cartGUI extends JFrame {
         title.setBounds(600, 30, 300, 40);
         header.add(title);
 
-        back = new JButton("QUAY LẠI");
+        ImageIcon icon_back = new ImageIcon("D:\\ThienTam-main\\ThienTam-main\\customer\\img_xt\\back.png");
+        Image img = icon_back.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon back_btn = new ImageIcon(img);
+
+        back = new JButton(back_btn);
         back.setFont(new Font("Arial", Font.BOLD, 12));
         back.setBounds(10, 10, 100, 20);
         back.setForeground(Color.white);
         back.setBackground(hong);
+        back.setFocusPainted(false);
         header.add(back);
 
         back.addActionListener(new ActionListener() {
@@ -74,6 +88,8 @@ public class cartGUI extends JFrame {
         body.setPreferredSize(new Dimension(0, 500));
         body.setLayout(new BorderLayout());
         add(body, BorderLayout.CENTER);
+
+        // panel ben phai
 
         JPanel pay = new JPanel();
         pay.setBackground(xam);
@@ -146,6 +162,7 @@ public class cartGUI extends JFrame {
         buttonPanel.setBackground(xam);
         JButton thanhtoan_btn = new JButton("Mua hàng");
         thanhtoan_btn.setBackground(hong);
+        thanhtoan_btn.setFocusPainted(false);
         thanhtoan_btn.setFont(new Font("Arial", Font.BOLD, 20));
         thanhtoan_btn.setPreferredSize(new Dimension(150, 50));
         buttonPanel.add(thanhtoan_btn);
@@ -154,10 +171,13 @@ public class cartGUI extends JFrame {
         thanhtoan_btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new thanhtoanGUI(khach, cartGUI.this);
+                System.out.println("Khách hàng trong thanhtoanGUI: " + khachCurrent);
+
+                new thanhtoanGUI(khach, cartGUI.this, khachCurrent);
                 dispose();
             }
         });
+
         pay.add(buttonPanel, gbc);
     }
 

@@ -1,6 +1,10 @@
 package cart;
 
+import customer.customer;
 import customer.customerGUI;
+import login.signup.login;
+import products.productsArr;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,12 +26,15 @@ public class thanhtoanGUI extends JFrame {
     private static final Color hong = new Color(234, 185, 170);
     private static final Color xam = new Color(207, 207, 207);
     private static final Color linen = new Color(250, 240, 230);
+    private customer khachhang;
+    private productsArr sanpham;
+    private customer khachCurrent;
 
-    public thanhtoanGUI(customerGUI khach, cartGUI cart) {
+    public thanhtoanGUI(customerGUI khach, cartGUI cart, customer khachCurrent) {
         this.khach = khach;
         this.cart = cart;
+        this.khachhang = khachCurrent;
 
-        // customerGUI khach, String ten
         setTitle("Giỏ hàng");
         setSize(1280, 720);
         setLocationRelativeTo(null);
@@ -39,6 +46,10 @@ public class thanhtoanGUI extends JFrame {
         create_footer();
 
         setVisible(true);
+    }
+
+    public customer getKhachHangDangNhap() {
+        return this.khachhang;
     }
 
     private void create_header() {
@@ -53,11 +64,16 @@ public class thanhtoanGUI extends JFrame {
         title.setBounds(500, 30, 300, 40);
         header.add(title);
 
-        back = new JButton("QUAY LẠI");
+        ImageIcon icon_back = new ImageIcon("D:\\ThienTam-main\\ThienTam-main\\customer\\img_xt\\back.png");
+        Image img = icon_back.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon back_btn = new ImageIcon(img);
+
+        back = new JButton(back_btn);
         back.setFont(new Font("Arial", Font.BOLD, 12));
         back.setBounds(10, 10, 100, 20);
         back.setForeground(Color.white);
         back.setBackground(hong);
+        back.setFocusPainted(false);
         header.add(back);
 
         back.addActionListener(new ActionListener() {
@@ -120,6 +136,7 @@ public class thanhtoanGUI extends JFrame {
         gbc1.weightx = 1; // Giúp các thành phần kéo dài theo chiều ngang
 
         // ===== THÔNG TIN NGƯỜI ĐẶT =====
+        customer khachDangNhap = getKhachHangDangNhap();
         gbc1.gridx = 0;
         gbc1.gridy = 0;
         gbc1.gridwidth = 2; // Dài hết hàng
@@ -134,6 +151,9 @@ public class thanhtoanGUI extends JFrame {
         panelNguoiDat.setBackground(Color.WHITE);
         JTextField tenNguoiDat = new JTextField();
         tenNguoiDat.setBorder(BorderFactory.createTitledBorder("Tên người đặt"));
+
+        String temp = khachDangNhap.getTenkh();
+        tenNguoiDat.setText(temp);
         JTextField sdtNguoiDat = new JTextField();
         sdtNguoiDat.setBorder(BorderFactory.createTitledBorder("SDT người đặt"));
         panelNguoiDat.add(tenNguoiDat);
@@ -166,10 +186,16 @@ public class thanhtoanGUI extends JFrame {
         Font comboBoxFont = new Font("Arial", Font.PLAIN, 16);
         JComboBox<String> tinhThanh = new JComboBox<>(new String[] { "Chọn tỉnh/thành phố", "TP Hồ Chí Minh" });
         tinhThanh.setFont(comboBoxFont);
-        JComboBox<String> quanHuyen = new JComboBox<>(new String[] { "Chọn quận/huyện" });
+        JComboBox<String> quanHuyen = new JComboBox<>(new String[] { "Chọn quận/huyện",
+                "Quận 1", "Quận 3", "Quận 4", "Quận 5", "Quận 6", "Quận 7",
+                "Quận 8", "Quận 10", "Quận 11", "Quận 12", "Quận Bình Tân",
+                "Quận Bình Thạnh", "Quận Gò Vấp", "Quận Phú Nhuận", "Quận Tân Bình",
+                "Quận Tân Phú", "Thành phố Thủ Đức", "Huyện Bình Chánh", "Huyện Cần Giờ",
+                "Huyện Củ Chi", "Huyện Hóc Môn", "Huyện Nhà Bè" });
         quanHuyen.setFont(comboBoxFont);
         JComboBox<String> phuongXa = new JComboBox<>(new String[] { "Chọn phường/xã" });
         phuongXa.setFont(comboBoxFont);
+
         panelDiaChi.add(tinhThanh);
         panelDiaChi.add(quanHuyen);
         panelDiaChi.add(phuongXa);
@@ -289,11 +315,35 @@ public class thanhtoanGUI extends JFrame {
         buttonPanel.setBackground(xam);
         JButton thanhtoan_btn = new JButton("Xác nhận thanh toán");
         thanhtoan_btn.setBackground(hong);
+        thanhtoan_btn.setFocusPainted(false);
         thanhtoan_btn.setFont(new Font("Arial", Font.BOLD, 20));
         thanhtoan_btn.setPreferredSize(new Dimension(250, 50));
         buttonPanel.add(thanhtoan_btn);
         gbc2.gridy = 5;
         pay.add(buttonPanel, gbc2);
+
+        thanhtoan_btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (diaChiCuThe.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Bạn chưa nhập địa chỉ nhận hàng!");
+                    return;
+                } else if (tenNguoiNhan.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Bạn chưa nhập tên người nhận!");
+                    return;
+                } else if (sdtNguoiNhan.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Bạn chưa nhập SĐT người nhận!");
+                    return;
+                }
+
+                int choice = JOptionPane.showConfirmDialog(null,
+                        "Bạn có chắc muốn xác nhận thanh toán không ?");
+                if (choice == 0) {
+
+                }
+
+            }
+        });
 
     }
 

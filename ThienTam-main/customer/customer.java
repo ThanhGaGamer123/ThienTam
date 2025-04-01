@@ -1,122 +1,82 @@
 package customer;
 
 public class customer {
-    private String makh;
-    private String tenkh;
-    private int sdtkh;
-    private String email;
-    private String soNhakhach;
-    private String phuongkh;
-    private String quankh;
-    private String tinhkh;
+    private String makh, tenkh, sdtkh, email, soNhakhach, duongkh, phuongkh, quankh, tinhkh, passwordkh;
     private int diemkm;
 
-    private String userkh;
-    private String password;
+
+
 
     public customer() {
     }
 
-    public customer(String makh, String tenkh, int sdtkh, String email, String soNhakhach, String phuongkh,
-            String quankh, String tinhkh, int diemkm, String userkh, String password) {
+    public customer(String makh, String tenkh, String sdtkh, String email, String soNhakhach, String duongkh,
+            String phuongkh, String quankh, String tinhkh, int diemkm, String passwordkh) {
         this.makh = makh;
         this.tenkh = tenkh;
         this.sdtkh = sdtkh;
         this.email = email;
         this.soNhakhach = soNhakhach;
+        this.duongkh = duongkh;
         this.phuongkh = phuongkh;
         this.quankh = quankh;
         this.tinhkh = tinhkh;
         this.diemkm = diemkm;
-        this.userkh = userkh;
-        this.password = password;
+        this.passwordkh = passwordkh;
     }
 
     public String getMakh() {
         return makh;
     }
 
-    public void setMakh(String makh) {
-        this.makh = makh;
-    }
-
     public String getTenkh() {
         return tenkh;
     }
 
-    public void setTenkh(String tenkh) {
-        this.tenkh = tenkh;
-    }
-
-    public int getSdtkh() {
+    public String getSdtkh() {
         return sdtkh;
-    }
-
-    public void setSdtkh(int sdtkh) {
-        this.sdtkh = sdtkh;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getSoNhakhach() {
         return soNhakhach;
     }
 
-    public void setSoNhakhach(String soNhakhach) {
-        this.soNhakhach = soNhakhach;
+    public String getDuongkh() {
+        return duongkh;
     }
 
     public String getPhuongkh() {
         return phuongkh;
     }
 
-    public void setPhuongkh(String phuongkh) {
-        this.phuongkh = phuongkh;
-    }
-
     public String getQuankh() {
         return quankh;
-    }
-
-    public void setQuankh(String quankh) {
-        this.quankh = quankh;
     }
 
     public String getTinhkh() {
         return tinhkh;
     }
 
-    public void setTinhkh(String tinhkh) {
-        this.tinhkh = tinhkh;
-    }
-
     public int getDiemkm() {
         return diemkm;
     }
 
-    public void setDiemkm(int diemkm) {
-        this.diemkm = diemkm;
+    public String getPasswordkh() {
+        return passwordkh;
     }
 
-    public String getUserkh() {
-        return userkh;
+    @Override
+    public String toString() {
+        return "Mã KH: " + makh +
+                ", Tên: " + tenkh +
+                ", SDT: " + sdtkh +
+                ", Email: " + email +
+                ", Địa chỉ: " + soNhakhach + ", " + duongkh + ", " + phuongkh + ", " + quankh + ", " + tinhkh +
+                ", Điểm KM: " + diemkm;
     }
 
-    public void setUserkh(String userkh) {
-        this.userkh = userkh;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

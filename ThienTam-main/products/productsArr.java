@@ -1,8 +1,6 @@
 package products;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class productsArr {
@@ -10,10 +8,6 @@ public class productsArr {
 
     public productsArr() {
         this.sp = new ArrayList<>();
-    }
-
-    public productsArr(ArrayList<product> sp) {
-        this.sp = sp;
     }
 
     public ArrayList<product> getSp() {
@@ -24,92 +18,105 @@ public class productsArr {
         this.sp = sp;
     }
 
-    public void readFile() {
-        String filePath = "D:\\ThienTam-main\\ThienTam-main\\data\\products.txt";
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] part = line.split(",");
-                if (part.length < 11) { // Đảm bảo đủ số trường
-                    System.out.println("Dòng dữ liệu không hợp lệ: " + line);
-                    continue;
+    // Hàm kết nối SQL Server và lấy dữ liệu từ bảng Thuoc
+
+    public void readDatabase() {
+        try {
+            // Nạp driver JDBC
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+            // Kết nối SQL Server
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=Thientam;encrypt=true;trustServerCertificate=true";
+            String username = "sa";
+            String password = "123";
+
+            try (Connection con = DriverManager.getConnection(url, username, password);
+                    Statement stmt = con.createStatement();
+                    ResultSet rs = stmt.executeQuery("SELECT * FROM Thuoc")) {
+
+                System.out.println("Kết nối SQL Server thành công!");
+
+                sp.clear(); // Xóa danh sách cũ trước khi tải mới
+
+                // Đọc dữ liệu từ ResultSet và thêm vào danh sách
+                while (rs.next()) {
+                    product thuoc = new product(
+                            rs.getString("MaThuoc"),
+                            rs.getString("TenThuoc"),
+                            rs.getString("DonVi"),
+                            rs.getString("ThanhPhan"),
+                            rs.getString("TTinThuoc"), 
+                            rs.getFloat("GiaBan"),
+                            rs.getFloat("GiaNhap"),
+                            rs.getString("XuatXu"),
+                            rs.getString("MaTon"),
+                            rs.getString("DoiTuongSD"));
+
+                    sp.add(thuoc);
                 }
-                try {
-                    float giaban = Float.parseFloat(part[5]);
-                    float gianhap = Float.parseFloat(part[6]);
-                    product thuoc = new product(part[0], part[1], part[2], part[3], part[4], giaban, gianhap, part[7],
-                            part[8], part[9], part[10]);
-                    sp.add(thuoc); // Thêm sản phẩm vào danh sách
-                } catch (NumberFormatException e) {
-                    System.out.println("Lỗi chuyển đổi số tại dòng: " + line);
-                }
+
+                System.out.println("Dữ liệu đã tải từ bảng Thuoc.");
             }
-        } catch (IOException e) {
-            System.out.println("Không thể đọc file: " + e.getMessage());
+
+        } catch (Exception e) {
+            System.out.println("Lỗi kết nối hoặc SQL: " + e.getMessage());
         }
     }
 
+    // Hàm in danh sách sản phẩm
     public void printProducts() {
-        if (sp == null || sp.isEmpty()) {
+        if (sp.isEmpty()) {
             System.out.println("Danh sách sản phẩm trống.");
             return;
         }
 
         System.out.println("Danh sách sản phẩm:");
-        for (product thuoc : sp) {
-            System.out.println("Mã thuốc: " + thuoc.getMathuoc());
-            System.out.println("Tên thuốc: " + thuoc.getTenthuoc());
-            System.out.println("Đơn vị: " + thuoc.getDonvi());
-            System.out.println("Thành phần: " + thuoc.getThanhphan());
-            System.out.println("Thông tin sản phẩm: " + thuoc.getThongtinsp());
-            System.out.println("Giá bán: " + thuoc.getGiaban());
-            System.out.println("Giá nhập: " + thuoc.getGianhap());
-            System.out.println("Xuất xứ: " + thuoc.getXuatxu());
-            System.out.println("Mã hàng tồn: " + thuoc.getMahangton());
-            System.out.println("Doi tuong su dung : " + thuoc.getDoituongsd());
-            System.out.println("Chi dinh " + thuoc.getChidinh());
-            System.out.println("----------------------------------");
+        for (product p : sp) {
+            System.out.println(p); // toString() trong product sẽ giúp in gọn
         }
     }
 
+    // Tìm kiếm thuốc theo tên
     public ArrayList<product> findName(String timkiem) {
         ArrayList<product> result = new ArrayList<>();
         for (product p : sp) {
-            String temp = p.getTenthuoc(); // Lấy tên thuốc
-            if (temp.toLowerCase().contains(timkiem.toLowerCase())) { // Tìm gần đúng, không phân biệt hoa thường
-                result.add(p); // Thêm vào danh sách kết quả
+            if (p.getTenThuoc().toLowerCase().contains(timkiem.toLowerCase())) {
+                result.add(p);
             }
         }
         return result;
     }
 
-    public int findDTSD(String dt) {
-        for (int i = 0; i < sp.size(); i++) {
-            String temp = sp.get(i).getDoituongsd(); // Tìm theo đối tượng sử dụng
-            if (temp.contains(dt)) {
-                return i;
+    public ArrayList<product> findDTuongSD(String s) {
+        ArrayList<product> result = new ArrayList<>();
+        for (product p : sp) {
+            if (p.getDoiTuongSD().toLowerCase().contains(s.toLowerCase())) {
+                result.add(p);
             }
         }
-        return -1;
+        return result;
     }
 
-    public int findxuatsu(String xsu) {
-        for (int i = 0; i < sp.size(); i++) {
-            String temp = sp.get(i).getXuatxu(); // Tìm theo xuất xứ
-            if (temp.contains(xsu)) {
-                return i;
+    // Tìm theo xuất xứ
+    public ArrayList<product> findXuatXu(String x) {
+        ArrayList<product> result = new ArrayList<>();
+        for (product p : sp) {
+            if (p.getXuatXu().toLowerCase().contains(x.toLowerCase())) {
+                result.add(p);
             }
         }
-        return -1;
+        return result;
     }
 
-    public int findChidinh(String cdinh) {
-        for (int i = 0; i < sp.size(); i++) {
-            String temp = sp.get(i).getChidinh(); // Tìm theo chỉ định
-            if (temp.contains(cdinh)) {
-                return i;
+    // Tìm theo chỉ định
+    public ArrayList<product> findChiDinh(String c) {
+        ArrayList<product> result = new ArrayList<>();
+        for (product p : sp) {
+            if (p.getThongTinThuoc().toLowerCase().contains(c.toLowerCase())) {
+                result.add(p);
             }
         }
-        return -1;
+        return result;  
     }
+
 }
