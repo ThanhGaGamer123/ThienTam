@@ -7,16 +7,19 @@ public class promotion {
     private String ngaybatdau;
     private String ngayketthuc;
     private String noidung;
+
+    private int diem;
     
     public promotion() {
     }
 
-    public promotion(String makm, String tenkm, String ngaybatdau, String ngayketthuc, String noidung) {
+    public promotion(String makm, String tenkm, String ngaybatdau, String ngayketthuc, String noidung, int diem) {
         this.makm = makm;
         this.tenkm = tenkm;
         this.ngaybatdau = ngaybatdau;
         this.ngayketthuc = ngayketthuc;
         this.noidung = noidung;
+        this.diem = diem;
     }
 
     public String getMakm() {
@@ -57,5 +60,13 @@ public class promotion {
 
     public void setNoidung(String noidung) {
         this.noidung = noidung;
+    }
+
+    public int getDiem() {
+        return diem;
+    }
+
+    public void setDiem(int diem) {
+        this.diem = diem;
     }
 }

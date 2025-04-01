@@ -147,7 +147,7 @@ public class login extends JFrame {
                 String username = user_field.getText();
                 String password = String.valueOf(pass_field.getPassword());
                 employeeArr employ = new employeeArr();
-                employ.readFile();
+                // employ.readFile();
                 Boolean flag = false;
                 for(employee nv : employ.getArr()) {
                     if(username.equals(nv.getUsername()) && password.equals(nv.getPassword())) {

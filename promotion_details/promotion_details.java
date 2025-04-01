@@ -6,17 +6,15 @@ public class promotion_details {
     private String makm;
 
     private String ngayapdung;
-    private String noidung;
     
     public promotion_details() {
     }
 
-    public promotion_details(String mactkm, String madon, String makm, String ngayapdung, String noidung) {
+    public promotion_details(String mactkm, String madon, String makm, String ngayapdung) {
         this.mactkm = mactkm;
         this.madon = madon;
         this.makm = makm;
         this.ngayapdung = ngayapdung;
-        this.noidung = noidung;
     }
 
     public String getMactkm() {
@@ -49,12 +47,5 @@ public class promotion_details {
 
     public void setNgayapdung(String ngayapdung) {
         this.ngayapdung = ngayapdung;
-    }
-    public String getNoidung() {
-        return noidung;
-    }
-
-    public void setNoidung(String noidung) {
-        this.noidung = noidung;
     }
 }

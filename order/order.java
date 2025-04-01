@@ -13,14 +13,14 @@ public class order {
     
     private String ngaydat;
     private String pttt;
-    private String tongtien;
+    private int tongtien;
     private String tinhtrang;
     
     public order() {
     }
 
     public order(String madon, String makh, String manv, String masonha, String duong, String phuong, String quan,
-            String tinh, String ngaydat, String pttt, String tongtien, String tinhtrang) {
+            String tinh, String ngaydat, String pttt, int tongtien, String tinhtrang) {
         this.madon = madon;
         this.makh = makh;
         this.manv = manv;
@@ -115,11 +115,11 @@ public class order {
         this.pttt = pttt;
     }
 
-    public String getTongtien() {
+    public int getTongtien() {
         return tongtien;
     }
 
-    public void setTongtien(String tongtien) {
+    public void setTongtien(int tongtien) {
         this.tongtien = tongtien;
     }
 

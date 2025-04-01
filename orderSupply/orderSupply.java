@@ -4,14 +4,14 @@ public class orderSupply {
     private String mahdnhap;
     private String mancc;
 
-    private String soloaithuoc;
+    private int soloaithuoc;
     private String ngaynhap;
-    private String tongtien;
+    private int tongtien;
     
     public orderSupply() {
     }
 
-    public orderSupply(String mahdnhap, String mancc, String soloaithuoc, String ngaynhap, String tongtien) {
+    public orderSupply(String mahdnhap, String mancc, int soloaithuoc, String ngaynhap, int tongtien) {
         this.mahdnhap = mahdnhap;
         this.mancc = mancc;
         this.soloaithuoc = soloaithuoc;
@@ -35,11 +35,11 @@ public class orderSupply {
         this.mancc = mancc;
     }
 
-    public String getSoloaithuoc() {
+    public int getSoloaithuoc() {
         return soloaithuoc;
     }
 
-    public void setSoloaithuoc(String soloaithuoc) {
+    public void setSoloaithuoc(int soloaithuoc) {
         this.soloaithuoc = soloaithuoc;
     }
 
@@ -51,11 +51,11 @@ public class orderSupply {
         this.ngaynhap = ngaynhap;
     }
 
-    public String getTongtien() {
+    public int getTongtien() {
         return tongtien;
     }
 
-    public void setTongtien(String tongtien) {
+    public void setTongtien(int tongtien) {
         this.tongtien = tongtien;
     }
 }

@@ -7,18 +7,17 @@ public class medicine {
 
     private String danhmuc;
     private String[] donvi;
-    private String[] thanhphan;
+    private String thanhphan;
     private String thongtin;
     private String xuatxu;
-
-    private int[] gianhap;
+    private String[] doituongsudung;
     private int[] giaban;
     
     public medicine() {
     }
 
-    public medicine(String mathuoc, String maton, String tenthuoc, String danhmuc, String[] donvi, String[] thanhphan,
-            String thongtin, String xuatxu, int[] gianhap, int[] giaban) {
+    public medicine(String mathuoc, String maton, String tenthuoc, String danhmuc, String[] donvi, String thanhphan,
+            String thongtin, String xuatxu, String[] doituongsudung, int[] giaban) {
         this.mathuoc = mathuoc;
         this.maton = maton;
         this.tenthuoc = tenthuoc;
@@ -27,7 +26,7 @@ public class medicine {
         this.thanhphan = thanhphan;
         this.thongtin = thongtin;
         this.xuatxu = xuatxu;
-        this.gianhap = gianhap;
+        this.doituongsudung = doituongsudung;
         this.giaban = giaban;
     }
 
@@ -47,6 +46,14 @@ public class medicine {
         this.maton = maton;
     }
 
+    public String[] getDoituongsudung() {
+        return doituongsudung;
+    }
+
+    public void setDoituongsudung(String[] doituongsudung) {
+        this.doituongsudung = doituongsudung;
+    }
+
     public String getTenthuoc() {
         return tenthuoc;
     }
@@ -63,11 +70,11 @@ public class medicine {
         this.donvi = donvi;
     }
 
-    public String[] getThanhphan() {
+    public String getThanhphan() {
         return thanhphan;
     }
 
-    public void setThanhphan(String[] thanhphan) {
+    public void setThanhphan(String thanhphan) {
         this.thanhphan = thanhphan;
     }
 
@@ -85,14 +92,6 @@ public class medicine {
 
     public void setXuatxu(String xuatxu) {
         this.xuatxu = xuatxu;
-    }
-
-    public int[] getGianhap() {
-        return gianhap;
-    }
-
-    public void setGianhap(int[] gianhap) {
-        this.gianhap = gianhap;
     }
 
     public int[] getGiaban() {

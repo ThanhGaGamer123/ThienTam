@@ -1,5 +1,9 @@
 package customer;
 
+import java.util.ArrayList;
+
+import medicine.medicine;
+
 public class customer {
     private String makh;
     private String tenkh;
@@ -14,11 +18,13 @@ public class customer {
     private String email;
     private String password;
 
+    private ArrayList<medicine> giohang;
+
     public customer() {
     }
 
     public customer(String makh, String tenkh, int sdt, String masonha, String duong, String phuong, String quan,
-            String tinh, String email, String password) {
+            String tinh, String email, String password, ArrayList<medicine> giohang) {
         this.makh = makh;
         this.tenkh = tenkh;
         this.sdt = sdt;
@@ -29,6 +35,7 @@ public class customer {
         this.tinh = tinh;
         this.email = email;
         this.password = password;
+        this.giohang = giohang;
     }
 
     public String getMakh() {
@@ -109,5 +116,13 @@ public class customer {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public ArrayList<medicine> getGiohang() {
+        return giohang;
+    }
+
+    public void setGiohang(ArrayList<medicine> giohang) {
+        this.giohang = giohang;
     }
 }

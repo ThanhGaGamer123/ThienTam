@@ -1,6 +1,5 @@
 ﻿create database Thientam
 use Thientam;
-use master;
 drop database Thientam;
 CREATE TABLE NhaThuoc (
     MaNhaThuoc VARCHAR(10) PRIMARY KEY,     

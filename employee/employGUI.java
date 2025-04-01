@@ -828,7 +828,7 @@ public class employGUI extends JFrame {
 
         //Tự động cập nhật thông tin hóa đơn bán
         orderArr arr = new orderArr();
-        arr.readFile();
+        // arr.readFile();
         for(order dh : arr.getArr()) {
             if(nv.getManv().equals(dh.getManv())) {
                 JLabel statusImg;
