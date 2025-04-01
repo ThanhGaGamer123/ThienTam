@@ -810,7 +810,7 @@ public class employGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 storeArr arr = new storeArr();
-                arr.readFile();
+                // arr.readFile();
                 Boolean found = false;
                 for(store nt : arr.getArr()) {
                     if(nv.getManhathuoc().equals(nt.getMant())) {
