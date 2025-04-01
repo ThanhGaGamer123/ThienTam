@@ -19,13 +19,13 @@ public class customer {
     private String password;
 
     private ArrayList<medicine> giohang;
-    private int diem;
+    private int diemKM;
 
     public customer() {
     }
 
     public customer(String makh, String tenkh, int sdt, String masonha, String duong, String phuong, String quan,
-            String tinh, String email, String password, ArrayList<medicine> giohang, int diem) {
+            String tinh, String email, String password, ArrayList<medicine> giohang, int diemKM) {
         this.makh = makh;
         this.tenkh = tenkh;
         this.sdt = sdt;
@@ -37,7 +37,7 @@ public class customer {
         this.email = email;
         this.password = password;
         this.giohang = giohang;
-        this.diem = diem;
+        this.diemKM = diemKM;
     }
 
     public String getMakh() {
@@ -128,11 +128,11 @@ public class customer {
         this.giohang = giohang;
     }
 
-    public int getDiem() {
-        return diem;
+    public int getDiemKM() {
+        return diemKM;
     }
 
-    public void setDiem(int diem) {
-        this.diem = diem;
+    public void setDiemKM(int diemKM) {
+        this.diemKM = diemKM;
     }
 }
