@@ -1,2 +1,0 @@
-NV0001, Nguyễn Văn A, Nhân viên, 0904121101, 12/34/5, An Cư, Bình Đông, Hà Thiên, Hải Phòng, nva@nv0001, nv@0001, NT0001
-NV0002, Trần Thị B, Nhân viên, 0903121131, 25A6, Đinh Lương, Ha Thành, Hà Thiên, Hải Phòng, ttb@nv0002, nv@0002, NT0001

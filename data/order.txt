@@ -1,4 +1,0 @@
-DH0001, KH0001, NV0001, 27/3, Mã Lò, Bình Trị Đông A, Bình Tân, TPHCM, 16/03/2025, Tiền mặt, 114000, true
-DH0002, KH0002, NV0001, 28/3, Mã Lò, Bình Trị Đông A, Bình Tân, TPHCM, 17/03/2025, Chuyển khoản, 12000, false
-DH0003, KH0003, NV0002, 29/3, Mã Lò, Bình Trị Đông B, Bình Tân, TPHCM, 18/03/2025, Tiền mặt, 12000, true
-DH0004, KH0004, NV0002, 30/3, Mã Lò, Bình Trị Đông C, Bình Tân, TPHCM, 19/03/2025, Chuyển khoản, 120000, false
