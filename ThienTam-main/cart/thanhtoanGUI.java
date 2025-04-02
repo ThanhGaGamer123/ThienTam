@@ -3,8 +3,8 @@ package cart;
 import customer.customer;
 import customer.customerGUI;
 import login.signup.login;
-import products.productsArr;
-
+// import medicine.productsArr; // Removed as the class does not exist or is not needed
+import medicine.medicineArr;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,7 +27,7 @@ public class thanhtoanGUI extends JFrame {
     private static final Color xam = new Color(207, 207, 207);
     private static final Color linen = new Color(250, 240, 230);
     private customer khachhang;
-    private productsArr sanpham;
+    private medicineArr sanpham;
     private customer khachCurrent;
 
     public thanhtoanGUI(customerGUI khach, cartGUI cart, customer khachCurrent) {

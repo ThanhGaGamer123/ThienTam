@@ -1,35 +1,53 @@
-package store;
+package supplier;
 
-public class store {
-    private String mant;
-    private String manql;
-    
+public class supplier {
+    private String mancc;
+    private String tenncc;
+
+    private String sdt;
     private String masonha;
     private String duong;
     private String phuong;
     private String quan;
     private String tinh;
     
-    public store() {
+    public supplier() {
     }
 
-    public store(String mant, String masonha, String duong, String phuong, 
-    String quan, String tinh, String manql) {
-        this.mant = mant;
+    public supplier(String mancc, String tenncc, String sdt, String masonha, String duong, String phuong, String quan,
+            String tinh) {
+        this.mancc = mancc;
+        this.tenncc = tenncc;
+        this.sdt = sdt;
         this.masonha = masonha;
         this.duong = duong;
         this.phuong = phuong;
         this.quan = quan;
         this.tinh = tinh;
-        this.manql = manql;
     }
 
-    public String getMant() {
-        return mant;
+    public String getMancc() {
+        return mancc;
     }
 
-    public void setMant(String mant) {
-        this.mant = mant;
+    public void setMancc(String mancc) {
+        this.mancc = mancc;
+    }
+
+    public String getTenncc() {
+        return tenncc;
+    }
+
+    public void setTenncc(String tenncc) {
+        this.tenncc = tenncc;
+    }
+
+    public String getSdt() {
+        return sdt;
+    }
+
+    public void setSdt(String sdt) {
+        this.sdt = sdt;
     }
 
     public String getMasonha() {
@@ -71,14 +89,4 @@ public class store {
     public void setTinh(String tinh) {
         this.tinh = tinh;
     }
-
-    public String getManql() {
-        return manql;
-    }
-
-    public void setManql(String manql) {
-        this.manql = manql;
-    }
-
-    
 }

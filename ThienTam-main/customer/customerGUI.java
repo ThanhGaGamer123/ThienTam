@@ -10,8 +10,8 @@ import java.util.Locale;
 import javax.swing.*;
 
 import login.signup.login;
-import products.product;
-import products.productsArr;
+import medicine.medicine;
+import medicine.medicineArr;
 
 public class customerGUI extends JFrame implements MouseListener, ActionListener {
 
@@ -33,14 +33,14 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
     private static final Color dodo = new Color(232, 58, 72);
 
     private customer khachhang;
-    private productsArr sanpham;
+    private medicineArr sanpham;
     private customer khachCurrent;
 
     public customerGUI(customer kh) {
 
         this.khachhang = kh;
         this.khachCurrent = kh;
-        this.sanpham = new productsArr(); // Khởi tạo
+        this.sanpham = new medicineArr(); // Khởi tạo
         sanpham.readDatabase(); // Đọc dữ liệu
         create();
     }
@@ -326,7 +326,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
     }
 
     public void createProductGrid() {
-        ArrayList<product> productArr = sanpham.getSp();
+        ArrayList<medicine> productArr = sanpham.getSp();
         int productCount = productArr.size();
 
         // mid_panel.removeAll(); // Xóa các sản phẩm cũ trước khi cập nhật mới
@@ -361,7 +361,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
             main_center_tensp.setPreferredSize(new Dimension(0, 30));
             main_center.add(main_center_tensp, BorderLayout.SOUTH);
 
-            JLabel tensp = new JLabel(productArr.get(i).getTenThuoc(), SwingConstants.CENTER);
+            JLabel tensp = new JLabel(productArr.get(i).getTenthuoc(), SwingConstants.CENTER);
 
             tensp.setFont(new Font("Arial", Font.PLAIN | Font.ITALIC, 13));
             main_center_tensp.add(tensp, BorderLayout.CENTER);
@@ -401,8 +401,11 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
 
             // gia tien
             NumberFormat nf = NumberFormat.getInstance(Locale.FRANCE); // Dùng dấu cách thay vì dấu phẩy
-            String formattedPrice = nf.format(productArr.get(i).getGiaBan()) + " / " + productArr.get(i).getDonVi();
+            int price = productArr.get(i).getGiaban()[0]; // Lấy giá trị đầu tiên trong mảng giaban
+            String formattedPrice = nf.format(price) + " / " + productArr.get(i).getDonvi()[0]; // Định dạng giá và đơn
+                                                                                                // vị
 
+            System.out.println(formattedPrice); // In ra kết quả
             JLabel price_sp = new JLabel(formattedPrice, SwingConstants.LEFT);
             price_sp.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 17));
             price_sp.setForeground(dodo);
@@ -468,20 +471,29 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
             String temp_chidinh = cb2.getSelectedItem().toString().trim();
             String temp_xuatxu = cb3.getSelectedItem().toString().trim();
 
-            ArrayList<product> foundProducts = temp.equals("Nhập tên sản phẩm thuốc ...") ? sanpham.getSp()
+            ArrayList<medicine> foundProducts = temp.equals("Nhập tên sản phẩm thuốc ...") ? sanpham.getSp()
                     : sanpham.findName(temp);
 
-            ArrayList<product> foundProductsFilter = new ArrayList<>();
-            for (product p : foundProducts) {
+            ArrayList<medicine> foundProductsFilter = new ArrayList<>();
+            for (medicine p : foundProducts) {
                 boolean hople = true;
 
-                if (!temp_dtsd.equals("Đối tượng sử dụng") && !p.getDoiTuongSD().contains(temp_dtsd)) {
+                if (temp_dtsd != null && !temp_dtsd.isEmpty() && !temp_dtsd.equals("Đối tượng sử dụng")) {
+                    boolean found = false;
+                    for (String item : p.getDoituongsudung()) {
+                        if (item.equals(temp_dtsd)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        hople = false;
+                    }
+                }
+                if (!temp_chidinh.equals("Chỉ định") && !p.getDanhmuc().contains(temp_chidinh)) {
                     hople = false;
                 }
-                if (!temp_chidinh.equals("Chỉ định") && !p.getThongTinThuoc().contains(temp_chidinh)) {
-                    hople = false;
-                }
-                if (!temp_xuatxu.equals("Xuất xứ thương hiệu") && !p.getXuatXu().contains(temp_xuatxu)) {
+                if (!temp_xuatxu.equals("Xuất xứ thương hiệu") && !p.getXuatxu().contains(temp_xuatxu)) {
                     hople = false;
                 }
 
@@ -496,11 +508,19 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
             } else {
                 System.out.println("Danh sách sản phẩm phù hợp:");
 
-                for (product p : foundProductsFilter) {
-                    System.out.println("Mã thuốc: " + p.getMaThuoc());
-                    System.out.println("Tên thuốc: " + p.getTenThuoc()); // Sửa lỗi in sai tên
-                    System.out.println("Giá bán: " + p.getGiaBan());
-                    System.out.println("Xuất xứ: " + p.getXuatXu());
+                for (medicine p : foundProductsFilter) {
+                    // Lấy giá bán đầu tiên và đơn vị đầu tiên
+                    int price = p.getGiaban()[0]; // Lấy giá đầu tiên trong mảng giaban
+                    String unit = p.getDonvi()[0]; // Lấy đơn vị đầu tiên trong mảng donvi
+
+                    // Định dạng giá bán (thêm dấu cách theo kiểu tiền tệ)
+                    NumberFormat nf = NumberFormat.getInstance(Locale.FRANCE); // Dùng dấu cách thay vì dấu phẩy
+                    String formattedPrice = nf.format(price) + " / " + unit; // Định dạng giá bán và đơn vị
+
+                    System.out.println("Mã thuốc: " + p.getMathuoc());
+                    System.out.println("Tên thuốc: " + p.getTenthuoc());
+                    System.out.println("Giá bán: " + formattedPrice); // In ra giá bán theo đơn vị
+                    System.out.println("Xuất xứ: " + p.getXuatxu());
                     System.out.println("----------------------------------");
                 }
             }

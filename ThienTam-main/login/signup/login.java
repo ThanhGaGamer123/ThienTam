@@ -80,7 +80,7 @@ public class login extends JFrame {
                 String username = user_field.getText();
                 String password = String.valueOf(pass_field.getPassword());
                 employeeArr employ = new employeeArr();
-                employ.readFile();
+                // employ.readFile();
                 Boolean flag = false;
                 System.out.println("Username nhập: " + username);
                 System.out.println("Password nhập: " + password);
@@ -104,7 +104,7 @@ public class login extends JFrame {
                 // khach.printCustomers();
 
                 for (customer kh : khach.getA()) {
-                    if (username.equals(kh.getEmail()) && password.equals(kh.getPasswordkh())) {
+                    if (username.equals(kh.getEmail()) && password.equals(kh.getPassword())) {
                         flag = true;
                         JOptionPane.showMessageDialog(null,
                                 "Đăng nhập thành công với tư cách khách hàng!");
