@@ -14,4 +14,25 @@ public class advance {
 
         return intArray; // Trả về mảng int
     }
+
+    public static String convertToString(String[] stringArray) {
+        String result = stringArray[0];
+        for (int i = 1; i < stringArray.length; i++) {
+            result+=";"+stringArray[i];
+        }
+        return result;
+    }
+
+    public static String convertToString(int[] stringArray) {
+        String result = String.valueOf(stringArray[0]);
+        for (int i = 1; i < stringArray.length; i++) {
+            result+=";"+stringArray[i];
+        }
+        return result;
+    }
+
+    public static String[] convertToStringArray(String string) {
+        String[] result = string.split(";");
+        return result;
+    }
 }
