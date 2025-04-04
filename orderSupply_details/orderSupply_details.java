@@ -6,18 +6,20 @@ public class orderSupply_details {
     private String mathuoc;
 
     private int[] slnhap;
+    private int[] slcon;
     private int[] gianhap;
     private int thanhtien;
     
     public orderSupply_details() {
     }
 
-    public orderSupply_details(String macthdnhap, String mahdnhap, String mathuoc, int[] slnhap,
+    public orderSupply_details(String macthdnhap, String mahdnhap, String mathuoc, int[] slnhap, int[] slcon,
             int[] gianhap, int thanhtien) {
         this.macthdnhap = macthdnhap;
         this.mahdnhap = mahdnhap;
         this.mathuoc = mathuoc;
         this.slnhap = slnhap;
+        this.slcon = slcon;
         this.gianhap = gianhap;
         this.thanhtien = thanhtien;
     }
@@ -54,6 +56,13 @@ public class orderSupply_details {
         this.slnhap = slnhap;
     }
 
+    public int[] getSlcon() {
+        return slcon;
+    }
+
+    public void setSlcon(int[] slcon) {
+        this.slcon = slcon;
+    }
 
     public int getThanhtien() {
         return thanhtien;
