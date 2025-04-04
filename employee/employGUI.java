@@ -32,6 +32,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.table.*;
 
+import advanceMethod.advance;
 import login.signup.login;
 import order.order;
 import order.orderArr;
@@ -47,7 +48,7 @@ public class employGUI extends JFrame {
         this.setResizable(true);
         
         this.setTitle("Nhân viên");
-        ImageIcon logo = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\logo.png");
+        ImageIcon logo = new ImageIcon(advance.img+"logo.png");
         this.setIconImage(logo.getImage());
         this.getContentPane().setBackground(Color.WHITE);
         this.setLayout(new BorderLayout());
@@ -61,46 +62,46 @@ public class employGUI extends JFrame {
         this.add(tab, BorderLayout.CENTER);
 
         //Lấy các icon
-        ImageIcon statusIcon = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\info.png");
+        ImageIcon statusIcon = new ImageIcon(advance.img+"info.png");
         ImageIcon resize_statusIcon = new ImageIcon(statusIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        ImageIcon order_sell = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\order_sell.png");
+        ImageIcon order_sell = new ImageIcon(advance.img+"order_sell.png");
         ImageIcon resize_orderSell = new ImageIcon(order_sell.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        ImageIcon addButton = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\add.png");
+        ImageIcon addButton = new ImageIcon(advance.img+"add.png");
         ImageIcon resize_addButton = new ImageIcon(addButton.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        ImageIcon fixButton = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\fix.png");
+        ImageIcon fixButton = new ImageIcon(advance.img+"fix.png");
         ImageIcon resize_fixButton = new ImageIcon(fixButton.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        ImageIcon deleteButton = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\delete.png");
+        ImageIcon deleteButton = new ImageIcon(advance.img+"delete.png");
         ImageIcon resize_deleteButton = new ImageIcon(deleteButton.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        ImageIcon Package = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\package.png");
+        ImageIcon Package = new ImageIcon(advance.img+"package.png");
         ImageIcon resize_package = new ImageIcon(Package.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        ImageIcon Medic = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\medic.png");
+        ImageIcon Medic = new ImageIcon(advance.img+"medic.png");
         ImageIcon resize_medic = new ImageIcon(Medic.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        ImageIcon Statistic = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\statistic.png");
+        ImageIcon Statistic = new ImageIcon(advance.img+"statistic.png");
         ImageIcon resize_statistic = new ImageIcon(Statistic.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
 
-        ImageIcon fileIcon = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\file.png");
+        ImageIcon fileIcon = new ImageIcon(advance.img+"file.png");
         ImageIcon resize_fileIcon = new ImageIcon(fileIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon systemIcon = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\system.png");
+        ImageIcon systemIcon = new ImageIcon(advance.img+"system.png");
         ImageIcon resize_systemIcon = new ImageIcon(systemIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon saveIcon = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\save.png");
+        ImageIcon saveIcon = new ImageIcon(advance.img+"save.png");
         ImageIcon resize_saveIcon = new ImageIcon(saveIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon exportIcon = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\export.png");
+        ImageIcon exportIcon = new ImageIcon(advance.img+"export.png");
         ImageIcon resize_exportIcon = new ImageIcon(exportIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon logOut = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\log_out.png");
+        ImageIcon logOut = new ImageIcon(advance.img+"log_out.png");
         ImageIcon resize_logOut = new ImageIcon(logOut.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon exitIcon = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\exit.png");
+        ImageIcon exitIcon = new ImageIcon(advance.img+"exit.png");
         ImageIcon resize_exitIcon = new ImageIcon(exitIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon Check = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\check.png");
+        ImageIcon Check = new ImageIcon(advance.img+"check.png");
         ImageIcon resize_check = new ImageIcon(Check.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon eye = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\eyes.png");
+        ImageIcon eye = new ImageIcon(advance.img+"eyes.png");
         ImageIcon resize_eye = new ImageIcon(eye.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon Reset = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\reset.png");
+        ImageIcon Reset = new ImageIcon(advance.img+"reset.png");
         ImageIcon resize_reset = new ImageIcon(Reset.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         
 
-        ImageIcon Wallet = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\wallet.png");
+        ImageIcon Wallet = new ImageIcon(advance.img+"wallet.png");
         ImageIcon resize_wallet = new ImageIcon(Wallet.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
-        ImageIcon Customer = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\customer.png");
+        ImageIcon Customer = new ImageIcon(advance.img+"customer.png");
         ImageIcon resize_customer = new ImageIcon(Customer.getImage().getScaledInstance(120, 100, Image.SCALE_SMOOTH));
         
         //Panel Thông tin nhân viên
@@ -112,7 +113,7 @@ public class employGUI extends JFrame {
         GridBagConstraints gdc_employee = new GridBagConstraints();
         
         // JLabel background = new JLabel();
-        // background.setIcon(new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\backgrounds.jpg"));
+        // background.setIcon(new ImageIcon(advance.img+"backgrounds.jpg"));
         // background.setBounds(0,0, 1280, 720);
         // employeeStatus.add(background, gdc_employee);
 
@@ -506,7 +507,7 @@ public class employGUI extends JFrame {
         orderCollect.add(xoaCollect, gdc_ordercollect);
 
         // JLabel backgroundCollect = new JLabel();
-        // backgroundCollect.setIcon(new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\backgrounds.jpg"));
+        // backgroundCollect.setIcon(new ImageIcon(advance.img+"backgrounds.jpg"));
         // backgroundCollect.setBounds(0,0, 1280, 720);
         // orderCollect.add(backgroundCollect);
 
@@ -653,7 +654,7 @@ public class employGUI extends JFrame {
         medic.add(xoaMedic, gdc_medic);
 
         // JLabel backgroundMedic = new JLabel();
-        // backgroundMedic.setIcon(new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\backgrounds.jpg"));
+        // backgroundMedic.setIcon(new ImageIcon(advance.img+"backgrounds.jpg"));
         // backgroundMedic.setBounds(0,0, 1280, 720);
         // medic.add(backgroundMedic);
 
@@ -741,7 +742,7 @@ public class employGUI extends JFrame {
         statistic.add(columnStatistic, gdc_statistic);
 
         // JLabel backgroundStatistic = new JLabel();
-        // backgroundStatistic.setIcon(new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\backgrounds.jpg"));
+        // backgroundStatistic.setIcon(new ImageIcon(advance.img+"backgrounds.jpg"));
         // backgroundStatistic.setBounds(0,0, 1280, 720);
         // statistic.add(backgroundStatistic);
 

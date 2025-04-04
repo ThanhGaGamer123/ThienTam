@@ -1,6 +1,8 @@
 package advanceMethod;
 
 public class advance {
+    public static final String img = "D:\\IT\\GitHub Projects\\ThienTam\\img\\";
+
     public static int[] convertToIntArray(String[] stringArray) {
         // Tạo mảng int có cùng kích thước với mảng String
         int[] intArray = new int[stringArray.length];

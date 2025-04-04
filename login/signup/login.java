@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import advanceMethod.advance;
 import employee.employGUI;
 import employee.employee;
 import employee.employeeArr;
@@ -17,7 +18,7 @@ public class login extends JFrame {
         this.setResizable(true);
         
         this.setTitle("Đăng Nhập");
-        ImageIcon logo = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\logo.png");
+        ImageIcon logo = new ImageIcon(advance.img+"logo.png");
         this.setIconImage(logo.getImage());
         this.getContentPane().setBackground(new Color(0,153,102));
         this.setLayout(new BorderLayout());

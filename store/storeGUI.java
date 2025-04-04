@@ -1,6 +1,9 @@
 package store;
 
 import javax.swing.*;
+
+import advanceMethod.advance;
+
 import java.awt.*;
 
 public class storeGUI extends JFrame {
@@ -11,7 +14,7 @@ public class storeGUI extends JFrame {
         this.setResizable(true);
         
         this.setTitle("Cửa hàng");
-        ImageIcon logo = new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\logo.png");
+        ImageIcon logo = new ImageIcon(advance.img+"logo.png");
         this.setIconImage(logo.getImage());
         this.getContentPane().setBackground(Color.WHITE);
         this.setLayout(new GridBagLayout());
@@ -24,12 +27,12 @@ public class storeGUI extends JFrame {
         // title.setBounds(340, 80, 300, 50);
         gdc.gridx = 0;
         gdc.gridy = 0;
-        gdc.fill = GridBagConstraints.CENTER;
+        gdc.anchor = GridBagConstraints.CENTER;
         gdc.insets = new Insets(50, 0, 50, 0);
         this.add(title, gdc);
 
         // reset
-        gdc.fill = GridBagConstraints.NONE;
+        gdc.anchor = GridBagConstraints.NONE;
 
         JLabel mant = new JLabel("Mã nhà thuốc: ");
         mant.setForeground(Color.BLACK);
@@ -37,7 +40,7 @@ public class storeGUI extends JFrame {
         // mant.setBounds(100, 180, 500, 20);
         gdc.gridx = 0;
         gdc.gridy = 1;
-        gdc.fill = GridBagConstraints.WEST;
+        gdc.anchor = GridBagConstraints.WEST;
         gdc.insets = new Insets(0, 0, 30, 0);
         this.add(mant, gdc);
 
@@ -46,7 +49,7 @@ public class storeGUI extends JFrame {
         tf_diachi.setLayout(new FlowLayout());
         gdc.gridx = 0;
         gdc.gridy = 2;
-        gdc.fill = GridBagConstraints.WEST;
+        gdc.anchor = GridBagConstraints.WEST;
         gdc.insets = new Insets(0, 0, 30, 0);
         this.add(tf_diachi, gdc);
 
@@ -62,7 +65,7 @@ public class storeGUI extends JFrame {
         // manql.setBounds(100, 300, 500, 25);
         gdc.gridx = 0;
         gdc.gridy = 3;
-        gdc.fill = GridBagConstraints.WEST;
+        gdc.anchor = GridBagConstraints.WEST;
         gdc.insets = new Insets(0, 0, 50, 0);
         this.add(manql, gdc);
 
@@ -72,7 +75,7 @@ public class storeGUI extends JFrame {
         // // thoat.setBounds(420, 400, 120, 40);
         // gdc.gridx = 0;
         // gdc.gridy = 4;
-        // gdc.fill = GridBagConstraints.HORIZONTAL;
+        // gdc.anchor = GridBagConstraints.HORIZONTAL;
         // this.add(thoat, gdc);
 
         // JLabel background = new JLabel();
