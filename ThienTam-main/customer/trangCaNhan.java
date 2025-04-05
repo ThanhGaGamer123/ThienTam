@@ -1,22 +1,25 @@
 package customer;
 
-// import customer.customer;
-// import customer.customerGUI;
+import customer.customer;
+import customer.customerGUI;
+import login.signup.login;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import javax.swing.tree.TreeNode;
 
 // import cart.cartGUI;
 // import cart.thanhtoanGUI;
 
 public class trangCaNhan extends JFrame {
-    private JPanel header, tail, body;
+    private JPanel header, tail, body, tab1_left, tab1_right, tab1_center, tab1_tren, tab1_duoi;
     private JLabel title;
     private JButton back;
     private customerGUI khach;
     private customer khachCurrent;
+    private JFrame f;
+    private float chieurong;
 
     // private String ten; // Thêm biến để lưu tên khách hàng
 
@@ -26,23 +29,25 @@ public class trangCaNhan extends JFrame {
     private static final Color xanhbien = new Color(27, 101, 197);
     private static final Color vang = new Color(252, 212, 59);
     private static final Color hong = new Color(234, 185, 170);
-    private static final Color linen = new Color(250, 240, 230);
     private static final Color xam = new Color(207, 207, 207);
+    private static final Color linen = new Color(250, 240, 230);
+    private static final Color xamnhat = new Color(237, 240, 243);
+    private static final Color dodo = new Color(232, 58, 72);
 
     // public trangCaNhan(customerGUI khach, customer khachCurrent) {
 
-    public trangCaNhan() {
-        // this.khach = khach;
-        // this.khachCurrent = khachCurrent;
+    public trangCaNhan(customerGUI khach, customer khachCurrent) {
+        this.khach = khach;
+        this.khachCurrent = khachCurrent;
 
-        // customer khachDangNhap = getKhachHangDangNhap();
+        customer khachDangNhap = getKhachHangDangNhap();
 
         setTitle("Giỏ hàng");
         setSize(1280, 720);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
-
+        chieurong = getWidth();
         create_header();
         create_body();
         create_footer();
@@ -50,9 +55,9 @@ public class trangCaNhan extends JFrame {
         setVisible(true);
     }
 
-    // public customer getKhachHangDangNhap() {
-    // return this.khachCurrent;
-    // }
+    public customer getKhachHangDangNhap() {
+        return this.khachCurrent;
+    }
 
     private void create_header() {
         header = new JPanel();
@@ -104,21 +109,145 @@ public class trangCaNhan extends JFrame {
         tb.setPreferredSize(new Dimension(400, 400));
 
         JPanel tab1 = new JPanel();
-        tab1.setBackground(hong);
+        tab1.setBackground(xamnhat);
         tab1.setLayout(new BorderLayout());
 
-        JPanel tab1_left = new JPanel();
+        tab1_left = new JPanel();
         tab1_left.setPreferredSize(new Dimension(300, 0));
-        tab1_left.setLayout(new FlowLayout());
-        tab1_left.setBackground(vang);
+        tab1_left.setLayout(new GridBagLayout());
+        tab1_left.setBackground(xamnhat);
         tab1.add(tab1_left, BorderLayout.WEST);
 
+        tab1_right = new JPanel();
+        tab1_right.setPreferredSize(new Dimension((int) (chieurong - 300), 0));
+        tab1_right.setLayout(new GridBagLayout());
+        tab1_right.setBackground(linen);
+        tab1.add(tab1_right, BorderLayout.EAST);
+
+        tab1_center = new JPanel();
+        tab1_center.setPreferredSize(new Dimension(0, 0));
+        tab1_center.setLayout(new GridBagLayout());
+        tab1_center.setBackground(xam);
+        tab1.add(tab1_center, BorderLayout.CENTER);
+
+        tab1_tren = new JPanel();
+        tab1_tren.setPreferredSize(new Dimension(0, 0));
+        tab1_tren.setLayout(new GridBagLayout());
+        tab1_tren.setBackground(xam);
+        tab1.add(tab1_tren, BorderLayout.NORTH);
+
+        tab1_duoi = new JPanel();
+        tab1_duoi.setPreferredSize(new Dimension(0, 0));
+        tab1_duoi.setLayout(new GridBagLayout());
+        tab1_duoi.setBackground(xam);
+        tab1.add(tab1_duoi, BorderLayout.SOUTH);
+
+        create_tab1();
         JPanel tab2 = new JPanel();
 
         // Thêm các tab vào JTabbedPane
         tb.addTab("Thông tin cá nhân", tab1);
         tb.addTab("Xem đơn hàng", tab2);
         body.add(tb, BorderLayout.CENTER);
+    }
+
+    public void create_tab1() {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(0, 0, 20, 0);
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        JLabel tieudekh = new JLabel("THÔNG TIN KHÁCH HÀNG");
+        tieudekh.setForeground(dodo);
+        tieudekh.setFont(new Font("Bookman", Font.PLAIN, 22));
+        gbc.gridy = 0;
+        tab1_left.add(tieudekh, gbc);
+
+        JButton ttnd = new JButton("Thông tin");
+        ttnd.setBackground(xanhla);
+        ttnd.setPreferredSize(new Dimension(220, 50));
+        ttnd.setFont(new Font("Bookman", Font.PLAIN, 20));
+        ttnd.setForeground(Color.WHITE);
+        gbc.gridy = 1;
+        tab1_left.add(ttnd, gbc);
+
+        JButton logout_btn = new JButton("Đăng xuất");
+        logout_btn.setForeground(Color.WHITE);
+        logout_btn.setPreferredSize(new Dimension(220, 50));
+        logout_btn.setFont(new Font("Bookman", Font.PLAIN, 20));
+        logout_btn.setBackground(xanhla);
+        gbc.gridy = 2;
+        tab1_left.add(logout_btn, gbc);
+
+        logout_btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int choice = JOptionPane.showConfirmDialog(null,
+                        "Bạn có chắc muốn đăng xuất không?");
+                if (choice == 0) {
+                    new login();
+                    dispose();
+                }
+            }
+        });
+
+        // Nhập thông tin khách hàng
+        GridBagConstraints gbcc = new GridBagConstraints();
+        gbcc.insets = new Insets(0, 0, 20, 0);
+        gbcc.gridx = 0;
+        gbcc.anchor = GridBagConstraints.CENTER;
+        gbcc.fill = GridBagConstraints.HORIZONTAL; // Để các dòng chiếm hết chiều ngang
+
+        // Dòng 1
+        JPanel line1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        line1.setBackground(linen);
+        JLabel name = new JLabel("Tên người dùng:");
+        String namekh = khachCurrent.getTenkh();
+        JTextField fillName = new JTextField(namekh);
+        fillName.setPreferredSize(new Dimension(300, 30));
+        fillName.setFont(new Font("Arial", Font.PLAIN, 18));
+        line1.add(name);
+        line1.add(fillName);
+        gbcc.gridy = 0;
+        tab1_right.add(line1, gbcc);
+
+        // Dòng 2
+        JPanel line2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        line2.setBackground(linen);
+        JLabel sdtkh = new JLabel("SĐT người dùng:");
+        int sdtkhachdangsd = khachCurrent.getSdt();
+        JTextField fillsdtkh = new JTextField(String.valueOf(sdtkhachdangsd));
+        fillsdtkh.setPreferredSize(new Dimension(300, 30));
+        fillsdtkh.setFont(new Font("Arial", Font.PLAIN, 18));
+        line2.add(sdtkh);
+        line2.add(fillsdtkh);
+        gbcc.gridy = 1;
+        tab1_right.add(line2, gbcc);
+
+        // Dòng 3
+        JPanel line3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        line3.setBackground(linen);
+        JLabel email = new JLabel("Email người dùng:");
+        String email_khach = khachCurrent.getEmail();
+        JTextField fillemail = new JTextField(email_khach);
+        fillemail.setPreferredSize(new Dimension(300, 30));
+        fillemail.setFont(new Font("Arial", Font.PLAIN, 18));
+        line3.add(email);
+        line3.add(fillemail);
+        gbcc.gridy = 2;
+        tab1_right.add(line3, gbcc);
+
+        // Dòng 4
+        JPanel line4 = new JPanel();
+        line4.setBackground(linen);
+        JButton edit_in4 = new JButton("Cập nhật thông tin");
+        edit_in4.setPreferredSize(new Dimension(320, 50));
+        edit_in4.setBackground(xanhla);
+        edit_in4.setFont(new Font("Bookman", Font.PLAIN, 20));
+        edit_in4.setForeground(Color.white);
+        line4.add(edit_in4);
+        gbcc.gridy = 3;
+        tab1_right.add(line4, gbcc);
     }
 
     private void create_footer() {
@@ -139,7 +268,4 @@ public class trangCaNhan extends JFrame {
         add(tail, BorderLayout.SOUTH);
     }
 
-    public static void main(String[] args) {
-        new trangCaNhan();
-    }
 }
