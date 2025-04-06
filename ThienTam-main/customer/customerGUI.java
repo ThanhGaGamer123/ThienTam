@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -85,7 +87,8 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         createPanel_1();
         createPanel_2();
         createPanel_3();
-        createProductGrid();
+        ArrayList<medicine> ds = sanpham.getSp();
+        createProductGrid(ds);
 
         bot_panel = new JPanel();
         bot_panel.setBackground(vang);
@@ -339,7 +342,8 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         price.setForeground(Color.BLACK);
         filterPanel.add(price);
 
-        String[] cb4_item = { "              Giá từ thấp đến cao", "              Giá từ cao đến thấp" };
+        String[] cb4_item = { "                     __________", "              Giá từ thấp đến cao",
+                "              Giá từ cao đến thấp" };
         cb4 = new JComboBox<>(cb4_item);
         cb4.setPreferredSize(new Dimension(220, 30));
         filterPanel.add(cb4);
@@ -350,12 +354,12 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         top_panel.add(p3, BorderLayout.SOUTH);
     }
 
-    public void createProductGrid() {
-        ArrayList<medicine> productArr = sanpham.getSp();
-        int productCount = productArr.size();
+    public void createProductGrid(ArrayList<medicine> foundProductsFilter) {
+        ArrayList<medicine> productArr = foundProductsFilter;
 
-        // mid_panel.removeAll(); // Xóa các sản phẩm cũ trước khi cập nhật mới
+        mid_panel.removeAll(); // Xóa các sản phẩm cũ trước khi cập nhật mới
         mid_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        int productCount = foundProductsFilter.size();
 
         for (int i = 0; i < productCount; i++) {
             JPanel productPanel = new JPanel();
@@ -398,7 +402,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
             main_center_tensp.setPreferredSize(new Dimension(0, 30));
             main_center.add(main_center_tensp, BorderLayout.SOUTH);
 
-            JLabel tensp = new JLabel(productArr.get(i).getTenthuoc(), SwingConstants.CENTER);
+            JLabel tensp = new JLabel(foundProductsFilter.get(i).getTenthuoc(), SwingConstants.CENTER);
 
             tensp.setFont(new Font("Bookman", Font.PLAIN | Font.ITALIC, 13));
             main_center_tensp.add(tensp, BorderLayout.CENTER);
@@ -438,9 +442,10 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
 
             // gia tien
             NumberFormat nf = NumberFormat.getInstance(Locale.FRANCE); // Dùng dấu cách thay vì dấu phẩy
-            int price = productArr.get(i).getGiaban()[0]; // Lấy giá trị đầu tiên trong mảng giaban
-            String formattedPrice = nf.format(price) + " / " + productArr.get(i).getDonvi()[0]; // Định dạng giá và đơn
-                                                                                                // vị
+            int price = foundProductsFilter.get(i).getGiaban()[0]; // Lấy giá trị đầu tiên trong mảng giaban
+            String formattedPrice = nf.format(price) + " / " + foundProductsFilter.get(i).getDonvi()[0]; // Định dạng
+                                                                                                         // giá và đơn
+            // vị
 
             System.out.println(formattedPrice); // In ra kết quả
             JLabel price_sp = new JLabel(formattedPrice, SwingConstants.LEFT);
@@ -732,11 +737,12 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
 
             ArrayList<medicine> foundProducts = temp.equals("Nhập tên sản phẩm thuốc ...") ? sanpham.getSp()
                     : sanpham.findName(temp);
-
             ArrayList<medicine> foundProductsFilter = new ArrayList<>();
+
             for (medicine p : foundProducts) {
                 boolean hople = true;
 
+                // Kiểm tra đối tượng sử dụng
                 if (temp_dtsd != null && !temp_dtsd.isEmpty() && !temp_dtsd.equals("Đối tượng sử dụng")) {
                     boolean found = false;
                     for (String item : p.getDoituongsudung()) {
@@ -749,9 +755,13 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
                         hople = false;
                     }
                 }
+
+                // Kiểm tra chỉ định
                 if (!temp_chidinh.equals("Chỉ định") && !p.getDanhmuc().contains(temp_chidinh)) {
                     hople = false;
                 }
+
+                // Kiểm tra xuất xứ
                 if (!temp_xuatxu.equals("Xuất xứ thương hiệu") && !p.getXuatxu().contains(temp_xuatxu)) {
                     hople = false;
                 }
@@ -761,27 +771,34 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
                 }
             }
 
+            // Kiểm tra nếu không tìm thấy sản phẩm nào
             if (foundProductsFilter.isEmpty()) {
-                System.out.println("Không tìm thấy sản phẩm phù hợp.");
                 JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm phù hợp");
             } else {
-                System.out.println("Danh sách sản phẩm phù hợp:");
+                String selectedSortOption = cb4.getSelectedItem().toString().trim();
+                System.out.println("Selected Sort Option: " + selectedSortOption);
 
-                for (medicine p : foundProductsFilter) {
-                    // Lấy giá bán đầu tiên và đơn vị đầu tiên
-                    int price = p.getGiaban()[0]; // Lấy giá đầu tiên trong mảng giaban
-                    String unit = p.getDonvi()[0]; // Lấy đơn vị đầu tiên trong mảng donvi
+                if (!selectedSortOption.equals("__________")) {
+                    Collections.sort(foundProductsFilter, new Comparator<medicine>() {
+                        @Override
+                        public int compare(medicine m1, medicine m2) {
+                            int price1 = (m1.getGiaban() != null && m1.getGiaban().length > 0) ? m1.getGiaban()[0]
+                                    : Integer.MAX_VALUE;
+                            int price2 = (m2.getGiaban() != null && m2.getGiaban().length > 0) ? m2.getGiaban()[0]
+                                    : Integer.MAX_VALUE;
 
-                    // Định dạng giá bán (thêm dấu cách theo kiểu tiền tệ)
-                    NumberFormat nf = NumberFormat.getInstance(Locale.FRANCE); // Dùng dấu cách thay vì dấu phẩy
-                    String formattedPrice = nf.format(price) + " / " + unit; // Định dạng giá bán và đơn vị
+                            System.out.println("Comparing Prices: " + price1 + " and " + price2); // In giá để kiểm tra
 
-                    System.out.println("Mã thuốc: " + p.getMathuoc());
-                    System.out.println("Tên thuốc: " + p.getTenthuoc());
-                    System.out.println("Giá bán: " + formattedPrice); // In ra giá bán theo đơn vị
-                    System.out.println("Xuất xứ: " + p.getXuatxu());
-                    System.out.println("----------------------------------");
+                            if (selectedSortOption.equals("Giá từ thấp đến cao")) {
+                                return Integer.compare(price1, price2);
+                            } else if (selectedSortOption.equals("Giá từ cao đến thấp")) {
+                                return Integer.compare(price2, price1);
+                            }
+                            return 0;
+                        }
+                    });
                 }
+                createProductGrid(foundProductsFilter);
             }
         }
     }
