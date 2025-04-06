@@ -7,6 +7,8 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+
 import login.signup.login;
 import medicine.medicine;
 import medicine.medicineArr;
@@ -501,8 +503,9 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
                     detailPanel.add(content_detail, BorderLayout.NORTH);
 
                     JPanel phai_content_pn = new JPanel();
-                    phai_content_pn.setBackground(xam);
+                    phai_content_pn.setBackground(xamnhat);
                     phai_content_pn.setPreferredSize(new Dimension(400, 0));
+                    phai_content_pn.setBorder(new LineBorder(xam, 5));
                     phai_content_pn.setLayout(new GridBagLayout()); // Sử dụng GridBagLayout
                     content_detail.add(phai_content_pn, BorderLayout.EAST);
 
@@ -520,7 +523,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
 
                     // Giá sản phẩm
                     JPanel pricePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0)); // Panel cho giá
-                    pricePanel.setBackground(xam);
+                    pricePanel.setBackground(xamnhat);
                     JLabel giaLB = new JLabel("Giá: ");
                     giaLB.setFont(new Font("Bookman", Font.BOLD, 17));
                     giaLB.setForeground(Color.BLACK);
@@ -540,7 +543,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
 
                     // Thành phần
                     JPanel thanhphanPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0)); // Panel cho thành phần
-                    thanhphanPanel.setBackground(xam);
+                    thanhphanPanel.setBackground(xamnhat);
                     JLabel thanhphanLB = new JLabel("Thành phần: ");
                     thanhphanLB.setFont(new Font("Bookman", Font.BOLD, 17));
                     thanhphanLB.setForeground(Color.BLACK);
@@ -570,7 +573,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
                     ttsp_detail.setLineWrap(true); // Cho phép xuống dòng
                     ttsp_detail.setWrapStyleWord(true); // Xuống dòng theo từ
                     ttsp_detail.setEditable(false); // Không cho chỉnh sửa
-                    ttsp_detail.setBackground(xam); // Màu nền cho dễ nhìn
+                    ttsp_detail.setBackground(xamnhat); // Màu nền cho dễ nhìn
                     ttsp_detail.setPreferredSize(new Dimension(380, 100)); // Kích thước cho JTextArea
                     ttsp_detail.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Khung bao quanh
 
@@ -579,7 +582,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
                     phai_content_pn.add(ttsp_detail, gbc);
 
                     JPanel sanxuatPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0)); // Panel cho thành phần
-                    sanxuatPanel.setBackground(xam);
+                    sanxuatPanel.setBackground(xamnhat);
                     JLabel sanxuatLB = new JLabel("Nước sản xuất: ");
                     sanxuatLB.setFont(new Font("Bookman", Font.BOLD, 17));
                     sanxuatLB.setForeground(Color.BLACK);
@@ -597,7 +600,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
 
                     // cach dung
                     JPanel cachdungPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0)); // Panel cho thành phần
-                    cachdungPanel.setBackground(xam);
+                    cachdungPanel.setBackground(xamnhat);
                     JLabel cachdungLB = new JLabel("Cách dùng :");
                     cachdungLB.setFont(new Font("Bookman", Font.BOLD, 17));
                     cachdungLB.setForeground(Color.BLACK);
@@ -638,6 +641,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
                     trai_content_pn.setBackground(hong);
                     trai_content_pn.setPreferredSize(new Dimension(500, 0));
                     trai_content_pn.setLayout(new BorderLayout());
+                    trai_content_pn.setBorder(new LineBorder(xam, 5));
                     content_detail.add(trai_content_pn, BorderLayout.WEST);
                     // hinh anh hien san pham
                     JPanel img_medicine = new JPanel();
