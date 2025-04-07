@@ -1,23 +1,28 @@
 package medicine;
 
+import java.util.ArrayList;
+
 public class medicine {
     private String mathuoc;
     private String maton;
     private String tenthuoc;
 
     private String danhmuc;
-    private String[] donvi;
+    private ArrayList<String> donvi;
     private String thanhphan;
     private String thongtin;
     private String xuatxu;
-    private String[] doituongsudung;
-    private int[] giaban;
+    private ArrayList<String> doituongsudung;
+    private ArrayList<Integer> giaban;
+
+    private Boolean tinhtrang;
     
     public medicine() {
     }
 
-    public medicine(String mathuoc, String maton, String tenthuoc, String danhmuc, String[] donvi, String thanhphan,
-            String thongtin, String xuatxu, String[] doituongsudung, int[] giaban) {
+    public medicine(String mathuoc, String maton, String tenthuoc, String danhmuc, ArrayList<String> donvi,
+            String thanhphan, String thongtin, String xuatxu, ArrayList<String> doituongsudung,
+            ArrayList<Integer> giaban, Boolean tinhtrang) {
         this.mathuoc = mathuoc;
         this.maton = maton;
         this.tenthuoc = tenthuoc;
@@ -28,6 +33,7 @@ public class medicine {
         this.xuatxu = xuatxu;
         this.doituongsudung = doituongsudung;
         this.giaban = giaban;
+        this.tinhtrang = tinhtrang;
     }
 
     public String getMathuoc() {
@@ -46,28 +52,12 @@ public class medicine {
         this.maton = maton;
     }
 
-    public String[] getDoituongsudung() {
-        return doituongsudung;
-    }
-
-    public void setDoituongsudung(String[] doituongsudung) {
-        this.doituongsudung = doituongsudung;
-    }
-
     public String getTenthuoc() {
         return tenthuoc;
     }
 
     public void setTenthuoc(String tenthuoc) {
         this.tenthuoc = tenthuoc;
-    }
-
-    public String[] getDonvi() {
-        return donvi;
-    }
-
-    public void setDonvi(String[] donvi) {
-        this.donvi = donvi;
     }
 
     public String getThanhphan() {
@@ -94,14 +84,6 @@ public class medicine {
         this.xuatxu = xuatxu;
     }
 
-    public int[] getGiaban() {
-        return giaban;
-    }
-
-    public void setGiaban(int[] giaban) {
-        this.giaban = giaban;
-    }
-
     public String getDanhmuc() {
         return danhmuc;
     }
@@ -109,4 +91,38 @@ public class medicine {
     public void setDanhmuc(String danhmuc) {
         this.danhmuc = danhmuc;
     }
+
+    public Boolean getTinhtrang() {
+        return tinhtrang;
+    }
+
+    public void setTinhtrang(Boolean tinhtrang) {
+        this.tinhtrang = tinhtrang;
+    }
+
+    public ArrayList<String> getDonvi() {
+        return donvi;
+    }
+
+    public void setDonvi(ArrayList<String> donvi) {
+        this.donvi = donvi;
+    }
+
+    public ArrayList<String> getDoituongsudung() {
+        return doituongsudung;
+    }
+
+    public void setDoituongsudung(ArrayList<String> doituongsudung) {
+        this.doituongsudung = doituongsudung;
+    }
+
+    public ArrayList<Integer> getGiaban() {
+        return giaban;
+    }
+
+    public void setGiaban(ArrayList<Integer> giaban) {
+        this.giaban = giaban;
+    }
+
+    
 }

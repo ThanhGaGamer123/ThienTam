@@ -8,10 +8,10 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -33,18 +33,21 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.*;
 
 import advanceMethod.advance;
+import dataAccessObj.medicineDAO;
+import dataAccessObj.storeDAO;
 import login.signup.login;
+import medicine.medicine;
+import medicine.medicineGUI;
 import order.order;
 import order.orderArr;
 import store.store;
-import store.storeArr;
 import store.storeGUI;
 
 public class employGUI extends JFrame {
     public employGUI(employee nv) {
         this.setSize(1280, 720);
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(true);
         
         this.setTitle("Nhân viên");
@@ -61,54 +64,12 @@ public class employGUI extends JFrame {
         // tab.setBounds(0, 10, 1280, 710);
         this.add(tab, BorderLayout.CENTER);
 
-        //Lấy các icon
-        ImageIcon statusIcon = new ImageIcon(advance.img+"info.png");
-        ImageIcon resize_statusIcon = new ImageIcon(statusIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        ImageIcon order_sell = new ImageIcon(advance.img+"order_sell.png");
-        ImageIcon resize_orderSell = new ImageIcon(order_sell.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        ImageIcon addButton = new ImageIcon(advance.img+"add.png");
-        ImageIcon resize_addButton = new ImageIcon(addButton.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        ImageIcon fixButton = new ImageIcon(advance.img+"fix.png");
-        ImageIcon resize_fixButton = new ImageIcon(fixButton.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        ImageIcon deleteButton = new ImageIcon(advance.img+"delete.png");
-        ImageIcon resize_deleteButton = new ImageIcon(deleteButton.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        ImageIcon Package = new ImageIcon(advance.img+"package.png");
-        ImageIcon resize_package = new ImageIcon(Package.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        ImageIcon Medic = new ImageIcon(advance.img+"medic.png");
-        ImageIcon resize_medic = new ImageIcon(Medic.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        ImageIcon Statistic = new ImageIcon(advance.img+"statistic.png");
-        ImageIcon resize_statistic = new ImageIcon(Statistic.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-
-        ImageIcon fileIcon = new ImageIcon(advance.img+"file.png");
-        ImageIcon resize_fileIcon = new ImageIcon(fileIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon systemIcon = new ImageIcon(advance.img+"system.png");
-        ImageIcon resize_systemIcon = new ImageIcon(systemIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon saveIcon = new ImageIcon(advance.img+"save.png");
-        ImageIcon resize_saveIcon = new ImageIcon(saveIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon exportIcon = new ImageIcon(advance.img+"export.png");
-        ImageIcon resize_exportIcon = new ImageIcon(exportIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon logOut = new ImageIcon(advance.img+"log_out.png");
-        ImageIcon resize_logOut = new ImageIcon(logOut.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon exitIcon = new ImageIcon(advance.img+"exit.png");
-        ImageIcon resize_exitIcon = new ImageIcon(exitIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon Check = new ImageIcon(advance.img+"check.png");
-        ImageIcon resize_check = new ImageIcon(Check.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon eye = new ImageIcon(advance.img+"eyes.png");
-        ImageIcon resize_eye = new ImageIcon(eye.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        ImageIcon Reset = new ImageIcon(advance.img+"reset.png");
-        ImageIcon resize_reset = new ImageIcon(Reset.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-        
-
-        ImageIcon Wallet = new ImageIcon(advance.img+"wallet.png");
-        ImageIcon resize_wallet = new ImageIcon(Wallet.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
-        ImageIcon Customer = new ImageIcon(advance.img+"customer.png");
-        ImageIcon resize_customer = new ImageIcon(Customer.getImage().getScaledInstance(120, 100, Image.SCALE_SMOOTH));
         
         //Panel Thông tin nhân viên
         JPanel employeeStatus = new JPanel();
         employeeStatus.setBackground(Color.white);
         employeeStatus.setLayout(new GridBagLayout());
-        tab.addTab("Thông tin", resize_statusIcon, employeeStatus);
+        tab.addTab("Thông tin", data.imagePath.resize_statusIcon, employeeStatus);
 
         GridBagConstraints gdc_employee = new GridBagConstraints();
         
@@ -125,7 +86,7 @@ public class employGUI extends JFrame {
         gdc_employee.gridy = 0;
         gdc_employee.gridwidth = 2;
         gdc_employee.anchor = GridBagConstraints.CENTER;
-        gdc_employee.insets = new Insets(50, 0, 50, 0);
+        gdc_employee.insets = new Insets(50, 0, 30, 0);
         employeeStatus.add(title, gdc_employee);
 
         // reset
@@ -158,18 +119,32 @@ public class employGUI extends JFrame {
         gdc_employee.gridx = 0;
         employeeStatus.add(chucvu, gdc_employee);
 
+        JLabel gioitinh = new JLabel("Giới tính: ");
+        gioitinh.setForeground(Color.BLACK);
+        gioitinh.setFont(new Font(null, Font.PLAIN, 22));
+        gdc_employee.gridy = 4;
+        gdc_employee.gridx = 0;
+        employeeStatus.add(gioitinh, gdc_employee);
+
+        JLabel cccd = new JLabel("CCCD: ");
+        cccd.setForeground(Color.BLACK);
+        cccd.setFont(new Font(null, Font.PLAIN, 22));
+        gdc_employee.gridy = 5;
+        gdc_employee.gridx = 0;
+        employeeStatus.add(cccd, gdc_employee);
+
         JLabel sdt = new JLabel("Số điện thoại: ");
         sdt.setForeground(Color.BLACK);
         sdt.setFont(new Font(null, Font.PLAIN, 22));
         // sdt.setBounds(200,260,300,30);
-        gdc_employee.gridy = 4;
+        gdc_employee.gridy = 6;
         gdc_employee.gridx = 0;
         employeeStatus.add(sdt, gdc_employee);
 
         JPanel tf_diachi = new JPanel();
         tf_diachi.setBackground(Color.white);
         tf_diachi.setLayout(new FlowLayout());
-        gdc_employee.gridy = 5;
+        gdc_employee.gridy = 7;
         gdc_employee.gridx = 0;
         employeeStatus.add(tf_diachi, gdc_employee);
 
@@ -183,25 +158,33 @@ public class employGUI extends JFrame {
         nhathuoc.setForeground(Color.BLACK);
         nhathuoc.setFont(new Font(null, Font.PLAIN, 22));
         // nhathuoc.setBounds(200,340,300,30);
-        gdc_employee.gridy = 6;
+        gdc_employee.gridy = 8;
         gdc_employee.gridx = 0;
-        gdc_employee.insets = new Insets(0, 0, 120, 0);
+        gdc_employee.insets = new Insets(0, 0, 30, 0);
         employeeStatus.add(nhathuoc, gdc_employee);
 
         JButton btn_nhathuoc = new JButton("Xem chi tiết");
         btn_nhathuoc.setForeground(Color.BLACK);
         btn_nhathuoc.setFont(new Font(null, Font.PLAIN, 20));
         // btn_nhathuoc.setBounds(440,340,120,30);
-        gdc_employee.gridy = 6;
+        gdc_employee.gridy = 8;
         gdc_employee.gridx = 1;
-        gdc_employee.insets = new Insets(0, 0, 120, 0);
+        gdc_employee.insets = new Insets(0, 0, 30, 0);
         employeeStatus.add(btn_nhathuoc, gdc_employee);
+
+        JLabel tinhtrang = new JLabel("Tình trạng: ");
+        tinhtrang.setForeground(Color.BLACK);
+        tinhtrang.setFont(new Font(null, Font.PLAIN, 22));
+        gdc_employee.gridy = 9;
+        gdc_employee.gridx = 0;
+        gdc_employee.insets = new Insets(0, 0, 50, 0);
+        employeeStatus.add(tinhtrang, gdc_employee);
 
         //Panel Hóa đơn bán
         JPanel orderSell = new JPanel();
         orderSell.setBackground(Color.white);
         orderSell.setLayout(new GridBagLayout());
-        tab.addTab("Hóa đơn bán", resize_orderSell, orderSell);
+        tab.addTab("Hóa đơn bán", data.imagePath.resize_orderSell, orderSell);
 
         GridBagConstraints gdc_ordersell = new GridBagConstraints();
 
@@ -268,7 +251,7 @@ public class employGUI extends JFrame {
         JButton reset = new JButton();
         reset.setForeground(Color.BLACK);
         reset.setFont(new Font(null, Font.PLAIN, 18));
-        reset.setIcon(resize_reset);
+        reset.setIcon(data.imagePath.resize_reset);
         // reset.setBounds(1050, 45, 30, 30);
         gdc_ordersell.gridx = 4;
         gdc_ordersell.gridy = 1;
@@ -323,7 +306,7 @@ public class employGUI extends JFrame {
         JButton themSell = new JButton("Thêm");
         themSell.setFont(new Font(null, Font.PLAIN, 18));
         themSell.setForeground(Color.BLACK);
-        themSell.setIcon(resize_addButton);
+        themSell.setIcon(data.imagePath.resize_addButton);
         // themSell.setBounds(1120, 90, 115, 50);
         gdc_ordersell.gridx = 4;
         gdc_ordersell.gridy = 2;
@@ -334,7 +317,7 @@ public class employGUI extends JFrame {
         JButton suaSell = new JButton("Sửa");
         suaSell.setFont(new Font(null, Font.PLAIN, 18));
         suaSell.setForeground(Color.BLACK);
-        suaSell.setIcon(resize_fixButton);
+        suaSell.setIcon(data.imagePath.resize_fixButton);
         // suaSell.setBounds(1120, 180, 115, 50);
         gdc_ordersell.gridx = 4;
         gdc_ordersell.gridy = 3;
@@ -345,7 +328,7 @@ public class employGUI extends JFrame {
         JButton xoaSell = new JButton("Xóa");
         xoaSell.setFont(new Font(null, Font.PLAIN, 18));
         xoaSell.setForeground(Color.BLACK);
-        xoaSell.setIcon(resize_deleteButton);
+        xoaSell.setIcon(data.imagePath.resize_deleteButton);
         // xoaSell.setBounds(1120, 270, 115, 50);
         gdc_ordersell.gridx = 4;
         gdc_ordersell.gridy = 4;
@@ -357,7 +340,7 @@ public class employGUI extends JFrame {
         JPanel orderCollect = new JPanel();
         orderCollect.setBackground(Color.white);
         orderCollect.setLayout(new GridBagLayout());
-        tab.addTab("Hóa đơn nhập", resize_package, orderCollect);
+        tab.addTab("Hóa đơn nhập", data.imagePath.resize_package, orderCollect);
 
         GridBagConstraints gdc_ordercollect = new GridBagConstraints();
 
@@ -424,7 +407,7 @@ public class employGUI extends JFrame {
         JButton reset_2 = new JButton();
         reset_2.setForeground(Color.BLACK);
         reset_2.setFont(new Font(null, Font.PLAIN, 18));
-        reset_2.setIcon(resize_reset);
+        reset_2.setIcon(data.imagePath.resize_reset);
         // reset_2.setBounds(1050, 45, 30, 30);
         gdc_ordercollect.gridx = 4;
         gdc_ordercollect.gridy = 1;
@@ -476,7 +459,7 @@ public class employGUI extends JFrame {
         JButton themCollect = new JButton("Thêm");
         themCollect.setFont(new Font(null, Font.PLAIN, 18));
         themCollect.setForeground(Color.BLACK);
-        themCollect.setIcon(resize_addButton);
+        themCollect.setIcon(data.imagePath.resize_addButton);
         // themCollect.setBounds(1120, 90, 115, 50);
         gdc_ordercollect.gridx = 4;
         gdc_ordercollect.gridy = 2;
@@ -487,7 +470,7 @@ public class employGUI extends JFrame {
         JButton suaCollect = new JButton("Sửa");
         suaCollect.setFont(new Font(null, Font.PLAIN, 18));
         suaCollect.setForeground(Color.BLACK);
-        suaCollect.setIcon(resize_fixButton);
+        suaCollect.setIcon(data.imagePath.resize_fixButton);
         // suaCollect.setBounds(1120, 180, 115, 50);
         gdc_ordercollect.gridx = 4;
         gdc_ordercollect.gridy = 3;
@@ -498,7 +481,7 @@ public class employGUI extends JFrame {
         JButton xoaCollect = new JButton("Xóa");
         xoaCollect.setFont(new Font(null, Font.PLAIN, 18));
         xoaCollect.setForeground(Color.BLACK);
-        xoaCollect.setIcon(resize_deleteButton);
+        xoaCollect.setIcon(data.imagePath.resize_deleteButton);
         // xoaCollect.setBounds(1120, 270, 115, 50);
         gdc_ordercollect.gridx = 4;
         gdc_ordercollect.gridy = 4;
@@ -515,7 +498,7 @@ public class employGUI extends JFrame {
         JPanel medic = new JPanel();
         medic.setBackground(Color.white);
         medic.setLayout(new GridBagLayout());
-        tab.addTab("Thuốc", resize_medic, medic);
+        tab.addTab("Thuốc", data.imagePath.resize_medic, medic);
 
         GridBagConstraints gdc_medic = new GridBagConstraints();
 
@@ -569,7 +552,7 @@ public class employGUI extends JFrame {
         JButton reset_3 = new JButton();
         reset_3.setForeground(Color.BLACK);
         reset_3.setFont(new Font(null, Font.PLAIN, 18));
-        reset_3.setIcon(resize_reset);
+        reset_3.setIcon(data.imagePath.resize_reset);
         // reset_3.setBounds(900, 45, 30, 30);
         gdc_medic.gridx = 3;
         gdc_medic.gridy = 1;
@@ -582,8 +565,8 @@ public class employGUI extends JFrame {
         gdc_medic.fill = GridBagConstraints.NONE;
         gdc_medic.weightx = 0;
 
-        String columnsMedic[] = {"Mã thuốc", "Mã tồn", "Tên thuốc", "Danh mục", 
-        "Xuất xứ", "Xem chi tiết"};
+        String columnsMedic[] = {"Mã thuốc", "Tên thuốc", "Danh mục", "Tình trạng", 
+        "Xem chi tiết"};
         DefaultTableModel modelMedic = new DefaultTableModel(columnsMedic,0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -598,8 +581,7 @@ public class employGUI extends JFrame {
         tableMedic.getTableHeader().setReorderingAllowed(false);
         tableMedic.getTableHeader().setFont(new Font(null, Font.BOLD, 18)); // Font tiêu đề
         tableMedic.getColumnModel().getColumn(0).setPreferredWidth(10);
-        tableMedic.getColumnModel().getColumn(1).setPreferredWidth(10);
-        tableMedic.getColumnModel().getColumn(4).setPreferredWidth(10);
+        tableMedic.getColumnModel().getColumn(2).setPreferredWidth(10);
         tableMedic.setRowHeight(30);
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         for (int i = 0; i < tableMedic.getColumnCount(); i++) {
@@ -623,7 +605,7 @@ public class employGUI extends JFrame {
         JButton themMedic = new JButton("Thêm");
         themMedic.setFont(new Font(null, Font.PLAIN, 18));
         themMedic.setForeground(Color.BLACK);
-        themMedic.setIcon(resize_addButton);
+        themMedic.setIcon(data.imagePath.resize_addButton);
         // themMedic.setBounds(1120, 90, 115, 50);
         gdc_medic.gridx = 3;
         gdc_medic.gridy = 2;
@@ -634,7 +616,7 @@ public class employGUI extends JFrame {
         JButton suaMedic = new JButton("Sửa");
         suaMedic.setFont(new Font(null, Font.PLAIN, 18));
         suaMedic.setForeground(Color.BLACK);
-        suaMedic.setIcon(resize_fixButton);
+        suaMedic.setIcon(data.imagePath.resize_fixButton);
         // suaMedic.setBounds(1120, 180, 115, 50);
         gdc_medic.gridx = 3;
         gdc_medic.gridy = 3;
@@ -645,7 +627,7 @@ public class employGUI extends JFrame {
         JButton xoaMedic = new JButton("Xóa");
         xoaMedic.setFont(new Font(null, Font.PLAIN, 18));
         xoaMedic.setForeground(Color.BLACK);
-        xoaMedic.setIcon(resize_deleteButton);
+        xoaMedic.setIcon(data.imagePath.resize_deleteButton);
         // xoaMedic.setBounds(1120, 270, 115, 50);
         gdc_medic.gridx = 3;
         gdc_medic.gridy = 4;
@@ -662,7 +644,7 @@ public class employGUI extends JFrame {
         JPanel statistic = new JPanel();
         statistic.setBackground(Color.white);
         statistic.setLayout(new GridBagLayout());
-        tab.addTab("Thống kê", resize_statistic, statistic);
+        tab.addTab("Thống kê", data.imagePath.resize_statistic, statistic);
 
         GridBagConstraints gdc_statistic = new GridBagConstraints();
 
@@ -681,7 +663,7 @@ public class employGUI extends JFrame {
         gdc_statistic.gridwidth = 1;
         
         JLabel wallet = new JLabel();
-        wallet.setIcon(resize_wallet);
+        wallet.setIcon(data.imagePath.resize_wallet);
         wallet.setBorder(BorderFactory.createEmptyBorder(0,0,0,250));
         // wallet.setBounds(70, 150, 100, 100);
         gdc_statistic.gridx = 0;
@@ -704,7 +686,7 @@ public class employGUI extends JFrame {
         statistic.add(sellStatistic, gdc_statistic);
 
         JLabel customer = new JLabel();
-        customer.setIcon(resize_customer);
+        customer.setIcon(data.imagePath.resize_customer);
         customer.setBorder(BorderFactory.createEmptyBorder(0,0,0,250));
         // customer.setBounds(70, 390, 120, 100);
         gdc_statistic.gridx = 0;
@@ -752,32 +734,32 @@ public class employGUI extends JFrame {
         file.setForeground(Color.BLACK);
         file.setFont(new Font(null, Font.BOLD, 16));
         file.setMnemonic('T');
-        file.setIcon(resize_fileIcon);
+        file.setIcon(data.imagePath.resize_fileIcon);
         JMenu system = new JMenu("Hệ thống");
         system.setForeground(Color.BLACK);
         system.setFont(new Font(null, Font.BOLD, 16));
         system.setMnemonic('H');
-        system.setIcon(resize_systemIcon);
+        system.setIcon(data.imagePath.resize_systemIcon);
         JMenuItem save = new JMenuItem("Lưu");
         save.setForeground(Color.BLACK);
         save.setFont(new Font(null, Font.PLAIN, 16));
         save.setMnemonic('L');
-        save.setIcon(resize_saveIcon);
+        save.setIcon(data.imagePath.resize_saveIcon);
         JMenuItem export = new JMenuItem("Xuất");
         export.setForeground(Color.BLACK);
         export.setFont(new Font(null, Font.PLAIN, 16));
         export.setMnemonic('X');
-        export.setIcon(resize_exportIcon);
+        export.setIcon(data.imagePath.resize_exportIcon);
         JMenuItem log_out = new JMenuItem("Đăng xuất");
         log_out.setForeground(Color.BLACK);
         log_out.setFont(new Font(null, Font.PLAIN, 16));
         log_out.setMnemonic('X');
-        log_out.setIcon(resize_logOut);
+        log_out.setIcon(data.imagePath.resize_logOut);
         JMenuItem exit = new JMenuItem("Thoát");
         exit.setForeground(Color.BLACK);
         exit.setFont(new Font(null, Font.PLAIN, 16));
         exit.setMnemonic('T');
-        exit.setIcon(resize_exitIcon);
+        exit.setIcon(data.imagePath.resize_exitIcon);
         file.add(save);
         file.add(export);
         system.add(log_out);
@@ -785,13 +767,6 @@ public class employGUI extends JFrame {
         menuBar.add(file);
         menuBar.add(system);
         this.setJMenuBar(menuBar);
-
-        // tab.addTab("Thông tin", resize_statusIcon, employeeStatus);
-        // tab.addTab("Hóa đơn bán", resize_orderSell, orderSell);
-        // tab.addTab("Hóa đơn nhập", resize_package, orderCollect);
-        // tab.addTab("Thuốc", resize_medic, medic);
-        // tab.addTab("Thống kê", resize_statistic, statistic);
-        // this.add(tab);
         
         this.setVisible(true);
 
@@ -801,19 +776,23 @@ public class employGUI extends JFrame {
         manv.setText(manv.getText() + nv.getManv());
         tennv.setText(tennv.getText() + nv.getTennv());
         chucvu.setText(chucvu.getText() + nv.getChucvu());
+        gioitinh.setText(gioitinh.getText() + nv.getGioitinh());
+        cccd.setText(cccd.getText() + nv.getCccd());
         sdt.setText(sdt.getText() + nv.getSdt());
         diachi.setText(diachi.getText() + nv.getMasonha() + ", " + nv.getDuong() + ", "
         + nv.getPhuong() + ", " + nv.getQuan() + ", " + nv.getTinh());
         nhathuoc.setText(nhathuoc.getText() + nv.getManhathuoc());
+        if(nv.getTinhtrang()) tinhtrang.setText(tinhtrang.getText() + "Đang hoạt động");
+        else tinhtrang.setText(tinhtrang.getText() + "Ngừng hoạt động");
 
         //Hiển thị thông tin nhà thuốc
         btn_nhathuoc.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                storeArr arr = new storeArr();
-                // arr.readFile();
+                storeDAO strDAO = new storeDAO();
+                ArrayList<store> storeArr = strDAO.selectAll();
                 Boolean found = false;
-                for(store nt : arr.getArr()) {
+                for(store nt : storeArr) {
                     if(nv.getManhathuoc().equals(nt.getMant())) {
                         new storeGUI(nt);
                         found = true;
@@ -834,11 +813,11 @@ public class employGUI extends JFrame {
             if(nv.getManv().equals(dh.getManv())) {
                 JLabel statusImg;
                 if(dh.getTinhtrang().equals("true")) {
-                    statusImg = new JLabel(resize_check);
+                    statusImg = new JLabel(data.imagePath.resize_check);
                 } else {
-                    statusImg = new JLabel(resize_exitIcon);
+                    statusImg = new JLabel(data.imagePath.resize_exitIcon);
                 }
-                JButton eyeButton = new JButton(resize_eye);
+                JButton eyeButton = new JButton(data.imagePath.resize_eye);
                 model.addRow(new Object[]{dh.getMadon(),dh.getMakh(),dh.getManv(),
                 dh.getNgaydat(),dh.getTongtien(),statusImg,eyeButton});
             }
@@ -879,6 +858,44 @@ public class employGUI extends JFrame {
             }   
         });
 
+        //Tự động cập nhật thông tin thuốc
+        updateTableMedic(modelMedic);
+
+        tableMedic.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JLabel label = (value instanceof JLabel) ? (JLabel) value : new JLabel();
+
+                // Thiết lập màu nền khi được chọn
+                if (isSelected) {
+                    label.setBackground(new Color(173, 216, 230)); // Màu nền sáng
+                    label.setOpaque(true); // Để màu nền có hiệu lực
+                } else {
+                    label.setBackground(Color.WHITE); // Màu nền mặc định
+                    label.setOpaque(true);
+                }
+
+                return label;
+            }   
+        });
+
+        tableMedic.getColumn("Xem chi tiết").setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JButton button = (value instanceof JButton) ? (JButton) value : new JButton();
+
+                if (isSelected) {
+                    button.setBackground(new Color(173, 216, 230)); // Màu nền sáng
+                } else {
+                    button.setBackground(Color.WHITE); // Màu nền mặc định
+                }
+        
+                button.setOpaque(true);
+                button.setBorderPainted(false); // Ẩn viền nút
+                return button;
+            }   
+        });
+
         //đăng xuất
         log_out.addActionListener(new ActionListener() {
             @Override
@@ -899,9 +916,32 @@ public class employGUI extends JFrame {
                 System.exit(0);
             }
         });
+
+        //thêm thuốc
+        themMedic.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new medicineGUI(modelMedic);
+            }
+        });
     }
 
-    public static void main(String[] args) {
-        new employGUI(null);
+    public static void updateTableMedic(DefaultTableModel modelMedic) {
+        modelMedic.setRowCount(0);
+        medicineDAO medDAO = new medicineDAO();
+        ArrayList<medicine> medicines = medDAO.selectAll();
+        for (medicine medicine : medicines) {
+            JLabel statusImg;
+            System.out.println(medicine.getTinhtrang());
+            if(medicine.getTinhtrang()) {
+                statusImg = new JLabel(data.imagePath.resize_check);
+            } else {
+                statusImg = new JLabel(data.imagePath.resize_exitIcon);
+            }
+            JButton eyeButton = new JButton(data.imagePath.resize_eye);
+            modelMedic.addRow(new Object[]{medicine.getMathuoc(), 
+            medicine.getTenthuoc(), medicine.getDanhmuc(),
+            statusImg, eyeButton});
+        }
     }
 } 

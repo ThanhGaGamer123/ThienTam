@@ -3,19 +3,22 @@ use Thientam;
 use master;
 drop database Thientam;
 CREATE TABLE NhaThuoc (
-    mant‎ VARCHAR(10) PRIMARY KEY,     
-    masonha‎ NVARCHAR(20),
+    mant VARCHAR(10) PRIMARY KEY,     
+    masonha NVARCHAR(20),
 	duong NVARCHAR(50),
 	phuong NVARCHAR(20),
 	quan NVARCHAR(20),
 	tinh NVARCHAR(20),        
-    manql VARCHAR(10),           
+    manql VARCHAR(10),    
+	tinhtrang BIT
 );
 
 CREATE TABLE NhanVien (
     manv VARCHAR(10) PRIMARY KEY,         
     tennv NVARCHAR(100),         
     chucvu NVARCHAR(50),  
+	gioitinh NVARCHAR(5),
+	cccd NVARCHAR(15),
 	sdt VARCHAR(11),
     masonha NVARCHAR(20),
 	duong NVARCHAR(50),
@@ -24,7 +27,8 @@ CREATE TABLE NhanVien (
 	tinh NVARCHAR(20),    
     username NVARCHAR(50),  
     passwordnv NVARCHAR(50),         
-    manhathuoc VARCHAR(10),               
+    manhathuoc VARCHAR(10),   
+	tinhtrang BIT
 );
 
 CREATE TABLE KhachHang (
@@ -102,6 +106,7 @@ CREATE TABLE Thuoc (
 	giaban VARCHAR(100),              
 	maton VARCHAR(10),
 	doituongsudung NVARCHAR(100),
+	tinhtrang BIT
 );
 
 CREATE TABLE HoaDonNhap (
@@ -126,6 +131,7 @@ CREATE TABLE NhaCungCap (
 CREATE TABLE Kho (
     maton VARCHAR(10) PRIMARY KEY,
     slton VARCHAR(100),
+	tinhtrang BIT
 );
 
     ALTER TABLE NhaThuoc ADD CONSTRAINT FK_NhaThuoc_NV FOREIGN KEY (manql) REFERENCES NhanVien(manv);

@@ -9,12 +9,14 @@ public class store {
     private String phuong;
     private String quan;
     private String tinh;
+
+    private Boolean tinhtrang;
     
     public store() {
     }
 
     public store(String mant, String masonha, String duong, String phuong, 
-    String quan, String tinh, String manql) {
+    String quan, String tinh, String manql, Boolean tinhtrang) {
         this.mant = mant;
         this.masonha = masonha;
         this.duong = duong;
@@ -22,6 +24,7 @@ public class store {
         this.quan = quan;
         this.tinh = tinh;
         this.manql = manql;
+        this.tinhtrang = tinhtrang;
     }
 
     public String getMant() {
@@ -78,6 +81,14 @@ public class store {
 
     public void setManql(String manql) {
         this.manql = manql;
+    }
+
+    public Boolean getTinhtrang() {
+        return tinhtrang;
+    }
+
+    public void setTinhtrang(Boolean tinhtrang) {
+        this.tinhtrang = tinhtrang;
     }
 
     

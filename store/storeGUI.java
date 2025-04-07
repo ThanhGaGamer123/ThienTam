@@ -69,19 +69,14 @@ public class storeGUI extends JFrame {
         gdc.insets = new Insets(0, 0, 50, 0);
         this.add(manql, gdc);
 
-        // JButton thoat = new JButton("Thoát");
-        // thoat.setForeground(Color.BLACK);
-        // thoat.setFont(new Font(null, Font.BOLD, 20));
-        // // thoat.setBounds(420, 400, 120, 40);
-        // gdc.gridx = 0;
-        // gdc.gridy = 4;
-        // gdc.anchor = GridBagConstraints.HORIZONTAL;
-        // this.add(thoat, gdc);
-
-        // JLabel background = new JLabel();
-        // background.setIcon(new ImageIcon("D:\\IT\\GitHub Projects\\ThienTam\\img\\backgrounds.jpg"));
-        // background.setBounds(0,0, 1000, 700);
-        // this.add(background);
+        JLabel tinhtrang = new JLabel("Tình trạng: ");
+        tinhtrang.setForeground(Color.BLACK);
+        tinhtrang.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 0;
+        gdc.gridy = 4;
+        gdc.anchor = GridBagConstraints.WEST;
+        gdc.insets = new Insets(0, 0, 50, 0);
+        this.add(tinhtrang, gdc);
 
         this.setVisible(true);
 
@@ -91,17 +86,7 @@ public class storeGUI extends JFrame {
         mant.setText(mant.getText() + nt.getMant());
         diachi.setText(diachi.getText() + nt.getMasonha() + ", " + nt.getDuong() + ", " + nt.getPhuong() + ", " + nt.getQuan() + ", " + nt.getTinh());
         manql.setText(manql.getText() + nt.getManql());
-
-        //thoát
-        // thoat.addActionListener(new ActionListener() {
-        //     @Override
-        //     public void actionPerformed(ActionEvent e) {
-        //         dispose();
-        //     }
-        // });
-    }
-
-    public static void main(String[] args) {
-        new storeGUI(null);
+        if(nt.getTinhtrang()) tinhtrang.setText(tinhtrang.getText() + "Đang hoạt động");
+        else tinhtrang.setText(tinhtrang.getText() + "Ngừng hoạt động");
     }
 }

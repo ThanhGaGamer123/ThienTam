@@ -2,13 +2,14 @@ package login.signup;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
 import advanceMethod.advance;
+import dataAccessObj.employeeDAO;
 import employee.employGUI;
 import employee.employee;
-import employee.employeeArr;
 
 public class login extends JFrame {
     public login() {
@@ -147,16 +148,17 @@ public class login extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String username = user_field.getText();
                 String password = String.valueOf(pass_field.getPassword());
-                employeeArr employ = new employeeArr();
-                // employ.readFile();
+                employeeDAO emDAO = new employeeDAO();
+                ArrayList<employee> nvArr = emDAO.selectAll();
                 Boolean flag = false;
-                for(employee nv : employ.getArr()) {
+                for(employee nv : nvArr) {
                     if(username.equals(nv.getUsername()) && password.equals(nv.getPassword())) {
                         flag = true;
                         JOptionPane.showMessageDialog(null, 
                         "Đăng nhập thành công!");
                         new employGUI(nv);
                         dispose();
+                        break;
                     }
                 }
                 if(!flag) {

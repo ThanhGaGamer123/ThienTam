@@ -16,22 +16,23 @@ public class medicineDAO implements DAO<medicine> {
         Connection sql = data.SQL.createConnection();
 
         //B2: tạo câu lệnh SQL
-        String command = "INSERT INTO Thuoc (mathuoc, tenthuoc, donvi, thanhphan, thongtin, xuatxu, danhmuc, giaban, maton, doituongsudung) " +
-                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String command = "INSERT INTO Thuoc (mathuoc, tenthuoc, donvi, thanhphan, thongtin, xuatxu, danhmuc, giaban, maton, doituongsudung, tinhtrang) " +
+                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         //B3: tạo prepare statement
         try (PreparedStatement pst = sql.prepareStatement(command)) {
             // Gán giá trị cho các tham số
             pst.setString(1, t.getMathuoc());
             pst.setString(2, t.getTenthuoc());
-            pst.setString(3, advance.convertToString(t.getDonvi()));
+            pst.setString(3, advance.StringArrayListToString(t.getDonvi()));
             pst.setString(4, t.getThanhphan());
             pst.setString(5, t.getThongtin());
             pst.setString(6, t.getXuatxu());
             pst.setString(7, t.getDanhmuc());
-            pst.setString(8, advance.convertToString(t.getGiaban()));
+            pst.setString(8, advance.IntArrayListToString(t.getGiaban()));
             pst.setString(9, t.getMaton());
-            pst.setString(10, advance.convertToString(t.getDoituongsudung()));
+            pst.setString(10, advance.StringArrayListToString(t.getDoituongsudung()));
+            pst.setBoolean(11, t.getTinhtrang());
 
             // B3: Thực thi câu lệnh
             int ketQua = pst.executeUpdate();
@@ -55,21 +56,22 @@ public class medicineDAO implements DAO<medicine> {
         Connection sql = data.SQL.createConnection();
 
         //B2: tạo câu lệnh SQL
-        String command = "UPDATE Thuoc SET tenthuoc = ?, donvi = ?, thanhphan = ?, thongtin = ?, xuatxu = ?, danhmuc = ?, giaban = ?, maton = ?, doituongsudung = ? WHERE mathuoc = ?";
+        String command = "UPDATE Thuoc SET tenthuoc = ?, donvi = ?, thanhphan = ?, thongtin = ?, xuatxu = ?, danhmuc = ?, giaban = ?, maton = ?, doituongsudung = ?, tinhtrang = ? WHERE mathuoc = ?";
         
         //B3: tạo prepare statement
         try (PreparedStatement pst = sql.prepareStatement(command)) {
             // Gán giá trị cho các tham số
             pst.setString(1, t.getTenthuoc());
-            pst.setString(2, advance.convertToString(t.getDonvi()));
+            pst.setString(2, advance.StringArrayListToString(t.getDonvi()));
             pst.setString(3, t.getThanhphan());
             pst.setString(4, t.getThongtin());
             pst.setString(5, t.getXuatxu());
             pst.setString(6, t.getDanhmuc());
-            pst.setString(7, advance.convertToString(t.getGiaban()));
+            pst.setString(7, advance.IntArrayListToString(t.getGiaban()));
             pst.setString(8, t.getMaton());
-            pst.setString(9, advance.convertToString(t.getDoituongsudung()));
+            pst.setString(9, advance.StringArrayListToString(t.getDoituongsudung()));
             pst.setString(10, t.getMathuoc());
+            pst.setBoolean(11, t.getTinhtrang());
 
             // B3: Thực thi câu lệnh
             int ketQua = pst.executeUpdate();
@@ -120,23 +122,24 @@ public class medicineDAO implements DAO<medicine> {
         String command = "SELECT * FROM Thuoc";
         
         try (Connection sql = data.SQL.createConnection();
-            PreparedStatement pst = sql.prepareStatement(command);
-            ResultSet rs = pst.executeQuery()) {
-            
+        PreparedStatement pst = sql.prepareStatement(command);
+        ResultSet rs = pst.executeQuery()) {
             while (rs.next()) {
                 medicine med = new medicine();
                 med.setMathuoc(rs.getString("mathuoc"));
                 med.setTenthuoc(rs.getString("tenthuoc"));
-                med.setDonvi(advance.convertToStringArray(rs.getString("donvi")));
+                med.setDonvi(advance.StringconvertToStringArrayList(rs.getString("donvi")));
                 med.setThanhphan(rs.getString("thanhphan"));
                 med.setThongtin(rs.getString("thongtin"));
                 med.setXuatxu(rs.getString("xuatxu"));
                 med.setDanhmuc(rs.getString("danhmuc"));
-                med.setGiaban(advance.convertToIntArray(advance.convertToStringArray(rs.getString("giaban"))));
+                med.setGiaban(advance.StringArrayListToIntArrayList(advance.StringconvertToStringArrayList(rs.getString("giaban"))));
                 med.setMaton(rs.getString("maton"));
-                med.setDoituongsudung(advance.convertToStringArray(rs.getString("doituongsudung")));
+                med.setDoituongsudung(advance.StringconvertToStringArrayList(rs.getString("doituongsudung")));
+                med.setTinhtrang(rs.getBoolean("tinhtrang"));
                 medicines.add(med);
             }
+            System.out.println("Truy vấn thành công");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -157,16 +160,18 @@ public class medicineDAO implements DAO<medicine> {
                 medicine med = new medicine();
                 med.setMathuoc(rs.getString("mathuoc"));
                 med.setTenthuoc(rs.getString("tenthuoc"));
-                med.setDonvi(advance.convertToStringArray(rs.getString("donvi")));
+                med.setDonvi(advance.StringconvertToStringArrayList(rs.getString("donvi")));
                 med.setThanhphan(rs.getString("thanhphan"));
                 med.setThongtin(rs.getString("thongtin"));
                 med.setXuatxu(rs.getString("xuatxu"));
                 med.setDanhmuc(rs.getString("danhmuc"));
-                med.setGiaban(advance.convertToIntArray(advance.convertToStringArray(rs.getString("giaban"))));
+                med.setGiaban(advance.StringArrayListToIntArrayList(advance.StringconvertToStringArrayList(rs.getString("giaban"))));
                 med.setMaton(rs.getString("maton"));
-                med.setDoituongsudung(advance.convertToStringArray(rs.getString("doituongsudung")));
+                med.setDoituongsudung(advance.StringconvertToStringArrayList(rs.getString("doituongsudung")));
+                med.setTinhtrang(rs.getBoolean("tinhtrang"));
                 medicines.add(med);
             }
+            System.out.println("Truy vấn thành công");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -180,23 +185,25 @@ public class medicineDAO implements DAO<medicine> {
         String command = "SELECT * FROM Thuoc WHERE mathuoc = ?";
         
         try (Connection sql = data.SQL.createConnection();
-            PreparedStatement pstmt = sql.prepareStatement(command)) {
+            PreparedStatement pst = sql.prepareStatement(command)) {
             
-            pstmt.setString(1, t.getMathuoc());
-            try (ResultSet rs = pstmt.executeQuery()) {
+            pst.setString(1, t.getMathuoc());
+            try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     med = new medicine();
                     med.setMathuoc(rs.getString("mathuoc"));
                     med.setTenthuoc(rs.getString("tenthuoc"));
-                    med.setDonvi(advance.convertToStringArray(rs.getString("donvi")));
+                    med.setDonvi(advance.StringconvertToStringArrayList(rs.getString("donvi")));
                     med.setThanhphan(rs.getString("thanhphan"));
                     med.setThongtin(rs.getString("thongtin"));
                     med.setXuatxu(rs.getString("xuatxu"));
                     med.setDanhmuc(rs.getString("danhmuc"));
-                    med.setGiaban(advance.convertToIntArray(advance.convertToStringArray(rs.getString("giaban"))));
+                    med.setGiaban(advance.StringArrayListToIntArrayList(advance.StringconvertToStringArrayList(rs.getString("giaban"))));
                     med.setMaton(rs.getString("maton"));
-                    med.setDoituongsudung(advance.convertToStringArray(rs.getString("doituongsudung")));
+                    med.setDoituongsudung(advance.StringconvertToStringArrayList(rs.getString("doituongsudung")));
+                    med.setTinhtrang(rs.getBoolean("tinhtrang"));
                 }
+                System.out.println("Truy vấn thành công");
             }
         } catch (SQLException e) {
             e.printStackTrace();
