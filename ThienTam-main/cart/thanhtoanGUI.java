@@ -262,8 +262,8 @@ public class thanhtoanGUI extends JFrame {
         mainPanel.add(pay, BorderLayout.EAST);
         // THANH TOÁN (Tiêu đề)
         JLabel paid = new JLabel("ĐƠN HÀNG", SwingConstants.CENTER);
-        paid.setFont(new Font("Arial", Font.BOLD, 20));
-        paid.setForeground(Color.BLACK);
+        paid.setForeground(dodo);
+        paid.setFont(new Font("Bookman", Font.BOLD, 23));
         gbc2.gridy = 0;
         pay.add(paid, gbc2);
 
@@ -328,6 +328,7 @@ public class thanhtoanGUI extends JFrame {
         pay.add(buttonPanel, gbc2);
 
         thanhtoan_btn.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (diaChiCuThe.getText().equals("") && tenNguoiNhan.getText().equals("")

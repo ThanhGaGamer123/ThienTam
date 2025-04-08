@@ -347,7 +347,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         price.setForeground(Color.BLACK);
         filterPanel.add(price);
 
-        String[] cb4_item = { "                     __________", "              Giá từ thấp đến cao",
+        String[] cb4_item = { "                        Giá bán", "              Giá từ thấp đến cao",
                 "              Giá từ cao đến thấp" };
         cb4 = new JComboBox<>(cb4_item);
         cb4.setPreferredSize(new Dimension(220, 30));
@@ -791,7 +791,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
                 String selectedSortOption = cb4.getSelectedItem().toString().trim();
                 System.out.println("Selected Sort Option: " + selectedSortOption);
 
-                if (!selectedSortOption.equals("__________")) {
+                if (!selectedSortOption.equals("Giá bán")) {
                     Collections.sort(foundProductsFilter, new Comparator<medicine>() {
                         @Override
                         public int compare(medicine m1, medicine m2) {

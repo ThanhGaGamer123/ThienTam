@@ -87,31 +87,70 @@ public class cartGUI extends JFrame {
     }
 
     private void create_body() {
+        // Panel chính chứa cả body và pay
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        add(mainPanel, BorderLayout.CENTER); // Thêm vào frame
+        customer khachDangNhap = getKhachHangDangNhap();
+        // ========= Body =========
         body = new JPanel();
-        body.setBackground(Color.white);
-        body.setPreferredSize(new Dimension(0, 500));
+        body.setBackground(xamnhat);
+        body.setPreferredSize(new Dimension(400, 400));
         body.setLayout(new BorderLayout());
-        add(body, BorderLayout.CENTER);
+        mainPanel.add(body, BorderLayout.CENTER);
 
-        // panel ben phai
+        JPanel trai = new JPanel();
+        trai.setBackground(linen);
+        trai.setPreferredSize(new Dimension(20, 400));
+        trai.setLayout(null);
+        body.add(trai, BorderLayout.WEST);
+
+        JPanel phai = new JPanel();
+        phai.setBackground(linen);
+        phai.setPreferredSize(new Dimension(20, 400));
+        phai.setLayout(null);
+        body.add(phai, BorderLayout.EAST);
+
+        JPanel duoi = new JPanel();
+        duoi.setBackground(linen);
+        duoi.setPreferredSize(new Dimension(400, 20));
+        duoi.setLayout(null);
+        body.add(duoi, BorderLayout.SOUTH);
+
+        JPanel tren = new JPanel();
+        tren.setBackground(linen);
+        tren.setPreferredSize(new Dimension(400, 20));
+        tren.setLayout(null);
+        body.add(tren, BorderLayout.NORTH);
+
+        JPanel giua = new JPanel();
+        giua.setBackground(Color.white);
+        giua.setLayout(new GridBagLayout()); // Sử dụng GridBagLayout để bố cục gọn gàng
+        body.add(giua, BorderLayout.CENTER);
+
+        GridBagConstraints gbc1 = new GridBagConstraints();
+        gbc1.insets = new Insets(5, 10, 5, 10); // Khoảng cách giữa các thành phần
+        gbc1.fill = GridBagConstraints.HORIZONTAL; // Giúp các ô giãn theo chiều ngang
+        gbc1.weightx = 1; // Giúp các thành phần kéo dài theo chiều ngang
+
+        // ========= PAY =========
 
         JPanel pay = new JPanel();
         pay.setBackground(xamnhat);
-        pay.setPreferredSize(new Dimension(300, 0));
-        pay.setLayout(new GridBagLayout()); // Dùng GridBagLayout
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0; // Cột đầu tiên
-        gbc.weightx = 1; // Căn giữa theo chiều ngang
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 10, 10, 10); // Khoảng cách giữa các thành phần
-        body.add(pay, BorderLayout.EAST);
+        pay.setPreferredSize(new Dimension(300, 400));
+        pay.setLayout(new GridBagLayout());
+        GridBagConstraints gbc2 = new GridBagConstraints();
+        gbc2.gridx = 0;
+        gbc2.weightx = 1;
+        gbc2.fill = GridBagConstraints.HORIZONTAL;
+        gbc2.insets = new Insets(10, 10, 10, 10);
 
+        mainPanel.add(pay, BorderLayout.EAST);
         // THANH TOÁN (Tiêu đề)
-        JLabel paid = new JLabel("THANH TOÁN", SwingConstants.CENTER);
-        paid.setFont(new Font("Arial", Font.BOLD, 20));
-        paid.setForeground(Color.BLACK);
-        gbc.gridy = 0;
-        pay.add(paid, gbc);
+        JLabel paid = new JLabel("MUA HÀNG", SwingConstants.CENTER);
+        paid.setForeground(dodo);
+        paid.setFont(new Font("Bookman", Font.BOLD, 23));
+        gbc2.gridy = 0;
+        pay.add(paid, gbc2);
 
         // Tổng tiền
         JPanel totalPanel = new JPanel(new GridLayout(1, 2));
@@ -122,8 +161,8 @@ public class cartGUI extends JFrame {
         cost.setFont(new Font("Arial", Font.PLAIN, 14));
         totalPanel.add(tt);
         totalPanel.add(cost);
-        gbc.gridy = 1;
-        pay.add(totalPanel, gbc);
+        gbc2.gridy = 1;
+        pay.add(totalPanel, gbc2);
 
         // Giảm giá voucher
         JPanel voucherPanel = new JPanel(new GridLayout(1, 2));
@@ -134,8 +173,8 @@ public class cartGUI extends JFrame {
         costvc.setFont(new Font("Arial", Font.PLAIN, 14));
         voucherPanel.add(vc);
         voucherPanel.add(costvc);
-        gbc.gridy = 2;
-        pay.add(voucherPanel, gbc);
+        gbc2.gridy = 2;
+        pay.add(voucherPanel, gbc2);
 
         // Tổng số sản phẩm
         JPanel tongspPanel = new JPanel(new GridLayout(1, 2));
@@ -146,8 +185,8 @@ public class cartGUI extends JFrame {
         sosp.setFont(new Font("Arial", Font.PLAIN, 14));
         tongspPanel.add(count);
         tongspPanel.add(sosp);
-        gbc.gridy = 3;
-        pay.add(tongspPanel, gbc);
+        gbc2.gridy = 3;
+        pay.add(tongspPanel, gbc2);
 
         // Thành tiền
         JPanel thanhtienPanel = new JPanel(new GridLayout(1, 2));
@@ -158,19 +197,20 @@ public class cartGUI extends JFrame {
         costreal.setFont(new Font("Arial", Font.PLAIN, 14));
         thanhtienPanel.add(thantienthantien);
         thanhtienPanel.add(costreal);
-        gbc.gridy = 4;
-        pay.add(thanhtienPanel, gbc);
+        gbc2.gridy = 4;
+        pay.add(thanhtienPanel, gbc2);
 
         // Nút mua hàng
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(xamnhat);
-        JButton thanhtoan_btn = new JButton("Mua hàng");
+        JButton thanhtoan_btn = new JButton("MUA HÀNG");
         thanhtoan_btn.setBackground(hong);
         thanhtoan_btn.setFocusPainted(false);
         thanhtoan_btn.setFont(new Font("Arial", Font.BOLD, 20));
-        thanhtoan_btn.setPreferredSize(new Dimension(150, 50));
+        thanhtoan_btn.setPreferredSize(new Dimension(250, 50));
         buttonPanel.add(thanhtoan_btn);
-        gbc.gridy = 5;
+        gbc2.gridy = 5;
+        pay.add(buttonPanel, gbc2);
 
         thanhtoan_btn.addActionListener(new ActionListener() {
             @Override
@@ -182,7 +222,6 @@ public class cartGUI extends JFrame {
             }
         });
 
-        pay.add(buttonPanel, gbc);
     }
 
     private void create_footer() {
