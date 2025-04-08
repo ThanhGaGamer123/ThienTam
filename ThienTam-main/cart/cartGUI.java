@@ -17,12 +17,16 @@ public class cartGUI extends JFrame {
     // private String ten; // Thêm biến để lưu tên khách hàng
 
     // Màu sắc tùy chỉnh
+
     private static final Color xanhla = new Color(76, 181, 81);
     private static final Color xanhla_btn = new Color(48, 156, 62);
     private static final Color xanhbien = new Color(27, 101, 197);
     private static final Color vang = new Color(252, 212, 59);
     private static final Color hong = new Color(234, 185, 170);
     private static final Color xam = new Color(207, 207, 207);
+    private static final Color linen = new Color(250, 240, 230);
+    private static final Color xamnhat = new Color(237, 240, 243);
+    private static final Color dodo = new Color(232, 58, 72);
 
     public cartGUI(customerGUI khach, customer khachCurrent) {
         this.khach = khach;
@@ -92,7 +96,7 @@ public class cartGUI extends JFrame {
         // panel ben phai
 
         JPanel pay = new JPanel();
-        pay.setBackground(xam);
+        pay.setBackground(xamnhat);
         pay.setPreferredSize(new Dimension(300, 0));
         pay.setLayout(new GridBagLayout()); // Dùng GridBagLayout
         GridBagConstraints gbc = new GridBagConstraints();
@@ -111,7 +115,7 @@ public class cartGUI extends JFrame {
 
         // Tổng tiền
         JPanel totalPanel = new JPanel(new GridLayout(1, 2));
-        totalPanel.setBackground(xam);
+        totalPanel.setBackground(xamnhat);
         JLabel tt = new JLabel("Tổng tiền: ");
         tt.setFont(new Font("Arial", Font.PLAIN, 14));
         JLabel cost = new JLabel("---");
@@ -123,7 +127,7 @@ public class cartGUI extends JFrame {
 
         // Giảm giá voucher
         JPanel voucherPanel = new JPanel(new GridLayout(1, 2));
-        voucherPanel.setBackground(xam);
+        voucherPanel.setBackground(xamnhat);
         JLabel vc = new JLabel("Giảm giá voucher: ");
         vc.setFont(new Font("Arial", Font.PLAIN, 14));
         JLabel costvc = new JLabel("---");
@@ -135,7 +139,7 @@ public class cartGUI extends JFrame {
 
         // Tổng số sản phẩm
         JPanel tongspPanel = new JPanel(new GridLayout(1, 2));
-        tongspPanel.setBackground(xam);
+        tongspPanel.setBackground(xamnhat);
         JLabel count = new JLabel("Tổng số sản phẩm: ");
         count.setFont(new Font("Arial", Font.PLAIN, 14));
         JLabel sosp = new JLabel("---");
@@ -147,7 +151,7 @@ public class cartGUI extends JFrame {
 
         // Thành tiền
         JPanel thanhtienPanel = new JPanel(new GridLayout(1, 2));
-        thanhtienPanel.setBackground(xam);
+        thanhtienPanel.setBackground(xamnhat);
         JLabel thantienthantien = new JLabel("Thành tiền: ");
         thantienthantien.setFont(new Font("Arial", Font.BOLD, 18));
         JLabel costreal = new JLabel("---");
@@ -159,7 +163,7 @@ public class cartGUI extends JFrame {
 
         // Nút mua hàng
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setBackground(xam);
+        buttonPanel.setBackground(xamnhat);
         JButton thanhtoan_btn = new JButton("Mua hàng");
         thanhtoan_btn.setBackground(hong);
         thanhtoan_btn.setFocusPainted(false);

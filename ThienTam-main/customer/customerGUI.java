@@ -34,6 +34,8 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
     private static final Color xamnhat = new Color(237, 240, 243);
     private static final Color dodo = new Color(232, 58, 72);
 
+    private static int totalHeight;
+
     private customer khachhang;
     private medicineArr sanpham;
     private customer khachCurrent;
@@ -44,7 +46,8 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         this.khachCurrent = kh;
         this.sanpham = new medicineArr(); // Khởi tạo
         sanpham.readDatabase(); // Đọc dữ liệu
-        create();
+        ArrayList<medicine> ds = sanpham.getSp();
+        create(ds);
     }
 
     public customer getKhachHangDangNhap() {
@@ -56,7 +59,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         return this.khachCurrent;
     }
 
-    public void create() {
+    public void create(ArrayList<medicine> foundProductsFilter) {
         setTitle("Customer");
         setSize(1280, 720);
         setLocationRelativeTo(null);
@@ -65,12 +68,14 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
         p0 = new JPanel();
         p0.setLayout(new BorderLayout());
 
-        int productCount = sanpham.getSp().size();
-        int rows = (int) Math.ceil(productCount / 4.0); // 4sp 1 dòng
+        int productCount = foundProductsFilter.size();
+        int rows = (int) Math.ceil(productCount / 4.0); // 4sp 1 dòng //*********** */
         int productHeight = 320; // Chiều cao mỗi ô sản phẩm
-        int totalHeight = 300 + rows * productHeight + 100; // Tổng chiều cao p0
+        totalHeight = 300 + rows * productHeight + 100; // Tổng chiều cao p0
 
         p0.setPreferredSize(new Dimension(1280, totalHeight));
+        p0.revalidate(); // set lai height cho p0
+        p0.repaint();
 
         top_panel = new JPanel();
         top_panel.setBackground(xanhla);
@@ -359,7 +364,7 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
 
         mid_panel.removeAll(); // Xóa các sản phẩm cũ trước khi cập nhật mới
         mid_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
-        int productCount = foundProductsFilter.size();
+        int productCount = productArr.size();
 
         for (int i = 0; i < productCount; i++) {
             JPanel productPanel = new JPanel();
@@ -704,6 +709,14 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
             });
 
         }
+
+        int rows = (int) Math.ceil(productCount / 4.0); // 4 sp mỗi dòng
+        int productHeight = 320;
+        int totalHeight = 300 + rows * productHeight + 100;
+
+        p0.setPreferredSize(new Dimension(1280, totalHeight));
+        p0.revalidate();
+        p0.repaint();
 
         mid_panel.revalidate();
         mid_panel.repaint();

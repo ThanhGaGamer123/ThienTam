@@ -19,6 +19,7 @@ public class thanhtoanGUI extends JFrame {
     private cartGUI cart;
 
     // Màu sắc tùy chỉnh
+    // Màu sắc tùy chỉnh
     private static final Color xanhla = new Color(76, 181, 81);
     private static final Color xanhla_btn = new Color(48, 156, 62);
     private static final Color xanhbien = new Color(27, 101, 197);
@@ -26,6 +27,9 @@ public class thanhtoanGUI extends JFrame {
     private static final Color hong = new Color(234, 185, 170);
     private static final Color xam = new Color(207, 207, 207);
     private static final Color linen = new Color(250, 240, 230);
+    private static final Color xamnhat = new Color(237, 240, 243);
+    private static final Color dodo = new Color(232, 58, 72);
+
     private customer khachhang;
     private medicineArr sanpham;
     private customer khachCurrent;
@@ -35,7 +39,7 @@ public class thanhtoanGUI extends JFrame {
         this.cart = cart;
         this.khachhang = khachCurrent;
 
-        setTitle("Giỏ hàng");
+        setTitle("Thanh toán");
         setSize(1280, 720);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -96,7 +100,7 @@ public class thanhtoanGUI extends JFrame {
 
         // ========= Body =========
         body = new JPanel();
-        body.setBackground(xam);
+        body.setBackground(xamnhat);
         body.setPreferredSize(new Dimension(400, 400));
         body.setLayout(new BorderLayout());
         mainPanel.add(body, BorderLayout.CENTER);
@@ -154,6 +158,7 @@ public class thanhtoanGUI extends JFrame {
 
         String temp = khachDangNhap.getTenkh();
         tenNguoiDat.setText(temp);
+
         JTextField sdtNguoiDat = new JTextField();
         sdtNguoiDat.setBorder(BorderFactory.createTitledBorder("SDT người đặt"));
         panelNguoiDat.add(tenNguoiDat);
@@ -215,7 +220,7 @@ public class thanhtoanGUI extends JFrame {
         giua.add(ghiChu, gbc1);
         // ========= PAY =========
         JPanel pay = new JPanel();
-        pay.setBackground(xam);
+        pay.setBackground(xamnhat);
         pay.setPreferredSize(new Dimension(300, 400));
         pay.setLayout(new GridBagLayout());
         GridBagConstraints gbc2 = new GridBagConstraints();
@@ -264,7 +269,7 @@ public class thanhtoanGUI extends JFrame {
 
         // Tổng tiền
         JPanel totalPanel = new JPanel(new GridLayout(1, 2));
-        totalPanel.setBackground(xam);
+        totalPanel.setBackground(xamnhat);
         JLabel tt = new JLabel("Tổng tiền: ");
         tt.setFont(new Font("Arial", Font.PLAIN, 14));
         JLabel cost = new JLabel("---");
@@ -276,7 +281,7 @@ public class thanhtoanGUI extends JFrame {
 
         // Giảm giá voucher
         JPanel voucherPanel = new JPanel(new GridLayout(1, 2));
-        voucherPanel.setBackground(xam);
+        voucherPanel.setBackground(xamnhat);
         JLabel vc = new JLabel("Giảm giá voucher: ");
         vc.setFont(new Font("Arial", Font.PLAIN, 14));
         JLabel costvc = new JLabel("---");
@@ -288,7 +293,7 @@ public class thanhtoanGUI extends JFrame {
 
         // Tổng số sản phẩm
         JPanel tongspPanel = new JPanel(new GridLayout(1, 2));
-        tongspPanel.setBackground(xam);
+        tongspPanel.setBackground(xamnhat);
         JLabel count = new JLabel("Tổng số sản phẩm: ");
         count.setFont(new Font("Arial", Font.PLAIN, 14));
         JLabel sosp = new JLabel("---");
@@ -300,7 +305,7 @@ public class thanhtoanGUI extends JFrame {
 
         // Thành tiền
         JPanel thanhtienPanel = new JPanel(new GridLayout(1, 2));
-        thanhtienPanel.setBackground(xam);
+        thanhtienPanel.setBackground(xamnhat);
         JLabel thantienthantien = new JLabel("Thành tiền: ");
         thantienthantien.setFont(new Font("Arial", Font.BOLD, 18));
         JLabel costreal = new JLabel("---");
@@ -312,7 +317,7 @@ public class thanhtoanGUI extends JFrame {
 
         // Nút mua hàng
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setBackground(xam);
+        buttonPanel.setBackground(xamnhat);
         JButton thanhtoan_btn = new JButton("Xác nhận thanh toán");
         thanhtoan_btn.setBackground(hong);
         thanhtoan_btn.setFocusPainted(false);
@@ -325,7 +330,12 @@ public class thanhtoanGUI extends JFrame {
         thanhtoan_btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (diaChiCuThe.getText().equals("")) {
+                if (diaChiCuThe.getText().equals("") && tenNguoiNhan.getText().equals("")
+                        && sdtNguoiNhan.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Bạn chưa nhập thông tin nhận hàng!");
+                    return;
+
+                } else if (diaChiCuThe.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "Bạn chưa nhập địa chỉ nhận hàng!");
                     return;
                 } else if (tenNguoiNhan.getText().equals("")) {

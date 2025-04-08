@@ -42,7 +42,7 @@ public class trangCaNhan extends JFrame {
 
         customer khachDangNhap = getKhachHangDangNhap();
 
-        setTitle("Giỏ hàng");
+        setTitle("Cá nhân");
         setSize(1280, 720);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
