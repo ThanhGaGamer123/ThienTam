@@ -70,8 +70,8 @@ public class medicineDAO implements DAO<medicine> {
             pst.setString(7, advance.IntArrayListToString(t.getGiaban()));
             pst.setString(8, t.getMaton());
             pst.setString(9, advance.StringArrayListToString(t.getDoituongsudung()));
-            pst.setString(10, t.getMathuoc());
-            pst.setBoolean(11, t.getTinhtrang());
+            pst.setBoolean(10, t.getTinhtrang());
+            pst.setString(11, t.getMathuoc());
 
             // B3: Thực thi câu lệnh
             int ketQua = pst.executeUpdate();

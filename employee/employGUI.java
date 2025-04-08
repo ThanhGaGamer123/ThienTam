@@ -34,12 +34,16 @@ import javax.swing.table.*;
 
 import advanceMethod.advance;
 import dataAccessObj.medicineDAO;
+import dataAccessObj.storageDAO;
 import dataAccessObj.storeDAO;
 import login.signup.login;
 import medicine.medicine;
 import medicine.medicineGUI;
+import medicine.medicineUpdateGUI;
+import medicine.searchAdvance;
 import order.order;
 import order.orderArr;
+import storage.storage;
 import store.store;
 import store.storeGUI;
 
@@ -69,7 +73,11 @@ public class employGUI extends JFrame {
         JPanel employeeStatus = new JPanel();
         employeeStatus.setBackground(Color.white);
         employeeStatus.setLayout(new GridBagLayout());
-        tab.addTab("Thông tin", data.imagePath.resize_statusIcon, employeeStatus);
+
+        JScrollPane employeeScroll = new JScrollPane();
+        employeeScroll.setViewportView(employeeStatus);
+
+        tab.addTab("Thông tin", data.imagePath.resize_statusIcon, employeeScroll);
 
         GridBagConstraints gdc_employee = new GridBagConstraints();
         
@@ -184,7 +192,11 @@ public class employGUI extends JFrame {
         JPanel orderSell = new JPanel();
         orderSell.setBackground(Color.white);
         orderSell.setLayout(new GridBagLayout());
-        tab.addTab("Hóa đơn bán", data.imagePath.resize_orderSell, orderSell);
+        
+        JScrollPane orderScroll = new JScrollPane();
+        orderScroll.setViewportView(orderSell);
+
+        tab.addTab("Hóa đơn bán", data.imagePath.resize_orderSell, orderScroll);
 
         GridBagConstraints gdc_ordersell = new GridBagConstraints();
 
@@ -340,7 +352,11 @@ public class employGUI extends JFrame {
         JPanel orderCollect = new JPanel();
         orderCollect.setBackground(Color.white);
         orderCollect.setLayout(new GridBagLayout());
-        tab.addTab("Hóa đơn nhập", data.imagePath.resize_package, orderCollect);
+
+        JScrollPane orderCollectScroll = new JScrollPane();
+        orderCollectScroll.setViewportView(orderCollect);
+
+        tab.addTab("Hóa đơn nhập", data.imagePath.resize_package, orderCollectScroll);
 
         GridBagConstraints gdc_ordercollect = new GridBagConstraints();
 
@@ -498,7 +514,11 @@ public class employGUI extends JFrame {
         JPanel medic = new JPanel();
         medic.setBackground(Color.white);
         medic.setLayout(new GridBagLayout());
-        tab.addTab("Thuốc", data.imagePath.resize_medic, medic);
+
+        JScrollPane medicScroll = new JScrollPane();
+        medicScroll.setViewportView(medic);
+
+        tab.addTab("Thuốc", data.imagePath.resize_medic, medicScroll);
 
         GridBagConstraints gdc_medic = new GridBagConstraints();
 
@@ -644,7 +664,11 @@ public class employGUI extends JFrame {
         JPanel statistic = new JPanel();
         statistic.setBackground(Color.white);
         statistic.setLayout(new GridBagLayout());
-        tab.addTab("Thống kê", data.imagePath.resize_statistic, statistic);
+
+        JScrollPane statisticScroll = new JScrollPane();
+        statisticScroll.setViewportView(statistic);
+
+        tab.addTab("Thống kê", data.imagePath.resize_statistic, statisticScroll);
 
         GridBagConstraints gdc_statistic = new GridBagConstraints();
 
@@ -924,6 +948,90 @@ public class employGUI extends JFrame {
                 new medicineGUI(modelMedic);
             }
         });
+
+        //sửa thuốc
+        suaMedic.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = tableMedic.getSelectedRow();
+                if(selectedRow != -1) {
+                    String mathuoc = String.valueOf(modelMedic.getValueAt(selectedRow, 0));
+                    medicine med = throwMedicineObj(mathuoc);
+                    if(med.getTinhtrang()) new medicineUpdateGUI(modelMedic, mathuoc);
+                    else JOptionPane.showMessageDialog(null, 
+                    "Thông tin thuốc này đã ngừng hoạt động!");
+                }
+                System.out.println(selectedRow);
+            }
+        });
+
+        //xóa thuốc
+        xoaMedic.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = tableMedic.getSelectedRow();
+                if(selectedRow != -1) {
+                    String mathuoc = String.valueOf(modelMedic.getValueAt(selectedRow, 0));
+                    medicine med = throwMedicineObj(mathuoc);
+                    if(med.getTinhtrang()) {
+                        int choice = JOptionPane.showConfirmDialog(null, 
+                        "Bạn có chắc chắn xóa thông tin thuốc này không?");
+                        if (choice == 0) {
+                            med.setTinhtrang(false);
+                            medicineDAO medDAO = new medicineDAO();
+                            medDAO.update(med);
+
+                            storage str = throwStorageObj(med.getMaton());
+                            str.setTinhtrang(false);
+                            storageDAO strDAO = new storageDAO();
+                            strDAO.update(str);
+
+                            updateTableMedic(modelMedic);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, 
+                        "Thông tin thuốc này đã ngừng hoạt động!");
+                    }
+                }
+            }
+        });
+
+        //tìm kiếm
+        search_3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                medicine med = throwMedicineObj(search_bar_3.getText());
+                modelMedic.setRowCount(0);
+                JLabel statusImg;
+                System.out.println(med.getTinhtrang());
+                if(med.getTinhtrang()) {
+                    statusImg = new JLabel(data.imagePath.resize_check);
+                } else {
+                    statusImg = new JLabel(data.imagePath.resize_exitIcon);
+                }
+                JButton eyeButton = new JButton(data.imagePath.resize_eye);
+                modelMedic.addRow(new Object[]{med.getMathuoc(), 
+                med.getTenthuoc(), med.getDanhmuc(),
+                statusImg, eyeButton});
+                }
+        });
+
+        //tìm kiếm nâng cao
+        search_advance_3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new searchAdvance(modelMedic);
+            }
+        });
+
+        //reset table
+        reset_3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                search_bar_3.setText("Nhập mã thuốc...");
+                updateTableMedic(modelMedic);
+            }
+        });
     }
 
     public static void updateTableMedic(DefaultTableModel modelMedic) {
@@ -943,5 +1051,23 @@ public class employGUI extends JFrame {
             medicine.getTenthuoc(), medicine.getDanhmuc(),
             statusImg, eyeButton});
         }
+    }
+
+    public static medicine throwMedicineObj(String mathuoc) {
+        medicine med = new medicine();
+        med.setMathuoc(mathuoc);
+        medicineDAO medDAO = new medicineDAO();
+        return medDAO.selectByID(med);
+    }
+
+    public static storage throwStorageObj(String maton) {
+        storage str = new storage();
+        str.setMaton(maton);
+        storageDAO strDAO = new storageDAO();
+        return strDAO.selectByID(str);
+    }
+
+    public static void main(String[] args) {
+        new employGUI(null);
     }
 } 

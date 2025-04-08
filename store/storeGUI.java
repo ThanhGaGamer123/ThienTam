@@ -28,6 +28,7 @@ public class storeGUI extends JFrame {
         gdc.gridx = 0;
         gdc.gridy = 0;
         gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.insets = new Insets(50, 0, 50, 0);
         this.add(title, gdc);
 
@@ -41,6 +42,7 @@ public class storeGUI extends JFrame {
         gdc.gridx = 0;
         gdc.gridy = 1;
         gdc.anchor = GridBagConstraints.WEST;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.insets = new Insets(0, 0, 30, 0);
         this.add(mant, gdc);
 
@@ -50,6 +52,7 @@ public class storeGUI extends JFrame {
         gdc.gridx = 0;
         gdc.gridy = 2;
         gdc.anchor = GridBagConstraints.WEST;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.insets = new Insets(0, 0, 30, 0);
         this.add(tf_diachi, gdc);
 
@@ -66,6 +69,7 @@ public class storeGUI extends JFrame {
         gdc.gridx = 0;
         gdc.gridy = 3;
         gdc.anchor = GridBagConstraints.WEST;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.insets = new Insets(0, 0, 50, 0);
         this.add(manql, gdc);
 
@@ -75,6 +79,7 @@ public class storeGUI extends JFrame {
         gdc.gridx = 0;
         gdc.gridy = 4;
         gdc.anchor = GridBagConstraints.WEST;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.insets = new Insets(0, 0, 50, 0);
         this.add(tinhtrang, gdc);
 
@@ -88,5 +93,9 @@ public class storeGUI extends JFrame {
         manql.setText(manql.getText() + nt.getManql());
         if(nt.getTinhtrang()) tinhtrang.setText(tinhtrang.getText() + "Đang hoạt động");
         else tinhtrang.setText(tinhtrang.getText() + "Ngừng hoạt động");
+    }
+
+    public static void main(String[] args) {
+        new storeGUI(null);
     }
 }

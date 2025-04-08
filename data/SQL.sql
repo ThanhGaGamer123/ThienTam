@@ -11,7 +11,7 @@ CREATE TABLE NhaThuoc (
 	tinh NVARCHAR(20),        
     manql VARCHAR(10),    
 	tinhtrang BIT
-);
+)
 
 CREATE TABLE NhanVien (
     manv VARCHAR(10) PRIMARY KEY,         
@@ -146,3 +146,10 @@ CREATE TABLE Kho (
 	ALTER TABLE ChiTietHoaDonNhap ADD CONSTRAINT FK_CTHDN_HDN FOREIGN KEY (mahdnhap) REFERENCES HoaDonNhap(mahdnhap); 
     ALTER TABLE ChiTietHoaDonNhap ADD CONSTRAINT FK_CTHDN_Thuoc FOREIGN KEY (mathuoc) REFERENCES Thuoc(mathuoc);
 	ALTER TABLE Thuoc ADD CONSTRAINT FK_Thuoc_Kho FOREIGN KEY (maton) REFERENCES Kho(maton);
+
+	delete from Thuoc
+	delete from Kho
+
+	select *
+	from Thuoc
+	where mathuoc like N'%mth%' and tenthuoc like N'%pa%' and danhmuc like N'%gi%' and xuatxu like N'%m%' and doituongsudung like N'%tr%' and giaban like N'%200000%'
