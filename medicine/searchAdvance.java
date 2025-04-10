@@ -302,11 +302,36 @@ public class searchAdvance extends JFrame {
         gdc.insets = new Insets(0, 0, 30, 80);
         main.add(tf_gia_vien, gdc);
 
+        JLabel tinhtrang = new JLabel("Giá viên:");
+        tinhtrang.setForeground(Color.BLACK);
+        tinhtrang.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 0;
+        gdc.gridy = 11;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.WEST;
+        gdc.fill = GridBagConstraints.NONE;
+        gdc.weightx = 0;
+        gdc.insets = new Insets(0, 100, 30, 0);
+        main.add(tinhtrang, gdc);
+
+        String[] dstinhtrang =  {"Không có", "Đang hoạt động", "Ngừng hoạt động"};
+        JComboBox cb_tinhtrang = new JComboBox(dstinhtrang);
+        cb_tinhtrang.setForeground(Color.BLACK);
+        cb_tinhtrang.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 1;
+        gdc.gridy = 11;
+        gdc.gridwidth = 3;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 0, 30, 80);
+        main.add(cb_tinhtrang, gdc);
+
         JButton finish = new JButton("Hoàn tất");
         finish.setForeground(Color.BLACK);
         finish.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 11;
+        gdc.gridy = 12;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -318,7 +343,7 @@ public class searchAdvance extends JFrame {
         reset.setForeground(Color.BLACK);
         reset.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 2;
-        gdc.gridy = 11;
+        gdc.gridy = 12;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -364,8 +389,10 @@ public class searchAdvance extends JFrame {
                 Boolean price = true;
                 if(!tf_gia_hop.getText().isEmpty() && !advance.checkTextField(tf_gia_hop.getText())) price = false;
                 else if(!tf_gia_hop.getText().isEmpty()) allPrice.add(tf_gia_hop.getText());
+
                 if(!tf_gia_vi.getText().isEmpty() && !advance.checkTextField(tf_gia_vi.getText())) price = false;
                 else if(!tf_gia_vi.getText().isEmpty()) allPrice.add(tf_gia_vi.getText());
+
                 if(!tf_gia_vien.getText().isEmpty() && !advance.checkTextField(tf_gia_vien.getText())) price = false;
                 else if(!tf_gia_vien.getText().isEmpty()) allPrice.add(tf_gia_vien.getText());
 
@@ -378,6 +405,12 @@ public class searchAdvance extends JFrame {
                     if(!tf_xuatxu.getText().isEmpty()) condition.add("xuatxu like N'%" + tf_xuatxu.getText() + "%' ");
                     if(chosen.size() != 0) condition.add("doituongsudung like N'%" + advance.StringArrayListToString(chosen) + "%' ");
                     condition.add("giaban like N'%" + advance.StringArrayListToString(allPrice) + "%' ");
+                    String tt = String.valueOf(cb_tinhtrang.getSelectedItem());
+                    if(tt.equals("Đang hoạt động")) {
+                        condition.add("tinhtrang = 1 ");
+                    } else if (tt.equals("Ngừng hoạt động")) {
+                        condition.add("tinhtrang = 0 ");
+                    }
                     String result = String.join("and ", condition);
 
                     medicineDAO medDAO = new medicineDAO();

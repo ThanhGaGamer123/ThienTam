@@ -149,7 +149,3 @@ CREATE TABLE Kho (
 
 	delete from Thuoc
 	delete from Kho
-
-	select *
-	from Thuoc
-	where mathuoc like N'%mth%' and tenthuoc like N'%pa%' and danhmuc like N'%gi%' and xuatxu like N'%m%' and doituongsudung like N'%tr%' and giaban like N'%200000%'

@@ -11,6 +11,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -38,18 +40,18 @@ import dataAccessObj.storageDAO;
 import dataAccessObj.storeDAO;
 import login.signup.login;
 import medicine.medicine;
+import medicine.medicineAddGUI;
 import medicine.medicineGUI;
 import medicine.medicineUpdateGUI;
 import medicine.searchAdvance;
-import order.order;
-import order.orderArr;
 import storage.storage;
 import store.store;
 import store.storeGUI;
 
 public class employGUI extends JFrame {
     public employGUI(employee nv) {
-        this.setSize(1280, 720);
+        // this.setSize(1280, 720);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(true);
@@ -80,11 +82,9 @@ public class employGUI extends JFrame {
         tab.addTab("Thông tin", data.imagePath.resize_statusIcon, employeeScroll);
 
         GridBagConstraints gdc_employee = new GridBagConstraints();
-        
-        // JLabel background = new JLabel();
-        // background.setIcon(new ImageIcon(advance.img+"backgrounds.jpg"));
-        // background.setBounds(0,0, 1280, 720);
-        // employeeStatus.add(background, gdc_employee);
+
+        gdc_employee.gridwidth = 1;
+        gdc_employee.gridheight = 1;
 
         JLabel title = new JLabel("Thông Tin Nhân Viên");
         title.setForeground(Color.BLACK);
@@ -187,6 +187,14 @@ public class employGUI extends JFrame {
         gdc_employee.gridx = 0;
         gdc_employee.insets = new Insets(0, 0, 50, 0);
         employeeStatus.add(tinhtrang, gdc_employee);
+        
+        // JLabel background = new JLabel();
+        // background.setIcon(new ImageIcon(advance.img+"backgrounds.jpg"));
+        // gdc_employee.gridx = 0;
+        // gdc_employee.gridy = 0;
+        // gdc_employee.gridwidth = 1;
+        // gdc_employee.gridheight = 9;
+        // employeeStatus.add(background, gdc_employee);
 
         //Panel Hóa đơn bán
         JPanel orderSell = new JPanel();
@@ -831,21 +839,8 @@ public class employGUI extends JFrame {
         });
 
         //Tự động cập nhật thông tin hóa đơn bán
-        orderArr arr = new orderArr();
-        // arr.readFile();
-        for(order dh : arr.getArr()) {
-            if(nv.getManv().equals(dh.getManv())) {
-                JLabel statusImg;
-                if(dh.getTinhtrang().equals("true")) {
-                    statusImg = new JLabel(data.imagePath.resize_check);
-                } else {
-                    statusImg = new JLabel(data.imagePath.resize_exitIcon);
-                }
-                JButton eyeButton = new JButton(data.imagePath.resize_eye);
-                model.addRow(new Object[]{dh.getMadon(),dh.getMakh(),dh.getManv(),
-                dh.getNgaydat(),dh.getTongtien(),statusImg,eyeButton});
-            }
-        }
+
+
 
         table.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -941,11 +936,43 @@ public class employGUI extends JFrame {
             }
         });
 
+        //xem thuốc
+        tableMedic.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectColumn = tableMedic.getSelectedColumn();
+                if(selectColumn == 4) {
+                    int selectedRow = tableMedic.getSelectedRow();
+                    if(selectedRow != -1) {
+                        String mathuoc = String.valueOf(modelMedic.getValueAt(selectedRow, 0));
+                        new medicineGUI(mathuoc);
+                    }
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+            
+        });
+
         //thêm thuốc
         themMedic.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new medicineGUI(modelMedic);
+                new medicineAddGUI(modelMedic);
             }
         });
 
@@ -1013,7 +1040,7 @@ public class employGUI extends JFrame {
                 modelMedic.addRow(new Object[]{med.getMathuoc(), 
                 med.getTenthuoc(), med.getDanhmuc(),
                 statusImg, eyeButton});
-                }
+            }
         });
 
         //tìm kiếm nâng cao
@@ -1024,7 +1051,7 @@ public class employGUI extends JFrame {
             }
         });
 
-        //reset table
+        //reset thuốc
         reset_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

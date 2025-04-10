@@ -3,39 +3,32 @@ package medicine;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
 
 import advanceMethod.advance;
 import dataAccessObj.medicineDAO;
 import dataAccessObj.storageDAO;
-import employee.employGUI;
 import storage.storage;
 
 public class medicineGUI extends JFrame {
-    public medicineGUI(DefaultTableModel modelMedic){
-        this.setSize(1000, 800);
-        this.setTitle("Lập thông tin thuốc");
+    public medicineGUI(String mathuoc){
+        this.setSize(1500, 800);
+        this.setTitle("Thông tin thuốc");
         ImageIcon logo = new ImageIcon(advance.img+"logo.png");
         this.setIconImage(logo.getImage());
         this.getContentPane().setBackground(Color.white);
@@ -54,23 +47,47 @@ public class medicineGUI extends JFrame {
 
         GridBagConstraints gdc = new GridBagConstraints();
 
-        JLabel title = new JLabel("Lập Thông Tin Thuốc Mới");
+        JLabel title = new JLabel("Thông Tin Thuốc");
         title.setForeground(Color.BLACK);
         title.setFont(new Font(null, Font.BOLD, 30));
         gdc.gridx = 0;
         gdc.gridy = 0;
-        gdc.gridwidth = 4;
+        gdc.gridwidth = 3;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.insets = new Insets(20, 0, 30, 0);
         main.add(title, gdc);
+
+        JLabel maThuoc = new JLabel("Mã thuốc:");
+        maThuoc.setForeground(Color.BLACK);
+        maThuoc.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 0;
+        gdc.gridy = 1;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.EAST;
+        gdc.fill = GridBagConstraints.NONE;
+        gdc.weightx = 0;
+        gdc.insets = new Insets(0, 100, 30, 0);
+        main.add(maThuoc, gdc);
+
+        JTextField tf_maThuoc = new JTextField();
+        tf_maThuoc.setForeground(Color.BLACK);
+        tf_maThuoc.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 1;
+        gdc.gridy = 1;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 10, 30, 10);
+        main.add(tf_maThuoc, gdc);
 
         JLabel tenthuoc = new JLabel("Tên thuốc:");
         tenthuoc.setForeground(Color.BLACK);
         tenthuoc.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 1;
+        gdc.gridy = 2;
         gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.WEST;
+        gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
         gdc.insets = new Insets(0, 100, 30, 0);
@@ -80,21 +97,21 @@ public class medicineGUI extends JFrame {
         tf_tenthuoc.setForeground(Color.BLACK);
         tf_tenthuoc.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 1;
-        gdc.gridwidth = 3;
+        gdc.gridy = 2;
+        gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 10, 30, 80);
+        gdc.insets = new Insets(0, 10, 30, 10);
         main.add(tf_tenthuoc, gdc);
 
         JLabel danhmuc = new JLabel("Danh mục:");
         danhmuc.setForeground(Color.BLACK);
         danhmuc.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 2;
+        gdc.gridy = 3;
         gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.WEST;
+        gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
         gdc.insets = new Insets(0, 100, 30, 0);
@@ -104,69 +121,45 @@ public class medicineGUI extends JFrame {
         tf_danhmuc.setForeground(Color.BLACK);
         tf_danhmuc.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 2;
-        gdc.gridwidth = 3;
+        gdc.gridy = 3;
+        gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 10, 30, 80);
+        gdc.insets = new Insets(0, 10, 30, 10);
         main.add(tf_danhmuc, gdc);
 
         JLabel donvi = new JLabel("Đơn vị:");
         donvi.setForeground(Color.BLACK);
         donvi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 3;
+        gdc.gridy = 4;
         gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.WEST;
+        gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
-        gdc.insets = new Insets(0, 100, 30, 0);
+        gdc.insets = new Insets(0, 50, 30, 0);
         main.add(donvi, gdc);
 
-        JCheckBox hop = new JCheckBox("Hộp");
-        hop.setBackground(Color.white);
-        hop.setForeground(Color.BLACK);
-        hop.setFont(new Font(null, Font.PLAIN, 20));
+        JTextField tf_donvi = new JTextField();
+        tf_donvi.setForeground(Color.BLACK);
+        tf_donvi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 3;
+        gdc.gridy = 4;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
-        gdc.fill = GridBagConstraints.NONE;
-        gdc.insets = new Insets(0, 0, 30, 0);
-        main.add(hop, gdc);
-
-        JCheckBox vi = new JCheckBox("Vỉ");
-        vi.setBackground(Color.white);
-        vi.setForeground(Color.BLACK);
-        vi.setFont(new Font(null, Font.PLAIN, 20));
-        gdc.gridx = 2;
-        gdc.gridy = 3;
-        gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.CENTER;
-        gdc.fill = GridBagConstraints.NONE;
-        gdc.insets = new Insets(0, 0, 30, 0);
-        main.add(vi, gdc);
-        
-        JCheckBox vien = new JCheckBox("Viên");
-        vien.setBackground(Color.white);
-        vien.setForeground(Color.BLACK);
-        vien.setFont(new Font(null, Font.PLAIN, 20));
-        gdc.gridx = 3;
-        gdc.gridy = 3;
-        gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.CENTER;
-        gdc.fill = GridBagConstraints.NONE;
-        gdc.insets = new Insets(0, 0, 30, 0);
-        main.add(vien, gdc);
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 10, 30, 10);
+        main.add(tf_donvi, gdc);
 
         JLabel thanhphan = new JLabel("Thành phần:");
         thanhphan.setForeground(Color.BLACK);
         thanhphan.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 4;
+        gdc.gridy = 5;
         gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.NORTHWEST;
+        gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
         gdc.insets = new Insets(0, 100, 30, 0);
@@ -182,21 +175,21 @@ public class medicineGUI extends JFrame {
         scroll_thanhphan.setViewportView(ta_thanhphan);
 
         gdc.gridx = 1;
-        gdc.gridy = 4;
-        gdc.gridwidth = 3;
+        gdc.gridy = 5;
+        gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 10, 30, 80);
+        gdc.insets = new Insets(0, 10, 30, 10);
         main.add(scroll_thanhphan, gdc);
 
         JLabel thongtin = new JLabel("Thông tin:");
         thongtin.setForeground(Color.BLACK);
         thongtin.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 5;
+        gdc.gridy = 6;
         gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.NORTHWEST;
+        gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
         gdc.insets = new Insets(0, 100, 30, 0);
@@ -212,21 +205,21 @@ public class medicineGUI extends JFrame {
         scroll_thongtin.setViewportView(ta_thongtin);
 
         gdc.gridx = 1;
-        gdc.gridy = 5;
-        gdc.gridwidth = 3;
+        gdc.gridy = 6;
+        gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 10, 30, 80);
+        gdc.insets = new Insets(0, 10, 30, 10);
         main.add(scroll_thongtin, gdc);
 
         JLabel xuatxu = new JLabel("Xuất xứ:");
         xuatxu.setForeground(Color.BLACK);
         xuatxu.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 6;
+        gdc.gridy = 7;
         gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.WEST;
+        gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
         gdc.insets = new Insets(0, 100, 30, 0);
@@ -236,190 +229,265 @@ public class medicineGUI extends JFrame {
         tf_xuatxu.setForeground(Color.BLACK);
         tf_xuatxu.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 6;
-        gdc.gridwidth = 3;
+        gdc.gridy = 7;
+        gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 10, 30, 80);
+        gdc.insets = new Insets(0, 10, 30, 10);
         main.add(tf_xuatxu, gdc);
 
-        JLabel doituong = new JLabel("Đối tượng sử dụng:");
-        doituong.setForeground(Color.BLACK);
-        doituong.setFont(new Font(null, Font.PLAIN, 20));
-        gdc.gridx = 0;
-        gdc.gridy = 7;
-        gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.WEST;
-        gdc.fill = GridBagConstraints.NONE;
-        gdc.weightx = 0;
-        gdc.insets = new Insets(0, 100, 30, 0);
-        main.add(doituong, gdc);
-
-        String[] doituongsudung = {"không có chỉ định", "trẻ em", "người cao tuổi", "phụ nữ đang mang thai"}; //etc...
-        JComboBox cb_doituong = new JComboBox(doituongsudung);
-        cb_doituong.setForeground(Color.BLACK);
-        cb_doituong.setFont(new Font(null, Font.PLAIN, 20));
-        gdc.gridx = 1;
-        gdc.gridy = 7;
-        gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.CENTER;
-        gdc.fill = GridBagConstraints.HORIZONTAL;
-        gdc.weightx = 1;
-        gdc.insets = new Insets(0, 10, 30, 10);
-        main.add(cb_doituong, gdc);
-
-        JButton btn_them_doituong = new JButton("Thêm");
-        btn_them_doituong.setForeground(Color.BLACK);
-        btn_them_doituong.setFont(new Font(null, Font.PLAIN, 20));
-        gdc.gridx = 2;
-        gdc.gridy = 7;
-        gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.CENTER;
-        gdc.fill = GridBagConstraints.HORIZONTAL;
-        gdc.weightx = 1;
-        gdc.insets = new Insets(0, 10, 30, 10);
-        main.add(btn_them_doituong, gdc);
-
-        JButton btn_xoa_doituong = new JButton("Xóa");
-        btn_xoa_doituong.setForeground(Color.BLACK);
-        btn_xoa_doituong.setFont(new Font(null, Font.PLAIN, 20));
-        gdc.gridx = 3;
-        gdc.gridy = 7;
-        gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.CENTER;
-        gdc.fill = GridBagConstraints.HORIZONTAL;
-        gdc.weightx = 1;
-        gdc.insets = new Insets(0, 10, 30, 80);
-        main.add(btn_xoa_doituong, gdc);
-
-        JLabel ds_doituong = new JLabel("Danh sách đối tượng sử dụng:");
-        ds_doituong.setForeground(Color.BLACK);
-        ds_doituong.setFont(new Font(null, Font.PLAIN, 20));
-
-        JPanel dsdt = new JPanel(new FlowLayout());
-        dsdt.setBackground(Color.white);
-        dsdt.add(ds_doituong);
+        JLabel dsdt = new JLabel("Danh sách đối tượng sử dụng:");
+        dsdt.setForeground(Color.BLACK);
+        dsdt.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
         gdc.gridy = 8;
-        gdc.gridwidth = 4;
-        gdc.anchor = GridBagConstraints.WEST;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
-        gdc.insets = new Insets(0, 100, 30, 100);
+        gdc.insets = new Insets(0, 50, 30, 0);
         main.add(dsdt, gdc);
 
-        JLabel giaban = new JLabel("Giá bán:");
-        giaban.setForeground(Color.BLACK);
-        giaban.setFont(new Font(null, Font.PLAIN, 20));
+        JTextField tf_dsdt = new JTextField();
+        tf_dsdt.setForeground(Color.BLACK);
+        tf_dsdt.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 1;
+        gdc.gridy = 8;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 10, 30, 10);
+        main.add(tf_dsdt, gdc);
+
+        JLabel giahop = new JLabel("Giá bán hộp:");
+        giahop.setForeground(Color.BLACK);
+        giahop.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
         gdc.gridy = 9;
         gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.WEST;
+        gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
-        gdc.insets = new Insets(0, 100, 30, 0);
-        main.add(giaban, gdc);
+        gdc.insets = new Insets(0, 50, 30, 0);
+        main.add(giahop, gdc);
 
-        JLabel gia_hop = new JLabel("Giá hộp:");
-        gia_hop.setForeground(Color.BLACK);
-        gia_hop.setFont(new Font(null, Font.PLAIN, 20));
+        JTextField tf_giahop = new JTextField();
+        tf_giahop.setForeground(Color.BLACK);
+        tf_giahop.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 1;
+        gdc.gridy = 9;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 10, 30, 10);
+        main.add(tf_giahop, gdc);
+
+        JLabel giavi = new JLabel("Giá bán vỉ:");
+        giavi.setForeground(Color.BLACK);
+        giavi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
         gdc.gridy = 10;
         gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.WEST;
+        gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
-        gdc.insets = new Insets(0, 100, 30, 0);
-        main.add(gia_hop, gdc);
+        gdc.insets = new Insets(0, 50, 30, 0);
+        main.add(giavi, gdc);
 
-        JTextField tf_gia_hop = new JTextField();
-        tf_gia_hop.setForeground(Color.BLACK);
-        tf_gia_hop.setFont(new Font(null, Font.PLAIN, 20));
+        JTextField tf_giavi = new JTextField();
+        tf_giavi.setForeground(Color.BLACK);
+        tf_giavi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
         gdc.gridy = 10;
-        gdc.gridwidth = 3;
+        gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 0, 30, 80);
-        main.add(tf_gia_hop, gdc);
+        gdc.insets = new Insets(0, 10, 30, 10);
+        main.add(tf_giavi, gdc);
 
-        JLabel gia_vi = new JLabel("Giá vỉ:");
-        gia_vi.setForeground(Color.BLACK);
-        gia_vi.setFont(new Font(null, Font.PLAIN, 20));
+        JLabel giavien = new JLabel("Giá bán viên:");
+        giavien.setForeground(Color.BLACK);
+        giavien.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
         gdc.gridy = 11;
         gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.WEST;
+        gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
-        gdc.insets = new Insets(0, 100, 30, 0);
-        main.add(gia_vi, gdc);
+        gdc.insets = new Insets(0, 50, 30, 0);
+        main.add(giavien, gdc);
 
-        JTextField tf_gia_vi = new JTextField();
-        tf_gia_vi.setForeground(Color.BLACK);
-        tf_gia_vi.setFont(new Font(null, Font.PLAIN, 20));
+        JTextField tf_giavien = new JTextField();
+        tf_giavien.setForeground(Color.BLACK);
+        tf_giavien.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
         gdc.gridy = 11;
-        gdc.gridwidth = 3;
+        gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 0, 30, 80);
-        main.add(tf_gia_vi, gdc);
+        gdc.insets = new Insets(0, 10, 30, 10);
+        main.add(tf_giavien, gdc);
 
-        JLabel gia_vien = new JLabel("Giá viên:");
-        gia_vien.setForeground(Color.BLACK);
-        gia_vien.setFont(new Font(null, Font.PLAIN, 20));
+        JLabel slhop = new JLabel("Số lượng hộp:");
+        slhop.setForeground(Color.BLACK);
+        slhop.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
         gdc.gridy = 12;
         gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.WEST;
+        gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
-        gdc.insets = new Insets(0, 100, 30, 0);
-        main.add(gia_vien, gdc);
+        gdc.insets = new Insets(0, 50, 30, 0);
+        main.add(slhop, gdc);
 
-        JTextField tf_gia_vien = new JTextField();
-        tf_gia_vien.setForeground(Color.BLACK);
-        tf_gia_vien.setFont(new Font(null, Font.PLAIN, 20));
+        JTextField tf_slhop = new JTextField();
+        tf_slhop.setForeground(Color.BLACK);
+        tf_slhop.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
         gdc.gridy = 12;
-        gdc.gridwidth = 3;
+        gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 0, 30, 80);
-        main.add(tf_gia_vien, gdc);
+        gdc.insets = new Insets(0, 10, 30, 10);
+        main.add(tf_slhop, gdc);
 
-        tf_gia_hop.setEnabled(false);
-        tf_gia_vi.setEnabled(false);
-        tf_gia_vien.setEnabled(false);
+        JLabel slvi = new JLabel("Số lượng vỉ:");
+        slvi.setForeground(Color.BLACK);
+        slvi.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 0;
+        gdc.gridy = 13;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.EAST;
+        gdc.fill = GridBagConstraints.NONE;
+        gdc.weightx = 0;
+        gdc.insets = new Insets(0, 50, 30, 0);
+        main.add(slvi, gdc);
 
-        JButton finish = new JButton("Hoàn tất");
-        finish.setForeground(Color.BLACK);
-        finish.setFont(new Font(null, Font.PLAIN, 20));
+        JTextField tf_slvi = new JTextField();
+        tf_slvi.setForeground(Color.BLACK);
+        tf_slvi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
         gdc.gridy = 13;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 0, 30, 0);
-        main.add(finish, gdc);
+        gdc.insets = new Insets(0, 10, 30, 10);
+        main.add(tf_slvi, gdc);
 
-        JButton reset = new JButton("Đặt lại");
-        reset.setForeground(Color.BLACK);
-        reset.setFont(new Font(null, Font.PLAIN, 20));
+        JLabel slvien = new JLabel("Số lượng viên:");
+        slvien.setForeground(Color.BLACK);
+        slvien.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 0;
+        gdc.gridy = 14;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.EAST;
+        gdc.fill = GridBagConstraints.NONE;
+        gdc.weightx = 0;
+        gdc.insets = new Insets(0, 50, 30, 0);
+        main.add(slvien, gdc);
+
+        JTextField tf_slvien = new JTextField();
+        tf_slvien.setForeground(Color.BLACK);
+        tf_slvien.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 1;
+        gdc.gridy = 14;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 10, 30, 10);
+        main.add(tf_slvien, gdc);
+
+        JLabel tinhtrang = new JLabel("Tình trạng:");
+        tinhtrang.setForeground(Color.BLACK);
+        tinhtrang.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 0;
+        gdc.gridy = 15;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.EAST;
+        gdc.fill = GridBagConstraints.NONE;
+        gdc.weightx = 0;
+        gdc.insets = new Insets(0, 50, 30, 0);
+        main.add(tinhtrang, gdc);
+
+        JTextField tf_tinhtrang = new JTextField();
+        tf_tinhtrang.setForeground(Color.BLACK);
+        tf_tinhtrang.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 1;
+        gdc.gridy = 15;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 10, 30, 10);
+        main.add(tf_tinhtrang, gdc);
+
+        JLabel khung_anh = new JLabel();
+        khung_anh.setBackground(Color.LIGHT_GRAY);
+        khung_anh.setBorder(BorderFactory.createLineBorder(Color.black,3));
         gdc.gridx = 2;
-        gdc.gridy = 13;
+        gdc.gridy = 1;
         gdc.gridwidth = 1;
+        gdc.gridheight = 5;
         gdc.anchor = GridBagConstraints.CENTER;
-        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.fill = GridBagConstraints.BOTH;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 10, 30, 80);
-        main.add(reset, gdc);
+        gdc.insets = new Insets(0, 100, 30, 80);
+        main.add(khung_anh, gdc);
+        
+        //ko thay đổi trường nhập liệu
+        tf_maThuoc.setEditable(false);
+        tf_maThuoc.setBackground(Color.white);
+        tf_maThuoc.setBorder(BorderFactory.createLineBorder(Color.black,1));
+        tf_tenthuoc.setEditable(false);
+        tf_tenthuoc.setBackground(Color.white);
+        tf_tenthuoc.setBorder(BorderFactory.createLineBorder(Color.black,1));
+        tf_danhmuc.setEditable(false);
+        tf_danhmuc.setBackground(Color.white);
+        tf_danhmuc.setBorder(BorderFactory.createLineBorder(Color.black,1));
+        tf_donvi.setEditable(false);
+        tf_donvi.setBackground(Color.white);
+        tf_donvi.setBorder(BorderFactory.createLineBorder(Color.black,1));
+        ta_thanhphan.setEditable(false);
+        ta_thanhphan.setBackground(Color.white);
+        ta_thanhphan.setBorder(BorderFactory.createLineBorder(Color.black,1));
+        ta_thongtin.setEditable(false);
+        ta_thongtin.setBackground(Color.white);
+        ta_thongtin.setBorder(BorderFactory.createLineBorder(Color.black,1));
+        tf_xuatxu.setEditable(false);
+        tf_xuatxu.setBackground(Color.white);
+        tf_xuatxu.setBorder(BorderFactory.createLineBorder(Color.black,1));
+        tf_dsdt.setEditable(false);
+        tf_dsdt.setBackground(Color.white);
+        tf_dsdt.setBorder(BorderFactory.createLineBorder(Color.black,1));
+        tf_giahop.setEditable(false);
+        tf_giahop.setBackground(Color.white);
+        tf_giahop.setBorder(BorderFactory.createLineBorder(Color.black,1));
+        tf_giavi.setEditable(false);
+        tf_giavi.setBackground(Color.white);
+        tf_giavi.setBorder(BorderFactory.createLineBorder(Color.black,1));
+        tf_giavien.setEditable(false);
+        tf_giavien.setBackground(Color.white);
+        tf_giavien.setBorder(BorderFactory.createLineBorder(Color.black,1));
+        tf_slhop.setEditable(false);
+        tf_slhop.setBackground(Color.white);
+        tf_slhop.setBorder(BorderFactory.createLineBorder(Color.black,1));
+        tf_slvi.setEditable(false);
+        tf_slvi.setBackground(Color.white);
+        tf_slvi.setBorder(BorderFactory.createLineBorder(Color.black,1));
+        tf_slvien.setEditable(false);
+        tf_slvien.setBackground(Color.white);
+        tf_slvien.setBorder(BorderFactory.createLineBorder(Color.black,1));
+        tf_tinhtrang.setEditable(false);
+        tf_tinhtrang.setBackground(Color.white);
+        tf_tinhtrang.setBorder(BorderFactory.createLineBorder(Color.black,1));
 
         this.setVisible(true);
 
@@ -427,168 +495,52 @@ public class medicineGUI extends JFrame {
 
         ArrayList<String> chosen = new ArrayList<>(); //ds đối tượng
 
-        //thêm đối tượng
-        btn_them_doituong.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (cb_doituong.getSelectedIndex() != 0 
-                && !chosen.contains(String.valueOf(cb_doituong.getSelectedItem()))) {
-                    chosen.add(String.valueOf(cb_doituong.getSelectedItem()));
-                    String result = String.join(", ", chosen);
-                    ds_doituong.setText("Danh sách đối tượng sử dụng: " + result);
-                }
-            }
-        });
+        //tự động điền thông tin
+        medicine med = throwMedicineObj(mathuoc);
+        tf_maThuoc.setText(med.getMathuoc());
+        tf_tenthuoc.setText(med.getTenthuoc());
+        tf_danhmuc.setText(med.getDanhmuc());
+        String dsdonvi = String.join(", ", med.getDonvi());
+        tf_donvi.setText(dsdonvi);
+        ta_thanhphan.setText(med.getThanhphan());
+        ta_thongtin.setText(med.getThongtin());
+        tf_xuatxu.setText(med.getXuatxu());
+        chosen.clear();
+        chosen.addAll(med.getDoituongsudung());
+        String dsdtsd = String.join(", ", chosen);
+        tf_dsdt.setText(dsdtsd);
+        if(med.getTinhtrang()) tf_tinhtrang.setText("Đang hoạt động");
+        else tf_tinhtrang.setText("Ngừng hoạt động");
 
-        //xóa đối tượng
-        btn_xoa_doituong.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (cb_doituong.getSelectedIndex() != 0 
-                && chosen.contains(String.valueOf(cb_doituong.getSelectedItem()))) {
-                    chosen.remove(String.valueOf(cb_doituong.getSelectedItem()));
-                    String result = String.join(", ", chosen);
-                    ds_doituong.setText("Danh sách đối tượng sử dụng: " + result);
-                }
-            }
-        });
+        ImageIcon anh = new ImageIcon(advance.medIMG + mathuoc + ".png");
+        Image anh_scale = anh.getImage().getScaledInstance(khung_anh.getWidth(), khung_anh.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon anh_scaled = new ImageIcon(anh_scale);
+        khung_anh.setIcon(anh_scaled);
 
-        //mở khóa giá bán
-        hop.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(hop.isSelected()) tf_gia_hop.setEnabled(true);
-                else tf_gia_hop.setEnabled(false);
-            }
-        });
+        ArrayList<String> giaban = advance.IntArrayListToStringArrayList(med.getGiaban());
+        tf_giahop.setText(giaban.get(0));
+        tf_giavi.setText(giaban.get(1));
+        tf_giavien.setText(giaban.get(2));
 
-        vi.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(vi.isSelected()) tf_gia_vi.setEnabled(true);
-                else tf_gia_vi.setEnabled(false);
-            }
-        });
+        storage str = throwStorageObj(med.getMaton());
+        ArrayList<String> sl = advance.IntArrayListToStringArrayList(str.getSlton());
+        tf_slhop.setText(sl.get(0));
+        tf_slvi.setText(sl.get(1));
+        tf_slvien.setText(sl.get(2));
+    }
 
-        vien.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(vien.isSelected()) tf_gia_vien.setEnabled(true);
-                else tf_gia_vien.setEnabled(false);
-            }
-        });
+    public static medicine throwMedicineObj(String mathuoc) {
+        medicine med = new medicine();
+        med.setMathuoc(mathuoc);
+        medicineDAO medDAO = new medicineDAO();
+        return medDAO.selectByID(med);
+    }
 
-        //hoàn tất
-        finish.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //kiểm tra form
-                Boolean found = false;
-                Boolean price = true;
-                if(tf_tenthuoc.getText().isEmpty() || tf_danhmuc.getText().isEmpty()
-                || ta_thanhphan.getText().isEmpty() || ta_thongtin.getText().isEmpty()
-                || tf_xuatxu.getText().isEmpty()) found = true;
-
-                int checkbox = 0;
-                if(hop.isSelected()) {
-                    checkbox++;
-                    if(tf_gia_hop.getText().isEmpty()) found = true;
-                    if(!advance.checkTextField(tf_gia_hop.getText())) price = false;
-                }
-                if(vi.isSelected()) {
-                    checkbox++;
-                    if(tf_gia_vi.getText().isEmpty()) found = true;
-                    if(!advance.checkTextField(tf_gia_vi.getText())) price = false;
-                }
-                if(vien.isSelected()) {
-                    checkbox++;
-                    if(tf_gia_vien.getText().isEmpty()) found = true;
-                    if(!advance.checkTextField(tf_gia_vien.getText())) price = false;
-                }
-                if(checkbox == 0) found = true;
-
-                if(found) JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ tất cả thông tin chính xác!");
-                else if(!price) JOptionPane.showMessageDialog(null, "Giá bán phải là số. Vui lòng nhập lại!");
-                else {
-                    //gửi form
-                    medicineDAO medDAO = new medicineDAO();
-                    ArrayList<medicine> temp_1 = medDAO.selectAll();
-                    medicine med = new medicine();
-                    med.setMathuoc("MTH"+advance.calculateID(temp_1.size()));
-
-                    //tạo dữ liệu tồn trong kho
-                    storageDAO strDAO = new storageDAO();
-                    ArrayList<storage> temp_2 = strDAO.selectAll();
-                    storage str = new storage();
-                    med.setMaton("MTO"+advance.calculateID(temp_2.size()));
-                    str.setMaton(med.getMaton());
-
-                    ArrayList<Integer> slton = new ArrayList<>();
-                    slton.add(0);
-                    slton.add(0);
-                    slton.add(0);
-                    str.setSlton(slton);
-
-                    str.setTinhtrang(true);
-
-                    strDAO.add(str);
-
-                    med.setTenthuoc(tf_tenthuoc.getText());
-                    med.setDanhmuc(tf_danhmuc.getText());
-                    
-                    ArrayList<String> donvi = new ArrayList<>();
-                    if(hop.isSelected()) donvi.add("hộp");
-                    if(vi.isSelected()) donvi.add("vỉ");
-                    if(vien.isSelected()) donvi.add("viên");
-                    med.setDonvi(donvi);
-                    
-                    med.setThanhphan(ta_thanhphan.getText());
-                    med.setThongtin(ta_thongtin.getText());
-                    med.setXuatxu(tf_xuatxu.getText());
-                    
-                    if(chosen.size() == 0) {
-                        ArrayList<String> temp = new ArrayList<>();
-                        temp.add("Không có chỉ định");
-                        med.setDoituongsudung(temp);
-                    } else med.setDoituongsudung(chosen);
-
-                    ArrayList<Integer> giaban = new ArrayList<>();
-                    if(hop.isSelected()) giaban.add(Integer.parseInt(tf_gia_hop.getText()));
-                    if(vi.isSelected()) giaban.add(Integer.parseInt(tf_gia_vi.getText()));
-                    if(vien.isSelected()) giaban.add(Integer.parseInt(tf_gia_vien.getText()));
-                    med.setGiaban(giaban);
-
-                    med.setTinhtrang(true);
-
-                    medDAO.add(med);
-                    employGUI.updateTableMedic(modelMedic);
-                    dispose();
-                }
-            }           
-        });
-
-        reset.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tf_tenthuoc.setText("");
-                tf_danhmuc.setText("");
-                hop.setSelected(false);
-                vi.setSelected(false);
-                vien.setSelected(false);
-                tf_gia_hop.setEnabled(false);
-                tf_gia_vi.setEnabled(false);
-                tf_gia_vien.setEnabled(false);
-                tf_gia_hop.setText("");
-                tf_gia_vi.setText("");
-                tf_gia_vien.setText("");
-                ta_thanhphan.setText("");
-                ta_thongtin.setText("");
-                tf_xuatxu.setText("");
-                cb_doituong.setSelectedIndex(0);
-                ds_doituong.setText("Danh sách đối tượng sử dụng: ");
-                chosen.clear();
-            }
-        });
+    public static storage throwStorageObj(String maton) {
+        storage str = new storage();
+        str.setMaton(maton);
+        storageDAO strDAO = new storageDAO();
+        return strDAO.selectByID(str);
     }
 
     public static void main(String[] args) {

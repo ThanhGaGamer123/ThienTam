@@ -37,10 +37,10 @@ import dataAccessObj.storageDAO;
 import employee.employGUI;
 import storage.storage;
 
-public class medicineUpdateGUI extends JFrame {
-    public medicineUpdateGUI(DefaultTableModel modelMedic, String mathuoc){
+public class medicineAddGUI extends JFrame {
+    public medicineAddGUI(DefaultTableModel modelMedic){
         this.setSize(1500, 800);
-        this.setTitle("Cập nhật thông tin thuốc");
+        this.setTitle("Lập thông tin thuốc");
         ImageIcon logo = new ImageIcon(advance.img+"logo.png");
         this.setIconImage(logo.getImage());
         this.getContentPane().setBackground(Color.white);
@@ -59,7 +59,7 @@ public class medicineUpdateGUI extends JFrame {
 
         GridBagConstraints gdc = new GridBagConstraints();
 
-        JLabel title = new JLabel("Cập Nhật Thông Tin Thuốc");
+        JLabel title = new JLabel("Lập Thông Tin Thuốc Mới");
         title.setForeground(Color.BLACK);
         title.setFont(new Font(null, Font.BOLD, 30));
         gdc.gridx = 0;
@@ -313,7 +313,7 @@ public class medicineUpdateGUI extends JFrame {
         gdc.weightx = 0;
         gdc.insets = new Insets(0, 100, 30, 100);
         main.add(dsdt, gdc);
-
+        
         JButton finish = new JButton("Hoàn tất");
         finish.setForeground(Color.BLACK);
         finish.setFont(new Font(null, Font.PLAIN, 20));
@@ -409,9 +409,26 @@ public class medicineUpdateGUI extends JFrame {
                 else {
                     //gửi form
                     medicineDAO medDAO = new medicineDAO();
+                    ArrayList<medicine> temp_1 = medDAO.selectAll();
                     medicine med = new medicine();
-                    medicine old_med = throwMedicineObj(mathuoc);
-                    med.setMathuoc(old_med.getMathuoc());
+                    med.setMathuoc("MTH"+advance.calculateID(temp_1.size()));
+
+                    //tạo dữ liệu tồn trong kho
+                    storageDAO strDAO = new storageDAO();
+                    ArrayList<storage> temp_2 = strDAO.selectAll();
+                    storage str = new storage();
+                    med.setMaton("MTO"+advance.calculateID(temp_2.size()));
+                    str.setMaton(med.getMaton());
+
+                    ArrayList<Integer> slton = new ArrayList<>();
+                    slton.add(0);
+                    slton.add(0);
+                    slton.add(0);
+                    str.setSlton(slton);
+
+                    str.setTinhtrang(true);
+
+                    strDAO.add(str);
 
                     med.setTenthuoc(tf_tenthuoc.getText());
                     med.setDanhmuc(tf_danhmuc.getText());
@@ -421,9 +438,6 @@ public class medicineUpdateGUI extends JFrame {
                     if(vi.isSelected()) donvi.add("vỉ");
                     if(vien.isSelected()) donvi.add("viên");
                     med.setDonvi(donvi);
-                    
-                    storage old_str = throwStorageObj(old_med.getMaton());
-                    med.setMaton(old_str.getMaton());
                     
                     med.setThanhphan(ta_thanhphan.getText());
                     med.setThongtin(ta_thongtin.getText());
@@ -435,11 +449,15 @@ public class medicineUpdateGUI extends JFrame {
                         med.setDoituongsudung(temp);
                     } else med.setDoituongsudung(chosen);
 
-                    med.setGiaban(old_med.getGiaban());
+                    ArrayList<Integer> giaban = new ArrayList<>();
+                    giaban.add(0);
+                    giaban.add(0);
+                    giaban.add(0);
+                    med.setGiaban(giaban);
 
                     med.setTinhtrang(true);
 
-                    medDAO.update(med);
+                    medDAO.add(med);
                     employGUI.updateTableMedic(modelMedic);
                     dispose();
                 }
@@ -449,78 +467,20 @@ public class medicineUpdateGUI extends JFrame {
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                medicine med = throwMedicineObj(mathuoc);
-                tf_tenthuoc.setText(med.getTenthuoc());
-                tf_danhmuc.setText(med.getDanhmuc());
-                for (String string : med.getDonvi()) {
-                    if(string.equals("hộp")) {
-                        hop.setSelected(true);
-                    }
-                    if(string.equals("vỉ")) {
-                        vi.setSelected(true);
-                    }
-                    if(string.equals("viên")) {
-                        vien.setSelected(true);
-                    }
-                }
-                ta_thanhphan.setText(med.getThanhphan());
-                ta_thongtin.setText(med.getThongtin());
-                tf_xuatxu.setText(med.getXuatxu());
-                chosen.clear();
-                chosen.addAll(med.getDoituongsudung());
-                String result = String.join(", ", chosen);
-                Boolean found = false;
-                for (String string : chosen) {
-                    if(string.equals("Không có chỉ định")) {
-                        ds_doituong.setText("Danh sách đối tượng sử dụng: ");
-                        chosen.clear();
-                        found = true;
-                        break;
-                    }
-                }
-                if(!found) ds_doituong.setText("Danh sách đối tượng sử dụng: " + result);
-                ImageIcon anh = new ImageIcon(advance.medIMG + mathuoc + ".png");
-                Image anh_scale = anh.getImage().getScaledInstance(khung_anh.getWidth(), khung_anh.getHeight(), Image.SCALE_SMOOTH);
-                ImageIcon anh_scaled = new ImageIcon(anh_scale);
-                khung_anh.setIcon(anh_scaled);
-            }
-        });
-
-        //tự động điền thông tin
-        medicine med = throwMedicineObj(mathuoc);
-        tf_tenthuoc.setText(med.getTenthuoc());
-        tf_danhmuc.setText(med.getDanhmuc());
-        for (String string : med.getDonvi()) {
-            if(string.equals("hộp")) {
-                hop.setSelected(true);
-            }
-            if(string.equals("vỉ")) {
-                vi.setSelected(true);
-            }
-            if(string.equals("viên")) {
-                vien.setSelected(true);
-            }
-        }
-        ta_thanhphan.setText(med.getThanhphan());
-        ta_thongtin.setText(med.getThongtin());
-        tf_xuatxu.setText(med.getXuatxu());
-        chosen.clear();
-        chosen.addAll(med.getDoituongsudung());
-        String result = String.join(", ", chosen);
-        Boolean found = false;
-        for (String string : chosen) {
-            if(string.equals("Không có chỉ định")) {
+                tf_tenthuoc.setText("");
+                tf_danhmuc.setText("");
+                hop.setSelected(false);
+                vi.setSelected(false);
+                vien.setSelected(false);
+                ta_thanhphan.setText("");
+                ta_thongtin.setText("");
+                tf_xuatxu.setText("");
+                cb_doituong.setSelectedIndex(0);
                 ds_doituong.setText("Danh sách đối tượng sử dụng: ");
                 chosen.clear();
-                found = true;
-                break;
+                khung_anh.setIcon(null);
             }
-        }
-        if(!found) ds_doituong.setText("Danh sách đối tượng sử dụng: " + result);
-        ImageIcon anh = new ImageIcon(advance.medIMG + mathuoc + ".png");
-        Image anh_scale = anh.getImage().getScaledInstance(khung_anh.getWidth(), khung_anh.getHeight(), Image.SCALE_SMOOTH);
-        ImageIcon anh_scaled = new ImageIcon(anh_scale);
-        khung_anh.setIcon(anh_scaled);
+        });
 
         chon_anh.addActionListener(new ActionListener() {
             @Override
@@ -535,7 +495,9 @@ public class medicineUpdateGUI extends JFrame {
                 int ketQua = fileChooser.showOpenDialog(null);
                 if(ketQua == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
-                    String imgPath = advance.medIMG + mathuoc + ".png";
+                    medicineDAO medDAO = new medicineDAO();
+                    ArrayList<medicine> temp = medDAO.selectAll();
+                    String imgPath = advance.medIMG + "MTH" + advance.calculateID(temp.size()) + ".png";
                     
                     try {
                         Files.copy(selectedFile.toPath(), new File(imgPath).toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -552,21 +514,7 @@ public class medicineUpdateGUI extends JFrame {
         });
     }
 
-    public static medicine throwMedicineObj(String mathuoc) {
-        medicine med = new medicine();
-        med.setMathuoc(mathuoc);
-        medicineDAO medDAO = new medicineDAO();
-        return medDAO.selectByID(med);
-    }
-
-    public static storage throwStorageObj(String maton) {
-        storage str = new storage();
-        str.setMaton(maton);
-        storageDAO strDAO = new storageDAO();
-        return strDAO.selectByID(str);
-    }
-
     public static void main(String[] args) {
-        new medicineUpdateGUI(null, null);
+        new medicineAddGUI(null);
     }
 }

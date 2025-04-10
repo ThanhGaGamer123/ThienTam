@@ -13,7 +13,8 @@ import employee.employee;
 
 public class login extends JFrame {
     public login() {
-        this.setSize(1280, 720);
+        // this.setSize(1280, 720);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setResizable(true);
