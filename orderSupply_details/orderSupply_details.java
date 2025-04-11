@@ -1,20 +1,24 @@
 package orderSupply_details;
 
+import java.util.ArrayList;
+
 public class orderSupply_details {
     private String macthdnhap;
     private String mahdnhap;
     private String mathuoc;
 
-    private int[] slnhap;
-    private int[] slcon;
-    private int[] gianhap;
+    private ArrayList<Integer> slnhap;
+    private ArrayList<Integer> slcon;
+    private ArrayList<Integer> gianhap;
     private int thanhtien;
+
+    private Boolean tinhtrang;
     
     public orderSupply_details() {
     }
 
-    public orderSupply_details(String macthdnhap, String mahdnhap, String mathuoc, int[] slnhap, int[] slcon,
-            int[] gianhap, int thanhtien) {
+    public orderSupply_details(String macthdnhap, String mahdnhap, String mathuoc, ArrayList<Integer> slnhap,
+            ArrayList<Integer> slcon, ArrayList<Integer> gianhap, int thanhtien, Boolean tinhtrang) {
         this.macthdnhap = macthdnhap;
         this.mahdnhap = mahdnhap;
         this.mathuoc = mathuoc;
@@ -22,6 +26,7 @@ public class orderSupply_details {
         this.slcon = slcon;
         this.gianhap = gianhap;
         this.thanhtien = thanhtien;
+        this.tinhtrang = tinhtrang;
     }
 
     public String getMacthdnhap() {
@@ -48,20 +53,28 @@ public class orderSupply_details {
         this.mathuoc = mathuoc;
     }
 
-    public int[] getSlnhap() {
+    public ArrayList<Integer> getSlnhap() {
         return slnhap;
     }
 
-    public void setSlnhap(int[] slnhap) {
+    public void setSlnhap(ArrayList<Integer> slnhap) {
         this.slnhap = slnhap;
     }
 
-    public int[] getSlcon() {
+    public ArrayList<Integer> getSlcon() {
         return slcon;
     }
 
-    public void setSlcon(int[] slcon) {
+    public void setSlcon(ArrayList<Integer> slcon) {
         this.slcon = slcon;
+    }
+
+    public ArrayList<Integer> getGianhap() {
+        return gianhap;
+    }
+
+    public void setGianhap(ArrayList<Integer> gianhap) {
+        this.gianhap = gianhap;
     }
 
     public int getThanhtien() {
@@ -72,11 +85,13 @@ public class orderSupply_details {
         this.thanhtien = thanhtien;
     }
 
-    public int[] getGianhap() {
-        return gianhap;
+    public Boolean getTinhtrang() {
+        return tinhtrang;
     }
 
-    public void setGianhap(int[] gianhap) {
-        this.gianhap = gianhap;
+    public void setTinhtrang(Boolean tinhtrang) {
+        this.tinhtrang = tinhtrang;
     }
+
+    
 }

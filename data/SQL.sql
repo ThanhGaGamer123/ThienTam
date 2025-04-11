@@ -45,6 +45,14 @@ CREATE TABLE KhachHang (
     passwordkh VARCHAR(50),
 );
 
+CREATE TABLE GioHang (
+    magio VARCHAR(10) PRIMARY KEY,
+    makh VARCHAR(10),
+    mathuoc VARCHAR(10),
+    soluong INT(10),
+    thanhtien INT(10)
+);
+
 CREATE TABLE ChiTietKM (
     mactkm VARCHAR(10) PRIMARY KEY,         
     madon VARCHAR(10),             
@@ -92,7 +100,8 @@ CREATE TABLE ChiTietHoaDonNhap (
     thanhtien INT,       
     slnhap VARCHAR(100),
 	slcon VARCHAR(100),
-    mathuoc VARCHAR(10),       
+    mathuoc VARCHAR(10),    
+	tinhtrang BIT
 );
 
 CREATE TABLE Thuoc (
@@ -115,6 +124,7 @@ CREATE TABLE HoaDonNhap (
     soloaithuoc INT,                
     ngaynhap VARCHAR(10),                  
     tongtien INT,        
+	tinhtrang BIT
 );
 
 CREATE TABLE NhaCungCap (
@@ -125,7 +135,8 @@ CREATE TABLE NhaCungCap (
 	duong NVARCHAR(50),
 	phuong NVARCHAR(20),
 	quan NVARCHAR(20),
-	tinh NVARCHAR(20),            
+	tinh NVARCHAR(20), 
+	tinhtrang BIT
 );
 
 CREATE TABLE Kho (

@@ -10,12 +10,14 @@ public class supplier {
     private String phuong;
     private String quan;
     private String tinh;
+
+    private Boolean tinhtrang;
     
     public supplier() {
     }
 
     public supplier(String mancc, String tenncc, String sdt, String masonha, String duong, String phuong, String quan,
-            String tinh) {
+            String tinh, Boolean tinhtrang) {
         this.mancc = mancc;
         this.tenncc = tenncc;
         this.sdt = sdt;
@@ -24,6 +26,7 @@ public class supplier {
         this.phuong = phuong;
         this.quan = quan;
         this.tinh = tinh;
+        this.tinhtrang = tinhtrang;
     }
 
     public String getMancc() {
@@ -89,4 +92,14 @@ public class supplier {
     public void setTinh(String tinh) {
         this.tinh = tinh;
     }
+
+    public Boolean getTinhtrang() {
+        return tinhtrang;
+    }
+
+    public void setTinhtrang(Boolean tinhtrang) {
+        this.tinhtrang = tinhtrang;
+    }
+
+    
 }

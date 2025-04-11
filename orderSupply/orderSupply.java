@@ -7,16 +7,20 @@ public class orderSupply {
     private int soloaithuoc;
     private String ngaynhap;
     private int tongtien;
+
+    private Boolean tinhtrang;
     
     public orderSupply() {
     }
 
-    public orderSupply(String mahdnhap, String mancc, int soloaithuoc, String ngaynhap, int tongtien) {
+    public orderSupply(String mahdnhap, String mancc, int soloaithuoc, String ngaynhap, int tongtien,
+            Boolean tinhtrang) {
         this.mahdnhap = mahdnhap;
         this.mancc = mancc;
         this.soloaithuoc = soloaithuoc;
         this.ngaynhap = ngaynhap;
         this.tongtien = tongtien;
+        this.tinhtrang = tinhtrang;
     }
 
     public String getMahdnhap() {
@@ -58,4 +62,14 @@ public class orderSupply {
     public void setTongtien(int tongtien) {
         this.tongtien = tongtien;
     }
+
+    public Boolean getTinhtrang() {
+        return tinhtrang;
+    }
+
+    public void setTinhtrang(Boolean tinhtrang) {
+        this.tinhtrang = tinhtrang;
+    }
+
+    
 }

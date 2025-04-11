@@ -118,11 +118,11 @@ public class medicineDAO implements DAO<medicine> {
 
     @Override
     public ArrayList<medicine> selectAll() {
+        Connection sql = data.SQL.createConnection();
         ArrayList<medicine> medicines = new ArrayList<>();
         String command = "SELECT * FROM Thuoc";
         
-        try (Connection sql = data.SQL.createConnection();
-        PreparedStatement pst = sql.prepareStatement(command);
+        try (PreparedStatement pst = sql.prepareStatement(command);
         ResultSet rs = pst.executeQuery()) {
             while (rs.next()) {
                 medicine med = new medicine();
@@ -142,6 +142,8 @@ public class medicineDAO implements DAO<medicine> {
             System.out.println("Truy vấn thành công");
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
         }
         
         return medicines;
@@ -149,11 +151,11 @@ public class medicineDAO implements DAO<medicine> {
 
     @Override
     public ArrayList<medicine> selectByCondition(String condition) {
+        Connection sql = data.SQL.createConnection();
         ArrayList<medicine> medicines = new ArrayList<>();
         String command = "SELECT * FROM Thuoc WHERE " + condition;
         
-        try (Connection sql = data.SQL.createConnection();
-            PreparedStatement pst = sql.prepareStatement(command);
+        try (PreparedStatement pst = sql.prepareStatement(command);
             ResultSet rs = pst.executeQuery()) {
             
             while (rs.next()) {
@@ -174,6 +176,8 @@ public class medicineDAO implements DAO<medicine> {
             System.out.println("Truy vấn thành công");
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
         }
         
         return medicines;
@@ -181,11 +185,11 @@ public class medicineDAO implements DAO<medicine> {
 
     @Override
     public medicine selectByID(medicine t) {
+        Connection sql = data.SQL.createConnection();
         medicine med = null;
         String command = "SELECT * FROM Thuoc WHERE mathuoc = ?";
         
-        try (Connection sql = data.SQL.createConnection();
-            PreparedStatement pst = sql.prepareStatement(command)) {
+        try (PreparedStatement pst = sql.prepareStatement(command)) {
             
             pst.setString(1, t.getMathuoc());
             try (ResultSet rs = pst.executeQuery()) {
@@ -207,6 +211,8 @@ public class medicineDAO implements DAO<medicine> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
         }
         
         return med;
