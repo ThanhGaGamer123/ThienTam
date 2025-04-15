@@ -2,17 +2,28 @@ package cart;
 
 import customer.customer;
 import customer.customerGUI;
+import dao.cartDAO;
+import dao.medicineDAO;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
+import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.event.DocumentListener;
+
+import medicine.medicine;
+import medicine.medicineArr;
 
 public class cartGUI extends JFrame {
-    private JPanel header, tail, body;
-    private JLabel title;
+    private JPanel header, tail, body, giua;
+    private JLabel title, cost, costreal, costvc, sosp;
     private JButton back;
     private customerGUI khach;
     private customer khachCurrent;
+    private medicineArr sanpham;
 
     // private String ten; // Thêm biến để lưu tên khách hàng
 
@@ -27,12 +38,16 @@ public class cartGUI extends JFrame {
     private static final Color linen = new Color(250, 240, 230);
     private static final Color xamnhat = new Color(237, 240, 243);
     private static final Color dodo = new Color(232, 58, 72);
+    private cartArr giohang;
 
     public cartGUI(customerGUI khach, customer khachCurrent) {
         this.khach = khach;
         this.khachCurrent = khachCurrent;
+        this.sanpham = new medicineArr(); // Khởi tạo
+        this.giohang = new cartArr();
+        giohang.readCartDatabase(giohang.getA(), khachCurrent.getMakh());
 
-        customer khachDangNhap = getKhachHangDangNhap();
+        customer khachDangnhap = getKhachHangDangNhap();
 
         setTitle("Giỏ hàng");
         setSize(1280, 720);
@@ -90,7 +105,7 @@ public class cartGUI extends JFrame {
         // Panel chính chứa cả body và pay
         JPanel mainPanel = new JPanel(new BorderLayout());
         add(mainPanel, BorderLayout.CENTER); // Thêm vào frame
-        customer khachDangNhap = getKhachHangDangNhap();
+        customer khachDangnhap = getKhachHangDangNhap();
         // ========= Body =========
         body = new JPanel();
         body.setBackground(xamnhat);
@@ -122,15 +137,23 @@ public class cartGUI extends JFrame {
         tren.setLayout(null);
         body.add(tren, BorderLayout.NORTH);
 
-        JPanel giua = new JPanel();
-        giua.setBackground(Color.white);
-        giua.setLayout(new GridBagLayout()); // Sử dụng GridBagLayout để bố cục gọn gàng
-        body.add(giua, BorderLayout.CENTER);
+        giua = new JPanel();
+        giua.setLayout(new BoxLayout(giua, BoxLayout.Y_AXIS));
+        giua.setBackground(xamnhat);
+        giua.setAlignmentY(Component.TOP_ALIGNMENT);
 
-        GridBagConstraints gbc1 = new GridBagConstraints();
-        gbc1.insets = new Insets(5, 10, 5, 10); // Khoảng cách giữa các thành phần
-        gbc1.fill = GridBagConstraints.HORIZONTAL; // Giúp các ô giãn theo chiều ngang
-        gbc1.weightx = 1; // Giúp các thành phần kéo dài theo chiều ngang
+        giua.setPreferredSize(new Dimension(400, 0));
+
+        // Gói giua vào scroll pane
+        JScrollPane scrollPane = new JScrollPane(giua);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+        body.add(scrollPane, BorderLayout.CENTER);
+
+        showSP_incart();
 
         // ========= PAY =========
 
@@ -157,7 +180,7 @@ public class cartGUI extends JFrame {
         totalPanel.setBackground(xamnhat);
         JLabel tt = new JLabel("Tổng tiền: ");
         tt.setFont(new Font("Arial", Font.PLAIN, 14));
-        JLabel cost = new JLabel("---");
+        cost = new JLabel("---");
         cost.setFont(new Font("Arial", Font.PLAIN, 14));
         totalPanel.add(tt);
         totalPanel.add(cost);
@@ -169,7 +192,7 @@ public class cartGUI extends JFrame {
         voucherPanel.setBackground(xamnhat);
         JLabel vc = new JLabel("Giảm giá voucher: ");
         vc.setFont(new Font("Arial", Font.PLAIN, 14));
-        JLabel costvc = new JLabel("---");
+        costvc = new JLabel("---");
         costvc.setFont(new Font("Arial", Font.PLAIN, 14));
         voucherPanel.add(vc);
         voucherPanel.add(costvc);
@@ -181,7 +204,7 @@ public class cartGUI extends JFrame {
         tongspPanel.setBackground(xamnhat);
         JLabel count = new JLabel("Tổng số sản phẩm: ");
         count.setFont(new Font("Arial", Font.PLAIN, 14));
-        JLabel sosp = new JLabel("---");
+        sosp = new JLabel("---");
         sosp.setFont(new Font("Arial", Font.PLAIN, 14));
         tongspPanel.add(count);
         tongspPanel.add(sosp);
@@ -193,7 +216,7 @@ public class cartGUI extends JFrame {
         thanhtienPanel.setBackground(xamnhat);
         JLabel thantienthantien = new JLabel("Thành tiền: ");
         thantienthantien.setFont(new Font("Arial", Font.BOLD, 18));
-        JLabel costreal = new JLabel("---");
+        costreal = new JLabel("---");
         costreal.setFont(new Font("Arial", Font.PLAIN, 14));
         thanhtienPanel.add(thantienthantien);
         thanhtienPanel.add(costreal);
@@ -215,13 +238,167 @@ public class cartGUI extends JFrame {
         thanhtoan_btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Khách hàng trong thanhtoanGUI: " + khachCurrent);
+                System.out.println("Khách hàng trong CartGUI " + khachDangnhap);
+                String nametemp = khachDangnhap.getTenkh();
+                System.out.println("Khách hàng trong CartGUI: " + nametemp);
 
-                new thanhtoanGUI(khach, cartGUI.this, khachCurrent);
+                new thanhtoanGUI(khach, cartGUI.this, khachDangnhap);
+
                 dispose();
             }
         });
 
+    }
+
+    private void showSP_incart() {
+        giua.removeAll();
+        ArrayList<cart> danhsachSPtronggio = giohang.getA();
+
+        for (cart c : danhsachSPtronggio) {
+            medicine thuoc = medicineDAO.timThuocTheoMa(c.getMathuoc());
+
+            // Panel chính cho từng dòng
+            JPanel spPanel = new JPanel(new GridLayout(1, 4));
+            spPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+            spPanel.setBorder(BorderFactory.createLineBorder(xam, 5));
+            spPanel.setBackground(linen);
+
+            // ==== Cột 1: checkbox + hình ảnh ==== (chiếm 40%)
+            JPanel cot1 = new JPanel();
+            cot1.setLayout(new BoxLayout(cot1, BoxLayout.X_AXIS));
+            cot1.setOpaque(false);
+
+            JRadioButton checkbuy = new JRadioButton();
+
+            JPanel hinhsp = new JPanel();
+            hinhsp.setPreferredSize(new Dimension(60, 50));
+            hinhsp.setBackground(vang);
+
+            cot1.add(Box.createHorizontalStrut(5));
+            cot1.add(checkbuy);
+            cot1.add(Box.createHorizontalStrut(10));
+            cot1.add(hinhsp);
+            cot1.add(Box.createHorizontalGlue());
+
+            checkbuy.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    updateTongTien();
+                }
+            });
+
+            JPanel cot2 = new JPanel(new GridBagLayout());
+            cot2.setOpaque(false);
+            JLabel tenThuoc = new JLabel(thuoc.getTenthuoc(), SwingConstants.LEFT);
+            tenThuoc.setPreferredSize(new Dimension(220, 50));
+            cot2.add(tenThuoc);
+
+            // ==== Cột 3: số lượng ==== (20%)
+            JPanel cot3 = new JPanel(new GridBagLayout());
+            JLabel soLuong = new JLabel("Số lượng: ");
+            int tempSL = c.getSl();
+            JTextField soluongnhap = new JTextField(Integer.toString(tempSL), SwingConstants.CENTER);
+
+            soluongnhap.setPreferredSize(new Dimension(40, 30));
+            soluongnhap.setForeground(Color.BLACK);
+            soluongnhap.setFont(new Font("Bookman", Font.PLAIN, 15));
+
+            soluongnhap.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusLost(FocusEvent e) {
+                    try {
+
+                        int newSL = Integer.parseInt(soluongnhap.getText());
+                        if (newSL <= 0) {
+                            JOptionPane.showMessageDialog(null, "Số lượng phải lớn hơn 0.");
+                            soluongnhap.setText(String.valueOf(tempSL));
+                            return;
+                        }
+
+                        // Nếu số lượng thay đổi, thì cập nhật vào database
+                        if (newSL != tempSL) {
+                            cartDAO dao = new cartDAO();
+                            dao.capNhatSoLuong(khachCurrent.getMakh(), c.getMathuoc(), newSL);
+
+                            // Cập nhật lại giỏ hàng trong bộ nhớ
+                            giohang.readCartDatabase(giohang.getA(), khachCurrent.getMakh());
+
+                            // Cập nhật giao diện (nếu cần update tổng tiền)
+                            showSP_incart();
+
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Số lượng nhập không hợp lệ!");
+                        soluongnhap.setText(String.valueOf(tempSL));
+                    }
+                }
+            });
+
+            cot3.add(soLuong);
+            cot3.add(soluongnhap);
+
+            // ==== Cột 4: đơn giá + thành tiền ==== (20%)
+            JPanel cot4 = new JPanel(new GridBagLayout());
+            cot4.setOpaque(false);
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(0, 0, 5, 0);
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.anchor = GridBagConstraints.WEST;
+
+            JLabel donGiaLabel = new JLabel("Đơn giá: " + c.getDongia() + "đ");
+            cot4.add(donGiaLabel, gbc);
+
+            // Nút Xóa
+            gbc.gridy = 1;
+            gbc.insets = new Insets(0, 0, 0, 0); // reset khoảng cách
+
+            ImageIcon icon_delete = new ImageIcon(
+                    "D:\\ThienTam-main\\ThienTam-main\\customer\\img_xt\\icons8-waste-40.png");
+            Image img_delete = icon_delete.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+            ImageIcon delete_btn = new ImageIcon(img_delete);
+            JButton xoasp = new JButton(delete_btn);
+            xoasp.setBackground(linen);
+            xoasp.setPreferredSize(new Dimension(40, 40));
+
+            cot4.add(xoasp, gbc);
+
+            spPanel.add(cot1);
+            spPanel.add(cot2);
+            spPanel.add(cot3);
+            spPanel.add(cot4);
+
+            xoasp.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int result = JOptionPane.showConfirmDialog(
+                            null,
+                            "Bạn có chắc chắn muốn xoá sản phẩm này khỏi giỏ hàng?",
+                            "Xác nhận xoá",
+                            JOptionPane.YES_NO_OPTION);
+
+                    if (result == JOptionPane.YES_OPTION) {
+                        // 1. Xoá khỏi cơ sở dữ liệu
+                        cartDAO dao = new cartDAO();
+                        dao.xoaSanPhamTrongGio(khachCurrent.getMakh(), c.getMathuoc());
+
+                        // 2. Cập nhật lại danh sách trong bộ nhớ từ DB
+                        giohang.readCartDatabase(giohang.getA(), khachCurrent.getMakh());
+
+                        // 3. Refresh lại giao diện
+                        showSP_incart();
+                    }
+                }
+            });
+
+            giua.add(Box.createRigidArea(new Dimension(0, 10)));
+            giua.add(spPanel);
+        }
+
+        giua.setPreferredSize(new Dimension(400, danhsachSPtronggio.size() * 90));
+        giua.revalidate();
+        giua.repaint();
     }
 
     private void create_footer() {
@@ -241,4 +418,69 @@ public class cartGUI extends JFrame {
         tail.add(detail_tail, gbc);
         add(tail, BorderLayout.SOUTH);
     }
+
+    private void updateTongTien() {
+        int tongTien = 0;
+
+        int sumsp = 0;
+
+        Component[] components = giua.getComponents();
+        for (Component comp : components) {
+            if (comp instanceof JPanel spPanel) {
+                Component[] columns = spPanel.getComponents();
+                if (columns.length == 4) {
+                    JPanel cot1 = (JPanel) columns[0];
+                    JPanel cot3 = (JPanel) columns[2];
+                    JPanel cot4 = (JPanel) columns[3];
+
+                    // Lấy checkbox
+                    JRadioButton checkbox = null;
+                    for (Component child : cot1.getComponents()) {
+                        if (child instanceof JRadioButton cb) {
+                            checkbox = cb;
+                            break;
+                        }
+                    }
+
+                    // Lấy số lượng từ JTextField
+                    JTextField soluongField = null;
+                    for (Component child : cot3.getComponents()) {
+                        if (child instanceof JTextField tf) {
+                            soluongField = tf;
+                            break;
+                        }
+                    }
+
+                    // Lấy đơn giá từ JLabel
+                    int dongia = 0;
+                    for (Component child : cot4.getComponents()) {
+                        if (child instanceof JLabel label && label.getText().startsWith("Đơn giá: ")) {
+                            String text = label.getText().replaceAll("[^0-9]", "");
+                            if (!text.isEmpty())
+                                dongia = Integer.parseInt(text);
+                            break;
+                        }
+                    }
+
+                    // Nếu checkbox được chọn -> tính tiền
+                    if (checkbox != null && checkbox.isSelected() && soluongField != null) {
+                        try {
+                            int sl = Integer.parseInt(soluongField.getText());
+                            tongTien += sl * dongia;
+                            sumsp += sl;
+                        } catch (NumberFormatException ex) {
+                            // Bỏ qua nếu người dùng nhập không hợp lệ
+                        }
+                    }
+                }
+            }
+        }
+
+        cost.setText(tongTien + " đ");
+        costreal.setText(tongTien + "đ");
+        costreal.setFont(new Font("Bookman", Font.PLAIN, 17));
+        sosp.setText(Integer.toString(sumsp));
+
+    }
+
 }

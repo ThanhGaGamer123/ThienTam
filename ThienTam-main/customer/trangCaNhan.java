@@ -202,6 +202,7 @@ public class trangCaNhan extends JFrame {
         JPanel line1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         line1.setBackground(linen);
         JLabel name = new JLabel("Tên người dùng:");
+        name.setPreferredSize(new Dimension(120, 30));
         String namekh = khachCurrent.getTenkh();
         JTextField fillName = new JTextField(namekh);
         fillName.setPreferredSize(new Dimension(300, 30));
@@ -215,6 +216,7 @@ public class trangCaNhan extends JFrame {
         JPanel line2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         line2.setBackground(linen);
         JLabel sdtkh = new JLabel("SĐT người dùng:");
+        sdtkh.setPreferredSize(new Dimension(120, 30));
         int sdtkhachdangsd = khachCurrent.getSdt();
         JTextField fillsdtkh = new JTextField(String.valueOf(sdtkhachdangsd));
         fillsdtkh.setPreferredSize(new Dimension(300, 30));
@@ -228,6 +230,7 @@ public class trangCaNhan extends JFrame {
         JPanel line3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         line3.setBackground(linen);
         JLabel email = new JLabel("Email người dùng:");
+        email.setPreferredSize(new Dimension(120, 30));
         String email_khach = khachCurrent.getEmail();
         JTextField fillemail = new JTextField(email_khach);
         fillemail.setPreferredSize(new Dimension(300, 30));
@@ -237,17 +240,46 @@ public class trangCaNhan extends JFrame {
         gbcc.gridy = 2;
         tab1_right.add(line3, gbcc);
 
-        // Dòng 4
-        JPanel line4 = new JPanel();
+        JPanel line4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         line4.setBackground(linen);
+        JLabel passwordLB = new JLabel("Nhập mật khẩu cũ:");
+        passwordLB.setPreferredSize(new Dimension(120, 30));
+        JPasswordField pwfield = new JPasswordField();
+        pwfield.setPreferredSize(new Dimension(300, 30));
+
+        line4.add(passwordLB);
+        line4.add(pwfield);
+
+        gbcc.gridy = 3;
+        tab1_right.add(line4, gbcc);
+
+        JPanel line5 = new JPanel();
+        line5.setBackground(linen);
+        JLabel newpasswordLB = new JLabel("Nhập mật khẩu mới:");
+        newpasswordLB.setPreferredSize(new Dimension(120, 30));
+        JTextField newpwfield = new JTextField();
+        newpwfield.setPreferredSize(new Dimension(200, 30));
+        JLabel cfnewpasswordLB = new JLabel("Xác nhận mật khẩu mới:");
+        JTextField cfnewpwfield = new JTextField();
+        cfnewpwfield.setPreferredSize(new Dimension(200, 30));
+        line5.add(newpasswordLB);
+        line5.add(newpwfield);
+        line5.add(cfnewpasswordLB);
+        line5.add(cfnewpwfield);
+        gbcc.gridy = 4;
+        tab1_right.add(line5, gbcc);
+
+        // Dòng 6
+        JPanel line6 = new JPanel();
+        line6.setBackground(linen);
         JButton edit_in4 = new JButton("Cập nhật thông tin");
         edit_in4.setPreferredSize(new Dimension(320, 50));
         edit_in4.setBackground(xanhla);
         edit_in4.setFont(new Font("Bookman", Font.PLAIN, 20));
         edit_in4.setForeground(Color.white);
-        line4.add(edit_in4);
-        gbcc.gridy = 3;
-        tab1_right.add(line4, gbcc);
+        line6.add(edit_in4);
+        gbcc.gridy = 5;
+        tab1_right.add(line6, gbcc);
     }
 
     private void create_footer() {

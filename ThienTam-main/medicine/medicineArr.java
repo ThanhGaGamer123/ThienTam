@@ -1,10 +1,7 @@
 package medicine;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import advanceMethod.advance;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class medicineArr {
@@ -20,72 +17,6 @@ public class medicineArr {
 
     public void setSp(ArrayList<medicine> sp) {
         this.sp = sp;
-    }
-
-    // Hàm kết nối SQL Server và lấy dữ liệu từ bảng Thuoc (cập nhật theo dữ liệu
-    // của bạn)
-
-    public void readDatabase() {
-        try {
-            // Nạp driver JDBC
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-
-            // Kết nối SQL Server
-            String url = "jdbc:sqlserver://localhost:1433;databaseName=Thientam;encrypt=true;trustServerCertificate=true";
-            String username = "sa";
-            String password = "123";
-
-            try (Connection con = DriverManager.getConnection(url, username, password);
-                    Statement stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM Thuoc")) {
-
-                System.out.println("Kết nối SQL Server thành công!");
-
-                sp.clear(); // Xóa danh sách cũ trước khi tải mới
-
-                // Đọc dữ liệu từ ResultSet và thêm vào danh sách
-                while (rs.next()) {
-                    // Lấy dữ liệu từ ResultSet và phân tách
-                    String[] donvi = rs.getString("DonVi").split(";");
-                    String[] doituongsudung = rs.getString("Doituongsudung").split(";");
-
-                    // Chuyển giaBan từ chuỗi sang mảng int[]
-                    String[] giaBanString = rs.getString("GiaBan").split(",");
-                    int[] giaban = new int[giaBanString.length];
-                    for (int i = 0; i < giaBanString.length; i++) {
-                        try {
-                            giaban[i] = Integer.parseInt(giaBanString[i].trim()); // Chuyển chuỗi thành int
-                        } catch (NumberFormatException e) {
-                            System.out.println("Lỗi khi chuyển đổi giá bán: " + giaBanString[i]);
-                            giaban[i] = 0; // Nếu có lỗi, gán giá trị 0
-                        }
-                    }
-
-                    // Tạo đối tượng medicine và thêm vào danh sách
-                    medicine thuoc = new medicine(
-                            rs.getString("MaThuoc"),
-                            rs.getString("MaTon"),
-                            rs.getString("TenThuoc"),
-                            rs.getString("DanhMuc"),
-                            donvi,
-                            rs.getString("ThanhPhan"),
-                            rs.getString("ThongTin"),
-                            rs.getString("XuatXu"),
-                            doituongsudung,
-                            giaban);
-
-                    sp.add(thuoc); // Thêm vào danh sách sản phẩm
-                }
-
-                System.out.println("Dữ liệu đã tải từ bảng Thuoc.");
-
-            } catch (SQLException e) {
-                System.out.println("Lỗi SQL: " + e.getMessage());
-            }
-
-        } catch (Exception e) {
-            System.out.println("Lỗi kết nối hoặc lỗi khác: " + e.getMessage());
-        }
     }
 
     // Hàm in danh sách thuốc
@@ -147,4 +78,49 @@ public class medicineArr {
         }
         return result;
     }
+
+    public ArrayList<medicine> selectAll() {
+        ArrayList<medicine> medicines = new ArrayList<>();
+        String command = "SELECT t.*, k.tinhtrang FROM Thuoc t JOIN Kho k ON t.maton = k.maton";
+
+        try (Connection sql = data.SQL.createConnection();
+                PreparedStatement pst = sql.prepareStatement(command);
+                ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                medicine med = new medicine();
+                med.setMathuoc(rs.getString("mathuoc"));
+                med.setTenthuoc(rs.getString("tenthuoc"));
+                med.setDonvi(advance.StringconvertToStringArrayList(rs.getString("donvi")));
+                med.setThanhphan(rs.getString("thanhphan"));
+                med.setThongtin(rs.getString("thongtin"));
+                med.setXuatxu(rs.getString("xuatxu"));
+                med.setDanhmuc(rs.getString("danhmuc"));
+                med.setGiaban(
+                        advance.StringArrayListToIntArrayList(
+                                advance.StringconvertToStringArrayList(rs.getString("giaban"))));
+                med.setMaton(rs.getString("maton"));
+                med.setDoituongsudung(advance.StringconvertToStringArrayList(rs.getString("doituongsudung")));
+                med.setTinhtrang(rs.getBoolean("tinhtrang")); // từ bảng Kho
+                medicines.add(med);
+            }
+            System.out.println("Truy vấn thành công");
+        } catch (SQLException e) {
+            System.out.println("Lỗi truy vấn thuốc: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return medicines;
+    }
+
+    public void readDatabase() {
+        try {
+            sp = selectAll(); // Gọi hàm đã có sẵn để đọc dữ liệu
+            System.out.println("Dữ liệu đã tải từ bảng Thuoc.");
+        } catch (Exception e) {
+            System.out.println("Lỗi khi đọc dữ liệu từ database: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 }

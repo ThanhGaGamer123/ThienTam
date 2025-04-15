@@ -11,8 +11,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class thanhtoanGUI extends JFrame {
-    private JPanel header, tail, body;
-    private JLabel title;
+    private JPanel header, tail, body, giua;
+    private JLabel title, cost, costreal, costvc, sosp;
     private JButton back;
     private customerGUI khach;
     private String ten; // Thêm biến để lưu tên khách hàng
@@ -129,7 +129,7 @@ public class thanhtoanGUI extends JFrame {
         tren.setLayout(null);
         body.add(tren, BorderLayout.NORTH);
 
-        JPanel giua = new JPanel();
+        giua = new JPanel();
         giua.setBackground(Color.white);
         giua.setLayout(new GridBagLayout()); // Sử dụng GridBagLayout để bố cục gọn gàng
         body.add(giua, BorderLayout.CENTER);
@@ -272,7 +272,7 @@ public class thanhtoanGUI extends JFrame {
         totalPanel.setBackground(xamnhat);
         JLabel tt = new JLabel("Tổng tiền: ");
         tt.setFont(new Font("Arial", Font.PLAIN, 14));
-        JLabel cost = new JLabel("---");
+        cost = new JLabel("---");
         cost.setFont(new Font("Arial", Font.PLAIN, 14));
         totalPanel.add(tt);
         totalPanel.add(cost);
@@ -284,7 +284,7 @@ public class thanhtoanGUI extends JFrame {
         voucherPanel.setBackground(xamnhat);
         JLabel vc = new JLabel("Giảm giá voucher: ");
         vc.setFont(new Font("Arial", Font.PLAIN, 14));
-        JLabel costvc = new JLabel("---");
+        costvc = new JLabel("---");
         costvc.setFont(new Font("Arial", Font.PLAIN, 14));
         voucherPanel.add(vc);
         voucherPanel.add(costvc);
@@ -296,7 +296,7 @@ public class thanhtoanGUI extends JFrame {
         tongspPanel.setBackground(xamnhat);
         JLabel count = new JLabel("Tổng số sản phẩm: ");
         count.setFont(new Font("Arial", Font.PLAIN, 14));
-        JLabel sosp = new JLabel("---");
+        sosp = new JLabel("---");
         sosp.setFont(new Font("Arial", Font.PLAIN, 14));
         tongspPanel.add(count);
         tongspPanel.add(sosp);
@@ -308,7 +308,7 @@ public class thanhtoanGUI extends JFrame {
         thanhtienPanel.setBackground(xamnhat);
         JLabel thantienthantien = new JLabel("Thành tiền: ");
         thantienthantien.setFont(new Font("Arial", Font.BOLD, 18));
-        JLabel costreal = new JLabel("---");
+        costreal = new JLabel("---");
         costreal.setFont(new Font("Arial", Font.PLAIN, 14));
         thanhtienPanel.add(thantienthantien);
         thanhtienPanel.add(costreal);
@@ -331,6 +331,7 @@ public class thanhtoanGUI extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 if (diaChiCuThe.getText().equals("") && tenNguoiNhan.getText().equals("")
                         && sdtNguoiNhan.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "Bạn chưa nhập thông tin nhận hàng!");
@@ -346,6 +347,9 @@ public class thanhtoanGUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "Bạn chưa nhập SĐT người nhận!");
                     return;
                 }
+                System.out.println("Khách hàng trong CartGUI " + khachDangNhap);
+                String nametemp = khachDangNhap.getTenkh();
+                System.out.println("Khách hàng trong CartGUI: " + nametemp);
 
                 int choice = JOptionPane.showConfirmDialog(null,
                         "Bạn có chắc muốn xác nhận thanh toán không ?");
@@ -374,6 +378,69 @@ public class thanhtoanGUI extends JFrame {
 
         tail.add(detail_tail, gbc);
         add(tail, BorderLayout.SOUTH);
+    }
+
+    private void updateTongTien() {
+        int tongTien = 0;
+
+        int sumsp = 0;
+
+        Component[] components = giua.getComponents();
+        for (Component comp : components) {
+            if (comp instanceof JPanel spPanel) {
+                Component[] columns = spPanel.getComponents();
+                if (columns.length == 4) {
+                    JPanel cot1 = (JPanel) columns[0];
+                    JPanel cot3 = (JPanel) columns[2];
+                    JPanel cot4 = (JPanel) columns[3];
+
+                    // Lấy checkbox
+                    JRadioButton checkbox = null;
+                    for (Component child : cot1.getComponents()) {
+                        if (child instanceof JRadioButton cb) {
+                            checkbox = cb;
+                            break;
+                        }
+                    }
+
+                    // Lấy số lượng từ JTextField
+                    JTextField soluongField = null;
+                    for (Component child : cot3.getComponents()) {
+                        if (child instanceof JTextField tf) {
+                            soluongField = tf;
+                            break;
+                        }
+                    }
+
+                    // Lấy đơn giá từ JLabel
+                    int dongia = 0;
+                    for (Component child : cot4.getComponents()) {
+                        if (child instanceof JLabel label && label.getText().startsWith("Đơn giá: ")) {
+                            String text = label.getText().replaceAll("[^0-9]", "");
+                            if (!text.isEmpty())
+                                dongia = Integer.parseInt(text);
+                            break;
+                        }
+                    }
+
+                    // Nếu checkbox được chọn -> tính tiền
+                    if (checkbox != null && checkbox.isSelected() && soluongField != null) {
+                        try {
+                            int sl = Integer.parseInt(soluongField.getText());
+                            tongTien += sl * dongia;
+                            sumsp += sl;
+                        } catch (NumberFormatException ex) {
+                            // Bỏ qua nếu người dùng nhập không hợp lệ
+                        }
+                    }
+                }
+            }
+        }
+
+        cost.setText(tongTien + " đ");
+        costreal.setText(tongTien + "đ");
+        sosp.setText(Integer.toString(sumsp));
+
     }
 
 }
