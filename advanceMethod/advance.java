@@ -1,5 +1,8 @@
 package advanceMethod;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class advance {
@@ -91,5 +94,47 @@ public class advance {
         if(size < 100) return "00"+size;
         if(size < 1000) return "0"+size;
         return String.valueOf(size);
+    }
+
+    public static String currentTime() {
+        LocalDateTime currentTime = LocalDateTime.now();
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
+        
+        return currentTime.format(format);
+    }
+
+    public static Boolean checkDate(String date) {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        try {
+            LocalDate.parse(date, format);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static Boolean date1BeforeDate2(String date1, String date2) {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        try {
+            LocalDate parse_date1 = LocalDate.parse(date1,format);
+            LocalDate parse_date2 = LocalDate.parse(date2,format);
+            return parse_date1.isBefore(parse_date2);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Boolean fulldate1BeforeFullDate2(String date1, String date2) {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
+        try {
+            LocalDateTime parse_date1 = LocalDateTime.parse(date1,format);
+            LocalDateTime parse_date2 = LocalDateTime.parse(date2,format);
+            return parse_date1.isBefore(parse_date2);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

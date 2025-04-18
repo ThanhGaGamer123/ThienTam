@@ -162,7 +162,7 @@ public class supplierDAO implements DAO<supplier> {
         String command = "SELECT * FROM NhaCungCap WHERE mancc = ?";
 
         try (PreparedStatement pst = sql.prepareStatement(command)) {
-            pst.setString(1, sup.getMancc());
+            pst.setString(1, t.getMancc());
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {

@@ -13,6 +13,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -36,17 +39,26 @@ import javax.swing.table.*;
 
 import advanceMethod.advance;
 import dataAccessObj.medicineDAO;
+import dataAccessObj.orderSupplyDAO;
+import dataAccessObj.orderSupply_detailsDAO;
 import dataAccessObj.storageDAO;
 import dataAccessObj.storeDAO;
+import dataAccessObj.supplierDAO;
 import login.signup.login;
 import medicine.medicine;
 import medicine.medicineAddGUI;
 import medicine.medicineGUI;
 import medicine.medicineUpdateGUI;
+import orderSupply.orderSupply;
+import orderSupply.orderSupplyAddGUI;
+import orderSupply.orderSupplyGUI;
+import orderSupply.searchAdvance2;
+import orderSupply_details.orderSupply_details;
 import medicine.searchAdvance;
 import storage.storage;
 import store.store;
 import store.storeGUI;
+import supplier.supplier;
 
 public class employGUI extends JFrame {
     public employGUI(employee nv) {
@@ -444,7 +456,7 @@ public class employGUI extends JFrame {
         gdc_ordercollect.fill = GridBagConstraints.NONE;
         gdc_ordercollect.weightx = 0;
 
-        String columnsCollect[] = {"Mã đơn", "Mã nhà cung cấp", "Số loại thuốc", "Ngày nhập", 
+        String columnsCollect[] = {"Mã đơn", "Tên nhà cung cấp", "Số loại thuốc", "Thời gian nhập", 
         "Tổng tiền", "Tình trạng", "Xem chi tiết"};
         DefaultTableModel modelCollect = new DefaultTableModel(columnsCollect,0) {
             @Override
@@ -491,24 +503,13 @@ public class employGUI extends JFrame {
         gdc_ordercollect.insets = new Insets(0, 5, 30, 50);
         orderCollect.add(themCollect, gdc_ordercollect);
 
-        JButton suaCollect = new JButton("Sửa");
-        suaCollect.setFont(new Font(null, Font.PLAIN, 18));
-        suaCollect.setForeground(Color.BLACK);
-        suaCollect.setIcon(data.imagePath.resize_fixButton);
-        // suaCollect.setBounds(1120, 180, 115, 50);
-        gdc_ordercollect.gridx = 4;
-        gdc_ordercollect.gridy = 3;
-        gdc_ordercollect.fill = GridBagConstraints.HORIZONTAL;
-        gdc_ordercollect.insets = new Insets(0, 5, 30, 50);
-        orderCollect.add(suaCollect, gdc_ordercollect);
-
         JButton xoaCollect = new JButton("Xóa");
         xoaCollect.setFont(new Font(null, Font.PLAIN, 18));
         xoaCollect.setForeground(Color.BLACK);
         xoaCollect.setIcon(data.imagePath.resize_deleteButton);
         // xoaCollect.setBounds(1120, 270, 115, 50);
         gdc_ordercollect.gridx = 4;
-        gdc_ordercollect.gridy = 4;
+        gdc_ordercollect.gridy = 3;
         gdc_ordercollect.fill = GridBagConstraints.HORIZONTAL;
         gdc_ordercollect.insets = new Insets(0, 5, 30, 50);
         orderCollect.add(xoaCollect, gdc_ordercollect);
@@ -877,6 +878,212 @@ public class employGUI extends JFrame {
             }   
         });
 
+        //xử lý nhà cung cấp
+        //cập nhật thông tin nhà cung cấp
+        updateTableSupplier(modelCollect);
+
+        tableCollect.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JLabel label = (value instanceof JLabel) ? (JLabel) value : new JLabel();
+
+                // Thiết lập màu nền khi được chọn
+                if (isSelected) {
+                    label.setBackground(new Color(173, 216, 230)); // Màu nền sáng
+                    label.setOpaque(true); // Để màu nền có hiệu lực
+                } else {
+                    label.setBackground(Color.WHITE); // Màu nền mặc định
+                    label.setOpaque(true);
+                }
+
+                return label;
+            }   
+        });
+
+        tableCollect.getColumn("Xem chi tiết").setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JButton button = (value instanceof JButton) ? (JButton) value : new JButton();
+
+                if (isSelected) {
+                    button.setBackground(new Color(173, 216, 230)); // Màu nền sáng
+                } else {
+                    button.setBackground(Color.WHITE); // Màu nền mặc định
+                }
+        
+                button.setOpaque(true);
+                button.setBorderPainted(false); // Ẩn viền nút
+                return button;
+            }   
+        });
+
+        //thêm đơn hàng nhập
+        themCollect.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new orderSupplyAddGUI(modelCollect);
+            }
+        });
+
+        //xóa đơn hàng nhập
+        xoaCollect.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = tableCollect.getSelectedRow();
+                if(selectedRow != -1) {
+                    String mahdnhap = modelCollect.getValueAt(selectedRow, 0).toString();
+                    orderSupply os = throwOrderSupplyObj(mahdnhap);
+                    if(os.getTinhtrang()) {
+                        int choice = JOptionPane.showConfirmDialog(null, 
+                        "Bạn có chắc chắn xóa đơn hàng nhập này không?");
+                        if (choice == 0) {
+                            os.setTinhtrang(false);
+                            orderSupplyDAO osDAO = new orderSupplyDAO();
+                            osDAO.update(os);
+
+                            ArrayList<orderSupply_details> osds = new ArrayList<>();
+                            orderSupply_detailsDAO osdDAO = new orderSupply_detailsDAO();
+                            osds = osdDAO.selectByCondition("mahdnhap = '" + os.getMahdnhap() + "'");
+                            for (orderSupply_details osd : osds) {
+                                osd.setTinhtrang(false);
+                                osdDAO.update(osd);
+                            }
+
+                            updateTableSupplier(modelCollect);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, 
+                        "Đơn hàng nhập này đã ngừng hoạt động!");
+                    }
+                }
+            }
+        });
+
+        ArrayList<orderSupply> orderSupplies = new ArrayList<>();
+
+        //tìm kiếm
+        search_2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                orderSupplies.clear();
+                modelCollect.setRowCount(0);
+                String mahdnhap = search_bar_2.getText().toString();
+                orderSupply os = new orderSupply();
+                os.setMahdnhap(mahdnhap);
+                orderSupplyDAO osDAO = new orderSupplyDAO();
+                os = osDAO.selectByID(os);
+                JLabel statusImg;
+                if(os.getTinhtrang()) {
+                    statusImg = new JLabel(data.imagePath.resize_check);
+                } else {
+                    statusImg = new JLabel(data.imagePath.resize_exitIcon);
+                }
+                JButton eyeButton = new JButton(data.imagePath.resize_eye);
+                supplier sp = new supplier();
+                sp.setMancc(os.getMancc());
+                supplierDAO spDAO = new supplierDAO();
+                sp = spDAO.selectByID(sp);
+                modelCollect.addRow(new Object[]{os.getMahdnhap(), sp.getTenncc(), os.getSoloaithuoc(), os.getNgaynhap(), os.getTongtien(), statusImg, eyeButton});
+                search_bar_2.setText("");
+            }
+        });
+
+        //tìm kiếm nâng cao
+        search_advance_2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new searchAdvance2(modelCollect, loc_2.getSelectedIndex(), orderSupplies);
+            }
+        });
+
+        //lọc
+        loc_2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int loC = loc_2.getSelectedIndex();
+                if(!orderSupplies.isEmpty()) {
+                    supplierfilter(modelCollect, loC, orderSupplies);
+                } else {
+                    String command = "select * from HoaDonNhap";
+                    Connection sql = data.SQL.createConnection();
+                    orderSupplies.clear();
+
+                    try {
+                        PreparedStatement pst = sql.prepareStatement(command);
+                        ResultSet rs = pst.executeQuery();
+                        while (rs.next()) {
+                            orderSupply orderSupply = new orderSupply();
+                            orderSupply.setMahdnhap(rs.getString("mahdnhap"));
+                            orderSupply.setMancc(rs.getString("mancc"));
+                            orderSupply.setNgaynhap(rs.getString("ngaynhap"));
+                            orderSupply.setSoloaithuoc(rs.getInt("soloaithuoc"));
+                            orderSupply.setTinhtrang(rs.getBoolean("tinhtrang"));
+                            orderSupply.setTongtien(rs.getInt("tongtien"));
+                            orderSupplies.add(orderSupply);
+                        }
+                        System.out.println("Truy vấn thành công");
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    } finally {
+                        data.SQL.closeConnection(sql);
+                    }
+                    
+                    supplierfilter(modelCollect, loC, orderSupplies);
+                }
+            }
+        });
+
+        //reset
+        reset_2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                search_bar_2.setText("Nhập mã đơn...");
+                loc_2.setSelectedIndex(0);
+                orderSupplies.clear();
+                updateTableSupplier(modelCollect);
+            }
+        });
+
+        //xem chi tiết
+        tableCollect.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectColumn = tableCollect.getSelectedColumn();
+                if(selectColumn == 6) {
+                    int selectedRow = tableCollect.getSelectedRow();
+                    if(selectedRow != -1) {
+                        String mahdnhap = String.valueOf(modelCollect.getValueAt(selectedRow, 0));
+                        new orderSupplyGUI(mahdnhap);
+                    }
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+        });
+
+        //Xử lý thuốc
         //Tự động cập nhật thông tin thuốc
         updateTableMedic(modelMedic);
 
@@ -1013,7 +1220,24 @@ public class employGUI extends JFrame {
                             storageDAO strDAO = new storageDAO();
                             strDAO.update(str);
 
+                            ArrayList<orderSupply_details> osds = new ArrayList<>();
+                            orderSupply_detailsDAO osdDAO = new orderSupply_detailsDAO();
+                            osds = osdDAO.selectByCondition("mathuoc = '" + med.getMathuoc() + "'");
+                            for (orderSupply_details osd : osds) {
+                                osd.setTinhtrang(false);
+                                osdDAO.update(osd);
+
+                                orderSupply os = new orderSupply();
+                                os.setMahdnhap(osd.getMahdnhap());
+                                orderSupplyDAO osDAO = new orderSupplyDAO();
+                                os = osDAO.selectByID(os);
+
+                                os.setTinhtrang(false);
+                                osDAO.update(os);
+                            }
+
                             updateTableMedic(modelMedic);
+                            updateTableSupplier(modelCollect);
                         }
                     } else {
                         JOptionPane.showMessageDialog(null, 
@@ -1047,7 +1271,7 @@ public class employGUI extends JFrame {
         search_advance_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new searchAdvance(modelMedic);
+                new searchAdvance(modelMedic, null);
             }
         });
 
@@ -1061,13 +1285,113 @@ public class employGUI extends JFrame {
         });
     }
 
+    public static void updateTableSupplier(DefaultTableModel modelSupplier) {
+        modelSupplier.setRowCount(0);
+        
+        String command = "select mahdnhap, tenncc, soloaithuoc, ngaynhap, tongtien, HoaDonNhap.tinhtrang from HoaDonNhap, NhaCungCap where HoaDonNhap.mancc = NhaCungCap.mancc";
+        Connection sql = data.SQL.createConnection();
+
+        try {
+            PreparedStatement pst = sql.prepareStatement(command);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                String mahdnhap = rs.getString("mahdnhap");
+                String tenncc = rs.getString("tenncc");
+                int soloaithuoc = rs.getInt("soloaithuoc");
+                String ngaynhap = rs.getString("ngaynhap");
+                int tongtien = rs.getInt("tongtien");
+                Boolean tinhtrang = rs.getBoolean("tinhtrang");
+                JLabel statusImg;
+                if(tinhtrang) {
+                    statusImg = new JLabel(data.imagePath.resize_check);
+                } else {
+                    statusImg = new JLabel(data.imagePath.resize_exitIcon);
+                }
+                JButton eyeButton = new JButton(data.imagePath.resize_eye);
+                modelSupplier.addRow(new Object[]{mahdnhap, tenncc, soloaithuoc, ngaynhap, tongtien, statusImg, eyeButton});
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
+        }
+    }
+
+    public static void supplierfilter(DefaultTableModel modelSupplier, int loc, ArrayList<orderSupply> orderSupplies) {
+        System.out.println(loc);
+        if(loc == 1) {
+            for(int i = 0; i < orderSupplies.size() - 1; i++) {
+                for(int j = i + 1; j < orderSupplies.size(); j++) {
+                    if(orderSupplies.get(i).getTongtien() < orderSupplies.get(j).getTongtien()) {
+                        orderSupply temp = orderSupplies.get(i);
+                        orderSupplies.set(i, orderSupplies.get(j));
+                        orderSupplies.set(j, temp);
+                    }
+                }
+            }
+        } else if(loc == 2) {
+            for(int i = 0; i < orderSupplies.size() - 1; i++) {
+                for(int j = i + 1; j < orderSupplies.size(); j++) {
+                    if(orderSupplies.get(i).getTongtien() > orderSupplies.get(j).getTongtien()) {
+                        orderSupply temp = orderSupplies.get(i);
+                        orderSupplies.set(i, orderSupplies.get(j));
+                        orderSupplies.set(j, temp);
+                    }
+                }
+            }
+        } else if(loc == 3) {
+            for(int i = 0; i < orderSupplies.size() - 1; i++) {
+                for(int j = i + 1; j < orderSupplies.size(); j++) {
+                    if(advance.fulldate1BeforeFullDate2(orderSupplies.get(i).getNgaynhap(), orderSupplies.get(j).getNgaynhap())) {
+                        orderSupply temp = orderSupplies.get(i);
+                        orderSupplies.set(i, orderSupplies.get(j));
+                        orderSupplies.set(j, temp);
+                    }
+                }
+            }
+        } else if(loc == 4) {
+            for(int i = 0; i < orderSupplies.size() - 1; i++) {
+                for(int j = i + 1; j < orderSupplies.size(); j++) {
+                    if(!advance.fulldate1BeforeFullDate2(orderSupplies.get(i).getNgaynhap(), orderSupplies.get(j).getNgaynhap())) {
+                        orderSupply temp = orderSupplies.get(i);
+                        orderSupplies.set(i, orderSupplies.get(j));
+                        orderSupplies.set(j, temp);
+                    }
+                }
+            }
+        }
+
+        //lưu vào bảng
+        modelSupplier.setRowCount(0);
+        for (orderSupply orderSupply : orderSupplies) {
+            JLabel statusImg;
+            if(orderSupply.getTinhtrang()) {
+                statusImg = new JLabel(data.imagePath.resize_check);
+            } else {
+                statusImg = new JLabel(data.imagePath.resize_exitIcon);
+            }
+            JButton eyeButton = new JButton(data.imagePath.resize_eye);
+
+            orderSupplyDAO osDAO = new orderSupplyDAO();
+            orderSupply = osDAO.selectByID(orderSupply);
+
+            supplier sp = new supplier();
+            sp.setMancc(orderSupply.getMancc());
+            supplierDAO spDAO = new supplierDAO();
+            sp = spDAO.selectByID(sp);
+
+            modelSupplier.addRow(new Object[]{orderSupply.getMahdnhap(), sp.getTenncc(),
+            orderSupply.getSoloaithuoc(), orderSupply.getNgaynhap(),
+            orderSupply.getTongtien(), statusImg, eyeButton});
+        }
+    }
+
     public static void updateTableMedic(DefaultTableModel modelMedic) {
         modelMedic.setRowCount(0);
         medicineDAO medDAO = new medicineDAO();
         ArrayList<medicine> medicines = medDAO.selectAll();
         for (medicine medicine : medicines) {
             JLabel statusImg;
-            System.out.println(medicine.getTinhtrang());
             if(medicine.getTinhtrang()) {
                 statusImg = new JLabel(data.imagePath.resize_check);
             } else {
@@ -1078,6 +1402,20 @@ public class employGUI extends JFrame {
             medicine.getTenthuoc(), medicine.getDanhmuc(),
             statusImg, eyeButton});
         }
+    }
+
+    public static orderSupply throwOrderSupplyObj(String mahdnhap) {
+        orderSupply os = new orderSupply();
+        os.setMahdnhap(mahdnhap);
+        orderSupplyDAO osDAO = new orderSupplyDAO();
+        return osDAO.selectByID(os);
+    }
+
+    public static orderSupply_details throwOrderSupplyDetailsObj(String macthdnhap) {
+        orderSupply_details osd = new orderSupply_details();
+        osd.setMacthdnhap(macthdnhap);
+        orderSupply_detailsDAO osdDAO = new orderSupply_detailsDAO();
+        return osdDAO.selectByID(osd);
     }
 
     public static medicine throwMedicineObj(String mathuoc) {

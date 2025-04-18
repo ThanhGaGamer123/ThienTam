@@ -39,8 +39,7 @@ public class orderSupplyDAO implements DAO<orderSupply> {
     public int update(orderSupply t) {
         Connection sql = data.SQL.createConnection();
 
-        String command = "UPDATE HoaDonNhap SET mancc = ?, soloaithuoc = ?, ngaynhap = ?, tongtien = ?, tinhtrang = ? WHERE mahdnhap = ?" + 
-        "VALUES (?, ?, ?, ?, ?, ?)";
+        String command = "UPDATE HoaDonNhap SET mancc = ?, soloaithuoc = ?, ngaynhap = ?, tongtien = ?, tinhtrang = ? WHERE mahdnhap = ?";
 
         try (PreparedStatement pst = sql.prepareStatement(command)) {
             pst.setString(1, t.getMancc());

@@ -49,8 +49,8 @@ CREATE TABLE GioHang (
     magio VARCHAR(10) PRIMARY KEY,
     makh VARCHAR(10),
     mathuoc VARCHAR(10),
-    soluong INT(10),
-    thanhtien INT(10)
+    soluong INT,
+    thanhtien INT
 );
 
 CREATE TABLE ChiTietKM (
@@ -122,7 +122,7 @@ CREATE TABLE HoaDonNhap (
     mahdnhap VARCHAR(10) PRIMARY KEY,        
     mancc VARCHAR(10),              
     soloaithuoc INT,                
-    ngaynhap VARCHAR(10),                  
+    ngaynhap VARCHAR(100),                  
     tongtien INT,        
 	tinhtrang BIT
 );

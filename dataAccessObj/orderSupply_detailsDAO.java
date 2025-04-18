@@ -42,7 +42,7 @@ public class orderSupply_detailsDAO implements DAO<orderSupply_details> {
     public int update(orderSupply_details t) {
         Connection sql = data.SQL.createConnection();
 
-        String command = "UPDATE ChiTietHoaDonNhap SET mahdnhap = ?, gianhap = ?, thanhtien = ?, slnhap = ?, slcon = ?, mathuoc = ?, tinhtrang = ? WHERE machthdnhap = ?";
+        String command = "UPDATE ChiTietHoaDonNhap SET mahdnhap = ?, gianhap = ?, thanhtien = ?, slnhap = ?, slcon = ?, mathuoc = ?, tinhtrang = ? WHERE macthdnhap = ?";
 
         try (PreparedStatement pst = sql.prepareStatement(command)) {
             pst.setString(1, t.getMahdnhap());

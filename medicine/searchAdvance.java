@@ -26,7 +26,7 @@ import advanceMethod.advance;
 import dataAccessObj.medicineDAO;
 
 public class searchAdvance extends JFrame {
-    public searchAdvance(DefaultTableModel modelMedic) {
+    public searchAdvance(DefaultTableModel modelMedic, DefaultTableModel modelMedicSupply) {
         this.setSize(1000, 800);
         this.setTitle("Tìm kiếm thuốc nâng cao");
         ImageIcon logo = new ImageIcon(advance.img+"logo.png");
@@ -416,19 +416,37 @@ public class searchAdvance extends JFrame {
                     medicineDAO medDAO = new medicineDAO();
                     ArrayList<medicine> medicines = medDAO.selectByCondition(result);
 
-                    modelMedic.setRowCount(0);
-                    for (medicine medicine : medicines) {
-                        JLabel statusImg;
-                        System.out.println(medicine.getTinhtrang());
-                        if(medicine.getTinhtrang()) {
-                            statusImg = new JLabel(data.imagePath.resize_check);
-                        } else {
-                            statusImg = new JLabel(data.imagePath.resize_exitIcon);
+                    if(modelMedic == null) {
+                        modelMedicSupply.setRowCount(0);
+                        for (medicine medicine : medicines) {
+                            JLabel statusImg;
+                            System.out.println(medicine.getTinhtrang());
+                            if(medicine.getTinhtrang()) {
+                                statusImg = new JLabel(data.imagePath.resize_check);
+                            } else {
+                                statusImg = new JLabel(data.imagePath.resize_exitIcon);
+                            }
+                            JButton chooseButton = new JButton("Chọn");
+                            chooseButton.setForeground(Color.BLACK);
+                            chooseButton.setFont(new Font(null, Font.PLAIN, 18));
+                            modelMedicSupply.addRow(new Object[]{medicine.getMathuoc(), 
+                            medicine.getTenthuoc(), statusImg, chooseButton});
                         }
-                        JButton eyeButton = new JButton(data.imagePath.resize_eye);
-                        modelMedic.addRow(new Object[]{medicine.getMathuoc(), 
-                        medicine.getTenthuoc(), medicine.getDanhmuc(),
-                        statusImg, eyeButton});
+                    } else {
+                        modelMedic.setRowCount(0);
+                        for (medicine medicine : medicines) {
+                            JLabel statusImg;
+                            System.out.println(medicine.getTinhtrang());
+                            if(medicine.getTinhtrang()) {
+                                statusImg = new JLabel(data.imagePath.resize_check);
+                            } else {
+                                statusImg = new JLabel(data.imagePath.resize_exitIcon);
+                            }
+                            JButton eyeButton = new JButton(data.imagePath.resize_eye);
+                            modelMedic.addRow(new Object[]{medicine.getMathuoc(), 
+                            medicine.getTenthuoc(), medicine.getDanhmuc(),
+                            statusImg, eyeButton});
+                        }
                     }
                 }
             }
@@ -452,6 +470,6 @@ public class searchAdvance extends JFrame {
     }
 
     public static void main(String[] args) {
-        new searchAdvance(null);
+        new searchAdvance(null, null);
     }
 }
