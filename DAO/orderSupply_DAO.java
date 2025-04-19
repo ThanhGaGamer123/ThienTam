@@ -5,9 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableModel;
+
 import DTO.orderSupply_DTO;
 
-public class orderSupplyDAO implements DAO<orderSupply_DTO> {
+public class orderSupply_DAO implements DAO<orderSupply_DTO> {
     @Override
     public int add(orderSupply_DTO t) {
         Connection sql = data.SQL.createConnection();
@@ -170,5 +174,62 @@ public class orderSupplyDAO implements DAO<orderSupply_DTO> {
 
         return orderSupply;
     }
+
+    public void loadData(DefaultTableModel modelOrderSupply) {
+        modelOrderSupply.setRowCount(0);
+        
+        String command = "select mahdnhap, tenncc, soloaithuoc, ngaynhap, tongtien, HoaDonNhap.tinhtrang from HoaDonNhap, NhaCungCap where HoaDonNhap.mancc = NhaCungCap.mancc";
+        Connection sql = data.SQL.createConnection();
+
+        try {
+            PreparedStatement pst = sql.prepareStatement(command);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                String mahdnhap = rs.getString("mahdnhap");
+                String tenncc = rs.getString("tenncc");
+                int soloaithuoc = rs.getInt("soloaithuoc");
+                String ngaynhap = rs.getString("ngaynhap");
+                int tongtien = rs.getInt("tongtien");
+                Boolean tinhtrang = rs.getBoolean("tinhtrang");
+                JLabel statusImg;
+                if(tinhtrang) {
+                    statusImg = new JLabel(data.imagePath.resize_check);
+                } else {
+                    statusImg = new JLabel(data.imagePath.resize_exitIcon);
+                }
+                JButton eyeButton = new JButton(data.imagePath.resize_eye);
+                modelOrderSupply.addRow(new Object[]{mahdnhap, tenncc, soloaithuoc, ngaynhap, tongtien, statusImg, eyeButton});
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
+        }
+    }
     
+    public void selectAllToArrayList(ArrayList<orderSupply_DTO> orderSupplies) {
+        String command = "select * from HoaDonNhap";
+        Connection sql = data.SQL.createConnection();
+        orderSupplies.clear();
+
+        try {
+            PreparedStatement pst = sql.prepareStatement(command);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                orderSupply_DTO orderSupply = new orderSupply_DTO();
+                orderSupply.setMahdnhap(rs.getString("mahdnhap"));
+                orderSupply.setMancc(rs.getString("mancc"));
+                orderSupply.setNgaynhap(rs.getString("ngaynhap"));
+                orderSupply.setSoloaithuoc(rs.getInt("soloaithuoc"));
+                orderSupply.setTinhtrang(rs.getBoolean("tinhtrang"));
+                orderSupply.setTongtien(rs.getInt("tongtien"));
+                orderSupplies.add(orderSupply);
+            }
+            System.out.println("Truy vấn thành công");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
+        }
+    }
 }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import DTO.storage_DTO;
 import advanceMethod.advance;
 
-public class storageDAO implements DAO<storage_DTO> {
+public class storage_DAO implements DAO<storage_DTO> {
     @Override
     public int add(storage_DTO t) {
         Connection sql = data.SQL.createConnection();

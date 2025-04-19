@@ -7,10 +7,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -22,6 +18,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import BUS.orderSupply_BUS;
 import advanceMethod.advance;
 
 public class orderSupply_GUI extends JFrame {
@@ -93,7 +90,7 @@ public class orderSupply_GUI extends JFrame {
         //xử lý tính năng
 
         //tự động cập nhật thông tin
-        updateTableSupplier(modelSupply, mahdnhap);
+        orderSupply_BUS.loadOrderDetails(modelSupply, mahdnhap);
 
         tableSupply.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -113,41 +110,6 @@ public class orderSupply_GUI extends JFrame {
                         return label;
             }
         });
-    }
-
-    public static void updateTableSupplier(DefaultTableModel modelSupply, String mahdnhap) {
-        modelSupply.setRowCount(0);
-        
-        String command = "select macthdnhap, tenthuoc, slnhap, gianhap, thanhtien, slcon, ChiTietHoaDonNhap.tinhtrang from ChiTietHoaDonNhap, Thuoc where ChiTietHoaDonNhap.mathuoc = Thuoc.mathuoc and mahdnhap = '" + mahdnhap + "'";
-        Connection sql = data.SQL.createConnection();
-
-        try {
-            PreparedStatement pst = sql.prepareStatement(command);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                String macthdnhap = rs.getString("macthdnhap");
-                String tenthuoc = rs.getString("tenthuoc");
-                ArrayList<Integer> slnhap = advance.StringArrayListToIntArrayList(advance.StringconvertToStringArrayList(rs.getString("slnhap")));
-                ArrayList<Integer> gianhap = advance.StringArrayListToIntArrayList(advance.StringconvertToStringArrayList(rs.getString("gianhap")));
-                int thanhtien = rs.getInt("thanhtien");
-                ArrayList<Integer> slcon = advance.StringArrayListToIntArrayList(advance.StringconvertToStringArrayList(rs.getString("slcon")));
-                Boolean tinhtrang = rs.getBoolean("tinhtrang");
-                JLabel statusImg;
-                if(tinhtrang) {
-                    statusImg = new JLabel(data.imagePath.resize_check);
-                } else {
-                    statusImg = new JLabel(data.imagePath.resize_exitIcon);
-                }
-                String SLnhap = String.join(";", advance.IntArrayListToStringArrayList(slnhap));
-                String GIAnhap = String.join(";", advance.IntArrayListToStringArrayList(gianhap));
-                String SLcon = String.join(";", advance.IntArrayListToStringArrayList(slcon));
-                modelSupply.addRow(new Object[]{macthdnhap, tenthuoc, SLnhap, GIAnhap, thanhtien, SLcon, statusImg});
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            data.SQL.closeConnection(sql);
-        }
     }
 
     public static void main(String[] args) {

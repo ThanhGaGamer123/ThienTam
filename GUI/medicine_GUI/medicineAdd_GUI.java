@@ -7,13 +7,9 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -21,21 +17,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import DAO.medicineDAO;
-import DAO.storageDAO;
-import DTO.medicine_DTO;
-import DTO.storage_DTO;
-import GUI.employee_GUI;
+import BUS.medicine_BUS;
 import advanceMethod.advance;
 
 public class medicineAdd_GUI extends JFrame {
@@ -374,12 +364,7 @@ public class medicineAdd_GUI extends JFrame {
         btn_them_doituong.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (cb_doituong.getSelectedIndex() != 0 
-                && !chosen.contains(String.valueOf(cb_doituong.getSelectedItem()))) {
-                    chosen.add(String.valueOf(cb_doituong.getSelectedItem()));
-                    String result = String.join(", ", chosen);
-                    ds_doituong.setText("Danh sách đối tượng sử dụng: " + result);
-                }
+                medicine_BUS.addUser(chosen, cb_doituong, ds_doituong);
             }
         });
 
@@ -387,12 +372,7 @@ public class medicineAdd_GUI extends JFrame {
         btn_xoa_doituong.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (cb_doituong.getSelectedIndex() != 0 
-                && chosen.contains(String.valueOf(cb_doituong.getSelectedItem()))) {
-                    chosen.remove(String.valueOf(cb_doituong.getSelectedItem()));
-                    String result = String.join(", ", chosen);
-                    ds_doituong.setText("Danh sách đối tượng sử dụng: " + result);
-                }
+                medicine_BUS.deleteUser(chosen, cb_doituong, ds_doituong);
             }
         });
 
@@ -400,117 +380,28 @@ public class medicineAdd_GUI extends JFrame {
         finish.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //kiểm tra form
-                Boolean found = false;
-                if(tf_tenthuoc.getText().isEmpty() || tf_danhmuc.getText().isEmpty()
-                || ta_thanhphan.getText().isEmpty() || ta_thongtin.getText().isEmpty()
-                || tf_xuatxu.getText().isEmpty()) found = true;
-
-                if(found) JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ tất cả thông tin chính xác!");
-                else {
-                    //gửi form
-                    medicineDAO medDAO = new medicineDAO();
-                    ArrayList<medicine_DTO> temp_1 = medDAO.selectAll();
-                    medicine_DTO med = new medicine_DTO();
-                    med.setMathuoc("MTH"+advance.calculateID(temp_1.size()));
-
-                    //tạo dữ liệu tồn trong kho
-                    storageDAO strDAO = new storageDAO();
-                    ArrayList<storage_DTO> temp_2 = strDAO.selectAll();
-                    storage_DTO str = new storage_DTO();
-                    med.setMaton("MTO"+advance.calculateID(temp_2.size()));
-                    str.setMaton(med.getMaton());
-
-                    ArrayList<Integer> slton = new ArrayList<>();
-                    slton.add(0);
-                    slton.add(0);
-                    slton.add(0);
-                    str.setSlton(slton);
-
-                    str.setTinhtrang(true);
-
-                    strDAO.add(str);
-
-                    med.setTenthuoc(tf_tenthuoc.getText());
-                    med.setDanhmuc(tf_danhmuc.getText());
-                    
-                    ArrayList<String> donvi = new ArrayList<>();
-                    if(hop.isSelected()) donvi.add("hộp");
-                    if(vi.isSelected()) donvi.add("vỉ");
-                    if(vien.isSelected()) donvi.add("viên");
-                    med.setDonvi(donvi);
-                    
-                    med.setThanhphan(ta_thanhphan.getText());
-                    med.setThongtin(ta_thongtin.getText());
-                    med.setXuatxu(tf_xuatxu.getText());
-                    
-                    if(chosen.size() == 0) {
-                        ArrayList<String> temp = new ArrayList<>();
-                        temp.add("Không có chỉ định");
-                        med.setDoituongsudung(temp);
-                    } else med.setDoituongsudung(chosen);
-
-                    ArrayList<Integer> giaban = new ArrayList<>();
-                    giaban.add(0);
-                    giaban.add(0);
-                    giaban.add(0);
-                    med.setGiaban(giaban);
-
-                    med.setTinhtrang(true);
-
-                    medDAO.add(med);
-                    employee_GUI.updateTableMedic(modelMedic);
+                if(medicine_BUS.addMedicine(tf_tenthuoc, tf_danhmuc, ta_thanhphan, 
+                ta_thongtin, tf_xuatxu, hop, vi, vien, chosen, modelMedic)) {
                     dispose();
                 }
             }           
         });
 
+        //reset
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tf_tenthuoc.setText("");
-                tf_danhmuc.setText("");
-                hop.setSelected(false);
-                vi.setSelected(false);
-                vien.setSelected(false);
-                ta_thanhphan.setText("");
-                ta_thongtin.setText("");
-                tf_xuatxu.setText("");
-                cb_doituong.setSelectedIndex(0);
-                ds_doituong.setText("Danh sách đối tượng sử dụng: ");
-                chosen.clear();
-                khung_anh.setIcon(null);
+                medicine_BUS.resetAdd(tf_tenthuoc, tf_danhmuc, ta_thanhphan, 
+                ta_thongtin, hop, vi, vien, tf_xuatxu, cb_doituong, ds_doituong, 
+                chosen, khung_anh);
             }
         });
 
+        //up ảnh
         chon_anh.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setDialogTitle("Chọn ảnh");
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                fileChooser.setAcceptAllFileFilterUsed(false);
-                fileChooser.addChoosableFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Image files", "jpg", "jpeg", "png", "gif"));
-
-                fileChooser.setCurrentDirectory(new File(advance.file_path));
-                int ketQua = fileChooser.showOpenDialog(null);
-                if(ketQua == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    medicineDAO medDAO = new medicineDAO();
-                    ArrayList<medicine_DTO> temp = medDAO.selectAll();
-                    String imgPath = advance.medIMG + "MTH" + advance.calculateID(temp.size()) + ".png";
-                    
-                    try {
-                        Files.copy(selectedFile.toPath(), new File(imgPath).toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        ImageIcon anh = new ImageIcon(imgPath);
-                        Image anh_scale = anh.getImage().getScaledInstance(khung_anh.getWidth(), khung_anh.getHeight(), Image.SCALE_SMOOTH);
-                        ImageIcon anh_scaled = new ImageIcon(anh_scale);
-                        khung_anh.setIcon(anh_scaled);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        System.out.println("Sao chép file thất bại");
-                    }
-                }
+                medicine_BUS.uploadImage(khung_anh);
             }
         });
     }

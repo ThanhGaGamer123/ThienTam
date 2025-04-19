@@ -16,14 +16,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import DAO.medicineDAO;
-import DTO.medicine_DTO;
+import BUS.medicine_BUS;
 import advanceMethod.advance;
 
 public class medicineSearch_GUI extends JFrame {
@@ -303,7 +301,7 @@ public class medicineSearch_GUI extends JFrame {
         gdc.insets = new Insets(0, 0, 30, 80);
         main.add(tf_gia_vien, gdc);
 
-        JLabel tinhtrang = new JLabel("Giá viên:");
+        JLabel tinhtrang = new JLabel("Tình trạng:");
         tinhtrang.setForeground(Color.BLACK);
         tinhtrang.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
@@ -361,12 +359,7 @@ public class medicineSearch_GUI extends JFrame {
         btn_them_doituong.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (cb_doituong.getSelectedIndex() != 0 
-                && !chosen.contains(String.valueOf(cb_doituong.getSelectedItem()))) {
-                    chosen.add(String.valueOf(cb_doituong.getSelectedItem()));
-                    String result = String.join(", ", chosen);
-                    ds_doituong.setText("Danh sách đối tượng sử dụng: " + result);
-                }
+                medicine_BUS.addUser(chosen, cb_doituong, ds_doituong);
             }
         });
 
@@ -374,98 +367,26 @@ public class medicineSearch_GUI extends JFrame {
         btn_xoa_doituong.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (cb_doituong.getSelectedIndex() != 0 
-                && chosen.contains(String.valueOf(cb_doituong.getSelectedItem()))) {
-                    chosen.remove(String.valueOf(cb_doituong.getSelectedItem()));
-                    String result = String.join(", ", chosen);
-                    ds_doituong.setText("Danh sách đối tượng sử dụng: " + result);
-                }
+                medicine_BUS.deleteUser(chosen, cb_doituong, ds_doituong);
             }
         });
 
+        //hoàn tất
         finish.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList<String> allPrice = new ArrayList<>();
-                Boolean price = true;
-                if(!tf_gia_hop.getText().isEmpty() && !advance.checkTextField(tf_gia_hop.getText())) price = false;
-                else if(!tf_gia_hop.getText().isEmpty()) allPrice.add(tf_gia_hop.getText());
-
-                if(!tf_gia_vi.getText().isEmpty() && !advance.checkTextField(tf_gia_vi.getText())) price = false;
-                else if(!tf_gia_vi.getText().isEmpty()) allPrice.add(tf_gia_vi.getText());
-
-                if(!tf_gia_vien.getText().isEmpty() && !advance.checkTextField(tf_gia_vien.getText())) price = false;
-                else if(!tf_gia_vien.getText().isEmpty()) allPrice.add(tf_gia_vien.getText());
-
-                if(!price) JOptionPane.showMessageDialog(null, "Giá bán phải là số. Vui lòng nhập lại!");
-                else {
-                    ArrayList<String> condition = new ArrayList<>();
-                    if(!tf_mathuoc.getText().isEmpty()) condition.add("mathuoc like N'%" + tf_mathuoc.getText() + "%' ");
-                    if(!tf_tenthuoc.getText().isEmpty()) condition.add("tenthuoc like N'%" + tf_tenthuoc.getText() + "%' ");
-                    if(!tf_danhmuc.getText().isEmpty()) condition.add("danhmuc like N'%" + tf_danhmuc.getText() + "%' ");
-                    if(!tf_xuatxu.getText().isEmpty()) condition.add("xuatxu like N'%" + tf_xuatxu.getText() + "%' ");
-                    if(chosen.size() != 0) condition.add("doituongsudung like N'%" + advance.StringArrayListToString(chosen) + "%' ");
-                    condition.add("giaban like N'%" + advance.StringArrayListToString(allPrice) + "%' ");
-                    String tt = String.valueOf(cb_tinhtrang.getSelectedItem());
-                    if(tt.equals("Đang hoạt động")) {
-                        condition.add("tinhtrang = 1 ");
-                    } else if (tt.equals("Ngừng hoạt động")) {
-                        condition.add("tinhtrang = 0 ");
-                    }
-                    String result = String.join("and ", condition);
-
-                    medicineDAO medDAO = new medicineDAO();
-                    ArrayList<medicine_DTO> medicines = medDAO.selectByCondition(result);
-
-                    if(modelMedic == null) {
-                        modelMedicSupply.setRowCount(0);
-                        for (medicine_DTO medicine : medicines) {
-                            JLabel statusImg;
-                            System.out.println(medicine.getTinhtrang());
-                            if(medicine.getTinhtrang()) {
-                                statusImg = new JLabel(data.imagePath.resize_check);
-                            } else {
-                                statusImg = new JLabel(data.imagePath.resize_exitIcon);
-                            }
-                            JButton chooseButton = new JButton("Chọn");
-                            chooseButton.setForeground(Color.BLACK);
-                            chooseButton.setFont(new Font(null, Font.PLAIN, 18));
-                            modelMedicSupply.addRow(new Object[]{medicine.getMathuoc(), 
-                            medicine.getTenthuoc(), statusImg, chooseButton});
-                        }
-                    } else {
-                        modelMedic.setRowCount(0);
-                        for (medicine_DTO medicine : medicines) {
-                            JLabel statusImg;
-                            System.out.println(medicine.getTinhtrang());
-                            if(medicine.getTinhtrang()) {
-                                statusImg = new JLabel(data.imagePath.resize_check);
-                            } else {
-                                statusImg = new JLabel(data.imagePath.resize_exitIcon);
-                            }
-                            JButton eyeButton = new JButton(data.imagePath.resize_eye);
-                            modelMedic.addRow(new Object[]{medicine.getMathuoc(), 
-                            medicine.getTenthuoc(), medicine.getDanhmuc(),
-                            statusImg, eyeButton});
-                        }
-                    }
-                }
+                medicine_BUS.findMedicine(tf_gia_hop, tf_gia_vi, tf_gia_vien, 
+                tf_mathuoc, tf_tenthuoc, tf_danhmuc, tf_xuatxu, chosen, cb_tinhtrang, 
+                modelMedic, modelMedicSupply);
             }
         });
 
+        //reset
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tf_mathuoc.setText("");
-                tf_tenthuoc.setText("");
-                tf_danhmuc.setText("");
-                tf_xuatxu.setText("");
-                tf_gia_hop.setText("");
-                tf_gia_vi.setText("");
-                tf_gia_vien.setText("");
-                cb_doituong.setSelectedIndex(0);
-                ds_doituong.setText("Danh sách đối tượng sử dụng: ");
-                chosen.clear();
+                medicine_BUS.resetFind(tf_mathuoc, tf_tenthuoc, tf_danhmuc, tf_gia_hop, 
+                tf_gia_vi, tf_gia_vien, tf_xuatxu, cb_doituong, ds_doituong, chosen);
             }
         });
     }

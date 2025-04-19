@@ -5,10 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableModel;
+
 import DTO.orderSupply_details_DTO;
 import advanceMethod.advance;
 
-public class orderSupply_detailsDAO implements DAO<orderSupply_details_DTO> {
+public class orderSupply_details_DAO implements DAO<orderSupply_details_DTO> {
     @Override
     public int add(orderSupply_details_DTO t) {
         Connection sql = data.SQL.createConnection();
@@ -182,4 +185,38 @@ public class orderSupply_detailsDAO implements DAO<orderSupply_details_DTO> {
         return order;
     }
     
+    public static void selectAllToOrderSupply(DefaultTableModel modelSupply, String mahdnhap) {
+        modelSupply.setRowCount(0);
+        
+        String command = "select macthdnhap, tenthuoc, slnhap, gianhap, thanhtien, slcon, ChiTietHoaDonNhap.tinhtrang from ChiTietHoaDonNhap, Thuoc where ChiTietHoaDonNhap.mathuoc = Thuoc.mathuoc and mahdnhap = '" + mahdnhap + "'";
+        Connection sql = data.SQL.createConnection();
+
+        try {
+            PreparedStatement pst = sql.prepareStatement(command);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                String macthdnhap = rs.getString("macthdnhap");
+                String tenthuoc = rs.getString("tenthuoc");
+                ArrayList<Integer> slnhap = advance.StringArrayListToIntArrayList(advance.StringconvertToStringArrayList(rs.getString("slnhap")));
+                ArrayList<Integer> gianhap = advance.StringArrayListToIntArrayList(advance.StringconvertToStringArrayList(rs.getString("gianhap")));
+                int thanhtien = rs.getInt("thanhtien");
+                ArrayList<Integer> slcon = advance.StringArrayListToIntArrayList(advance.StringconvertToStringArrayList(rs.getString("slcon")));
+                Boolean tinhtrang = rs.getBoolean("tinhtrang");
+                JLabel statusImg;
+                if(tinhtrang) {
+                    statusImg = new JLabel(data.imagePath.resize_check);
+                } else {
+                    statusImg = new JLabel(data.imagePath.resize_exitIcon);
+                }
+                String SLnhap = String.join(";", advance.IntArrayListToStringArrayList(slnhap));
+                String GIAnhap = String.join(";", advance.IntArrayListToStringArrayList(gianhap));
+                String SLcon = String.join(";", advance.IntArrayListToStringArrayList(slcon));
+                modelSupply.addRow(new Object[]{macthdnhap, tenthuoc, SLnhap, GIAnhap, thanhtien, SLcon, statusImg});
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
+        }
+    }
 }

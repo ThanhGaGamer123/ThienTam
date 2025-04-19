@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import DTO.supplier_DTO;
 
-public class supplierDAO implements DAO<supplier_DTO> {
+public class supplier_DAO implements DAO<supplier_DTO> {
     @Override
     public int add(supplier_DTO t) {
         Connection sql = data.SQL.createConnection();

@@ -6,9 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -19,10 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import DAO.medicineDAO;
-import DAO.storageDAO;
-import DTO.medicine_DTO;
-import DTO.storage_DTO;
+import BUS.medicine_BUS;
 import advanceMethod.advance;
 
 public class medicine_GUI extends JFrame {
@@ -492,55 +487,10 @@ public class medicine_GUI extends JFrame {
         this.setVisible(true);
 
         //xử lý các tính năng
-
-        ArrayList<String> chosen = new ArrayList<>(); //ds đối tượng
-
-        //tự động điền thông tin
-        medicine_DTO med = throwMedicineObj(mathuoc);
-        tf_maThuoc.setText(med.getMathuoc());
-        tf_tenthuoc.setText(med.getTenthuoc());
-        tf_danhmuc.setText(med.getDanhmuc());
-        String dsdonvi = String.join(", ", med.getDonvi());
-        tf_donvi.setText(dsdonvi);
-        ta_thanhphan.setText(med.getThanhphan());
-        ta_thongtin.setText(med.getThongtin());
-        tf_xuatxu.setText(med.getXuatxu());
-        chosen.clear();
-        chosen.addAll(med.getDoituongsudung());
-        String dsdtsd = String.join(", ", chosen);
-        tf_dsdt.setText(dsdtsd);
-        if(med.getTinhtrang()) tf_tinhtrang.setText("Đang hoạt động");
-        else tf_tinhtrang.setText("Ngừng hoạt động");
-
-        ImageIcon anh = new ImageIcon(advance.medIMG + mathuoc + ".png");
-        Image anh_scale = anh.getImage().getScaledInstance(khung_anh.getWidth(), khung_anh.getHeight(), Image.SCALE_SMOOTH);
-        ImageIcon anh_scaled = new ImageIcon(anh_scale);
-        khung_anh.setIcon(anh_scaled);
-
-        ArrayList<String> giaban = advance.IntArrayListToStringArrayList(med.getGiaban());
-        tf_giahop.setText(giaban.get(0));
-        tf_giavi.setText(giaban.get(1));
-        tf_giavien.setText(giaban.get(2));
-
-        storage_DTO str = throwStorageObj(med.getMaton());
-        ArrayList<String> sl = advance.IntArrayListToStringArrayList(str.getSlton());
-        tf_slhop.setText(sl.get(0));
-        tf_slvi.setText(sl.get(1));
-        tf_slvien.setText(sl.get(2));
-    }
-
-    public static medicine_DTO throwMedicineObj(String mathuoc) {
-        medicine_DTO med = new medicine_DTO();
-        med.setMathuoc(mathuoc);
-        medicineDAO medDAO = new medicineDAO();
-        return medDAO.selectByID(med);
-    }
-
-    public static storage_DTO throwStorageObj(String maton) {
-        storage_DTO str = new storage_DTO();
-        str.setMaton(maton);
-        storageDAO strDAO = new storageDAO();
-        return strDAO.selectByID(str);
+        medicine_BUS.loadDetailsMedicine(mathuoc, tf_maThuoc, tf_tenthuoc, 
+        tf_danhmuc, tf_donvi, ta_thanhphan, ta_thongtin, tf_xuatxu, tf_dsdt, 
+        tf_tinhtrang, khung_anh, tf_giahop, tf_giavi, tf_giavien, tf_slhop, 
+        tf_slvi, tf_slvien);
     }
 
     public static void main(String[] args) {

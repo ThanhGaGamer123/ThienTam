@@ -2,12 +2,10 @@ package GUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.*;
 
-import DAO.employeeDAO;
-import DTO.employee_DTO;
+import BUS.login_BUS;
 import advanceMethod.advance;
 
 public class login_GUI extends JFrame {
@@ -137,10 +135,10 @@ public class login_GUI extends JFrame {
         form.add(login, gdc);
         login.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                login.setBackground(new Color(100, 221, 23)); // Màu khi di chuột vào
+                login.setBackground(new Color(100, 221, 23));
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                login.setBackground(new Color(76, 175, 80)); // Màu trở lại
+                login.setBackground(new Color(76, 175, 80));
             }
         });
         login.addActionListener(new ActionListener() {
@@ -148,25 +146,9 @@ public class login_GUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String username = user_field.getText();
                 String password = String.valueOf(pass_field.getPassword());
-                employeeDAO emDAO = new employeeDAO();
-                ArrayList<employee_DTO> nvArr = emDAO.selectAll();
-                Boolean flag = false;
-                for(employee_DTO nv : nvArr) {
-                    if(username.equals(nv.getUsername()) && password.equals(nv.getPassword())) {
-                        flag = true;
-                        JOptionPane.showMessageDialog(null, 
-                        "Đăng nhập thành công!");
-                        new employee_GUI(nv);
-                        dispose();
-                        break;
-                    }
+                if(login_BUS.checkLogin(username, password, user_field, pass_field)) {
+                    dispose();
                 }
-                if(!flag) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Tài khoản hoặc mật khẩu không chính xác. Vui lòng nhập lại!");
-                    user_field.requestFocus(true);
-                }
-                pass_field.setText("");
             }
         });
 
@@ -176,7 +158,6 @@ public class login_GUI extends JFrame {
         signup.setForeground(Color.blue);
         signup.setBorderPainted(false);
         signup.setBackground(Color.white);
-        // signup.setBounds(100, 400, 300, 20);
         gdc.gridx = 0;
         gdc.gridy = 4;
         gdc.gridwidth = 2;
@@ -185,12 +166,15 @@ public class login_GUI extends JFrame {
         signup.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //lien ket toi sign up page
                 new signup_GUI();
                 dispose();
             }
         });
 
         this.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new login_GUI();
     }
 }

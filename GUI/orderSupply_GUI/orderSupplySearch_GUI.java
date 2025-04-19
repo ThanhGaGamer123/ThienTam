@@ -8,9 +8,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -18,12 +15,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import BUS.orderSupply_BUS;
 import DTO.orderSupply_DTO;
 import advanceMethod.advance;
 
@@ -188,123 +185,16 @@ public class orderSupplySearch_GUI extends JFrame {
         tim.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //kiểm tra
-                String madon = tf_mandon.getText().toString();
-                String tenncc = tf_tenncc.getText().toString();
-                String ngaynhap = tf_ngaynhap.getText().toString();
-
-                if(tf_ngaynhap.getText().isEmpty() || (!tf_ngaynhap.getText().isEmpty() && advance.checkDate(ngaynhap))) {
-                    String command = "select mahdnhap, HoaDonNhap.mancc,tenncc, soloaithuoc, ngaynhap, tongtien, HoaDonNhap.tinhtrang "
-                    + "from HoaDonNhap, NhaCungCap where HoaDonNhap.mancc = NhaCungCap.mancc and "
-                    + "mahdnhap like N'%" + madon + "%' and tenncc like N'%" + tenncc + "%' and "
-                    + "ngaynhap like N'%" + ngaynhap + "%'";
-                    Connection sql = data.SQL.createConnection();
-                    orderSupplies.clear();
-
-                    try {
-                        PreparedStatement pst = sql.prepareStatement(command);
-                        ResultSet rs = pst.executeQuery();
-                        while (rs.next()) {
-                            orderSupply_DTO orderSupply = new orderSupply_DTO();
-                            orderSupply.setMahdnhap(rs.getString("mahdnhap"));
-                            orderSupply.setMancc("mancc");
-                            tenncc = rs.getString("tenncc");
-                            orderSupply.setNgaynhap(rs.getString("ngaynhap"));
-                            orderSupply.setSoloaithuoc(rs.getInt("soloaithuoc"));
-                            orderSupply.setTinhtrang(rs.getBoolean("tinhtrang"));
-                            orderSupply.setTongtien(rs.getInt("tongtien"));
-                            if((tf_tinhtrang.getSelectedItem().toString().equals("Đang hoạt động")
-                            && orderSupply.getTinhtrang()) 
-                            || (tf_tinhtrang.getSelectedItem().toString().equals("Ngừng hoạt động")
-                            && !orderSupply.getTinhtrang())
-                            || (tf_tinhtrang.getSelectedItem().toString().equals("Không có"))) {
-                                orderSupplies.add(orderSupply);
-                            }
-                        }
-                        System.out.println("Truy vấn thành công");
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    } finally {
-                        data.SQL.closeConnection(sql);
-                    }
-                    
-                    //xử lý lọc
-                    System.out.println(loc);
-                    if(loc == 1) {
-                        for(int i = 0; i < orderSupplies.size() - 1; i++) {
-                            for(int j = i + 1; j < orderSupplies.size(); j++) {
-                                if(orderSupplies.get(i).getTongtien() < orderSupplies.get(j).getTongtien()) {
-                                    orderSupply_DTO temp = orderSupplies.get(i);
-                                    orderSupplies.set(i, orderSupplies.get(j));
-                                    orderSupplies.set(j, temp);
-                                }
-                            }
-                        }
-                    } else if(loc == 2) {
-                        for(int i = 0; i < orderSupplies.size() - 1; i++) {
-                            for(int j = i + 1; j < orderSupplies.size(); j++) {
-                                if(orderSupplies.get(i).getTongtien() > orderSupplies.get(j).getTongtien()) {
-                                    orderSupply_DTO temp = orderSupplies.get(i);
-                                    orderSupplies.set(i, orderSupplies.get(j));
-                                    orderSupplies.set(j, temp);
-                                }
-                            }
-                        }
-                    } else if(loc == 3) {
-                        for(int i = 0; i < orderSupplies.size() - 1; i++) {
-                            for(int j = i + 1; j < orderSupplies.size(); j++) {
-                                if(advance.fulldate1BeforeFullDate2(orderSupplies.get(i).getNgaynhap(), orderSupplies.get(j).getNgaynhap())) {
-                                    orderSupply_DTO temp = orderSupplies.get(i);
-                                    orderSupplies.set(i, orderSupplies.get(j));
-                                    orderSupplies.set(j, temp);
-                                }
-                            }
-                        }
-                    } else if(loc == 4) {
-                        for(int i = 0; i < orderSupplies.size() - 1; i++) {
-                            for(int j = i + 1; j < orderSupplies.size(); j++) {
-                                if(!advance.fulldate1BeforeFullDate2(orderSupplies.get(i).getNgaynhap(), orderSupplies.get(j).getNgaynhap())) {
-                                    orderSupply_DTO temp = orderSupplies.get(i);
-                                    orderSupplies.set(i, orderSupplies.get(j));
-                                    orderSupplies.set(j, temp);
-                                }
-                            }
-                        }
-                    }
-
-                    //lưu vào bảng
-                    modelSupplier.setRowCount(0);
-                    for (orderSupply_DTO orderSupply : orderSupplies) {
-                        JLabel statusImg;
-                        if(orderSupply.getTinhtrang()) {
-                            statusImg = new JLabel(data.imagePath.resize_check);
-                        } else {
-                            statusImg = new JLabel(data.imagePath.resize_exitIcon);
-                        }
-                        JButton eyeButton = new JButton(data.imagePath.resize_eye);
-                        modelSupplier.addRow(new Object[]{orderSupply.getMahdnhap(), tenncc,
-                        orderSupply.getSoloaithuoc(), orderSupply.getNgaynhap(),
-                        orderSupply.getTongtien(), statusImg, eyeButton});
-                    }
-
-                    //reset
-                    tf_mandon.setText("");
-                    tf_tenncc.setText("");
-                    tf_ngaynhap.setText("");
-                    tf_tinhtrang.setSelectedItem(0);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Ngày nhập không hợp lệ!");
-                }
+                orderSupply_BUS.findOrderSupply(tf_mandon, tf_tenncc, tf_ngaynhap, 
+                orderSupplies, tf_tinhtrang, loc, modelSupplier);
             }
         });
 
+        //reset
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tf_mandon.setText("");
-                tf_tenncc.setText("");
-                tf_ngaynhap.setText("");
-                tf_tinhtrang.setSelectedItem(0);
+                orderSupply_BUS.resetFind(tf_mandon, tf_tenncc, tf_ngaynhap, tf_tinhtrang);
             }
         });
     }

@@ -171,29 +171,29 @@ public class signup_GUI extends JFrame {
         gdc.weightx = 0;
         gdc.anchor = GridBagConstraints.CENTER;
 
-        JButton login = new JButton();
-        login.setText("Đăng Ký");
-        login.setFont(new Font(null, Font.PLAIN, 18));
-        login.setForeground(Color.BLACK);
-        login.setBackground(new Color(76, 175, 80));
-        // login.setBounds(200, 390, 150, 30);
-        login.setPreferredSize(new Dimension(0, 50));
+        JButton signup = new JButton();
+        signup.setText("Đăng Ký");
+        signup.setFont(new Font(null, Font.PLAIN, 18));
+        signup.setForeground(Color.BLACK);
+        signup.setBackground(new Color(76, 175, 80));
+        // signup.setBounds(200, 390, 150, 30);
+        signup.setPreferredSize(new Dimension(0, 50));
         gdc.gridx = 0;
         gdc.gridy = 5;
         gdc.gridwidth = 2;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
         gdc.insets = new Insets(0, 50, 40, 50);
-        form.add(login, gdc);
-        login.addMouseListener(new java.awt.event.MouseAdapter() {
+        form.add(signup, gdc);
+        signup.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                login.setBackground(new Color(100, 221, 23)); // Màu khi di chuột vào
+                signup.setBackground(new Color(100, 221, 23));
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                login.setBackground(new Color(76, 175, 80)); // Màu trở lại
+                signup.setBackground(new Color(76, 175, 80));
             }
         });
-        login.addActionListener(new ActionListener() {
+        signup.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null,
@@ -207,19 +207,19 @@ public class signup_GUI extends JFrame {
             }
         });
 
-        JButton signup = new JButton();
-        signup.setText("Đã có tài khoản? Đăng nhập ngay!");
-        signup.setFont(new Font(null, Font.PLAIN, 14));
-        signup.setForeground(Color.blue);
-        signup.setBorderPainted(false);
-        signup.setBackground(Color.white);
-        // signup.setBounds(120, 440, 300, 20);
+        JButton login = new JButton();
+        login.setText("Đã có tài khoản? Đăng nhập ngay!");
+        login.setFont(new Font(null, Font.PLAIN, 14));
+        login.setForeground(Color.blue);
+        login.setBorderPainted(false);
+        login.setBackground(Color.white);
+        // login.setBounds(120, 440, 300, 20);
         gdc.gridx = 0;
         gdc.gridy = 6;
         gdc.gridwidth = 2;
         gdc.insets = new Insets(0, 50, 80, 50);
-        form.add(signup, gdc);
-        signup.addActionListener(new ActionListener() {
+        form.add(login, gdc);
+        login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //lien ket toi log in page
@@ -229,5 +229,9 @@ public class signup_GUI extends JFrame {
         });
 
         this.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new signup_GUI();
     }
 }

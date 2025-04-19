@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import DTO.medicine_DTO;
 import advanceMethod.advance;
 
-public class medicineDAO implements DAO<medicine_DTO> {
+public class medicine_DAO implements DAO<medicine_DTO> {
     @Override
     public int add(medicine_DTO t) {
         //B1: kết nối csdl

@@ -13,9 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -27,7 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -37,26 +33,15 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.table.*;
 
-import DAO.medicineDAO;
-import DAO.orderSupplyDAO;
-import DAO.orderSupply_detailsDAO;
-import DAO.storageDAO;
-import DAO.storeDAO;
-import DAO.supplierDAO;
+import BUS.employee_BUS;
+import BUS.medicine_BUS;
+import BUS.orderSupply_BUS;
 import DTO.employee_DTO;
-import DTO.medicine_DTO;
 import DTO.orderSupply_DTO;
-import DTO.orderSupply_details_DTO;
-import DTO.storage_DTO;
-import DTO.store_DTO;
-import DTO.supplier_DTO;
 import GUI.medicine_GUI.medicineAdd_GUI;
 import GUI.medicine_GUI.medicineSearch_GUI;
-import GUI.medicine_GUI.medicineUpdate_GUI;
-import GUI.medicine_GUI.medicine_GUI;
 import GUI.orderSupply_GUI.orderSupplyAdd_GUI;
 import GUI.orderSupply_GUI.orderSupplySearch_GUI;
-import GUI.orderSupply_GUI.orderSupply_GUI;
 import advanceMethod.advance;
 
 public class employee_GUI extends JFrame {
@@ -804,37 +789,13 @@ public class employee_GUI extends JFrame {
 
         //xử lý các tính năng
 
-        //Tự động điền thông tin khi đăng nhập:
-        manv.setText(manv.getText() + nv.getManv());
-        tennv.setText(tennv.getText() + nv.getTennv());
-        chucvu.setText(chucvu.getText() + nv.getChucvu());
-        gioitinh.setText(gioitinh.getText() + nv.getGioitinh());
-        cccd.setText(cccd.getText() + nv.getCccd());
-        sdt.setText(sdt.getText() + nv.getSdt());
-        diachi.setText(diachi.getText() + nv.getMasonha() + ", " + nv.getDuong() + ", "
-        + nv.getPhuong() + ", " + nv.getQuan() + ", " + nv.getTinh());
-        nhathuoc.setText(nhathuoc.getText() + nv.getManhathuoc());
-        if(nv.getTinhtrang()) tinhtrang.setText(tinhtrang.getText() + "Đang hoạt động");
-        else tinhtrang.setText(tinhtrang.getText() + "Ngừng hoạt động");
+        employee_BUS.loadData(nv, manv, tennv, chucvu, gioitinh, cccd, sdt, diachi, nhathuoc, tinhtrang);
 
         //Hiển thị thông tin nhà thuốc
         btn_nhathuoc.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                storeDAO strDAO = new storeDAO();
-                ArrayList<store_DTO> storeArr = strDAO.selectAll();
-                Boolean found = false;
-                for(store_DTO nt : storeArr) {
-                    if(nv.getManhathuoc().equals(nt.getMant())) {
-                        new store_GUI(nt);
-                        found = true;
-                        break;
-                    }
-                }
-                if(!found) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Không tìm thấy thông tin nhà thuốc.");
-                }
+                employee_BUS.showStore(nv);
             }
         });
 
@@ -877,9 +838,9 @@ public class employee_GUI extends JFrame {
             }   
         });
 
-        //xử lý nhà cung cấp
-        //cập nhật thông tin nhà cung cấp
-        updateTableSupplier(modelCollect);
+        //xử lý đơn hàng nhập
+        //cập nhật thông tin đơn hàng nhập
+        orderSupply_BUS.loadData(modelCollect);
 
         tableCollect.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -928,33 +889,7 @@ public class employee_GUI extends JFrame {
         xoaCollect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int selectedRow = tableCollect.getSelectedRow();
-                if(selectedRow != -1) {
-                    String mahdnhap = modelCollect.getValueAt(selectedRow, 0).toString();
-                    orderSupply_DTO os = throwOrderSupplyObj(mahdnhap);
-                    if(os.getTinhtrang()) {
-                        int choice = JOptionPane.showConfirmDialog(null, 
-                        "Bạn có chắc chắn xóa đơn hàng nhập này không?");
-                        if (choice == 0) {
-                            os.setTinhtrang(false);
-                            orderSupplyDAO osDAO = new orderSupplyDAO();
-                            osDAO.update(os);
-
-                            ArrayList<orderSupply_details_DTO> osds = new ArrayList<>();
-                            orderSupply_detailsDAO osdDAO = new orderSupply_detailsDAO();
-                            osds = osdDAO.selectByCondition("mahdnhap = '" + os.getMahdnhap() + "'");
-                            for (orderSupply_details_DTO osd : osds) {
-                                osd.setTinhtrang(false);
-                                osdDAO.update(osd);
-                            }
-
-                            updateTableSupplier(modelCollect);
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, 
-                        "Đơn hàng nhập này đã ngừng hoạt động!");
-                    }
-                }
+                orderSupply_BUS.deleteOrderSupply(tableCollect, modelCollect);
             }
         });
 
@@ -964,26 +899,7 @@ public class employee_GUI extends JFrame {
         search_2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                orderSupplies.clear();
-                modelCollect.setRowCount(0);
-                String mahdnhap = search_bar_2.getText().toString();
-                orderSupply_DTO os = new orderSupply_DTO();
-                os.setMahdnhap(mahdnhap);
-                orderSupplyDAO osDAO = new orderSupplyDAO();
-                os = osDAO.selectByID(os);
-                JLabel statusImg;
-                if(os.getTinhtrang()) {
-                    statusImg = new JLabel(data.imagePath.resize_check);
-                } else {
-                    statusImg = new JLabel(data.imagePath.resize_exitIcon);
-                }
-                JButton eyeButton = new JButton(data.imagePath.resize_eye);
-                supplier_DTO sp = new supplier_DTO();
-                sp.setMancc(os.getMancc());
-                supplierDAO spDAO = new supplierDAO();
-                sp = spDAO.selectByID(sp);
-                modelCollect.addRow(new Object[]{os.getMahdnhap(), sp.getTenncc(), os.getSoloaithuoc(), os.getNgaynhap(), os.getTongtien(), statusImg, eyeButton});
-                search_bar_2.setText("");
+                orderSupply_BUS.findOrderSupplyByID(orderSupplies, modelCollect, search_bar_2);
             }
         });
 
@@ -999,36 +915,7 @@ public class employee_GUI extends JFrame {
         loc_2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int loC = loc_2.getSelectedIndex();
-                if(!orderSupplies.isEmpty()) {
-                    supplierfilter(modelCollect, loC, orderSupplies);
-                } else {
-                    String command = "select * from HoaDonNhap";
-                    Connection sql = data.SQL.createConnection();
-                    orderSupplies.clear();
-
-                    try {
-                        PreparedStatement pst = sql.prepareStatement(command);
-                        ResultSet rs = pst.executeQuery();
-                        while (rs.next()) {
-                            orderSupply_DTO orderSupply = new orderSupply_DTO();
-                            orderSupply.setMahdnhap(rs.getString("mahdnhap"));
-                            orderSupply.setMancc(rs.getString("mancc"));
-                            orderSupply.setNgaynhap(rs.getString("ngaynhap"));
-                            orderSupply.setSoloaithuoc(rs.getInt("soloaithuoc"));
-                            orderSupply.setTinhtrang(rs.getBoolean("tinhtrang"));
-                            orderSupply.setTongtien(rs.getInt("tongtien"));
-                            orderSupplies.add(orderSupply);
-                        }
-                        System.out.println("Truy vấn thành công");
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    } finally {
-                        data.SQL.closeConnection(sql);
-                    }
-                    
-                    supplierfilter(modelCollect, loC, orderSupplies);
-                }
+                orderSupply_BUS.orderSupplyFilter(loc_2, orderSupplies, modelCollect);
             }
         });
 
@@ -1036,10 +923,7 @@ public class employee_GUI extends JFrame {
         reset_2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                search_bar_2.setText("Nhập mã đơn...");
-                loc_2.setSelectedIndex(0);
-                orderSupplies.clear();
-                updateTableSupplier(modelCollect);
+                orderSupply_BUS.reset(search_bar_2, loc_2, orderSupplies, modelCollect);
             }
         });
 
@@ -1047,14 +931,7 @@ public class employee_GUI extends JFrame {
         tableCollect.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int selectColumn = tableCollect.getSelectedColumn();
-                if(selectColumn == 6) {
-                    int selectedRow = tableCollect.getSelectedRow();
-                    if(selectedRow != -1) {
-                        String mahdnhap = String.valueOf(modelCollect.getValueAt(selectedRow, 0));
-                        new orderSupply_GUI(mahdnhap);
-                    }
-                }
+                orderSupply_BUS.showDetails(tableCollect, modelCollect);
             }
 
             @Override
@@ -1084,7 +961,7 @@ public class employee_GUI extends JFrame {
 
         //Xử lý thuốc
         //Tự động cập nhật thông tin thuốc
-        updateTableMedic(modelMedic);
+        medicine_BUS.loadData(modelMedic);
 
         tableMedic.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -1125,10 +1002,7 @@ public class employee_GUI extends JFrame {
         log_out.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int choice = JOptionPane.showConfirmDialog(null, 
-                "Bạn có chắc muốn đăng xuất không?");
-                if(choice == 0) {
-                    new login_GUI();
+                if (medicine_BUS.logOut()) {
                     dispose();
                 }
             }
@@ -1146,14 +1020,7 @@ public class employee_GUI extends JFrame {
         tableMedic.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int selectColumn = tableMedic.getSelectedColumn();
-                if(selectColumn == 4) {
-                    int selectedRow = tableMedic.getSelectedRow();
-                    if(selectedRow != -1) {
-                        String mathuoc = String.valueOf(modelMedic.getValueAt(selectedRow, 0));
-                        new medicine_GUI(mathuoc);
-                    }
-                }
+                medicine_BUS.showDetails(tableMedic, modelMedic);
             }
 
             @Override
@@ -1186,15 +1053,7 @@ public class employee_GUI extends JFrame {
         suaMedic.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int selectedRow = tableMedic.getSelectedRow();
-                if(selectedRow != -1) {
-                    String mathuoc = String.valueOf(modelMedic.getValueAt(selectedRow, 0));
-                    medicine_DTO med = throwMedicineObj(mathuoc);
-                    if(med.getTinhtrang()) new medicineUpdate_GUI(modelMedic, mathuoc);
-                    else JOptionPane.showMessageDialog(null, 
-                    "Thông tin thuốc này đã ngừng hoạt động!");
-                }
-                System.out.println(selectedRow);
+                medicine_BUS.rectifyMedicine(tableMedic, modelMedic);
             }
         });
 
@@ -1202,47 +1061,7 @@ public class employee_GUI extends JFrame {
         xoaMedic.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int selectedRow = tableMedic.getSelectedRow();
-                if(selectedRow != -1) {
-                    String mathuoc = String.valueOf(modelMedic.getValueAt(selectedRow, 0));
-                    medicine_DTO med = throwMedicineObj(mathuoc);
-                    if(med.getTinhtrang()) {
-                        int choice = JOptionPane.showConfirmDialog(null, 
-                        "Bạn có chắc chắn xóa thông tin thuốc này không?");
-                        if (choice == 0) {
-                            med.setTinhtrang(false);
-                            medicineDAO medDAO = new medicineDAO();
-                            medDAO.update(med);
-
-                            storage_DTO str = throwStorageObj(med.getMaton());
-                            str.setTinhtrang(false);
-                            storageDAO strDAO = new storageDAO();
-                            strDAO.update(str);
-
-                            ArrayList<orderSupply_details_DTO> osds = new ArrayList<>();
-                            orderSupply_detailsDAO osdDAO = new orderSupply_detailsDAO();
-                            osds = osdDAO.selectByCondition("mathuoc = '" + med.getMathuoc() + "'");
-                            for (orderSupply_details_DTO osd : osds) {
-                                osd.setTinhtrang(false);
-                                osdDAO.update(osd);
-
-                                orderSupply_DTO os = new orderSupply_DTO();
-                                os.setMahdnhap(osd.getMahdnhap());
-                                orderSupplyDAO osDAO = new orderSupplyDAO();
-                                os = osDAO.selectByID(os);
-
-                                os.setTinhtrang(false);
-                                osDAO.update(os);
-                            }
-
-                            updateTableMedic(modelMedic);
-                            updateTableSupplier(modelCollect);
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, 
-                        "Thông tin thuốc này đã ngừng hoạt động!");
-                    }
-                }
+                medicine_BUS.deleteMedicine(tableMedic, modelMedic, modelCollect);
             }
         });
 
@@ -1250,19 +1069,7 @@ public class employee_GUI extends JFrame {
         search_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                medicine_DTO med = throwMedicineObj(search_bar_3.getText());
-                modelMedic.setRowCount(0);
-                JLabel statusImg;
-                System.out.println(med.getTinhtrang());
-                if(med.getTinhtrang()) {
-                    statusImg = new JLabel(data.imagePath.resize_check);
-                } else {
-                    statusImg = new JLabel(data.imagePath.resize_exitIcon);
-                }
-                JButton eyeButton = new JButton(data.imagePath.resize_eye);
-                modelMedic.addRow(new Object[]{med.getMathuoc(), 
-                med.getTenthuoc(), med.getDanhmuc(),
-                statusImg, eyeButton});
+                medicine_BUS.searchMedicine(search_bar_3, modelMedic);
             }
         });
 
@@ -1278,157 +1085,9 @@ public class employee_GUI extends JFrame {
         reset_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                search_bar_3.setText("Nhập mã thuốc...");
-                updateTableMedic(modelMedic);
+                medicine_BUS.reset(search_bar_3, modelMedic);
             }
         });
-    }
-
-    public static void updateTableSupplier(DefaultTableModel modelSupplier) {
-        modelSupplier.setRowCount(0);
-        
-        String command = "select mahdnhap, tenncc, soloaithuoc, ngaynhap, tongtien, HoaDonNhap.tinhtrang from HoaDonNhap, NhaCungCap where HoaDonNhap.mancc = NhaCungCap.mancc";
-        Connection sql = data.SQL.createConnection();
-
-        try {
-            PreparedStatement pst = sql.prepareStatement(command);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                String mahdnhap = rs.getString("mahdnhap");
-                String tenncc = rs.getString("tenncc");
-                int soloaithuoc = rs.getInt("soloaithuoc");
-                String ngaynhap = rs.getString("ngaynhap");
-                int tongtien = rs.getInt("tongtien");
-                Boolean tinhtrang = rs.getBoolean("tinhtrang");
-                JLabel statusImg;
-                if(tinhtrang) {
-                    statusImg = new JLabel(data.imagePath.resize_check);
-                } else {
-                    statusImg = new JLabel(data.imagePath.resize_exitIcon);
-                }
-                JButton eyeButton = new JButton(data.imagePath.resize_eye);
-                modelSupplier.addRow(new Object[]{mahdnhap, tenncc, soloaithuoc, ngaynhap, tongtien, statusImg, eyeButton});
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            data.SQL.closeConnection(sql);
-        }
-    }
-
-    public static void supplierfilter(DefaultTableModel modelSupplier, int loc, ArrayList<orderSupply_DTO> orderSupplies) {
-        System.out.println(loc);
-        if(loc == 1) {
-            for(int i = 0; i < orderSupplies.size() - 1; i++) {
-                for(int j = i + 1; j < orderSupplies.size(); j++) {
-                    if(orderSupplies.get(i).getTongtien() < orderSupplies.get(j).getTongtien()) {
-                        orderSupply_DTO temp = orderSupplies.get(i);
-                        orderSupplies.set(i, orderSupplies.get(j));
-                        orderSupplies.set(j, temp);
-                    }
-                }
-            }
-        } else if(loc == 2) {
-            for(int i = 0; i < orderSupplies.size() - 1; i++) {
-                for(int j = i + 1; j < orderSupplies.size(); j++) {
-                    if(orderSupplies.get(i).getTongtien() > orderSupplies.get(j).getTongtien()) {
-                        orderSupply_DTO temp = orderSupplies.get(i);
-                        orderSupplies.set(i, orderSupplies.get(j));
-                        orderSupplies.set(j, temp);
-                    }
-                }
-            }
-        } else if(loc == 3) {
-            for(int i = 0; i < orderSupplies.size() - 1; i++) {
-                for(int j = i + 1; j < orderSupplies.size(); j++) {
-                    if(advance.fulldate1BeforeFullDate2(orderSupplies.get(i).getNgaynhap(), orderSupplies.get(j).getNgaynhap())) {
-                        orderSupply_DTO temp = orderSupplies.get(i);
-                        orderSupplies.set(i, orderSupplies.get(j));
-                        orderSupplies.set(j, temp);
-                    }
-                }
-            }
-        } else if(loc == 4) {
-            for(int i = 0; i < orderSupplies.size() - 1; i++) {
-                for(int j = i + 1; j < orderSupplies.size(); j++) {
-                    if(!advance.fulldate1BeforeFullDate2(orderSupplies.get(i).getNgaynhap(), orderSupplies.get(j).getNgaynhap())) {
-                        orderSupply_DTO temp = orderSupplies.get(i);
-                        orderSupplies.set(i, orderSupplies.get(j));
-                        orderSupplies.set(j, temp);
-                    }
-                }
-            }
-        }
-
-        //lưu vào bảng
-        modelSupplier.setRowCount(0);
-        for (orderSupply_DTO orderSupply : orderSupplies) {
-            JLabel statusImg;
-            if(orderSupply.getTinhtrang()) {
-                statusImg = new JLabel(data.imagePath.resize_check);
-            } else {
-                statusImg = new JLabel(data.imagePath.resize_exitIcon);
-            }
-            JButton eyeButton = new JButton(data.imagePath.resize_eye);
-
-            orderSupplyDAO osDAO = new orderSupplyDAO();
-            orderSupply = osDAO.selectByID(orderSupply);
-
-            supplier_DTO sp = new supplier_DTO();
-            sp.setMancc(orderSupply.getMancc());
-            supplierDAO spDAO = new supplierDAO();
-            sp = spDAO.selectByID(sp);
-
-            modelSupplier.addRow(new Object[]{orderSupply.getMahdnhap(), sp.getTenncc(),
-            orderSupply.getSoloaithuoc(), orderSupply.getNgaynhap(),
-            orderSupply.getTongtien(), statusImg, eyeButton});
-        }
-    }
-
-    public static void updateTableMedic(DefaultTableModel modelMedic) {
-        modelMedic.setRowCount(0);
-        medicineDAO medDAO = new medicineDAO();
-        ArrayList<medicine_DTO> medicines = medDAO.selectAll();
-        for (medicine_DTO medicine : medicines) {
-            JLabel statusImg;
-            if(medicine.getTinhtrang()) {
-                statusImg = new JLabel(data.imagePath.resize_check);
-            } else {
-                statusImg = new JLabel(data.imagePath.resize_exitIcon);
-            }
-            JButton eyeButton = new JButton(data.imagePath.resize_eye);
-            modelMedic.addRow(new Object[]{medicine.getMathuoc(), 
-            medicine.getTenthuoc(), medicine.getDanhmuc(),
-            statusImg, eyeButton});
-        }
-    }
-
-    public static orderSupply_DTO throwOrderSupplyObj(String mahdnhap) {
-        orderSupply_DTO os = new orderSupply_DTO();
-        os.setMahdnhap(mahdnhap);
-        orderSupplyDAO osDAO = new orderSupplyDAO();
-        return osDAO.selectByID(os);
-    }
-
-    public static orderSupply_details_DTO throwOrderSupplyDetailsObj(String macthdnhap) {
-        orderSupply_details_DTO osd = new orderSupply_details_DTO();
-        osd.setMacthdnhap(macthdnhap);
-        orderSupply_detailsDAO osdDAO = new orderSupply_detailsDAO();
-        return osdDAO.selectByID(osd);
-    }
-
-    public static medicine_DTO throwMedicineObj(String mathuoc) {
-        medicine_DTO med = new medicine_DTO();
-        med.setMathuoc(mathuoc);
-        medicineDAO medDAO = new medicineDAO();
-        return medDAO.selectByID(med);
-    }
-
-    public static storage_DTO throwStorageObj(String maton) {
-        storage_DTO str = new storage_DTO();
-        str.setMaton(maton);
-        storageDAO strDAO = new storageDAO();
-        return strDAO.selectByID(str);
     }
 
     public static void main(String[] args) {
