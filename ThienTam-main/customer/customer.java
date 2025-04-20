@@ -20,10 +20,13 @@ public class customer {
     private ArrayList<medicine> giohang;
     private int diemKM;
 
+    private Boolean tinhtrang;
+
     public customer() {
     }
 
-    public customer(String makh, String tenkh, int sdt, String masonha, String duong, String phuong, String quan, String tinh, String email, String password, ArrayList<medicine> giohang, int diemKM) {
+    public customer(String makh, String tenkh, int sdt, String masonha, String duong, String phuong, String quan,
+            String tinh, String email, String password, ArrayList<medicine> giohang, int diemKM, Boolean tinhtrang) {
         this.makh = makh;
         this.tenkh = tenkh;
         this.sdt = sdt;
@@ -36,8 +39,8 @@ public class customer {
         this.password = password;
         this.giohang = giohang;
         this.diemKM = diemKM;
+        this.tinhtrang = tinhtrang;
     }
-
 
     public String getMakh() {
         return makh;
@@ -134,5 +137,13 @@ public class customer {
     public void setDiemKM(int diemKM) {
         this.diemKM = diemKM;
     }
-    
+
+    public Boolean getTinhtrang() {
+        return tinhtrang;
+    }
+
+    public void setTinhtrang(Boolean tinhtrang) {
+        this.tinhtrang = tinhtrang;
+    }
+
 }

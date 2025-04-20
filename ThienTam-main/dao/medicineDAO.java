@@ -38,8 +38,7 @@ public class medicineDAO {
                     ArrayList<String> donvi = advance.StringconvertToStringArrayList(donviStr);
                     ArrayList<String> doituongsudung = advance.StringconvertToStringArrayList(doituongStr);
                     ArrayList<Integer> giaban = advance.StringArrayListToIntArrayList(
-                        advance.StringconvertToStringArrayList(giabanStr)
-                    );
+                            advance.StringconvertToStringArrayList(giabanStr));
 
                     // Tạo đối tượng medicine
                     thuoc = new medicine(maThuoc, maton, tenthuoc, danhmuc, donvi, thanhphan,
@@ -52,4 +51,7 @@ public class medicineDAO {
 
         return thuoc;
     }
+
+
+
 }

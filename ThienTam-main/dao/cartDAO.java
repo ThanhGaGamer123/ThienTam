@@ -7,20 +7,14 @@ import java.sql.SQLException;
 
 public class cartDAO {
 
-    public void xoaSanPhamTrongGio(String makh, String mathuoc) {
-        try {
-            // Nạp driver JDBC
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+    public static void xoaSanPhamTrongGio(String makh, String mathuoc) {
+        String url = "jdbc:sqlserver://localhost:1433;databaseName=Thientam;encrypt=true;trustServerCertificate=true";
+        String username = "sa";
+        String password = "123";
 
-            // Kết nối SQL Server
-            String url = "jdbc:sqlserver://localhost:1433;databaseName=Thientam;encrypt=true;trustServerCertificate=true";
-            String username = "sa";
-            String password = "123";
-
-            try (Connection con = DriverManager.getConnection(url, username, password);
-                    PreparedStatement pst = con
-                            .prepareStatement("DELETE FROM GioHang WHERE MaKH = ? AND MaThuoc = ?")) {
-
+        try (Connection con = DriverManager.getConnection(url, username, password)) {
+            String sql = "DELETE FROM GioHang WHERE MaKH = ? AND MaThuoc = ?";
+            try (PreparedStatement pst = con.prepareStatement(sql)) {
                 pst.setString(1, makh);
                 pst.setString(2, mathuoc);
 
@@ -31,38 +25,42 @@ public class cartDAO {
                 } else {
                     System.out.println("Không tìm thấy sản phẩm để xoá.");
                 }
-
             } catch (SQLException e) {
                 System.out.println("Lỗi SQL khi xoá sản phẩm khỏi giỏ: " + e.getMessage());
+                e.printStackTrace();
             }
-
-        } catch (Exception e) {
-            System.out.println("Lỗi kết nối hoặc lỗi khác khi xoá giỏ hàng: " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Lỗi kết nối SQL: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    public void capNhatSoLuong(String makh, String mathuoc, int soluong) {
+    public static void capNhatSoLuong(String makh, String mathuoc, int soluong) {
         String url = "jdbc:sqlserver://localhost:1433;databaseName=Thientam;encrypt=true;trustServerCertificate=true";
         String username = "sa";
         String password = "123";
 
-        try (Connection conn = DriverManager.getConnection(url, username, password);
-                PreparedStatement stmt = conn
-                        .prepareStatement("UPDATE GioHang SET soluong = ? WHERE makh = ? AND mathuoc = ?")) {
+        try (Connection con = DriverManager.getConnection(url, username, password)) {
+            String sql = "UPDATE GioHang SET soluong = ? WHERE MaKH = ? AND MaThuoc = ?";
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setInt(1, soluong);
+                ps.setString(2, makh);
+                ps.setString(3, mathuoc);
 
-            stmt.setInt(1, soluong);
-            stmt.setString(2, makh);
-            stmt.setString(3, mathuoc);
-
-            int rows = stmt.executeUpdate();
-            if (rows > 0) {
-                System.out.println("Đã cập nhật số lượng thành công.");
-            } else {
-                System.out.println("Không tìm thấy sản phẩm để cập nhật.");
+                int rows = ps.executeUpdate();
+                if (rows > 0) {
+                    System.out.println("Đã cập nhật số lượng thành công.");
+                } else {
+                    System.out.println("Không tìm thấy sản phẩm để cập nhật.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Lỗi SQL khi cập nhật số lượng: " + e.getMessage());
+                e.printStackTrace();
             }
-
         } catch (SQLException e) {
+            System.out.println("Lỗi kết nối SQL: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 }

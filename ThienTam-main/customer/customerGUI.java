@@ -1,21 +1,16 @@
 package customer;
 
-import cart.cart;
 import cart.cartArr;
 import cart.cartGUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
 import javax.swing.*;
-
 import login.signup.login;
 import medicine.medicine;
 import medicine.medicineArr;
@@ -445,28 +440,35 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
             chinhgiua.setBackground(linen);
             productPanel.add(chinhgiua, BorderLayout.CENTER);
 
-            chinhgiua.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    chinhgiua.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Chuyển thành bàn tay
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    chinhgiua.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
-                }
-            });
-
             JPanel main_center = new JPanel();
             main_center.setBackground(hong);
             main_center.setLayout(new BorderLayout());
             main_center.setPreferredSize(new Dimension(0, 0));
+            main_center.setBorder(BorderFactory.createLineBorder(xanhla, 1));
             chinhgiua.add(main_center, BorderLayout.CENTER);
 
             JLabel test = new JLabel("" + (i + 1), SwingConstants.CENTER);
             test.setFont(new Font("Bookman", Font.PLAIN, 60));
             test.setForeground(xanhla);
             main_center.add(test, BorderLayout.CENTER);
+
+            chinhgiua.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    chinhgiua.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Chuyển thành bàn tay
+                    main_center.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+                    main_center.setBorder(BorderFactory.createLineBorder(hong, 2));
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    chinhgiua.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+                    main_center.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+                    main_center.setBorder(BorderFactory.createLineBorder(xanhla, 1));
+                }
+            });
 
             // TEN SAN PHAM------------------
             JPanel main_center_tensp = new JPanel();
@@ -550,6 +552,21 @@ public class customerGUI extends JFrame implements MouseListener, ActionListener
                     buy_btn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
                 }
             });
+
+            // main_center.addMouseListener(new MouseAdapter() {
+            // @Override
+            // public void mouseEntered(MouseEvent e) {
+            // main_center.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+            // main_center.setBorder(BorderFactory.createLineBorder(hong, 2));
+            // }
+
+            // @Override
+            // public void mouseExited(MouseEvent e) {
+            // main_center.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+            // main_center.setBorder(BorderFactory.createLineBorder(xanhla, 1));
+            // }
+            // });
 
             final medicine thuoc = productArr.get(i);
 

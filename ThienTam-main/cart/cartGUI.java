@@ -7,9 +7,11 @@ import dao.medicineDAO;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent; // Added correct import
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.event.DocumentListener;
@@ -21,6 +23,7 @@ public class cartGUI extends JFrame {
     private JPanel header, tail, body, giua;
     private JLabel title, cost, costreal, costvc, sosp;
     private JButton back;
+    // public JRadioButton checkbuy;
     private customerGUI khach;
     private customer khachCurrent;
     private medicineArr sanpham;
@@ -39,6 +42,8 @@ public class cartGUI extends JFrame {
     private static final Color xamnhat = new Color(237, 240, 243);
     private static final Color dodo = new Color(232, 58, 72);
     private cartArr giohang;
+    private ArrayList<sanphamchonmua> selectedProducts = new ArrayList<>();
+    private ArrayList<JRadioButton> checkboxes = new ArrayList<>();
 
     public cartGUI(customerGUI khach, customer khachCurrent) {
         this.khach = khach;
@@ -238,11 +243,23 @@ public class cartGUI extends JFrame {
         thanhtoan_btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Khách hàng trong CartGUI " + khachDangnhap);
+                System.out.println("Khách hàng trong CartGUI: " + khachDangnhap);
                 String nametemp = khachDangnhap.getTenkh();
                 System.out.println("Khách hàng trong CartGUI: " + nametemp);
 
-                new thanhtoanGUI(khach, cartGUI.this, khachDangnhap);
+                if (selectedProducts.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn ít nhất một sản phẩm để thanh toán.");
+                    return;
+                }
+
+                System.out.println("Các sản phẩm đã chọn để thanh toán:");
+                for (sanphamchonmua product : selectedProducts) {
+                    System.out.println("Mã thuốc: " + product.getMathuoc() +
+                            ", Tên thuốc: " + product.getTenthuoc() +
+                            ", Số lượng: " + product.getSoLuong());
+                }
+
+                new thanhtoanGUI(khach, cartGUI.this, khachDangnhap, selectedProducts);
 
                 dispose();
             }
@@ -253,6 +270,52 @@ public class cartGUI extends JFrame {
     private void showSP_incart() {
         giua.removeAll();
         ArrayList<cart> danhsachSPtronggio = giohang.getA();
+
+        JPanel pn_contain_btn = new JPanel();
+        pn_contain_btn.setLayout(new BoxLayout(pn_contain_btn, BoxLayout.X_AXIS));
+        pn_contain_btn.setBackground(linen);
+
+        Dimension fixedSize = new Dimension(Integer.MAX_VALUE, 20);
+        pn_contain_btn.setPreferredSize(fixedSize);
+        pn_contain_btn.setMaximumSize(fixedSize);
+        pn_contain_btn.setMinimumSize(new Dimension(0, 20));
+
+        JPanel nutChonTatCa = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 1));
+        JButton select_all_btn = new JButton("Chọn tất cả");
+        select_all_btn.setBackground(hong);
+        select_all_btn.setForeground(Color.black);
+        select_all_btn.setFont(new Font("Bookman", Font.BOLD, 12));
+        select_all_btn.setBorder(BorderFactory.createLineBorder(xanhla, 1));
+        select_all_btn.setPreferredSize(new Dimension(140, 18));
+        select_all_btn.setFocusPainted(false);
+
+        select_all_btn.setFocusable(false);
+        // nutChonTatCa.setOpaque(false);
+        // select_all_btn.setFocusable(false);
+        nutChonTatCa.add(select_all_btn);
+
+        JPanel delete_all_btn = new JPanel();
+        delete_all_btn.setBackground(linen);
+        pn_contain_btn.add(nutChonTatCa);
+
+        pn_contain_btn.add(delete_all_btn);
+
+        giua.add(pn_contain_btn);
+
+        select_all_btn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                select_all_btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Chuyển thành bàn tay
+                select_all_btn.setBorder(BorderFactory.createLineBorder(hong, 2));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                select_all_btn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+                select_all_btn.setBorder(BorderFactory.createLineBorder(xanhla, 1));
+
+            }
+        });
 
         for (cart c : danhsachSPtronggio) {
             medicine thuoc = medicineDAO.timThuocTheoMa(c.getMathuoc());
@@ -269,6 +332,7 @@ public class cartGUI extends JFrame {
             cot1.setOpaque(false);
 
             JRadioButton checkbuy = new JRadioButton();
+            checkboxes.add(checkbuy);
 
             JPanel hinhsp = new JPanel();
             hinhsp.setPreferredSize(new Dimension(60, 50));
@@ -280,11 +344,16 @@ public class cartGUI extends JFrame {
             cot1.add(hinhsp);
             cot1.add(Box.createHorizontalGlue());
 
-            checkbuy.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    updateTongTien();
+            checkbuy.addActionListener(e -> {
+                if (checkbuy.isSelected()) {
+                    // Thêm sản phẩm vào danh sách đã chọn
+                    selectedProducts.add(new sanphamchonmua(c.getMathuoc(), thuoc.getTenthuoc(), c.getSl(),
+                            String.join(", ", thuoc.getDonvi()), c.getDongia()));
+                } else {
+                    // Xóa sản phẩm khỏi danh sách đã chọn
+                    selectedProducts.removeIf(product -> product.getMathuoc().equals(c.getMathuoc()));
                 }
+                updateTongTien(); // Cập nhật tổng tiền
             });
 
             JPanel cot2 = new JPanel(new GridBagLayout());
@@ -307,7 +376,6 @@ public class cartGUI extends JFrame {
                 @Override
                 public void focusLost(FocusEvent e) {
                     try {
-
                         int newSL = Integer.parseInt(soluongnhap.getText());
                         if (newSL <= 0) {
                             JOptionPane.showMessageDialog(null, "Số lượng phải lớn hơn 0.");
@@ -320,12 +388,9 @@ public class cartGUI extends JFrame {
                             cartDAO dao = new cartDAO();
                             dao.capNhatSoLuong(khachCurrent.getMakh(), c.getMathuoc(), newSL);
 
-                            // Cập nhật lại giỏ hàng trong bộ nhớ
                             giohang.readCartDatabase(giohang.getA(), khachCurrent.getMakh());
 
-                            // Cập nhật giao diện (nếu cần update tổng tiền)
-                            showSP_incart();
-
+                            updateTongTien();
                         }
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(null, "Số lượng nhập không hợp lệ!");
@@ -395,6 +460,50 @@ public class cartGUI extends JFrame {
             giua.add(Box.createRigidArea(new Dimension(0, 10)));
             giua.add(spPanel);
         }
+
+        boolean[] allSelected = { false }; // Dùng mảng 1 phần tử để cho phép thay đổi bên trong listener
+
+        select_all_btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean allSelected = true; // Kiểm tra trạng thái chọn
+
+                // Đảo trạng thái cho checkbox
+                for (JRadioButton checkbox : checkboxes) {
+                    if (!checkbox.isSelected()) {
+                        allSelected = false; // Nếu có ít nhất một checkbox không được chọn, đặt allSelected thành false
+                        break;
+                    }
+                }
+
+                for (JRadioButton checkbox : checkboxes) {
+                    checkbox.setSelected(!allSelected);
+                    if (checkbox.isSelected()) {
+
+                        int index = checkboxes.indexOf(checkbox);
+                        cart c = danhsachSPtronggio.get(index);
+                        medicine thuoc = medicineDAO.timThuocTheoMa(c.getMathuoc());
+                        selectedProducts.add(new sanphamchonmua(c.getMathuoc(), thuoc.getTenthuoc(), c.getSl(),
+                                String.join(", ", thuoc.getDonvi()), c.getDongia()));
+                    } else {
+
+                        int index = checkboxes.indexOf(checkbox);
+                        cart c = danhsachSPtronggio.get(index);
+                        selectedProducts.removeIf(product -> product.getMathuoc().equals(c.getMathuoc()));
+                    }
+                }
+
+                updateTongTien();
+
+                if (allSelected) {
+                    select_all_btn.setText("Chọn tất cả");
+                    select_all_btn.setPreferredSize(new Dimension(120, 18));
+                } else {
+                    select_all_btn.setText("Bỏ chọn tất cả");
+                    select_all_btn.setPreferredSize(new Dimension(180, 18));
+                }
+            }
+        });
 
         giua.setPreferredSize(new Dimension(400, danhsachSPtronggio.size() * 90));
         giua.revalidate();

@@ -2,13 +2,13 @@ package cart;
 
 import customer.customer;
 import customer.customerGUI;
-import login.signup.login;
-// import medicine.productsArr; // Removed as the class does not exist or is not needed
-import medicine.medicineArr;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+import medicine.medicineArr;
 
 public class thanhtoanGUI extends JFrame {
     private JPanel header, tail, body, giua;
@@ -34,10 +34,14 @@ public class thanhtoanGUI extends JFrame {
     private medicineArr sanpham;
     private customer khachCurrent;
 
-    public thanhtoanGUI(customerGUI khach, cartGUI cart, customer khachCurrent) {
+    private ArrayList<sanphamchonmua> selectedProducts;
+
+    public thanhtoanGUI(customerGUI khach, cartGUI cart, customer khachCurrent,
+            ArrayList<sanphamchonmua> selectedProducts) {
         this.khach = khach;
         this.cart = cart;
         this.khachhang = khachCurrent;
+        this.selectedProducts = selectedProducts;
 
         setTitle("Thanh toán");
         setSize(1280, 720);
@@ -213,6 +217,51 @@ public class thanhtoanGUI extends JFrame {
         diaChiCuThe.setBorder(BorderFactory.createTitledBorder("Nhập địa chỉ cụ thể"));
         giua.add(diaChiCuThe, gbc1);
 
+        // o hien thi san pham
+        gbc1.gridy++;
+
+        JPanel danhsach_sp_pn = new JPanel();
+
+        danhsach_sp_pn.setLayout(new BoxLayout(danhsach_sp_pn, BoxLayout.Y_AXIS));
+        danhsach_sp_pn.setBackground(Color.WHITE);
+
+        for (int i = 0; i < selectedProducts.size(); i++) {
+            sanphamchonmua temp_medicine = selectedProducts.get(i);
+
+            JPanel rowsp = new JPanel(new GridLayout(1, 3)); // 1 dòng 3 cột bằng nhau
+            rowsp.setBorder(new LineBorder(xam, 1));
+            rowsp.setPreferredSize(new Dimension(500, 22));
+
+            JLabel tenthuoc = new JLabel("             " + (i + 1) + ")    " + temp_medicine.getTenthuoc(),
+                    SwingConstants.LEFT);
+            tenthuoc.setFont(new Font("Bookmap", Font.PLAIN, 13));
+            JLabel dongia = new JLabel(String.valueOf(temp_medicine.getDonGia()) + " đ", SwingConstants.CENTER);
+            dongia.setFont(new Font("Bookmap", Font.BOLD, 12));
+            JLabel soluong = new JLabel("x" + temp_medicine.getSoLuong(), SwingConstants.CENTER);
+            soluong.setFont(new Font("Arial", Font.BOLD, 12));
+
+            rowsp.add(tenthuoc);
+            rowsp.add(dongia);
+            rowsp.add(soluong);
+
+            danhsach_sp_pn.add(rowsp);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(danhsach_sp_pn);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+        // Panel bao ngoài có kích thước 500x50
+        JPanel sp_pn = new JPanel(new BorderLayout());
+
+        sp_pn.setPreferredSize(new Dimension(500, 55));
+        sp_pn.setBackground(hong); // Màu nền tùy ý
+        sp_pn.add(scrollPane, BorderLayout.CENTER);
+
+        // Thêm vào bố cục chính
+        giua.add(sp_pn, gbc1);
+
         // Ghi chú
         gbc1.gridy++;
         JTextArea ghiChu = new JTextArea(3, 20);
@@ -378,69 +427,6 @@ public class thanhtoanGUI extends JFrame {
 
         tail.add(detail_tail, gbc);
         add(tail, BorderLayout.SOUTH);
-    }
-
-    private void updateTongTien() {
-        int tongTien = 0;
-
-        int sumsp = 0;
-
-        Component[] components = giua.getComponents();
-        for (Component comp : components) {
-            if (comp instanceof JPanel spPanel) {
-                Component[] columns = spPanel.getComponents();
-                if (columns.length == 4) {
-                    JPanel cot1 = (JPanel) columns[0];
-                    JPanel cot3 = (JPanel) columns[2];
-                    JPanel cot4 = (JPanel) columns[3];
-
-                    // Lấy checkbox
-                    JRadioButton checkbox = null;
-                    for (Component child : cot1.getComponents()) {
-                        if (child instanceof JRadioButton cb) {
-                            checkbox = cb;
-                            break;
-                        }
-                    }
-
-                    // Lấy số lượng từ JTextField
-                    JTextField soluongField = null;
-                    for (Component child : cot3.getComponents()) {
-                        if (child instanceof JTextField tf) {
-                            soluongField = tf;
-                            break;
-                        }
-                    }
-
-                    // Lấy đơn giá từ JLabel
-                    int dongia = 0;
-                    for (Component child : cot4.getComponents()) {
-                        if (child instanceof JLabel label && label.getText().startsWith("Đơn giá: ")) {
-                            String text = label.getText().replaceAll("[^0-9]", "");
-                            if (!text.isEmpty())
-                                dongia = Integer.parseInt(text);
-                            break;
-                        }
-                    }
-
-                    // Nếu checkbox được chọn -> tính tiền
-                    if (checkbox != null && checkbox.isSelected() && soluongField != null) {
-                        try {
-                            int sl = Integer.parseInt(soluongField.getText());
-                            tongTien += sl * dongia;
-                            sumsp += sl;
-                        } catch (NumberFormatException ex) {
-                            // Bỏ qua nếu người dùng nhập không hợp lệ
-                        }
-                    }
-                }
-            }
-        }
-
-        cost.setText(tongTien + " đ");
-        costreal.setText(tongTien + "đ");
-        sosp.setText(Integer.toString(sumsp));
-
     }
 
 }

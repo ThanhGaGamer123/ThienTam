@@ -124,4 +124,6 @@ public class medicine {
         this.giaban = giaban;
     }
 
+
+
 }

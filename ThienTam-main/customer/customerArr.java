@@ -48,8 +48,8 @@ public class customerArr {
                             rs.getString("email"), // Email
                             rs.getString("passwordkh"), // Mật khẩu
                             new ArrayList<>(), // Giỏ hàng tạm thời
-                            rs.getInt("diemkm") // Điểm khách hàng
-                    );
+                            rs.getInt("diemkm"), // Điểm khách hàng
+                            rs.getBoolean(1));
                     a.add(kh); // Thêm khách hàng vào danh sách
                 }
 
