@@ -16,8 +16,8 @@ public class medicine_DAO implements DAO<medicine_DTO> {
         Connection sql = data.SQL.createConnection();
 
         //B2: tạo câu lệnh SQL
-        String command = "INSERT INTO Thuoc (mathuoc, tenthuoc, donvi, thanhphan, thongtin, xuatxu, danhmuc, giaban, maton, doituongsudung, tinhtrang) " +
-                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String command = "INSERT INTO Thuoc (mathuoc, tenthuoc, donvi, thanhphan, thongtin, xuatxu, danhmuc, giaban, maton, doituongsudung, hansudung, tinhtrang) " +
+                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         //B3: tạo prepare statement
         try (PreparedStatement pst = sql.prepareStatement(command)) {
@@ -29,10 +29,11 @@ public class medicine_DAO implements DAO<medicine_DTO> {
             pst.setString(5, t.getThongtin());
             pst.setString(6, t.getXuatxu());
             pst.setString(7, t.getDanhmuc());
-            pst.setString(8, advance.IntArrayListToString(t.getGiaban()));
+            pst.setString(8, advance.DoubleArrayListToString(t.getGiaban()));
             pst.setString(9, t.getMaton());
             pst.setString(10, advance.StringArrayListToString(t.getDoituongsudung()));
-            pst.setBoolean(11, t.getTinhtrang());
+            pst.setString(11, t.getHansudung());
+            pst.setBoolean(12, t.getTinhtrang());
 
             // B3: Thực thi câu lệnh
             int ketQua = pst.executeUpdate();
@@ -56,7 +57,7 @@ public class medicine_DAO implements DAO<medicine_DTO> {
         Connection sql = data.SQL.createConnection();
 
         //B2: tạo câu lệnh SQL
-        String command = "UPDATE Thuoc SET tenthuoc = ?, donvi = ?, thanhphan = ?, thongtin = ?, xuatxu = ?, danhmuc = ?, giaban = ?, maton = ?, doituongsudung = ?, tinhtrang = ? WHERE mathuoc = ?";
+        String command = "UPDATE Thuoc SET tenthuoc = ?, donvi = ?, thanhphan = ?, thongtin = ?, xuatxu = ?, danhmuc = ?, giaban = ?, maton = ?, doituongsudung = ?, hansudung = ?, tinhtrang = ? WHERE mathuoc = ?";
         
         //B3: tạo prepare statement
         try (PreparedStatement pst = sql.prepareStatement(command)) {
@@ -67,11 +68,12 @@ public class medicine_DAO implements DAO<medicine_DTO> {
             pst.setString(4, t.getThongtin());
             pst.setString(5, t.getXuatxu());
             pst.setString(6, t.getDanhmuc());
-            pst.setString(7, advance.IntArrayListToString(t.getGiaban()));
+            pst.setString(7, advance.DoubleArrayListToString(t.getGiaban()));
             pst.setString(8, t.getMaton());
             pst.setString(9, advance.StringArrayListToString(t.getDoituongsudung()));
-            pst.setBoolean(10, t.getTinhtrang());
-            pst.setString(11, t.getMathuoc());
+            pst.setString(10, t.getHansudung());
+            pst.setBoolean(11, t.getTinhtrang());
+            pst.setString(12, t.getMathuoc());
 
             // B3: Thực thi câu lệnh
             int ketQua = pst.executeUpdate();
@@ -133,9 +135,10 @@ public class medicine_DAO implements DAO<medicine_DTO> {
                 med.setThongtin(rs.getString("thongtin"));
                 med.setXuatxu(rs.getString("xuatxu"));
                 med.setDanhmuc(rs.getString("danhmuc"));
-                med.setGiaban(advance.StringArrayListToIntArrayList(advance.StringconvertToStringArrayList(rs.getString("giaban"))));
+                med.setGiaban(advance.StringArrayListToDoubleArrayList(advance.StringconvertToStringArrayList(rs.getString("giaban"))));
                 med.setMaton(rs.getString("maton"));
                 med.setDoituongsudung(advance.StringconvertToStringArrayList(rs.getString("doituongsudung")));
+                med.setHansudung(rs.getString("hansudung"));
                 med.setTinhtrang(rs.getBoolean("tinhtrang"));
                 medicines.add(med);
             }
@@ -167,9 +170,10 @@ public class medicine_DAO implements DAO<medicine_DTO> {
                 med.setThongtin(rs.getString("thongtin"));
                 med.setXuatxu(rs.getString("xuatxu"));
                 med.setDanhmuc(rs.getString("danhmuc"));
-                med.setGiaban(advance.StringArrayListToIntArrayList(advance.StringconvertToStringArrayList(rs.getString("giaban"))));
+                med.setGiaban(advance.StringArrayListToDoubleArrayList(advance.StringconvertToStringArrayList(rs.getString("giaban"))));
                 med.setMaton(rs.getString("maton"));
                 med.setDoituongsudung(advance.StringconvertToStringArrayList(rs.getString("doituongsudung")));
+                med.setHansudung(rs.getString("hansudung"));
                 med.setTinhtrang(rs.getBoolean("tinhtrang"));
                 medicines.add(med);
             }
@@ -202,9 +206,10 @@ public class medicine_DAO implements DAO<medicine_DTO> {
                     med.setThongtin(rs.getString("thongtin"));
                     med.setXuatxu(rs.getString("xuatxu"));
                     med.setDanhmuc(rs.getString("danhmuc"));
-                    med.setGiaban(advance.StringArrayListToIntArrayList(advance.StringconvertToStringArrayList(rs.getString("giaban"))));
+                    med.setGiaban(advance.StringArrayListToDoubleArrayList(advance.StringconvertToStringArrayList(rs.getString("giaban"))));
                     med.setMaton(rs.getString("maton"));
                     med.setDoituongsudung(advance.StringconvertToStringArrayList(rs.getString("doituongsudung")));
+                    med.setHansudung(rs.getString("hansudung"));
                     med.setTinhtrang(rs.getBoolean("tinhtrang"));
                 }
                 System.out.println("Truy vấn thành công");

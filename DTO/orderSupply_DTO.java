@@ -6,14 +6,14 @@ public class orderSupply_DTO {
 
     private int soloaithuoc;
     private String ngaynhap;
-    private int tongtien;
+    private double tongtien;
 
     private Boolean tinhtrang;
     
     public orderSupply_DTO() {
     }
 
-    public orderSupply_DTO(String mahdnhap, String mancc, int soloaithuoc, String ngaynhap, int tongtien,
+    public orderSupply_DTO(String mahdnhap, String mancc, int soloaithuoc, String ngaynhap, double tongtien,
             Boolean tinhtrang) {
         this.mahdnhap = mahdnhap;
         this.mancc = mancc;
@@ -55,11 +55,11 @@ public class orderSupply_DTO {
         this.ngaynhap = ngaynhap;
     }
 
-    public int getTongtien() {
+    public double getTongtien() {
         return tongtien;
     }
 
-    public void setTongtien(int tongtien) {
+    public void setTongtien(double tongtien) {
         this.tongtien = tongtien;
     }
 

@@ -21,8 +21,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 
 import BUS.medicine_BUS;
@@ -304,12 +306,50 @@ public class medicineAdd_GUI extends JFrame {
         gdc.weightx = 0;
         gdc.insets = new Insets(0, 100, 30, 100);
         main.add(dsdt, gdc);
+
+        JLabel hansudung = new JLabel("Hạn sử dụng:");
+        hansudung.setForeground(Color.BLACK);
+        hansudung.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 0;
+        gdc.gridy = 9;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.WEST;
+        gdc.fill = GridBagConstraints.NONE;
+        gdc.weightx = 0;
+        gdc.insets = new Insets(0, 100, 30, 0);
+        main.add(hansudung, gdc);
+
+        SpinnerNumberModel sp_model = new SpinnerNumberModel(0, 0, 36, 1);
+        JSpinner sp_hansudung = new JSpinner(sp_model);
+        sp_hansudung.setForeground(Color.BLACK);
+        sp_hansudung.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 1;
+        gdc.gridy = 9;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 10, 30, 10);
+        main.add(sp_hansudung, gdc);
+
+        String[] time = {"tháng", "năm"};
+        JComboBox cb_hansudung = new JComboBox(time);
+        cb_hansudung.setForeground(Color.BLACK);
+        cb_hansudung.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 2;
+        gdc.gridy = 9;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 10, 30, 10);
+        main.add(cb_hansudung, gdc);
         
         JButton finish = new JButton("Hoàn tất");
         finish.setForeground(Color.BLACK);
         finish.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 9;
+        gdc.gridy = 10;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -321,7 +361,7 @@ public class medicineAdd_GUI extends JFrame {
         reset.setForeground(Color.BLACK);
         reset.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 2;
-        gdc.gridy = 9;
+        gdc.gridy = 10;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -381,7 +421,8 @@ public class medicineAdd_GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(medicine_BUS.addMedicine(tf_tenthuoc, tf_danhmuc, ta_thanhphan, 
-                ta_thongtin, tf_xuatxu, hop, vi, vien, chosen, modelMedic)) {
+                ta_thongtin, tf_xuatxu, hop, vi, vien, chosen, modelMedic, sp_hansudung,
+                cb_hansudung)) {
                     dispose();
                 }
             }           
@@ -393,7 +434,7 @@ public class medicineAdd_GUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 medicine_BUS.resetAdd(tf_tenthuoc, tf_danhmuc, ta_thanhphan, 
                 ta_thongtin, hop, vi, vien, tf_xuatxu, cb_doituong, ds_doituong, 
-                chosen, khung_anh);
+                chosen, khung_anh, sp_hansudung, cb_hansudung);
             }
         });
 

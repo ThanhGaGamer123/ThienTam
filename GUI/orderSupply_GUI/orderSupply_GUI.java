@@ -7,8 +7,11 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,10 +22,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import BUS.orderSupply_BUS;
+import BUS.orderSupply_details_BUS;
 import advanceMethod.advance;
 
 public class orderSupply_GUI extends JFrame {
-    public orderSupply_GUI(String mahdnhap) {
+    public orderSupply_GUI(String mahdnhap, DefaultTableModel modelCollect) {
         this.setSize(1400, 600);
         this.setTitle("Thông tin đơn nhập");
         ImageIcon logo = new ImageIcon(advance.img+"logo.png");
@@ -53,7 +57,7 @@ public class orderSupply_GUI extends JFrame {
         gdc.insets = new Insets(20, 0, 30, 0);
         main.add(title, gdc);
 
-        String[] columns = {"Mã chi tiết đơn nhập", "Tên thuốc", "Số lượng nhập", "Giá nhập", "Thành tiền", "Số lượng còn", "Tình trạng"};
+        String[] columns = {"Mã chi tiết đơn nhập", "Tên thuốc", "Số lượng nhập", "Giá nhập", "Thành tiền", "Số lượng còn", "Tình trạng", ""};
         DefaultTableModel modelSupply = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -110,9 +114,59 @@ public class orderSupply_GUI extends JFrame {
                         return label;
             }
         });
+
+        tableSupply.getColumn("").setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JButton button = (value instanceof JButton) ? (JButton) value : new JButton();
+
+                if (isSelected) {
+                    button.setBackground(new Color(173, 216, 230)); // Màu nền sáng
+                } else {
+                    button.setBackground(Color.WHITE); // Màu nền mặc định
+                }
+        
+                button.setOpaque(true);
+                button.setBorderPainted(true);
+                return button;
+            }   
+        });
+    
+        //thu hồi chi tiết đơn hàng nhập
+        tableSupply.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                orderSupply_details_BUS.deleteOrderSupplyDetail(modelSupply, 
+                tableSupply, mahdnhap, modelCollect);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+        });
     }
 
     public static void main(String[] args) {
-        new orderSupply_GUI(null);
+        new orderSupply_GUI(null, null);
     }
 }

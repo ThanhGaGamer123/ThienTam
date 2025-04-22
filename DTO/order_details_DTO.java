@@ -6,19 +6,23 @@ public class order_details_DTO {
     private String macthdnhap;
 
     private int sl;
-    private int dongia;
-    private int thanhtien; //don gia * sl
+    private double dongia;
+    private double thanhtien; //don gia * sl
+
+    private Boolean tinhtrang;
     
     public order_details_DTO() {
     }
 
-    public order_details_DTO(String mactdh, String madon, String macthdnhap, int sl, int dongia, int thanhtien) {
+    public order_details_DTO(String mactdh, String madon, String macthdnhap, int sl, double dongia, double thanhtien,
+            Boolean tinhtrang) {
         this.mactdh = mactdh;
         this.madon = madon;
         this.macthdnhap = macthdnhap;
         this.sl = sl;
         this.dongia = dongia;
         this.thanhtien = thanhtien;
+        this.tinhtrang = tinhtrang;
     }
 
     public String getMactdh() {
@@ -53,19 +57,29 @@ public class order_details_DTO {
         this.sl = sl;
     }
 
-    public int getDongia() {
+    public double getDongia() {
         return dongia;
     }
 
-    public void setDongia(int dongia) {
+    public void setDongia(double dongia) {
         this.dongia = dongia;
     }
 
-    public int getThanhtien() {
+    public double getThanhtien() {
         return thanhtien;
     }
 
-    public void setThanhtien(int thanhtien) {
+    public void setThanhtien(double thanhtien) {
         this.thanhtien = thanhtien;
     }
+
+    public Boolean getTinhtrang() {
+        return tinhtrang;
+    }
+
+    public void setTinhtrang(Boolean tinhtrang) {
+        this.tinhtrang = tinhtrang;
+    }
+
+    
 }

@@ -529,7 +529,7 @@ public class employee_GUI extends JFrame {
         // reset
         gdc_medic.gridwidth = 1;
 
-        JTextField search_bar_3 = new JTextField("Nhập mã thuốc...");
+        JTextField search_bar_3 = new JTextField("Nhập tên thuốc...");
         search_bar_3.setForeground(Color.BLACK);
         search_bar_3.setFont(new Font(null, Font.PLAIN, 18));
         // search_bar_3.setBounds(300, 45, 200, 30);
@@ -840,7 +840,7 @@ public class employee_GUI extends JFrame {
 
         //xử lý đơn hàng nhập
         //cập nhật thông tin đơn hàng nhập
-        orderSupply_BUS.loadData(modelCollect);
+        orderSupply_BUS.loadData(modelCollect, true);
 
         tableCollect.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -961,7 +961,7 @@ public class employee_GUI extends JFrame {
 
         //Xử lý thuốc
         //Tự động cập nhật thông tin thuốc
-        medicine_BUS.loadData(modelMedic);
+        medicine_BUS.loadData(modelMedic, true);
 
         tableMedic.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
             @Override

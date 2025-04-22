@@ -9,8 +9,8 @@ public class orderSupply_details_DTO {
 
     private ArrayList<Integer> slnhap;
     private ArrayList<Integer> slcon;
-    private ArrayList<Integer> gianhap;
-    private int thanhtien;
+    private ArrayList<Double> gianhap;
+    private double thanhtien;
 
     private Boolean tinhtrang;
     
@@ -18,7 +18,7 @@ public class orderSupply_details_DTO {
     }
 
     public orderSupply_details_DTO(String macthdnhap, String mahdnhap, String mathuoc, ArrayList<Integer> slnhap,
-            ArrayList<Integer> slcon, ArrayList<Integer> gianhap, int thanhtien, Boolean tinhtrang) {
+            ArrayList<Integer> slcon, ArrayList<Double> gianhap, double thanhtien, Boolean tinhtrang) {
         this.macthdnhap = macthdnhap;
         this.mahdnhap = mahdnhap;
         this.mathuoc = mathuoc;
@@ -69,19 +69,19 @@ public class orderSupply_details_DTO {
         this.slcon = slcon;
     }
 
-    public ArrayList<Integer> getGianhap() {
+    public ArrayList<Double> getGianhap() {
         return gianhap;
     }
 
-    public void setGianhap(ArrayList<Integer> gianhap) {
+    public void setGianhap(ArrayList<Double> gianhap) {
         this.gianhap = gianhap;
     }
 
-    public int getThanhtien() {
+    public double getThanhtien() {
         return thanhtien;
     }
 
-    public void setThanhtien(int thanhtien) {
+    public void setThanhtien(double thanhtien) {
         this.thanhtien = thanhtien;
     }
 

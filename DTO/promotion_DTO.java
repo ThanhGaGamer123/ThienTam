@@ -9,17 +9,20 @@ public class promotion_DTO {
     private String noidung;
 
     private int diem;
+    private Boolean tinhtrang;
     
     public promotion_DTO() {
     }
 
-    public promotion_DTO(String makm, String tenkm, String ngaybatdau, String ngayketthuc, String noidung, int diem) {
+    public promotion_DTO(String makm, String tenkm, String ngaybatdau, String ngayketthuc, String noidung, int diem,
+            Boolean tinhtrang) {
         this.makm = makm;
         this.tenkm = tenkm;
         this.ngaybatdau = ngaybatdau;
         this.ngayketthuc = ngayketthuc;
         this.noidung = noidung;
         this.diem = diem;
+        this.tinhtrang = tinhtrang;
     }
 
     public String getMakm() {
@@ -69,4 +72,14 @@ public class promotion_DTO {
     public void setDiem(int diem) {
         this.diem = diem;
     }
+
+    public Boolean getTinhtrang() {
+        return tinhtrang;
+    }
+
+    public void setTinhtrang(Boolean tinhtrang) {
+        this.tinhtrang = tinhtrang;
+    }
+
+    
 }

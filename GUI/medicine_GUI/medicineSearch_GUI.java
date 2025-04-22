@@ -18,7 +18,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 
 import BUS.medicine_BUS;
@@ -217,9 +219,9 @@ public class medicineSearch_GUI extends JFrame {
         gdc.insets = new Insets(0, 100, 30, 100);
         main.add(dsdt, gdc);
 
-        JLabel giaban = new JLabel("Giá bán:");
-        giaban.setForeground(Color.BLACK);
-        giaban.setFont(new Font(null, Font.PLAIN, 20));
+        JLabel hansd = new JLabel("Hạn sử dụng:");
+        hansd.setForeground(Color.BLACK);
+        hansd.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
         gdc.gridy = 7;
         gdc.gridwidth = 1;
@@ -227,7 +229,33 @@ public class medicineSearch_GUI extends JFrame {
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
         gdc.insets = new Insets(0, 100, 30, 0);
-        main.add(giaban, gdc);
+        main.add(hansd, gdc);
+
+        SpinnerNumberModel sp_model = new SpinnerNumberModel(0, 0, 36, 1);
+        JSpinner sp_hansd = new JSpinner(sp_model);
+        sp_hansd.setForeground(Color.BLACK);
+        sp_hansd.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 1;
+        gdc.gridy = 7;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 10, 30, 80);
+        main.add(sp_hansd, gdc);
+
+        String[] time = {"tháng", "năm"};
+        JComboBox cb_hansd = new JComboBox(time);
+        cb_hansd.setForeground(Color.BLACK);
+        cb_hansd.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 2;
+        gdc.gridy = 7;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 10, 30, 80);
+        main.add(cb_hansd, gdc);
 
         JLabel gia_hop = new JLabel("Giá hộp:");
         gia_hop.setForeground(Color.BLACK);
@@ -241,17 +269,18 @@ public class medicineSearch_GUI extends JFrame {
         gdc.insets = new Insets(0, 100, 30, 0);
         main.add(gia_hop, gdc);
 
-        JTextField tf_gia_hop = new JTextField();
-        tf_gia_hop.setForeground(Color.BLACK);
-        tf_gia_hop.setFont(new Font(null, Font.PLAIN, 20));
+        SpinnerNumberModel sp_hop = new SpinnerNumberModel(0.0, 0.0, 10000000000.0, 1000.0);
+        JSpinner sp_gia_hop = new JSpinner(sp_hop);
+        sp_gia_hop.setForeground(Color.BLACK);
+        sp_gia_hop.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
         gdc.gridy = 8;
         gdc.gridwidth = 3;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 0, 30, 80);
-        main.add(tf_gia_hop, gdc);
+        gdc.insets = new Insets(0, 10, 30, 80);
+        main.add(sp_gia_hop, gdc);
 
         JLabel gia_vi = new JLabel("Giá vỉ:");
         gia_vi.setForeground(Color.BLACK);
@@ -265,17 +294,18 @@ public class medicineSearch_GUI extends JFrame {
         gdc.insets = new Insets(0, 100, 30, 0);
         main.add(gia_vi, gdc);
 
-        JTextField tf_gia_vi = new JTextField();
-        tf_gia_vi.setForeground(Color.BLACK);
-        tf_gia_vi.setFont(new Font(null, Font.PLAIN, 20));
+        SpinnerNumberModel sp_vi = new SpinnerNumberModel(0.0, 0.0, 10000000000.0, 1000.0);
+        JSpinner sp_gia_vi = new JSpinner(sp_vi);
+        sp_gia_vi.setForeground(Color.BLACK);
+        sp_gia_vi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
         gdc.gridy = 9;
         gdc.gridwidth = 3;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 0, 30, 80);
-        main.add(tf_gia_vi, gdc);
+        gdc.insets = new Insets(0, 10, 30, 80);
+        main.add(sp_gia_vi, gdc);
 
         JLabel gia_vien = new JLabel("Giá viên:");
         gia_vien.setForeground(Color.BLACK);
@@ -289,17 +319,18 @@ public class medicineSearch_GUI extends JFrame {
         gdc.insets = new Insets(0, 100, 30, 0);
         main.add(gia_vien, gdc);
 
-        JTextField tf_gia_vien = new JTextField();
-        tf_gia_vien.setForeground(Color.BLACK);
-        tf_gia_vien.setFont(new Font(null, Font.PLAIN, 20));
+        SpinnerNumberModel sp_vien = new SpinnerNumberModel(0.0, 0.0, 10000000000.0, 1000.0);
+        JSpinner sp_gia_vien = new JSpinner(sp_vien);
+        sp_gia_vien.setForeground(Color.BLACK);
+        sp_gia_vien.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
         gdc.gridy = 10;
         gdc.gridwidth = 3;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 0, 30, 80);
-        main.add(tf_gia_vien, gdc);
+        gdc.insets = new Insets(0, 10, 30, 80);
+        main.add(sp_gia_vien, gdc);
 
         JLabel tinhtrang = new JLabel("Tình trạng:");
         tinhtrang.setForeground(Color.BLACK);
@@ -323,7 +354,7 @@ public class medicineSearch_GUI extends JFrame {
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 0, 30, 80);
+        gdc.insets = new Insets(0, 10, 30, 80);
         main.add(cb_tinhtrang, gdc);
 
         JButton finish = new JButton("Hoàn tất");
@@ -335,7 +366,7 @@ public class medicineSearch_GUI extends JFrame {
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(0, 0, 30, 0);
+        gdc.insets = new Insets(0, 10, 30, 0);
         main.add(finish, gdc);
 
         JButton reset = new JButton("Đặt lại");
@@ -375,9 +406,9 @@ public class medicineSearch_GUI extends JFrame {
         finish.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                medicine_BUS.findMedicine(tf_gia_hop, tf_gia_vi, tf_gia_vien, 
+                medicine_BUS.findMedicine(sp_gia_hop, sp_gia_vi, sp_gia_vien, 
                 tf_mathuoc, tf_tenthuoc, tf_danhmuc, tf_xuatxu, chosen, cb_tinhtrang, 
-                modelMedic, modelMedicSupply);
+                modelMedic, modelMedicSupply, sp_hansd, cb_hansd);
             }
         });
 
@@ -385,8 +416,9 @@ public class medicineSearch_GUI extends JFrame {
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                medicine_BUS.resetFind(tf_mathuoc, tf_tenthuoc, tf_danhmuc, tf_gia_hop, 
-                tf_gia_vi, tf_gia_vien, tf_xuatxu, cb_doituong, ds_doituong, chosen);
+                medicine_BUS.resetFind(tf_mathuoc, tf_tenthuoc, tf_danhmuc, sp_gia_hop, 
+                sp_gia_vi, sp_gia_vien, tf_xuatxu, cb_doituong, ds_doituong, chosen,
+                sp_hansd, cb_hansd);
             }
         });
     }

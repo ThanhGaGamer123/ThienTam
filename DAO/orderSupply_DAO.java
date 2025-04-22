@@ -24,7 +24,7 @@ public class orderSupply_DAO implements DAO<orderSupply_DTO> {
             pst.setString(2, t.getMancc());
             pst.setInt(3, t.getSoloaithuoc());
             pst.setString(4, t.getNgaynhap());
-            pst.setInt(5, t.getTongtien());
+            pst.setDouble(5, t.getTongtien());
             pst.setBoolean(6, t.getTinhtrang());
 
             int ketQua = pst.executeUpdate();
@@ -49,7 +49,7 @@ public class orderSupply_DAO implements DAO<orderSupply_DTO> {
             pst.setString(1, t.getMancc());
             pst.setInt(2, t.getSoloaithuoc());
             pst.setString(3, t.getNgaynhap());
-            pst.setInt(4, t.getTongtien());
+            pst.setDouble(4, t.getTongtien());
             pst.setBoolean(5, t.getTinhtrang());
             pst.setString(6, t.getMahdnhap());
 
@@ -103,7 +103,7 @@ public class orderSupply_DAO implements DAO<orderSupply_DTO> {
                 orderSupply.setNgaynhap(rs.getString("ngaynhap"));
                 orderSupply.setSoloaithuoc(rs.getInt("soloaithuoc"));
                 orderSupply.setTinhtrang(rs.getBoolean("tinhtrang"));
-                orderSupply.setTongtien(rs.getInt("tongtien"));
+                orderSupply.setTongtien(rs.getDouble("tongtien"));
                 orderSupplies.add(orderSupply);
             }
             System.out.println("Truy vấn thành công");
@@ -133,7 +133,7 @@ public class orderSupply_DAO implements DAO<orderSupply_DTO> {
                 orderSupply.setNgaynhap(rs.getString("ngaynhap"));
                 orderSupply.setSoloaithuoc(rs.getInt("soloaithuoc"));
                 orderSupply.setTinhtrang(rs.getBoolean("tinhtrang"));
-                orderSupply.setTongtien(rs.getInt("tongtien"));
+                orderSupply.setTongtien(rs.getDouble("tongtien"));
                 orderSupplies.add(orderSupply);
             }
             System.out.println("Truy vấn thành công");
@@ -163,7 +163,7 @@ public class orderSupply_DAO implements DAO<orderSupply_DTO> {
                 orderSupply.setNgaynhap(rs.getString("ngaynhap"));
                 orderSupply.setSoloaithuoc(rs.getInt("soloaithuoc"));
                 orderSupply.setTinhtrang(rs.getBoolean("tinhtrang"));
-                orderSupply.setTongtien(rs.getInt("tongtien"));
+                orderSupply.setTongtien(rs.getDouble("tongtien"));
             }
             System.out.println("Truy vấn thành công");
         } catch (Exception e) {
@@ -175,7 +175,7 @@ public class orderSupply_DAO implements DAO<orderSupply_DTO> {
         return orderSupply;
     }
 
-    public void loadData(DefaultTableModel modelOrderSupply) {
+    public void loadData(DefaultTableModel modelOrderSupply, Boolean flag) {
         modelOrderSupply.setRowCount(0);
         
         String command = "select mahdnhap, tenncc, soloaithuoc, ngaynhap, tongtien, HoaDonNhap.tinhtrang from HoaDonNhap, NhaCungCap where HoaDonNhap.mancc = NhaCungCap.mancc";
@@ -189,7 +189,7 @@ public class orderSupply_DAO implements DAO<orderSupply_DTO> {
                 String tenncc = rs.getString("tenncc");
                 int soloaithuoc = rs.getInt("soloaithuoc");
                 String ngaynhap = rs.getString("ngaynhap");
-                int tongtien = rs.getInt("tongtien");
+                double tongtien = rs.getDouble("tongtien");
                 Boolean tinhtrang = rs.getBoolean("tinhtrang");
                 JLabel statusImg;
                 if(tinhtrang) {
@@ -198,7 +198,8 @@ public class orderSupply_DAO implements DAO<orderSupply_DTO> {
                     statusImg = new JLabel(data.imagePath.resize_exitIcon);
                 }
                 JButton eyeButton = new JButton(data.imagePath.resize_eye);
-                modelOrderSupply.addRow(new Object[]{mahdnhap, tenncc, soloaithuoc, ngaynhap, tongtien, statusImg, eyeButton});
+                if(flag && tinhtrang) modelOrderSupply.addRow(new Object[]{mahdnhap, tenncc, soloaithuoc, ngaynhap, tongtien, statusImg, eyeButton});
+                if(!flag) modelOrderSupply.addRow(new Object[]{mahdnhap, tenncc, soloaithuoc, ngaynhap, tongtien, statusImg, eyeButton});
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -222,7 +223,7 @@ public class orderSupply_DAO implements DAO<orderSupply_DTO> {
                 orderSupply.setNgaynhap(rs.getString("ngaynhap"));
                 orderSupply.setSoloaithuoc(rs.getInt("soloaithuoc"));
                 orderSupply.setTinhtrang(rs.getBoolean("tinhtrang"));
-                orderSupply.setTongtien(rs.getInt("tongtien"));
+                orderSupply.setTongtien(rs.getDouble("tongtien"));
                 orderSupplies.add(orderSupply);
             }
             System.out.println("Truy vấn thành công");

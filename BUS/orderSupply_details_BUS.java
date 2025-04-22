@@ -3,6 +3,7 @@ package BUS;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -12,11 +13,11 @@ import DTO.orderSupply_details_DTO;
 import advanceMethod.advance;
 
 public class orderSupply_details_BUS {
-    //orderSupply_details trong orderSupply
+    //orderSupply_details của orderSupply trong medicine
     public static void addOrderSupplyDetails(ArrayList<orderSupply_details_DTO> osds,
-    DefaultTableModel modelMedic, JTable tableMedic, JTextField tf_slnhap_hop,
-    JTextField tf_slnhap_vi, JTextField tf_slnhap_vien, JTextField tf_gianhap_hop,
-    JTextField tf_gianhap_vi, JTextField tf_gianhap_vien, DefaultTableModel modelSupply,
+    DefaultTableModel modelMedic, JTable tableMedic, JSpinner sp_slnhap_hop,
+    JSpinner sp_slnhap_vi, JSpinner sp_slnhap_vien, JSpinner sp_gianhap_hop,
+    JSpinner sp_gianhap_vi, JSpinner sp_gianhap_vien, DefaultTableModel modelSupply,
     JTextField tf_tenthuoc) {
         orderSupply_details_DTO osd = new orderSupply_details_DTO();
         ArrayList<orderSupply_details_DTO> osds2 = new ArrayList<>();
@@ -32,68 +33,38 @@ public class orderSupply_details_BUS {
             osd.setMathuoc(mathuoc);
         }
 
-        ArrayList<Integer> gianhap = new ArrayList<>();
-        Boolean flag = false;
+        ArrayList<Double> gianhap = new ArrayList<>();
         ArrayList<Integer> sl = new ArrayList<>();
-        if (!tf_slnhap_hop.getText().isEmpty() && advance.checkTextField(tf_slnhap_hop.getText())) {
-            sl.add(Integer.parseInt(tf_slnhap_hop.getText().toString()));
-        } else if (tf_slnhap_hop.getText().isEmpty()) {
-            sl.add(0);
-        } else flag = true;
-        if (!tf_slnhap_vi.getText().isEmpty() && advance.checkTextField(tf_slnhap_vi.getText())) {
-            sl.add(Integer.parseInt(tf_slnhap_vi.getText().toString()));
-        } else if (tf_slnhap_vi.getText().isEmpty()) {
-            sl.add(0);
-        } else flag = true;
-        if (!tf_slnhap_vien.getText().isEmpty() && advance.checkTextField(tf_slnhap_vien.getText())) {
-            sl.add(Integer.parseInt(tf_slnhap_vien.getText().toString()));
-        } else if (tf_slnhap_vien.getText().isEmpty()) {
-            sl.add(0);
-        } else flag = true;
+        sl.add(Integer.parseInt(sp_slnhap_hop.getValue().toString()));
+        sl.add(Integer.parseInt(sp_slnhap_vi.getValue().toString()));
+        sl.add(Integer.parseInt(sp_slnhap_vien.getValue().toString()));
         osd.setSlnhap(sl);
         osd.setSlcon(sl);
 
-        if(!flag) {
-            flag = false;
-            if (!tf_gianhap_hop.getText().isEmpty() && !tf_slnhap_hop.getText().isEmpty() && advance.checkTextField(tf_gianhap_hop.getText())) {
-                gianhap.add(Integer.parseInt(tf_gianhap_hop.getText().toString()));
-            } else if (tf_gianhap_hop.getText().isEmpty()) {
-                gianhap.add(0);
-            } else flag = true;
-            if (!tf_gianhap_vi.getText().isEmpty() && !tf_slnhap_vi.getText().isEmpty() && advance.checkTextField(tf_gianhap_vi.getText())) {
-                gianhap.add(Integer.parseInt(tf_gianhap_vi.getText().toString()));
-            } else if (tf_gianhap_vi.getText().isEmpty()) {
-                gianhap.add(0);
-            } else flag = true;
-            if (!tf_gianhap_vien.getText().isEmpty() && !tf_slnhap_vien.getText().isEmpty() && advance.checkTextField(tf_gianhap_vien.getText())) {
-                gianhap.add(Integer.parseInt(tf_gianhap_vien.getText().toString()));
-            } else if (tf_gianhap_vien.getText().isEmpty()) {
-                gianhap.add(0);
-            } else flag = true;
-            osd.setGianhap(gianhap);
+        gianhap.add(Double.parseDouble(sp_gianhap_hop.getValue().toString()));
+        gianhap.add(Double.parseDouble(sp_gianhap_vi.getValue().toString()));
+        gianhap.add(Double.parseDouble(sp_gianhap_vien.getValue().toString()));
+        osd.setGianhap(gianhap);
 
-            if (!flag) {
-                int thanhtien = 0;
-                for(int i = 0; i < 3; i++) {
-                    thanhtien = thanhtien + osd.getGianhap().get(i) * osd.getSlnhap().get(i);
-                }
-                osd.setThanhtien(thanhtien);
+        double thanhtien = 0;
+        for(int i = 0; i < 3; i++) {
+            thanhtien = thanhtien + osd.getGianhap().get(i) * osd.getSlnhap().get(i);
+        }
+        osd.setThanhtien(thanhtien);
 
-                osd.setTinhtrang(true);
+        osd.setTinhtrang(true);
 
-                osds.add(osd);
+        if(!tf_tenthuoc.getText().isEmpty()) osds.add(osd);
+        else JOptionPane.showMessageDialog(null, "Vui lòng chọn thuốc trước!");
 
-                orderSupply_BUS.updateTableSupply(modelSupply, osds);
+        orderSupply_BUS.updateTableSupply(modelSupply, osds);
 
-                tf_tenthuoc.setText("");
-                tf_gianhap_hop.setText("");
-                tf_slnhap_hop.setText("");
-                tf_gianhap_vi.setText("");
-                tf_slnhap_vi.setText("");
-                tf_gianhap_vien.setText("");
-                tf_slnhap_vien.setText("");
-            } else JOptionPane.showMessageDialog(null, "Giá nhập không hợp lệ hoặc không có số lượng!");
-        } else JOptionPane.showMessageDialog(null, "Số lượng không hợp lệ!");
+        sp_gianhap_hop.setValue(0);
+        sp_slnhap_hop.setValue(0);
+        sp_gianhap_vi.setValue(0);
+        sp_slnhap_vi.setValue(0);
+        sp_gianhap_vien.setValue(0);
+        sp_slnhap_vien.setValue(0);
     }
 
     public static void deleteOrderSupplyDetails(JTable tableSupply,
@@ -112,13 +83,45 @@ public class orderSupply_details_BUS {
                 osds.remove(temp);
 
                 ArrayList<orderSupply_details_DTO> osds2 = new ArrayList<>();
-                int i = 0 + osds2.size() + 1;
+                orderSupply_details_DAO osdDAO = new orderSupply_details_DAO();
+                osds2 = osdDAO.selectAll();
+                int i = 0 + osds2.size();
                 for (orderSupply_details_DTO osd : osds) {
                     osd.setMacthdnhap("CTN" + advance.calculateID(i));
                     i++;
                 }
 
                 orderSupply_BUS.updateTableSupply(modelSupply, osds);
+            }
+        }
+    }
+
+    //orderSupply_details trong oderSupply chi tiết
+    public static void deleteOrderSupplyDetail(DefaultTableModel modelSupply, 
+    JTable tableSupply, String mahdnhap, DefaultTableModel modelCollect) {
+        int selectedColumn = tableSupply.getSelectedColumn();
+        if(selectedColumn == 7) {
+            int selectedRow = tableSupply.getSelectedRow();
+            if(selectedRow != -1) {
+                int choice = JOptionPane.showConfirmDialog(null, 
+                "Bạn có chắc chắn xóa thông tin thuốc này không?");
+                if(choice == 0) {
+                    String macthdnhap = modelSupply.getValueAt(selectedRow, 0).toString();
+                    orderSupply_details_DTO osd = new orderSupply_details_DTO();
+                    osd.setMacthdnhap(macthdnhap);
+                    orderSupply_details_DAO osdDAO = new orderSupply_details_DAO();
+                    osd = osdDAO.selectByID(osd);
+                    if(osd.getTinhtrang()) {
+                        osd.setTinhtrang(false);
+                        osdDAO.update(osd);
+                        
+                        storage_BUS.decreaseStock(osd);
+                        orderSupply_BUS.checkOrderSupply(mahdnhap, modelCollect);
+                        orderSupply_BUS.loadOrderDetails(modelSupply, mahdnhap);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Chi tiết nhập này đã ngưng hoạt động!");
+                    }
+                }
             }
         }
     }

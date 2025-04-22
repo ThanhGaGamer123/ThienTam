@@ -15,17 +15,16 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import DAO.medicine_DAO;
-import DAO.orderSupply_DAO;
 import DAO.orderSupply_details_DAO;
 import DAO.storage_DAO;
 import DTO.medicine_DTO;
-import DTO.orderSupply_DTO;
 import DTO.orderSupply_details_DTO;
 import DTO.storage_DTO;
 import GUI.login_GUI;
@@ -34,8 +33,29 @@ import GUI.medicine_GUI.medicine_GUI;
 import advanceMethod.advance;
 
 public class medicine_BUS {
+    public static void updateSellPrice() {
+        ArrayList<orderSupply_details_DTO> osds = new ArrayList<>();
+        orderSupply_details_DAO osdDAO = new orderSupply_details_DAO();
+        osds = osdDAO.selectAll();
+        for (orderSupply_details_DTO osd : osds) {
+            if(osd.getTinhtrang()) {
+                medicine_DTO med = throwMedicineObj(osd.getMathuoc());
+                ArrayList<Double> giaban = med.getGiaban();
+                if(giaban.get(0) == 0.0 && osd.getGianhap().get(0) != 0.0)
+                    giaban.set(0, osd.getGianhap().get(0) * 1.2);
+                if(giaban.get(1) == 0.0 && osd.getGianhap().get(1) != 0.0)
+                    giaban.set(1, osd.getGianhap().get(1) * 1.2);
+                if(giaban.get(2) == 0.0 && osd.getGianhap().get(2) != 0.0)
+                    giaban.set(2, osd.getGianhap().get(2) * 1.2);
+                med.setGiaban(giaban);
+                medicine_DAO medDAO = new medicine_DAO();
+                medDAO.update(med);
+            }
+        }
+    }
+
     //medicine trong employee
-    public static void loadData(DefaultTableModel modelMedic) {
+    public static void loadData(DefaultTableModel modelMedic, Boolean flag) {
         modelMedic.setRowCount(0);
         medicine_DAO medDAO = new medicine_DAO();
         ArrayList<medicine_DTO> medicines = medDAO.selectAll();
@@ -47,9 +67,14 @@ public class medicine_BUS {
                 statusImg = new JLabel(data.imagePath.resize_exitIcon);
             }
             JButton eyeButton = new JButton(data.imagePath.resize_eye);
-            modelMedic.addRow(new Object[]{medicine.getMathuoc(), 
-            medicine.getTenthuoc(), medicine.getDanhmuc(),
-            statusImg, eyeButton});
+            if(flag && medicine.getTinhtrang()) 
+                modelMedic.addRow(new Object[]{medicine.getMathuoc(), 
+                medicine.getTenthuoc(), medicine.getDanhmuc(),
+                statusImg, eyeButton});
+            if(!flag)
+                modelMedic.addRow(new Object[]{medicine.getMathuoc(), 
+                medicine.getTenthuoc(), medicine.getDanhmuc(),
+                statusImg, eyeButton});
         }
     }
 
@@ -113,10 +138,7 @@ public class medicine_BUS {
                     medicine_DAO medDAO = new medicine_DAO();
                     medDAO.update(med);
 
-                    storage_DTO str = throwStorageObj(med.getMaton());
-                    str.setTinhtrang(false);
-                    storage_DAO strDAO = new storage_DAO();
-                    strDAO.update(str);
+                    storage_BUS.deleteStock(med);
 
                     ArrayList<orderSupply_details_DTO> osds = new ArrayList<>();
                     orderSupply_details_DAO osdDAO = new orderSupply_details_DAO();
@@ -124,18 +146,12 @@ public class medicine_BUS {
                     for (orderSupply_details_DTO osd : osds) {
                         osd.setTinhtrang(false);
                         osdDAO.update(osd);
-
-                        orderSupply_DTO os = new orderSupply_DTO();
-                        os.setMahdnhap(osd.getMahdnhap());
-                        orderSupply_DAO osDAO = new orderSupply_DAO();
-                        os = osDAO.selectByID(os);
-
-                        os.setTinhtrang(false);
-                        osDAO.update(os);
+                        orderSupply_BUS.checkOrderSupply(osd.getMahdnhap(), modelCollect);
                     }
 
-                    loadData(modelMedic);
-                    orderSupply_BUS.loadData(modelCollect);
+                    storage_BUS.decreaseStock(osds);
+                    loadData(modelMedic, true);
+                    orderSupply_BUS.loadData(modelCollect, true);
                 }
             } else {
                 JOptionPane.showMessageDialog(null, 
@@ -145,24 +161,28 @@ public class medicine_BUS {
     }
 
     public static void searchMedicine(JTextField search_bar_3, DefaultTableModel modelMedic) {
-        medicine_DTO med = throwMedicineObj(search_bar_3.getText());
+        ArrayList<medicine_DTO> meds = new ArrayList<>();
+        medicine_DAO medDAO = new medicine_DAO();
+        meds = medDAO.selectByCondition("tenthuoc like N'%" + search_bar_3.getText() + "%'");
         modelMedic.setRowCount(0);
-        JLabel statusImg;
-        System.out.println(med.getTinhtrang());
-        if(med.getTinhtrang()) {
-            statusImg = new JLabel(data.imagePath.resize_check);
-        } else {
-            statusImg = new JLabel(data.imagePath.resize_exitIcon);
+        for (medicine_DTO med : meds) {
+            JLabel statusImg;
+            System.out.println(med.getTinhtrang());
+            if(med.getTinhtrang()) {
+                statusImg = new JLabel(data.imagePath.resize_check);
+            } else {
+                statusImg = new JLabel(data.imagePath.resize_exitIcon);
+            }
+            JButton eyeButton = new JButton(data.imagePath.resize_eye);
+            modelMedic.addRow(new Object[]{med.getMathuoc(), 
+            med.getTenthuoc(), med.getDanhmuc(),
+            statusImg, eyeButton});
         }
-        JButton eyeButton = new JButton(data.imagePath.resize_eye);
-        modelMedic.addRow(new Object[]{med.getMathuoc(), 
-        med.getTenthuoc(), med.getDanhmuc(),
-        statusImg, eyeButton});
     }
 
     public static void reset(JTextField search_bar_3, DefaultTableModel modelMedic) {
-        search_bar_3.setText("Nhập mã thuốc...");
-        loadData(modelMedic);
+        search_bar_3.setText("Nhập tên thuốc...");
+        loadData(modelMedic, true);
     }
 
     //medicine chi tiết
@@ -171,7 +191,7 @@ public class medicine_BUS {
     JTextArea ta_thanhphan, JTextArea ta_thongtin, JTextField tf_xuatxu,
     JTextField tf_dsdt, JTextField tf_tinhtrang, JLabel khung_anh,
     JTextField tf_giahop, JTextField tf_giavi, JTextField tf_giavien,
-    JTextField tf_slhop, JTextField tf_slvi, JTextField tf_slvien) {
+    JTextField tf_slhop, JTextField tf_slvi, JTextField tf_slvien, JTextField tf_hansd) {
         ArrayList<String> chosen = new ArrayList<>(); //ds đối tượng sử dụng
 
         medicine_DTO med = throwMedicineObj(mathuoc);
@@ -187,6 +207,7 @@ public class medicine_BUS {
         chosen.addAll(med.getDoituongsudung());
         String dsdtsd = String.join(", ", chosen);
         tf_dsdt.setText(dsdtsd);
+        tf_hansd.setText(med.getHansudung());
         if(med.getTinhtrang()) tf_tinhtrang.setText("Đang hoạt động");
         else tf_tinhtrang.setText("Ngừng hoạt động");
 
@@ -195,7 +216,7 @@ public class medicine_BUS {
         ImageIcon anh_scaled = new ImageIcon(anh_scale);
         khung_anh.setIcon(anh_scaled);
 
-        ArrayList<String> giaban = advance.IntArrayListToStringArrayList(med.getGiaban());
+        ArrayList<String> giaban = advance.DoubleArrayListToStringArrayList(med.getGiaban());
         tf_giahop.setText(giaban.get(0));
         tf_giavi.setText(giaban.get(1));
         tf_giavien.setText(giaban.get(2));
@@ -229,12 +250,13 @@ public class medicine_BUS {
     public static Boolean addMedicine(JTextField tf_tenthuoc, JTextField tf_danhmuc,
     JTextArea ta_thanhphan, JTextArea ta_thongtin, JTextField tf_xuatxu,
     JCheckBox hop, JCheckBox vi, JCheckBox vien, ArrayList<String> chosen,
-    DefaultTableModel modelMedic) {
+    DefaultTableModel modelMedic, JSpinner sp_hansd, JComboBox cb_hansd) {
         //kiểm tra form
         Boolean found = false;
         if(tf_tenthuoc.getText().isEmpty() || tf_danhmuc.getText().isEmpty()
         || ta_thanhphan.getText().isEmpty() || ta_thongtin.getText().isEmpty()
-        || tf_xuatxu.getText().isEmpty()) found = true;
+        || tf_xuatxu.getText().isEmpty() || sp_hansd.getValue().toString().equals("0")) 
+            found = true;
 
         if(found) JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ tất cả thông tin chính xác!");
         else {
@@ -245,21 +267,7 @@ public class medicine_BUS {
             med.setMathuoc("MTH"+advance.calculateID(temp_1.size()));
 
             //tạo dữ liệu tồn trong kho
-            storage_DAO strDAO = new storage_DAO();
-            ArrayList<storage_DTO> temp_2 = strDAO.selectAll();
-            storage_DTO str = new storage_DTO();
-            med.setMaton("MTO"+advance.calculateID(temp_2.size()));
-            str.setMaton(med.getMaton());
-
-            ArrayList<Integer> slton = new ArrayList<>();
-            slton.add(0);
-            slton.add(0);
-            slton.add(0);
-            str.setSlton(slton);
-
-            str.setTinhtrang(true);
-
-            strDAO.add(str);
+            storage_BUS.createStock(med);
 
             med.setTenthuoc(tf_tenthuoc.getText());
             med.setDanhmuc(tf_danhmuc.getText());
@@ -280,16 +288,19 @@ public class medicine_BUS {
                 med.setDoituongsudung(temp);
             } else med.setDoituongsudung(chosen);
 
-            ArrayList<Integer> giaban = new ArrayList<>();
-            giaban.add(0);
-            giaban.add(0);
-            giaban.add(0);
+            String hansudung = sp_hansd.getValue().toString() + " " + cb_hansd.getSelectedItem().toString();
+            med.setHansudung(hansudung);
+
+            ArrayList<Double> giaban = new ArrayList<>();
+            giaban.add(0.0);
+            giaban.add(0.0);
+            giaban.add(0.0);
             med.setGiaban(giaban);
 
             med.setTinhtrang(true);
 
             medDAO.add(med);
-            loadData(modelMedic);
+            loadData(modelMedic, true);
             return true;
         }
 
@@ -299,7 +310,7 @@ public class medicine_BUS {
     public static void resetAdd(JTextField tf_tenthuoc, JTextField tf_danhmuc,
     JTextArea ta_thanhphan, JTextArea ta_thongtin, JCheckBox hop, JCheckBox vi,
     JCheckBox vien, JTextField tf_xuatxu, JComboBox cb_doituong, JLabel ds_doituong,
-    ArrayList<String> chosen, JLabel khung_anh) {
+    ArrayList<String> chosen, JLabel khung_anh, JSpinner sp_hansd, JComboBox cb_hansd) {
         tf_tenthuoc.setText("");
         tf_danhmuc.setText("");
         hop.setSelected(false);
@@ -311,6 +322,8 @@ public class medicine_BUS {
         cb_doituong.setSelectedIndex(0);
         ds_doituong.setText("Danh sách đối tượng sử dụng: ");
         chosen.clear();
+        sp_hansd.setValue(0);
+        cb_hansd.setSelectedIndex(0);
         khung_anh.setIcon(null);
     }
 
@@ -343,97 +356,94 @@ public class medicine_BUS {
     }
 
     //medicine tìm kiếm
-    public static void findMedicine(JTextField tf_gia_hop, JTextField tf_gia_vi,
-    JTextField tf_gia_vien, JTextField tf_mathuoc, JTextField tf_tenthuoc,
+    public static void findMedicine(JSpinner sp_gia_hop, JSpinner sp_gia_vi,
+    JSpinner sp_gia_vien, JTextField tf_mathuoc, JTextField tf_tenthuoc,
     JTextField tf_danhmuc, JTextField tf_xuatxu, ArrayList<String> chosen,
-    JComboBox cb_tinhtrang, DefaultTableModel modelMedic, DefaultTableModel modelMedicSupply) {
+    JComboBox cb_tinhtrang, DefaultTableModel modelMedic, DefaultTableModel modelMedicSupply,
+    JSpinner sp_hansd, JComboBox cb_hansd) {
         ArrayList<String> allPrice = new ArrayList<>();
-        Boolean price = true;
-        if(!tf_gia_hop.getText().isEmpty() && !advance.checkTextField(tf_gia_hop.getText())) price = false;
-        else if(!tf_gia_hop.getText().isEmpty()) allPrice.add(tf_gia_hop.getText());
+        allPrice.add(sp_gia_hop.getValue().toString());
+        allPrice.add(sp_gia_vi.getValue().toString());
+        allPrice.add(sp_gia_vien.getValue().toString());
+        ArrayList<String> condition = new ArrayList<>();
+        if(!tf_mathuoc.getText().isEmpty()) condition.add("mathuoc like N'%" + tf_mathuoc.getText() + "%' ");
+        if(!tf_tenthuoc.getText().isEmpty()) condition.add("tenthuoc like N'%" + tf_tenthuoc.getText() + "%' ");
+        if(!tf_danhmuc.getText().isEmpty()) condition.add("danhmuc like N'%" + tf_danhmuc.getText() + "%' ");
+        if(!tf_xuatxu.getText().isEmpty()) condition.add("xuatxu like N'%" + tf_xuatxu.getText() + "%' ");
+        if(!chosen.isEmpty()) condition.add("doituongsudung like N'%" + advance.StringArrayListToString(chosen) + "%' ");
+        condition.add("giaban like N'%" + advance.StringArrayListToString(allPrice) + "%' ");
+        String tt = String.valueOf(cb_tinhtrang.getSelectedItem());
+        if(tt.equals("Đang hoạt động")) {
+            condition.add("tinhtrang = 1 ");
+        } else if (tt.equals("Ngừng hoạt động")) {
+            condition.add("tinhtrang = 0 ");
+        }
+        if(!sp_hansd.getValue().toString().equals("0")) {
+            condition.add("hansudung like N'%" + sp_hansd.getValue().toString() + " " + cb_hansd.getSelectedItem().toString() + "%' ");
+        }
+        String result = String.join("and ", condition);
 
-        if(!tf_gia_vi.getText().isEmpty() && !advance.checkTextField(tf_gia_vi.getText())) price = false;
-        else if(!tf_gia_vi.getText().isEmpty()) allPrice.add(tf_gia_vi.getText());
+        medicine_DAO medDAO = new medicine_DAO();
+        ArrayList<medicine_DTO> medicines = medDAO.selectByCondition(result);
 
-        if(!tf_gia_vien.getText().isEmpty() && !advance.checkTextField(tf_gia_vien.getText())) price = false;
-        else if(!tf_gia_vien.getText().isEmpty()) allPrice.add(tf_gia_vien.getText());
-
-        if(!price) JOptionPane.showMessageDialog(null, "Giá bán phải là số. Vui lòng nhập lại!");
-        else {
-            ArrayList<String> condition = new ArrayList<>();
-            if(!tf_mathuoc.getText().isEmpty()) condition.add("mathuoc like N'%" + tf_mathuoc.getText() + "%' ");
-            if(!tf_tenthuoc.getText().isEmpty()) condition.add("tenthuoc like N'%" + tf_tenthuoc.getText() + "%' ");
-            if(!tf_danhmuc.getText().isEmpty()) condition.add("danhmuc like N'%" + tf_danhmuc.getText() + "%' ");
-            if(!tf_xuatxu.getText().isEmpty()) condition.add("xuatxu like N'%" + tf_xuatxu.getText() + "%' ");
-            if(chosen.size() != 0) condition.add("doituongsudung like N'%" + advance.StringArrayListToString(chosen) + "%' ");
-            condition.add("giaban like N'%" + advance.StringArrayListToString(allPrice) + "%' ");
-            String tt = String.valueOf(cb_tinhtrang.getSelectedItem());
-            if(tt.equals("Đang hoạt động")) {
-                condition.add("tinhtrang = 1 ");
-            } else if (tt.equals("Ngừng hoạt động")) {
-                condition.add("tinhtrang = 0 ");
+        if(modelMedic == null) {
+            modelMedicSupply.setRowCount(0);
+            for (medicine_DTO medicine : medicines) {
+                JLabel statusImg;
+                System.out.println(medicine.getTinhtrang());
+                if(medicine.getTinhtrang()) {
+                    statusImg = new JLabel(data.imagePath.resize_check);
+                } else {
+                    statusImg = new JLabel(data.imagePath.resize_exitIcon);
+                }
+                JButton chooseButton = new JButton("Chọn");
+                chooseButton.setForeground(Color.BLACK);
+                chooseButton.setFont(new Font(null, Font.PLAIN, 18));
+                modelMedicSupply.addRow(new Object[]{medicine.getMathuoc(), 
+                medicine.getTenthuoc(), statusImg, chooseButton});
             }
-            String result = String.join("and ", condition);
-
-            medicine_DAO medDAO = new medicine_DAO();
-            ArrayList<medicine_DTO> medicines = medDAO.selectByCondition(result);
-
-            if(modelMedic == null) {
-                modelMedicSupply.setRowCount(0);
-                for (medicine_DTO medicine : medicines) {
-                    JLabel statusImg;
-                    System.out.println(medicine.getTinhtrang());
-                    if(medicine.getTinhtrang()) {
-                        statusImg = new JLabel(data.imagePath.resize_check);
-                    } else {
-                        statusImg = new JLabel(data.imagePath.resize_exitIcon);
-                    }
-                    JButton chooseButton = new JButton("Chọn");
-                    chooseButton.setForeground(Color.BLACK);
-                    chooseButton.setFont(new Font(null, Font.PLAIN, 18));
-                    modelMedicSupply.addRow(new Object[]{medicine.getMathuoc(), 
-                    medicine.getTenthuoc(), statusImg, chooseButton});
+        } else {
+            modelMedic.setRowCount(0);
+            for (medicine_DTO medicine : medicines) {
+                JLabel statusImg;
+                System.out.println(medicine.getTinhtrang());
+                if(medicine.getTinhtrang()) {
+                    statusImg = new JLabel(data.imagePath.resize_check);
+                } else {
+                    statusImg = new JLabel(data.imagePath.resize_exitIcon);
                 }
-            } else {
-                modelMedic.setRowCount(0);
-                for (medicine_DTO medicine : medicines) {
-                    JLabel statusImg;
-                    System.out.println(medicine.getTinhtrang());
-                    if(medicine.getTinhtrang()) {
-                        statusImg = new JLabel(data.imagePath.resize_check);
-                    } else {
-                        statusImg = new JLabel(data.imagePath.resize_exitIcon);
-                    }
-                    JButton eyeButton = new JButton(data.imagePath.resize_eye);
-                    modelMedic.addRow(new Object[]{medicine.getMathuoc(), 
-                    medicine.getTenthuoc(), medicine.getDanhmuc(),
-                    statusImg, eyeButton});
-                }
+                JButton eyeButton = new JButton(data.imagePath.resize_eye);
+                modelMedic.addRow(new Object[]{medicine.getMathuoc(), 
+                medicine.getTenthuoc(), medicine.getDanhmuc(),
+                statusImg, eyeButton});
             }
         }
     }
 
     public static void resetFind(JTextField tf_mathuoc ,JTextField tf_tenthuoc, 
-    JTextField tf_danhmuc, JTextField tf_gia_hop, JTextField tf_gia_vi, 
-    JTextField tf_gia_vien, JTextField tf_xuatxu, JComboBox cb_doituong, 
-    JLabel ds_doituong, ArrayList<String> chosen) {
+    JTextField tf_danhmuc, JSpinner sp_gia_hop, JSpinner sp_gia_vi, 
+    JSpinner sp_gia_vien, JTextField tf_xuatxu, JComboBox cb_doituong, 
+    JLabel ds_doituong, ArrayList<String> chosen, JSpinner sp_hansd, JComboBox cb_hansd) {
         tf_mathuoc.setText("");
         tf_tenthuoc.setText("");
         tf_danhmuc.setText("");
         tf_xuatxu.setText("");
-        tf_gia_hop.setText("");
-        tf_gia_vi.setText("");
-        tf_gia_vien.setText("");
+        sp_gia_hop.setValue(0.0);
+        sp_gia_vi.setValue(0.0);
+        sp_gia_vien.setValue(0.0);
         cb_doituong.setSelectedIndex(0);
         ds_doituong.setText("Danh sách đối tượng sử dụng: ");
         chosen.clear();
+        sp_hansd.setValue(0);
+        cb_hansd.setSelectedIndex(0);
     }
 
     //medicine cập nhật
     public static void loadUpdateMedicine(String mathuoc, JTextField tf_tenthuoc,
     JTextField tf_danhmuc, JCheckBox hop, JCheckBox vi, JCheckBox vien,
     JTextArea ta_thanhphan, JTextArea ta_thongtin, JTextField tf_xuatxu,
-    ArrayList<String> chosen, JLabel ds_doituong, JLabel khung_anh) {
+    ArrayList<String> chosen, JLabel ds_doituong, JLabel khung_anh, JSpinner sp_hansd,
+    JComboBox cb_hansd) {
         medicine_DTO med = throwMedicineObj(mathuoc);
         tf_tenthuoc.setText(med.getTenthuoc());
         tf_danhmuc.setText(med.getDanhmuc());
@@ -464,6 +474,11 @@ public class medicine_BUS {
             }
         }
         if(!found) ds_doituong.setText("Danh sách đối tượng sử dụng: " + result);
+        String[] time = med.getHansudung().split(" ");
+        sp_hansd.setValue(Integer.parseInt(time[0]));
+        System.out.println(Integer.parseInt(time[0]));
+        if(time[1].equals("tháng")) cb_hansd.setSelectedItem("tháng");
+        else cb_hansd.setSelectedItem("năm");
         ImageIcon anh = new ImageIcon(advance.medIMG + mathuoc + ".png");
         Image anh_scale = anh.getImage().getScaledInstance(khung_anh.getWidth(), khung_anh.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon anh_scaled = new ImageIcon(anh_scale);
@@ -473,12 +488,13 @@ public class medicine_BUS {
     public static Boolean updateMedicine(JTextField tf_tenthuoc, JTextField tf_danhmuc,
     JTextArea ta_thanhphan, JTextArea ta_thongtin, JTextField tf_xuatxu,
     String mathuoc, JCheckBox hop, JCheckBox vi, JCheckBox vien,
-    ArrayList<String> chosen, DefaultTableModel modelMedic) {
+    ArrayList<String> chosen, DefaultTableModel modelMedic, JSpinner sp_hansd,
+    JComboBox cb_hansd) {
         //kiểm tra form
         Boolean found = false;
         if(tf_tenthuoc.getText().isEmpty() || tf_danhmuc.getText().isEmpty()
         || ta_thanhphan.getText().isEmpty() || ta_thongtin.getText().isEmpty()
-        || tf_xuatxu.getText().isEmpty()) found = true;
+        || tf_xuatxu.getText().isEmpty() || sp_hansd.getValue().toString() == "0") found = true;
 
         if(found) JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ tất cả thông tin chính xác!");
         else {
@@ -510,12 +526,15 @@ public class medicine_BUS {
                 med.setDoituongsudung(temp);
             } else med.setDoituongsudung(chosen);
 
+            String hansudung = sp_hansd.getValue().toString() + " " + cb_hansd.getSelectedItem().toString();
+            med.setHansudung(hansudung);
+
             med.setGiaban(old_med.getGiaban());
 
             med.setTinhtrang(true);
 
             medDAO.update(med);
-            loadData(modelMedic);
+            loadData(modelMedic, true);
             return true;
         }
 
@@ -525,7 +544,7 @@ public class medicine_BUS {
     public static void resetUpdate(String mathuoc, JTextField tf_tenthuoc, JTextField tf_danhmuc,
     JCheckBox hop, JCheckBox vi, JCheckBox vien, JTextArea ta_thanhphan,
     JTextArea ta_thongtin, JTextField tf_xuatxu, ArrayList<String> chosen,
-    JLabel ds_doituong, JLabel khung_anh) {
+    JLabel ds_doituong, JLabel khung_anh, JSpinner sp_hansd, JComboBox cb_hansd) {
         medicine_DTO med = throwMedicineObj(mathuoc);
         tf_tenthuoc.setText(med.getTenthuoc());
         tf_danhmuc.setText(med.getDanhmuc());
@@ -556,6 +575,8 @@ public class medicine_BUS {
             }
         }
         if(!found) ds_doituong.setText("Danh sách đối tượng sử dụng: " + result);
+        sp_hansd.setValue(0);
+        cb_hansd.setSelectedIndex(0);
         ImageIcon anh = new ImageIcon(advance.medIMG + mathuoc + ".png");
         Image anh_scale = anh.getImage().getScaledInstance(khung_anh.getWidth(), khung_anh.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon anh_scaled = new ImageIcon(anh_scale);
@@ -563,7 +584,7 @@ public class medicine_BUS {
     }
 
     //medicine trong orderSupplyAdd
-    public static void loadDataOther(DefaultTableModel modelMedic) {
+    public static void loadDataOther(DefaultTableModel modelMedic, Boolean flag) {
         modelMedic.setRowCount(0);
         medicine_DAO medDAO = new medicine_DAO();
         ArrayList<medicine_DTO> medicines = medDAO.selectAll();
@@ -577,54 +598,59 @@ public class medicine_BUS {
             JButton chooseButton = new JButton("Chọn");
             chooseButton.setForeground(Color.BLACK);
             chooseButton.setFont(new Font(null, Font.PLAIN, 18));
-            modelMedic.addRow(new Object[]{medicine.getMathuoc(), 
-            medicine.getTenthuoc(), statusImg, chooseButton});
+            if(flag && medicine.getTinhtrang()) 
+                modelMedic.addRow(new Object[]{medicine.getMathuoc(), 
+                medicine.getTenthuoc(), statusImg, chooseButton});
+            if(!flag)
+                modelMedic.addRow(new Object[]{medicine.getMathuoc(), 
+                medicine.getTenthuoc(), statusImg, chooseButton});
         }
     }
 
     public static void searchMedicineOther(JTextField search_bar, DefaultTableModel modelMedic) {
-        medicine_DTO med = throwMedicineObj(search_bar.getText());
+        ArrayList<medicine_DTO> meds = new ArrayList<>();
+        medicine_DAO medDAO = new medicine_DAO();
+        meds = medDAO.selectByCondition("tenthuoc like N'%" + search_bar.getText() + "%'");
         modelMedic.setRowCount(0);
-        JLabel statusImg;
-        if(med.getTinhtrang()) {
-            statusImg = new JLabel(data.imagePath.resize_check);
-        } else {
-            statusImg = new JLabel(data.imagePath.resize_exitIcon);
+        for (medicine_DTO med : meds) {
+            JLabel statusImg;
+            if(med.getTinhtrang()) {
+                statusImg = new JLabel(data.imagePath.resize_check);
+            } else {
+                statusImg = new JLabel(data.imagePath.resize_exitIcon);
+            }
+            JButton chooseButton = new JButton("Chọn");
+            chooseButton.setForeground(Color.BLACK);
+            chooseButton.setFont(new Font(null, Font.PLAIN, 18));
+            modelMedic.addRow(new Object[]{med.getMathuoc(), 
+            med.getTenthuoc(), statusImg, chooseButton});
         }
-        JButton chooseButton = new JButton("Chọn");
-        chooseButton.setForeground(Color.BLACK);
-        chooseButton.setFont(new Font(null, Font.PLAIN, 18));
-        modelMedic.addRow(new Object[]{med.getMathuoc(), 
-        med.getTenthuoc(), statusImg, chooseButton});
     }
 
     public static void resetOther(JTextField search_bar, JTextField tf_tenthuoc,
-    JTextField tf_gianhap_hop, JTextField tf_gianhap_vi, JTextField tf_gianhap_vien,
-    JTextField tf_slnhap_hop, JTextField tf_slnhap_vi, JTextField tf_slnhap_vien,
+    JSpinner sp_gianhap_hop, JSpinner sp_gianhap_vi, JSpinner sp_gianhap_vien,
+    JSpinner sp_slnhap_hop, JSpinner sp_slnhap_vi, JSpinner sp_slnhap_vien,
     DefaultTableModel modelMedic) {
         search_bar.setText("Nhập mã thuốc...");
         tf_tenthuoc.setText("");
-        tf_gianhap_hop.setText("");
-        tf_slnhap_hop.setText("");
-        tf_gianhap_vi.setText("");
-        tf_slnhap_vi.setText("");
-        tf_gianhap_vien.setText("");
-        tf_slnhap_vien.setText("");
-        loadDataOther(modelMedic);
+        sp_gianhap_hop.setValue(0);
+        sp_slnhap_hop.setValue(0);
+        sp_gianhap_vi.setValue(0);
+        sp_slnhap_vi.setValue(0);
+        sp_gianhap_vien.setValue(0);
+        sp_slnhap_vien.setValue(0);
+        loadDataOther(modelMedic, true);
     }
 
     public static void chooseMedicine(JTable tableMedic, DefaultTableModel modelMedic, JTextField tf_tenthuoc) {
-        int selectedColumn = tableMedic.getSelectedColumn();
-        if(selectedColumn == 3) {
-            int selectedRow = tableMedic.getSelectedRow();
-            if(selectedRow != -1) {
-                String mathuoc = modelMedic.getValueAt(selectedRow, 0).toString();
-                medicine_DTO med = throwMedicineObj(mathuoc);
-                if(med.getTinhtrang()) {
-                    tf_tenthuoc.setText(med.getTenthuoc());
-                } else {
-                    JOptionPane.showMessageDialog(null, "Thuốc này đã ngừng hoạt động!");
-                }
+        int selectedRow = tableMedic.getSelectedRow();
+        if(selectedRow != -1) {
+            String mathuoc = modelMedic.getValueAt(selectedRow, 0).toString();
+            medicine_DTO med = throwMedicineObj(mathuoc);
+            if(med.getTinhtrang()) {
+                tf_tenthuoc.setText(med.getTenthuoc());
+            } else {
+                JOptionPane.showMessageDialog(null, "Thuốc này đã ngừng hoạt động!");
             }
         }
     }

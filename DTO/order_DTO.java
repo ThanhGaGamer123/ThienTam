@@ -13,14 +13,19 @@ public class order_DTO {
     
     private String ngaydat;
     private String pttt;
-    private int tongtien;
+    private double tongtien;
     private String tinhtrang;
+
+    private String ghichu;
+    private String nguoinhan;
+    private int sdt_nguoinhan;
     
     public order_DTO() {
     }
 
     public order_DTO(String madon, String makh, String manv, String masonha, String duong, String phuong, String quan,
-            String tinh, String ngaydat, String pttt, int tongtien, String tinhtrang) {
+            String tinh, String ngaydat, String pttt, double tongtien, String tinhtrang, String ghichu, String nguoinhan,
+            int sdt_nguoinhan) {
         this.madon = madon;
         this.makh = makh;
         this.manv = manv;
@@ -33,6 +38,9 @@ public class order_DTO {
         this.pttt = pttt;
         this.tongtien = tongtien;
         this.tinhtrang = tinhtrang;
+        this.ghichu = ghichu;
+        this.nguoinhan = nguoinhan;
+        this.sdt_nguoinhan = sdt_nguoinhan;
     }
 
     public String getMadon() {
@@ -115,11 +123,11 @@ public class order_DTO {
         this.pttt = pttt;
     }
 
-    public int getTongtien() {
+    public double getTongtien() {
         return tongtien;
     }
 
-    public void setTongtien(int tongtien) {
+    public void setTongtien(double tongtien) {
         this.tongtien = tongtien;
     }
 
@@ -130,4 +138,30 @@ public class order_DTO {
     public void setTinhtrang(String tinhtrang) {
         this.tinhtrang = tinhtrang;
     }
+
+    public String getGhichu() {
+        return ghichu;
+    }
+
+    public void setGhichu(String ghichu) {
+        this.ghichu = ghichu;
+    }
+
+    public String getNguoinhan() {
+        return nguoinhan;
+    }
+
+    public void setNguoinhan(String nguoinhan) {
+        this.nguoinhan = nguoinhan;
+    }
+
+    public int getSdt_nguoinhan() {
+        return sdt_nguoinhan;
+    }
+
+    public void setSdt_nguoinhan(int sdt_nguoinhan) {
+        this.sdt_nguoinhan = sdt_nguoinhan;
+    }
+
+    
 }

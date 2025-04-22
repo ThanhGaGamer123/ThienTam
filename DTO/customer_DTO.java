@@ -1,7 +1,5 @@
 package DTO;
 
-import java.util.ArrayList;
-
 public class customer_DTO {
     private String makh;
     private String tenkh;
@@ -16,14 +14,15 @@ public class customer_DTO {
     private String email;
     private String password;
 
-    private ArrayList<medicine_DTO> giohang;
     private int diemKM;
+    private Boolean tinhtrang;
 
     public customer_DTO() {
     }
 
     public customer_DTO(String makh, String tenkh, int sdt, String masonha, String duong, String phuong, String quan,
-            String tinh, String email, String password, ArrayList<medicine_DTO> giohang, int diemKM) {
+            String tinh, String email, String password, int diemKM,
+            Boolean tinhtrang) {
         this.makh = makh;
         this.tenkh = tenkh;
         this.sdt = sdt;
@@ -34,8 +33,8 @@ public class customer_DTO {
         this.tinh = tinh;
         this.email = email;
         this.password = password;
-        this.giohang = giohang;
         this.diemKM = diemKM;
+        this.tinhtrang = tinhtrang;
     }
 
     public String getMakh() {
@@ -118,14 +117,6 @@ public class customer_DTO {
         this.password = password;
     }
 
-    public ArrayList<medicine_DTO> getGiohang() {
-        return giohang;
-    }
-
-    public void setGiohang(ArrayList<medicine_DTO> giohang) {
-        this.giohang = giohang;
-    }
-
     public int getDiemKM() {
         return diemKM;
     }
@@ -133,4 +124,14 @@ public class customer_DTO {
     public void setDiemKM(int diemKM) {
         this.diemKM = diemKM;
     }
+
+    public Boolean getTinhtrang() {
+        return tinhtrang;
+    }
+
+    public void setTinhtrang(Boolean tinhtrang) {
+        this.tinhtrang = tinhtrang;
+    }
+
+    
 }

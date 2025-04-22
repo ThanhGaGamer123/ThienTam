@@ -6,15 +6,17 @@ public class promotion_details_DTO {
     private String makm;
 
     private String ngayapdung;
+    private Boolean tinhtrang;
     
     public promotion_details_DTO() {
     }
 
-    public promotion_details_DTO(String mactkm, String madon, String makm, String ngayapdung) {
+    public promotion_details_DTO(String mactkm, String madon, String makm, String ngayapdung, Boolean tinhtrang) {
         this.mactkm = mactkm;
         this.madon = madon;
         this.makm = makm;
         this.ngayapdung = ngayapdung;
+        this.tinhtrang = tinhtrang;
     }
 
     public String getMactkm() {
@@ -48,4 +50,14 @@ public class promotion_details_DTO {
     public void setNgayapdung(String ngayapdung) {
         this.ngayapdung = ngayapdung;
     }
+
+    public Boolean getTinhtrang() {
+        return tinhtrang;
+    }
+
+    public void setTinhtrang(Boolean tinhtrang) {
+        this.tinhtrang = tinhtrang;
+    }
+
+
 }

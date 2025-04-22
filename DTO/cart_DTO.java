@@ -1,28 +1,18 @@
 package DTO;
 
 public class cart_DTO {
-    private String magio;
     private String makh;
     private String mathuoc;
     private int sl;
-    private int thanhtien;
-    private int dongia;
+    private double thanhtien;
+    private double dongia;
     
-    public cart_DTO(String magio, String makh, String mathuoc, int sl, int thanhtien, int dongia) {
-        this.magio = magio;
+    public cart_DTO(String makh, String mathuoc, int sl, double thanhtien, double dongia) {
         this.makh = makh;
         this.mathuoc = mathuoc;
         this.sl = sl;
         this.thanhtien = thanhtien;
         this.dongia = dongia;
-    }
-
-    public String getMagio() {
-        return magio;
-    }
-
-    public void setMagio(String magio) {
-        this.magio = magio;
     }
 
     public String getMakh() {
@@ -49,19 +39,19 @@ public class cart_DTO {
         this.sl = sl;
     }
 
-    public int getThanhtien() {
+    public double getThanhtien() {
         return thanhtien;
     }
 
-    public void setThanhtien(int thanhtien) {
+    public void setThanhtien(double thanhtien) {
         this.thanhtien = thanhtien;
     }
 
-    public int getDongia() {
+    public double getDongia() {
         return dongia;
     }
 
-    public void setDongia(int dongia) {
+    public void setDongia(double dongia) {
         this.dongia = dongia;
     }
 

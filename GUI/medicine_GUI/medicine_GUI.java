@@ -256,11 +256,35 @@ public class medicine_GUI extends JFrame {
         gdc.insets = new Insets(0, 10, 30, 10);
         main.add(tf_dsdt, gdc);
 
+        JLabel hansd = new JLabel("Hạn sử dụng:");
+        hansd.setForeground(Color.BLACK);
+        hansd.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 0;
+        gdc.gridy = 9;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.EAST;
+        gdc.fill = GridBagConstraints.NONE;
+        gdc.weightx = 0;
+        gdc.insets = new Insets(0, 50, 30, 0);
+        main.add(hansd, gdc);
+
+        JTextField tf_hansd = new JTextField();
+        tf_hansd.setForeground(Color.BLACK);
+        tf_hansd.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 1;
+        gdc.gridy = 9;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 10, 30, 10);
+        main.add(tf_hansd, gdc);
+
         JLabel giahop = new JLabel("Giá bán hộp:");
         giahop.setForeground(Color.BLACK);
         giahop.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 9;
+        gdc.gridy = 10;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
@@ -272,7 +296,7 @@ public class medicine_GUI extends JFrame {
         tf_giahop.setForeground(Color.BLACK);
         tf_giahop.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 9;
+        gdc.gridy = 10;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -284,7 +308,7 @@ public class medicine_GUI extends JFrame {
         giavi.setForeground(Color.BLACK);
         giavi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 10;
+        gdc.gridy = 11;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
@@ -296,7 +320,7 @@ public class medicine_GUI extends JFrame {
         tf_giavi.setForeground(Color.BLACK);
         tf_giavi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 10;
+        gdc.gridy = 11;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -308,7 +332,7 @@ public class medicine_GUI extends JFrame {
         giavien.setForeground(Color.BLACK);
         giavien.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 11;
+        gdc.gridy = 12;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
@@ -320,7 +344,7 @@ public class medicine_GUI extends JFrame {
         tf_giavien.setForeground(Color.BLACK);
         tf_giavien.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 11;
+        gdc.gridy = 12;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -332,7 +356,7 @@ public class medicine_GUI extends JFrame {
         slhop.setForeground(Color.BLACK);
         slhop.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 12;
+        gdc.gridy = 13;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
@@ -344,7 +368,7 @@ public class medicine_GUI extends JFrame {
         tf_slhop.setForeground(Color.BLACK);
         tf_slhop.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 12;
+        gdc.gridy = 13;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -356,7 +380,7 @@ public class medicine_GUI extends JFrame {
         slvi.setForeground(Color.BLACK);
         slvi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 13;
+        gdc.gridy = 14;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
@@ -368,7 +392,7 @@ public class medicine_GUI extends JFrame {
         tf_slvi.setForeground(Color.BLACK);
         tf_slvi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 13;
+        gdc.gridy = 14;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -380,7 +404,7 @@ public class medicine_GUI extends JFrame {
         slvien.setForeground(Color.BLACK);
         slvien.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 14;
+        gdc.gridy = 15;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
@@ -392,7 +416,7 @@ public class medicine_GUI extends JFrame {
         tf_slvien.setForeground(Color.BLACK);
         tf_slvien.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 14;
+        gdc.gridy = 15;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -404,7 +428,7 @@ public class medicine_GUI extends JFrame {
         tinhtrang.setForeground(Color.BLACK);
         tinhtrang.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 15;
+        gdc.gridy = 16;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.NONE;
@@ -416,7 +440,7 @@ public class medicine_GUI extends JFrame {
         tf_tinhtrang.setForeground(Color.BLACK);
         tf_tinhtrang.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 15;
+        gdc.gridy = 16;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -490,7 +514,7 @@ public class medicine_GUI extends JFrame {
         medicine_BUS.loadDetailsMedicine(mathuoc, tf_maThuoc, tf_tenthuoc, 
         tf_danhmuc, tf_donvi, ta_thanhphan, ta_thongtin, tf_xuatxu, tf_dsdt, 
         tf_tinhtrang, khung_anh, tf_giahop, tf_giavi, tf_giavien, tf_slhop, 
-        tf_slvi, tf_slvien);
+        tf_slvi, tf_slvien, tf_hansd);
     }
 
     public static void main(String[] args) {

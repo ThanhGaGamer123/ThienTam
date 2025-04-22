@@ -19,8 +19,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -64,7 +66,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.insets = new Insets(20, 0, 30, 0);
         main.add(title, gdc);
 
-        JTextField search_bar = new JTextField("Nhập mã thuốc...");
+        JTextField search_bar = new JTextField("Nhập tên thuốc...");
         search_bar.setForeground(Color.BLACK);
         search_bar.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
@@ -113,7 +115,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.insets = new Insets(0, 10, 30, 50);
         main.add(reset, gdc);
 
-        String[] columns = {"Mã thuốc", "Tên thuốc", "Tình trạng", ""};
+        String[] columns = {"Mã thuốc", "Tên thuốc", "Tình trạng"};
         DefaultTableModel modelMedic = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -129,7 +131,6 @@ public class orderSupplyAdd_GUI extends JFrame{
         tableMedic.getTableHeader().setFont(new Font(null, Font.BOLD, 18)); // Font tiêu đề
         tableMedic.getColumnModel().getColumn(0).setPreferredWidth(10);
         tableMedic.getColumnModel().getColumn(2).setPreferredWidth(10);
-        tableMedic.getColumnModel().getColumn(3).setPreferredWidth(10);
         tableMedic.setRowHeight(30);
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -187,9 +188,10 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.insets = new Insets(0, 0, 30, 0);
         main.add(slnhap_hop, gdc);
 
-        JTextField tf_slnhap_hop = new JTextField();
-        tf_slnhap_hop.setForeground(Color.BLACK);
-        tf_slnhap_hop.setFont(new Font(null, Font.PLAIN, 20));
+        SpinnerNumberModel sp_slhop = new SpinnerNumberModel(0, 0, null, 1000);
+        JSpinner sp_slnhap_hop = new JSpinner(sp_slhop);
+        sp_slnhap_hop.setForeground(Color.BLACK);
+        sp_slnhap_hop.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 5;
         gdc.gridy = 2;
         gdc.gridwidth = 1;
@@ -197,7 +199,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1.5;
         gdc.insets = new Insets(0, 10, 30, 100);
-        main.add(tf_slnhap_hop, gdc);
+        main.add(sp_slnhap_hop, gdc);
         
         JLabel gianhap_hop = new JLabel("Giá nhập hộp:");
         gianhap_hop.setForeground(Color.BLACK);
@@ -211,9 +213,10 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.insets = new Insets(0, 0, 30, 0);
         main.add(gianhap_hop, gdc);
 
-        JTextField tf_gianhap_hop = new JTextField();
-        tf_gianhap_hop.setForeground(Color.BLACK);
-        tf_gianhap_hop.setFont(new Font(null, Font.PLAIN, 20));
+        SpinnerNumberModel sp_giahop = new SpinnerNumberModel(0.0, 0.0, 10000000000.0, 1000.0);
+        JSpinner sp_gianhap_hop = new JSpinner(sp_giahop);
+        sp_gianhap_hop.setForeground(Color.BLACK);
+        sp_gianhap_hop.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 5;
         gdc.gridy = 3;
         gdc.gridwidth = 1;
@@ -221,7 +224,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1.5;
         gdc.insets = new Insets(0, 10, 30, 100);
-        main.add(tf_gianhap_hop, gdc);
+        main.add(sp_gianhap_hop, gdc);
 
         JLabel slnhap_vi = new JLabel("Số lượng vỉ:");
         slnhap_vi.setForeground(Color.BLACK);
@@ -235,9 +238,10 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.insets = new Insets(0, 0, 30, 0);
         main.add(slnhap_vi, gdc);
 
-        JTextField tf_slnhap_vi = new JTextField();
-        tf_slnhap_vi.setForeground(Color.BLACK);
-        tf_slnhap_vi.setFont(new Font(null, Font.PLAIN, 20));
+        SpinnerNumberModel sp_slvi = new SpinnerNumberModel(0, 0, null, 1000);
+        JSpinner sp_slnhap_vi = new JSpinner(sp_slvi);
+        sp_slnhap_vi.setForeground(Color.BLACK);
+        sp_slnhap_vi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 5;
         gdc.gridy = 4;
         gdc.gridwidth = 1;
@@ -245,7 +249,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1.5;
         gdc.insets = new Insets(0, 10, 30, 100);
-        main.add(tf_slnhap_vi, gdc);
+        main.add(sp_slnhap_vi, gdc);
 
         JLabel gianhap_vi = new JLabel("Giá nhập vỉ:");
         gianhap_vi.setForeground(Color.BLACK);
@@ -259,9 +263,10 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.insets = new Insets(0, 0, 30, 0);
         main.add(gianhap_vi, gdc);
 
-        JTextField tf_gianhap_vi = new JTextField();
-        tf_gianhap_vi.setForeground(Color.BLACK);
-        tf_gianhap_vi.setFont(new Font(null, Font.PLAIN, 20));
+        SpinnerNumberModel sp_giavi = new SpinnerNumberModel(0.0, 0.0, 10000000000.0, 1000.0);
+        JSpinner sp_gianhap_vi = new JSpinner(sp_giavi);
+        sp_gianhap_vi.setForeground(Color.BLACK);
+        sp_gianhap_vi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 5;
         gdc.gridy = 5;
         gdc.gridwidth = 1;
@@ -269,7 +274,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1.5;
         gdc.insets = new Insets(0, 10, 30, 100);
-        main.add(tf_gianhap_vi, gdc);
+        main.add(sp_gianhap_vi, gdc);
 
         JLabel slnhap_vien = new JLabel("Số lượng viên:");
         slnhap_vien.setForeground(Color.BLACK);
@@ -283,9 +288,10 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.insets = new Insets(0, 0, 30, 0);
         main.add(slnhap_vien, gdc);
 
-        JTextField tf_slnhap_vien = new JTextField();
-        tf_slnhap_vien.setForeground(Color.BLACK);
-        tf_slnhap_vien.setFont(new Font(null, Font.PLAIN, 20));
+        SpinnerNumberModel sp_slvien = new SpinnerNumberModel(0, 0, null, 1000);
+        JSpinner sp_slnhap_vien = new JSpinner(sp_slvien);
+        sp_slnhap_vien.setForeground(Color.BLACK);
+        sp_slnhap_vien.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 5;
         gdc.gridy = 6;
         gdc.gridwidth = 1;
@@ -293,7 +299,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1.5;
         gdc.insets = new Insets(0, 10, 30, 100);
-        main.add(tf_slnhap_vien, gdc);
+        main.add(sp_slnhap_vien, gdc);
 
         JLabel gianhap_vien = new JLabel("Giá nhập viên:");
         gianhap_vien.setForeground(Color.BLACK);
@@ -307,9 +313,10 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.insets = new Insets(0, 0, 30, 0);
         main.add(gianhap_vien, gdc);
 
-        JTextField tf_gianhap_vien = new JTextField();
-        tf_gianhap_vien.setForeground(Color.BLACK);
-        tf_gianhap_vien.setFont(new Font(null, Font.PLAIN, 20));
+        SpinnerNumberModel sp_giavien = new SpinnerNumberModel(0.0, 0.0, 10000000000.0, 1000.0);
+        JSpinner sp_gianhap_vien = new JSpinner(sp_giavien);
+        sp_gianhap_vien.setForeground(Color.BLACK);
+        sp_gianhap_vien.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 5;
         gdc.gridy = 7;
         gdc.gridwidth = 1;
@@ -317,7 +324,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1.5;
         gdc.insets = new Insets(0, 10, 30, 100);
-        main.add(tf_gianhap_vien, gdc);
+        main.add(sp_gianhap_vien, gdc);
         
         JButton themMedic = new JButton("Thêm");
         themMedic.setForeground(Color.BLACK);
@@ -417,7 +424,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         //xử lý tính năng
 
         //xử lý thuốc
-        medicine_BUS.loadDataOther(modelMedic);
+        medicine_BUS.loadDataOther(modelMedic, true);
 
         tableMedic.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -434,23 +441,6 @@ public class orderSupplyAdd_GUI extends JFrame{
                 }
 
                 return label;
-            }   
-        });
-
-        tableMedic.getColumn("").setCellRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JButton button = (value instanceof JButton) ? (JButton) value : new JButton();
-
-                if (isSelected) {
-                    button.setBackground(new Color(173, 216, 230)); // Màu nền sáng
-                } else {
-                    button.setBackground(Color.WHITE); // Màu nền mặc định
-                }
-        
-                button.setOpaque(true);
-                button.setBorderPainted(true);
-                return button;
             }   
         });
     
@@ -474,9 +464,9 @@ public class orderSupplyAdd_GUI extends JFrame{
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                medicine_BUS.resetOther(search_bar, tf_tenthuoc, tf_gianhap_hop, 
-                tf_gianhap_vi, tf_gianhap_vien, tf_slnhap_hop, tf_slnhap_vi, 
-                tf_slnhap_vien, modelMedic);
+                medicine_BUS.resetOther(search_bar, tf_tenthuoc, sp_gianhap_hop, 
+                sp_gianhap_vi, sp_gianhap_vien, sp_slnhap_hop, sp_slnhap_vi, 
+                sp_slnhap_vien, modelMedic);
             }
         });
     
@@ -518,8 +508,8 @@ public class orderSupplyAdd_GUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 orderSupply_details_BUS.addOrderSupplyDetails(osds, modelMedic, 
-                tableMedic, tf_slnhap_hop, tf_slnhap_vi, tf_slnhap_vien, tf_gianhap_hop, 
-                tf_gianhap_vi, tf_gianhap_vien, modelSupply, tf_tenthuoc);
+                tableMedic, sp_slnhap_hop, sp_slnhap_vi, sp_slnhap_vien, sp_gianhap_hop, 
+                sp_gianhap_vi, sp_gianhap_vien, modelSupply, tf_tenthuoc);
             }
         });
     
@@ -595,8 +585,8 @@ public class orderSupplyAdd_GUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 orderSupply_BUS.addOrderSupply(tf_nhacc, osds, modelSupplier, 
-                modelMedic, modelSupply, tf_gianhap_hop, tf_gianhap_vi, tf_gianhap_vien, 
-                tf_slnhap_hop, tf_slnhap_vi, tf_slnhap_vien, tf_tenthuoc, search_bar);
+                modelMedic, modelSupply, sp_gianhap_hop, sp_gianhap_vi, sp_gianhap_vien, 
+                sp_slnhap_hop, sp_slnhap_vi, sp_slnhap_vien, tf_tenthuoc, search_bar);
             }
         });
     
@@ -605,8 +595,8 @@ public class orderSupplyAdd_GUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 orderSupply_BUS.resetAdd(tf_nhacc, modelMedic, modelSupply, 
-                tf_gianhap_hop, tf_gianhap_vi, tf_gianhap_vien, tf_slnhap_hop, 
-                tf_slnhap_vi, tf_slnhap_vien, tf_tenthuoc, search_bar);
+                sp_gianhap_hop, sp_gianhap_vi, sp_gianhap_vien, sp_slnhap_hop, 
+                sp_slnhap_vi, sp_slnhap_vien, tf_tenthuoc, search_bar, osds);
             }
         });
     }

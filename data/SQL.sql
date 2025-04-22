@@ -13,6 +13,8 @@ CREATE TABLE NhaThuoc (
 	tinhtrang BIT
 )
 
+insert into NhaThuoc values ('NT0001', N'267', N'Mã Lò', N'Bình Trị Đông A', N'Bình Tân', N'TPHCM', null, 1);
+
 CREATE TABLE NhanVien (
     manv VARCHAR(10) PRIMARY KEY,         
     tennv NVARCHAR(100),         
@@ -31,6 +33,10 @@ CREATE TABLE NhanVien (
 	tinhtrang BIT
 );
 
+insert into NhanVien values ('NV0001', N'Nguyễn Văn A', N'quản lý', N'Nam', N'1231231234', 1231231234,
+N'267', N'Mã Lò', N'Bình Trị Đông A', N'Bình Tân', N'TPHCM', N'nv1', N'123', 'NT0001', 1);
+update NhaThuoc set manql = 'NV0001' where mant = 'NT0001';
+
 CREATE TABLE KhachHang (
     makh VARCHAR(10) PRIMARY KEY,          
     tenkh NVARCHAR(100),          
@@ -43,14 +49,14 @@ CREATE TABLE KhachHang (
 	tinh NVARCHAR(20),                
     diemkm INT, 
     passwordkh VARCHAR(50),
+	tinhtrang BIT,
 );
 
 CREATE TABLE GioHang (
-    magio VARCHAR(10) PRIMARY KEY,
-    makh VARCHAR(10),
+    makh VARCHAR(10) PRIMARY KEY,
     mathuoc VARCHAR(10),
     soluong INT,
-    thanhtien INT
+    thanhtien DECIMAL
 );
 
 CREATE TABLE ChiTietKM (
@@ -58,6 +64,7 @@ CREATE TABLE ChiTietKM (
     madon VARCHAR(10),             
     makm VARCHAR(10), 
 	ngayapdung VARCHAR(10),
+	tinhtrang BIT,
 );
 
 CREATE TABLE ChuongTrinhKhuyenMai (
@@ -67,6 +74,7 @@ CREATE TABLE ChuongTrinhKhuyenMai (
     ngayketthuc VARCHAR(10),                   
     noidung NVARCHAR(200),      
 	diem INT,
+	tinhtrang BIT,
 );
 
 CREATE TABLE DonHang (
@@ -81,23 +89,27 @@ CREATE TABLE DonHang (
     ngaydat VARCHAR(10),                 
     pttt NVARCHAR(50),            
     tinhtrang NVARCHAR(50),       
-    tongtien INT,      
+    tongtien DECIMAL,
+	ghichu NVARCHAR(1000),
+	nguoinhan NVARCHAR(100),
+	sdt_nguoinhan INT,
 );
 
 CREATE TABLE ChiTietDonHang (
     mactdh VARCHAR(10) PRIMARY KEY,          
     sl INT,                   
-    thanhtien INT,      
+    thanhtien DECIMAL,      
     madon VARCHAR(10),             
-    dongia INT,         
-    macthdnhap VARCHAR(10),            
+    dongia DECIMAL,         
+    macthdnhap VARCHAR(10),
+	tinhtrang BIT
 );
 
 CREATE TABLE ChiTietHoaDonNhap (
     macthdnhap VARCHAR(10) PRIMARY KEY,     
     mahdnhap VARCHAR(10),           
     gianhap VARCHAR(100),         
-    thanhtien INT,       
+    thanhtien DECIMAL,       
     slnhap VARCHAR(100),
 	slcon VARCHAR(100),
     mathuoc VARCHAR(10),    
@@ -115,6 +127,7 @@ CREATE TABLE Thuoc (
 	giaban VARCHAR(100),              
 	maton VARCHAR(10),
 	doituongsudung NVARCHAR(100),
+	hansudung NVARCHAR(50),
 	tinhtrang BIT
 );
 
@@ -123,7 +136,7 @@ CREATE TABLE HoaDonNhap (
     mancc VARCHAR(10),              
     soloaithuoc INT,                
     ngaynhap VARCHAR(100),                  
-    tongtien INT,        
+    tongtien DECIMAL,        
 	tinhtrang BIT
 );
 
@@ -139,24 +152,25 @@ CREATE TABLE NhaCungCap (
 	tinhtrang BIT
 );
 
+insert into NhaCungCap values ('NCC0001', N'Thái An', 1231231234, N'267', N'Mã Lò', N'Bình Trị Đông A',
+N'Bình Tân', N'TPHCM', 1);
+
 CREATE TABLE Kho (
     maton VARCHAR(10) PRIMARY KEY,
     slton VARCHAR(100),
 	tinhtrang BIT
 );
 
-    ALTER TABLE NhaThuoc ADD CONSTRAINT FK_NhaThuoc_NV FOREIGN KEY (manql) REFERENCES NhanVien(manv);
-    ALTER TABLE NhanVien ADD CONSTRAINT FK_NV_NhaThuoc FOREIGN KEY (manhathuoc) REFERENCES NhaThuoc(mant);
-    ALTER TABLE ChiTietKM ADD CONSTRAINT FK_CTKM_DH FOREIGN KEY (madon) REFERENCES DonHang(madon);
-	ALTER TABLE ChiTietKM ADD CONSTRAINT FK_CTKM_CTRKM FOREIGN KEY (makm) REFERENCES ChuongTrinhKhuyenMai(makm);
-	ALTER TABLE DonHang ADD CONSTRAINT FK_DH_KH FOREIGN KEY (makh) REFERENCES KhachHang(makh);
-	ALTER TABLE DonHang ADD CONSTRAINT FK_DH_NV FOREIGN KEY (manv) REFERENCES NhanVien(manv);
-	ALTER TABLE ChiTietDonHang ADD CONSTRAINT FK_CTDH_DH FOREIGN KEY (madon) REFERENCES DonHang(madon);
-    ALTER TABLE ChiTietDonHang ADD CONSTRAINT FK_CTDH_CTHDN FOREIGN KEY (macthdnhap) REFERENCES ChiTietHoaDonNhap(macthdnhap);
-	ALTER TABLE HoaDonNhap ADD CONSTRAINT FK_HDN_NCC FOREIGN KEY (mancc) REFERENCES NhaCungCap(mancc);
-	ALTER TABLE ChiTietHoaDonNhap ADD CONSTRAINT FK_CTHDN_HDN FOREIGN KEY (mahdnhap) REFERENCES HoaDonNhap(mahdnhap); 
-    ALTER TABLE ChiTietHoaDonNhap ADD CONSTRAINT FK_CTHDN_Thuoc FOREIGN KEY (mathuoc) REFERENCES Thuoc(mathuoc);
-	ALTER TABLE Thuoc ADD CONSTRAINT FK_Thuoc_Kho FOREIGN KEY (maton) REFERENCES Kho(maton);
-
-	delete from Thuoc
-	delete from Kho
+ALTER TABLE NhaThuoc ADD CONSTRAINT FK_NhaThuoc_NV FOREIGN KEY (manql) REFERENCES NhanVien(manv);
+ALTER TABLE NhanVien ADD CONSTRAINT FK_NV_NhaThuoc FOREIGN KEY (manhathuoc) REFERENCES NhaThuoc(mant);
+ALTER TABLE ChiTietKM ADD CONSTRAINT FK_CTKM_DH FOREIGN KEY (madon) REFERENCES DonHang(madon);
+ALTER TABLE ChiTietKM ADD CONSTRAINT FK_CTKM_CTRKM FOREIGN KEY (makm) REFERENCES ChuongTrinhKhuyenMai(makm);
+ALTER TABLE DonHang ADD CONSTRAINT FK_DH_KH FOREIGN KEY (makh) REFERENCES KhachHang(makh);
+ALTER TABLE DonHang ADD CONSTRAINT FK_DH_NV FOREIGN KEY (manv) REFERENCES NhanVien(manv);
+ALTER TABLE ChiTietDonHang ADD CONSTRAINT FK_CTDH_DH FOREIGN KEY (madon) REFERENCES DonHang(madon);
+ALTER TABLE ChiTietDonHang ADD CONSTRAINT FK_CTDH_CTHDN FOREIGN KEY (macthdnhap) REFERENCES ChiTietHoaDonNhap(macthdnhap);
+ALTER TABLE HoaDonNhap ADD CONSTRAINT FK_HDN_NCC FOREIGN KEY (mancc) REFERENCES NhaCungCap(mancc);
+ALTER TABLE ChiTietHoaDonNhap ADD CONSTRAINT FK_CTHDN_HDN FOREIGN KEY (mahdnhap) REFERENCES HoaDonNhap(mahdnhap); 
+ALTER TABLE ChiTietHoaDonNhap ADD CONSTRAINT FK_CTHDN_Thuoc FOREIGN KEY (mathuoc) REFERENCES Thuoc(mathuoc);
+ALTER TABLE Thuoc ADD CONSTRAINT FK_Thuoc_Kho FOREIGN KEY (maton) REFERENCES Kho(maton);
+ALTER TABLE GioHang ADD CONSTRAINT FK_GioHang_KhachHang FOREIGN KEY (maKH) REFERENCES KhachHang(maKH);

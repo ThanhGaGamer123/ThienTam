@@ -13,7 +13,8 @@ public class medicine_DTO {
     private String thongtin;
     private String xuatxu;
     private ArrayList<String> doituongsudung;
-    private ArrayList<Integer> giaban;
+    private String hansudung;
+    private ArrayList<Double> giaban;
 
     private Boolean tinhtrang;
     
@@ -21,8 +22,8 @@ public class medicine_DTO {
     }
 
     public medicine_DTO(String mathuoc, String maton, String tenthuoc, String danhmuc, ArrayList<String> donvi,
-            String thanhphan, String thongtin, String xuatxu, ArrayList<String> doituongsudung,
-            ArrayList<Integer> giaban, Boolean tinhtrang) {
+            String thanhphan, String thongtin, String xuatxu, ArrayList<String> doituongsudung, String hansudung,
+            ArrayList<Double> giaban, Boolean tinhtrang) {
         this.mathuoc = mathuoc;
         this.maton = maton;
         this.tenthuoc = tenthuoc;
@@ -32,6 +33,7 @@ public class medicine_DTO {
         this.thongtin = thongtin;
         this.xuatxu = xuatxu;
         this.doituongsudung = doituongsudung;
+        this.hansudung = hansudung;
         this.giaban = giaban;
         this.tinhtrang = tinhtrang;
     }
@@ -116,12 +118,20 @@ public class medicine_DTO {
         this.doituongsudung = doituongsudung;
     }
 
-    public ArrayList<Integer> getGiaban() {
+    public ArrayList<Double> getGiaban() {
         return giaban;
     }
 
-    public void setGiaban(ArrayList<Integer> giaban) {
+    public void setGiaban(ArrayList<Double> giaban) {
         this.giaban = giaban;
+    }
+
+    public String getHansudung() {
+        return hansudung;
+    }
+
+    public void setHansudung(String hansudung) {
+        this.hansudung = hansudung;
     }
 
     

@@ -10,11 +10,37 @@ public class advance {
     public static final String medIMG = "D:\\IT\\GitHub Projects\\ThienTam\\img\\medIMG\\";
     public static final String file_path = "C:\\Users\\thanh\\Downloads\\";
 
+    public static ArrayList<Double> StringArrayListToDoubleArrayList(ArrayList<String> stringArray) {
+        try {
+            ArrayList<Double> result = new ArrayList<>();
+            for (String part : stringArray) {
+                result.add(Double.parseDouble(part));
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static ArrayList<Integer> StringArrayListToIntArrayList(ArrayList<String> stringArray) {
         try {
             ArrayList<Integer> result = new ArrayList<>();
             for (String part : stringArray) {
                 result.add(Integer.parseInt(part));
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static ArrayList<String> DoubleArrayListToStringArrayList(ArrayList<Double> doubleArray) {
+        try {
+            ArrayList<String> result = new ArrayList<>();
+            for (double part : doubleArray) {
+                result.add(String.valueOf(part));
             }
             return result;
         } catch (Exception e) {
@@ -49,6 +75,16 @@ public class advance {
     public static String IntArrayListToString(ArrayList<Integer> intArray) {
         try {
             ArrayList<String> stringArray = IntArrayListToStringArrayList(intArray);
+            String result = StringArrayListToString(stringArray);
+            return result;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static String DoubleArrayListToString(ArrayList<Double> doubleArray) {
+        try {
+            ArrayList<String> stringArray = DoubleArrayListToStringArrayList(doubleArray);
             String result = StringArrayListToString(stringArray);
             return result;
         } catch (Exception e) {
