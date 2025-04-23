@@ -407,7 +407,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.insets = new Insets(0, 10, 30, 50);
         main.add(finish, gdc);
         
-        JButton reset_all = new JButton("Đặt lại    ");
+        JButton reset_all = new JButton("Đặt lại");
         reset_all.setForeground(Color.BLACK);
         reset_all.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 3;

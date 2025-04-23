@@ -56,7 +56,8 @@ CREATE TABLE GioHang (
     makh VARCHAR(10) PRIMARY KEY,
     mathuoc VARCHAR(10),
     soluong INT,
-    thanhtien DECIMAL
+    thanhtien DECIMAL,
+    dongia DECIMAL,
 );
 
 CREATE TABLE ChiTietKM (

@@ -362,9 +362,12 @@ public class medicine_BUS {
     JComboBox cb_tinhtrang, DefaultTableModel modelMedic, DefaultTableModel modelMedicSupply,
     JSpinner sp_hansd, JComboBox cb_hansd) {
         ArrayList<String> allPrice = new ArrayList<>();
-        allPrice.add(sp_gia_hop.getValue().toString());
-        allPrice.add(sp_gia_vi.getValue().toString());
-        allPrice.add(sp_gia_vien.getValue().toString());
+        if(!sp_gia_hop.getValue().toString().equals("0.0"))
+            allPrice.add(sp_gia_hop.getValue().toString());
+        if(!sp_gia_vi.getValue().toString().equals("0.0"))
+            allPrice.add(sp_gia_vi.getValue().toString());
+        if(!sp_gia_vien.getValue().toString().equals("0.0"))
+            allPrice.add(sp_gia_vien.getValue().toString());
         ArrayList<String> condition = new ArrayList<>();
         if(!tf_mathuoc.getText().isEmpty()) condition.add("mathuoc like N'%" + tf_mathuoc.getText() + "%' ");
         if(!tf_tenthuoc.getText().isEmpty()) condition.add("tenthuoc like N'%" + tf_tenthuoc.getText() + "%' ");
@@ -382,6 +385,7 @@ public class medicine_BUS {
             condition.add("hansudung like N'%" + sp_hansd.getValue().toString() + " " + cb_hansd.getSelectedItem().toString() + "%' ");
         }
         String result = String.join("and ", condition);
+        System.out.println(result);
 
         medicine_DAO medDAO = new medicine_DAO();
         ArrayList<medicine_DTO> medicines = medDAO.selectByCondition(result);
@@ -631,7 +635,7 @@ public class medicine_BUS {
     JSpinner sp_gianhap_hop, JSpinner sp_gianhap_vi, JSpinner sp_gianhap_vien,
     JSpinner sp_slnhap_hop, JSpinner sp_slnhap_vi, JSpinner sp_slnhap_vien,
     DefaultTableModel modelMedic) {
-        search_bar.setText("Nhập mã thuốc...");
+        search_bar.setText("Nhập tên thuốc...");
         tf_tenthuoc.setText("");
         sp_gianhap_hop.setValue(0);
         sp_slnhap_hop.setValue(0);

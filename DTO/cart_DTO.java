@@ -6,6 +6,8 @@ public class cart_DTO {
     private int sl;
     private double thanhtien;
     private double dongia;
+
+    public cart_DTO() {}
     
     public cart_DTO(String makh, String mathuoc, int sl, double thanhtien, double dongia) {
         this.makh = makh;

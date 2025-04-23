@@ -261,7 +261,7 @@ public class orderSupply_BUS {
             ArrayList<supplier_DTO> sps = new ArrayList<>();
             supplier_DTO sp = new supplier_DTO();
             supplier_DAO spDAO = new supplier_DAO();
-            sps = spDAO.selectByCondition("tenncc like N'%" + tenncc + "%'");
+            sps = spDAO.selectByCondition("tenncc = N'" + tenncc + "'");
             
             if(sps.size() != 0 || !sps.isEmpty()) {
                 sp = sps.get(0);
@@ -313,7 +313,7 @@ public class orderSupply_BUS {
     JTextField tf_tenthuoc, JTextField search_bar, ArrayList<orderSupply_details_DTO> osds) {
         modelMedic.setRowCount(0);
         modelSupply.setRowCount(0);
-        search_bar.setText("Nhập mã thuốc...");
+        search_bar.setText("Nhập tên thuốc...");
         tf_tenthuoc.setText("");
         sp_gianhap_hop.setValue(0);
         sp_slnhap_hop.setValue(0);
