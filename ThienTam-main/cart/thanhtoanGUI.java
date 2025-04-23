@@ -2,9 +2,13 @@ package cart;
 
 import customer.customer;
 import customer.customerGUI;
+import dao.orderDAO;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -17,6 +21,12 @@ public class thanhtoanGUI extends JFrame {
     private customerGUI khach;
     private String ten; // Thêm biến để lưu tên khách hàng
     private cartGUI cart;
+    private JTextField tenNguoiDat, sdtNguoiDat, tenNguoiNhan, sdtNguoiNhan, diaChiCuThe;
+    private JTextArea ghiChu;
+    private JRadioButton momoRadio, cashRadio, qrRadio;
+    private JComboBox<String> tinhThanh;
+    private JComboBox<String> quanHuyen;
+    private JComboBox<String> phuongXa;
 
     // Màu sắc tùy chỉnh
     // Màu sắc tùy chỉnh
@@ -157,13 +167,13 @@ public class thanhtoanGUI extends JFrame {
         gbc1.gridwidth = 1;
         JPanel panelNguoiDat = new JPanel(new GridLayout(1, 2, 10, 0)); // GridLayout: 1 hàng, 2 cột
         panelNguoiDat.setBackground(Color.WHITE);
-        JTextField tenNguoiDat = new JTextField();
+        tenNguoiDat = new JTextField();
         tenNguoiDat.setBorder(BorderFactory.createTitledBorder("Tên người đặt"));
 
         String temp = khachDangNhap.getTenkh();
         tenNguoiDat.setText(temp);
 
-        JTextField sdtNguoiDat = new JTextField();
+        sdtNguoiDat = new JTextField();
         sdtNguoiDat.setBorder(BorderFactory.createTitledBorder("SDT người đặt"));
         panelNguoiDat.add(tenNguoiDat);
         panelNguoiDat.add(sdtNguoiDat);
@@ -181,9 +191,9 @@ public class thanhtoanGUI extends JFrame {
         gbc1.gridwidth = 1;
         JPanel panelNguoiNhan = new JPanel(new GridLayout(1, 2, 10, 0));
         panelNguoiNhan.setBackground(Color.WHITE);
-        JTextField tenNguoiNhan = new JTextField();
+        tenNguoiNhan = new JTextField();
         tenNguoiNhan.setBorder(BorderFactory.createTitledBorder("Họ và tên người nhận"));
-        JTextField sdtNguoiNhan = new JTextField();
+        sdtNguoiNhan = new JTextField();
         sdtNguoiNhan.setBorder(BorderFactory.createTitledBorder("SDT người nhận"));
         panelNguoiNhan.add(tenNguoiNhan);
         panelNguoiNhan.add(sdtNguoiNhan);
@@ -193,16 +203,16 @@ public class thanhtoanGUI extends JFrame {
         gbc1.gridy++;
         JPanel panelDiaChi = new JPanel(new GridLayout(1, 3, 10, 0));
         Font comboBoxFont = new Font("Arial", Font.PLAIN, 16);
-        JComboBox<String> tinhThanh = new JComboBox<>(new String[] { "Chọn tỉnh/thành phố", "TP Hồ Chí Minh" });
+        tinhThanh = new JComboBox<>(new String[] { "Chọn tỉnh/thành phố", "TP Hồ Chí Minh" });
         tinhThanh.setFont(comboBoxFont);
-        JComboBox<String> quanHuyen = new JComboBox<>(new String[] { "Chọn quận/huyện",
+        quanHuyen = new JComboBox<>(new String[] { "Chọn quận/huyện",
                 "Quận 1", "Quận 3", "Quận 4", "Quận 5", "Quận 6", "Quận 7",
                 "Quận 8", "Quận 10", "Quận 11", "Quận 12", "Quận Bình Tân",
                 "Quận Bình Thạnh", "Quận Gò Vấp", "Quận Phú Nhuận", "Quận Tân Bình",
                 "Quận Tân Phú", "Thành phố Thủ Đức", "Huyện Bình Chánh", "Huyện Cần Giờ",
                 "Huyện Củ Chi", "Huyện Hóc Môn", "Huyện Nhà Bè" });
         quanHuyen.setFont(comboBoxFont);
-        JComboBox<String> phuongXa = new JComboBox<>(new String[] { "Chọn phường/xã" });
+        phuongXa = new JComboBox<>(new String[] { "Chọn phường/xã" });
         phuongXa.setFont(comboBoxFont);
 
         panelDiaChi.add(tinhThanh);
@@ -213,7 +223,7 @@ public class thanhtoanGUI extends JFrame {
         // Địa chỉ cụ thể
         gbc1.gridy++;
         gbc1.gridwidth = 2;
-        JTextField diaChiCuThe = new JTextField();
+        diaChiCuThe = new JTextField();
         diaChiCuThe.setBorder(BorderFactory.createTitledBorder("Nhập địa chỉ cụ thể"));
         giua.add(diaChiCuThe, gbc1);
 
@@ -264,7 +274,7 @@ public class thanhtoanGUI extends JFrame {
 
         // Ghi chú
         gbc1.gridy++;
-        JTextArea ghiChu = new JTextArea(3, 20);
+        ghiChu = new JTextArea(3, 20);
         ghiChu.setBorder(BorderFactory.createTitledBorder("Ghi chú (không bắt buộc)"));
         giua.add(ghiChu, gbc1);
         // ========= PAY =========
@@ -284,9 +294,9 @@ public class thanhtoanGUI extends JFrame {
         paymentPanel.setBorder(BorderFactory.createTitledBorder("Phương thức thanh toán"));
         paymentPanel.setBackground(Color.WHITE); // Đặt màu nền trắng
 
-        JRadioButton momoRadio = new JRadioButton("Thanh toán bằng ví MoMo");
-        JRadioButton cashRadio = new JRadioButton("Thanh toán tiền mặt khi nhận hàng");
-        JRadioButton qrRadio = new JRadioButton("Thanh toán bằng chuyển khoản (QR Code)");
+        momoRadio = new JRadioButton("Thanh toán bằng ví MoMo");
+        cashRadio = new JRadioButton("Thanh toán tiền mặt khi nhận hàng");
+        qrRadio = new JRadioButton("Thanh toán bằng chuyển khoản (QR Code)");
 
         momoRadio.setBackground(Color.white);
         cashRadio.setBackground(Color.white);
@@ -377,35 +387,27 @@ public class thanhtoanGUI extends JFrame {
         pay.add(buttonPanel, gbc2);
 
         thanhtoan_btn.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Kiểm tra các trường nhập liệu
+                if (diaChiCuThe.getText().trim().isEmpty() ||
+                        tenNguoiNhan.getText().trim().isEmpty() ||
 
-                if (diaChiCuThe.getText().equals("") && tenNguoiNhan.getText().equals("")
-                        && sdtNguoiNhan.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "Bạn chưa nhập thông tin nhận hàng!");
-                    return;
-
-                } else if (diaChiCuThe.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "Bạn chưa nhập địa chỉ nhận hàng!");
-                    return;
-                } else if (tenNguoiNhan.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "Bạn chưa nhập tên người nhận!");
-                    return;
-                } else if (sdtNguoiNhan.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "Bạn chưa nhập SĐT người nhận!");
+                        sdtNguoiNhan.getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin nhận hàng!");
                     return;
                 }
-                System.out.println("Khách hàng trong CartGUI " + khachDangNhap);
-                String nametemp = khachDangNhap.getTenkh();
-                System.out.println("Khách hàng trong CartGUI: " + nametemp);
 
+                // Hiển thị hộp thoại xác nhận
                 int choice = JOptionPane.showConfirmDialog(null,
-                        "Bạn có chắc muốn xác nhận thanh toán không ?");
-                if (choice == 0) {
+                        "Bạn có chắc muốn xác nhận thanh toán không?",
+                        "Xác nhận thanh toán",
+                        JOptionPane.YES_NO_OPTION);
 
+                if (choice == JOptionPane.YES_OPTION) {
+                    // Gọi phương thức xử lý thanh toán
+                    xacNhanThanhToan();
                 }
-
             }
         });
 
@@ -427,6 +429,68 @@ public class thanhtoanGUI extends JFrame {
 
         tail.add(detail_tail, gbc);
         add(tail, BorderLayout.SOUTH);
+    }
+
+    public void xacNhanThanhToan() {
+        // Lấy thông tin khách hàng đang đăng nhập
+        customer khachDangNhap = getKhachHangDangNhap();
+        String makh = khachDangNhap.getMakh(); // Giả sử có đối tượng currentUser
+        int sdt = khachDangNhap.getSdt();
+
+        // Mã nhân viên mặc định
+        String manv = "1";
+
+        // Lấy thông tin người nhận từ giao diện
+        String tennguoinhan = tenNguoiNhan.getText().trim();
+        String sdtnguoinhan = sdtNguoiNhan.getText().trim();
+        // String phuong = phuongXa.getSelectedItem().toString();
+        String phuong = "phuong 10";
+        String quan = quanHuyen.getSelectedItem().toString();
+        String tinh = tinhThanh.getSelectedItem().toString();
+        String diachicuthe = diaChiCuThe.getText().trim();
+        String ghichu = ghiChu.getText().trim();
+
+        // Xác định phương thức thanh toán
+        String pttt = "";
+        if (momoRadio.isSelected()) {
+            pttt = momoRadio.getText();
+        } else if (cashRadio.isSelected()) {
+            pttt = cashRadio.getText();
+        } else if (qrRadio.isSelected()) {
+            pttt = qrRadio.getText();
+        }
+
+        // Lấy ngày đặt hiện tại
+        String ngaydat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
+
+        // Tính tổng tiền và chuẩn bị danh sách sản phẩm mua
+        int tongtien = 0;
+        ArrayList<String> danhSachSanPham = new ArrayList<>();
+        for (sanphamchonmua sp : selectedProducts) {
+            tongtien += sp.getDonGia() * sp.getSoLuong();
+            String spString = sp.getMathuoc() + " - " + sp.getTenthuoc() + " - " + sp.getSoLuong() + " - "
+                    + sp.getDonvi()
+                    + " - " + sp.getDonGia();
+            danhSachSanPham.add(spString);
+        }
+
+        // Tạo mã đơn hàng mới
+        String madon = orderDAO.taoMaHDMoi();
+
+        // Tình trạng đơn hàng ban đầu
+        String tinhtrang = "Chờ xác nhận";
+
+        // Gọi phương thức để lưu đơn hàng vào cơ sở dữ liệu
+        orderDAO.taodonhangmoi(madon, makh, sdt, manv, tennguoinhan, sdtnguoinhan,
+                phuong, quan, tinh, diachicuthe, danhSachSanPham, ngaydat, ghichu, pttt, tongtien, tinhtrang);
+
+        // Thông báo cho người dùng
+        JOptionPane.showMessageDialog(null, "Đơn hàng đã được đặt thành công!", "Thông báo",
+                JOptionPane.INFORMATION_MESSAGE);
+
+        // Xóa dữ liệu sau khi đặt hàng thành công
+        selectedProducts.clear();
+        // Cập nhật giao diện nếu cần thiết
     }
 
 }

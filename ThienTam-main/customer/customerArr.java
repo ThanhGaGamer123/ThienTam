@@ -1,6 +1,9 @@
 package customer;
 
-import java.sql.*;
+import connection.MyConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class customerArr {
@@ -18,47 +21,81 @@ public class customerArr {
         this.a = a;
     }
 
+    // public void readDatabase() {
+    // try {
+    // // Kết nối SQL Server
+    // Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+    // String url =
+    // "jdbc:sqlserver://localhost:1433;databaseName=Thientam;encrypt=true;trustServerCertificate=true";
+    // String username = "sa";
+    // String password = "123";
+
+    // // Tạo kết nối
+    // try (Connection con = DriverManager.getConnection(url, username, password);
+    // Statement stmt = con.createStatement();
+    // ResultSet rs = stmt.executeQuery("SELECT * FROM KhachHang")) {
+
+    // a.clear();
+
+    // // Đọc dữ liệu từ ResultSet
+    // while (rs.next()) {
+    // // Khởi tạo đối tượng customer với dữ liệu từ SQL
+    // customer kh = new customer(
+    // rs.getString("makh"), // Mã khách hàng
+    // rs.getString("tenkh"), // Tên khách hàng
+    // Integer.parseInt(rs.getString("sdt")), // Số điện thoại (chuyển từ String
+    // sang int)
+    // rs.getString("masonha"), // Mã số nhà
+    // rs.getString("duong"), // Đường
+    // rs.getString("phuong"), // Phường
+    // rs.getString("quan"), // Quận
+    // rs.getString("tinh"), // Tỉnh
+    // rs.getString("email"), // Email
+    // rs.getString("passwordkh"), // Mật khẩu
+    // new ArrayList<>(), // Giỏ hàng tạm thời
+    // rs.getInt("diemkm"), // Điểm khách hàng
+    // rs.getBoolean(1));
+    // a.add(kh); // Thêm khách hàng vào danh sách
+    // }
+
+    // System.out.println("Dữ liệu đã được tải từ database.");
+    // } catch (SQLException ex) {
+    // System.out.println("Lỗi kết nối hoặc truy vấn SQL: " + ex.getMessage());
+    // }
+    // } catch (ClassNotFoundException e) {
+    // System.out.println("Lỗi tải driver: " + e.getMessage());
+    // }
+    // }
+
     public void readDatabase() {
-        try {
-            // Kết nối SQL Server
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String url = "jdbc:sqlserver://localhost:1433;databaseName=Thientam;encrypt=true;trustServerCertificate=true";
-            String username = "sa";
-            String password = "123";
+        try (Connection con = MyConnection.createConnection();
+                PreparedStatement pstmt = con.prepareStatement("SELECT * FROM KhachHang");
+                ResultSet rs = pstmt.executeQuery()) {
 
-            // Tạo kết nối
-            try (Connection con = DriverManager.getConnection(url, username, password);
-                    Statement stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM KhachHang")) {
+            a.clear();
 
-                a.clear();
-
-                // Đọc dữ liệu từ ResultSet
-                while (rs.next()) {
-                    // Khởi tạo đối tượng customer với dữ liệu từ SQL
-                    customer kh = new customer(
-                            rs.getString("makh"), // Mã khách hàng
-                            rs.getString("tenkh"), // Tên khách hàng
-                            Integer.parseInt(rs.getString("sdt")), // Số điện thoại (chuyển từ String sang int)
-                            rs.getString("masonha"), // Mã số nhà
-                            rs.getString("duong"), // Đường
-                            rs.getString("phuong"), // Phường
-                            rs.getString("quan"), // Quận
-                            rs.getString("tinh"), // Tỉnh
-                            rs.getString("email"), // Email
-                            rs.getString("passwordkh"), // Mật khẩu
-                            new ArrayList<>(), // Giỏ hàng tạm thời
-                            rs.getInt("diemkm"), // Điểm khách hàng
-                            rs.getBoolean(1));
-                    a.add(kh); // Thêm khách hàng vào danh sách
-                }
-
-                System.out.println("Dữ liệu đã được tải từ database.");
-            } catch (SQLException ex) {
-                System.out.println("Lỗi kết nối hoặc truy vấn SQL: " + ex.getMessage());
+            while (rs.next()) {
+                customer kh = new customer(
+                        rs.getString("makh"),
+                        rs.getString("tenkh"),
+                        Integer.parseInt(rs.getString("sdt")),
+                        rs.getString("masonha"),
+                        rs.getString("duong"),
+                        rs.getString("phuong"),
+                        rs.getString("quan"),
+                        rs.getString("tinh"),
+                        rs.getString("email"),
+                        rs.getString("passwordkh"),
+                        new ArrayList<>(),
+                        rs.getInt("diemkm"),
+                        rs.getBoolean("tinhtrang") // thay bằng tên cột boolean thật
+                );
+                a.add(kh);
             }
-        } catch (ClassNotFoundException e) {
-            System.out.println("Lỗi tải driver: " + e.getMessage());
+
+            System.out.println("Dữ liệu đã được tải từ database.");
+        } catch (Exception e) {
+            System.out.println("Lỗi khi đọc dữ liệu từ database: " + e.getMessage());
         }
     }
 

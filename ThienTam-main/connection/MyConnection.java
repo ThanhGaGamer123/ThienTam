@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class MyConnection {
@@ -13,20 +14,19 @@ public class MyConnection {
     Statement stm;
     PreparedStatement prestm;
 
-    public boolean openConnection() {
+    public static Connection createConnection() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-
-            String url = "jdbc:sqlserver://localhost:1433;databaseName=Thientam;trustServerCertificate=true";
-            String user = "sa";
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=Thientam;encrypt=true;trustServerCertificate=true";
+            String username = "sa";
             String password = "123";
-            con = DriverManager.getConnection(url, user, password);
-
-            stm = con.createStatement();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            Connection sql = DriverManager.getConnection(url, username, password);
+            System.out.println("Create connect to SQL Server completed!");
+            System.out.println(sql);
+            return sql;
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Error: " + e.getMessage());
+            return null;
         }
     }
 

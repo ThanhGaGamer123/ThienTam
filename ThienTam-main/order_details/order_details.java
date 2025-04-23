@@ -1,23 +1,28 @@
 package order_details;
 
-public class order_details {
-    private String mactdh;
-    private String madon;
-    private String macthdnhap;
+import java.util.ArrayList;
 
+public class order_details {
+    private String mactdh; // mã chi tiết hóa đơn 
+    private String madon;
+    private String macthdnhap;  // mã hóa đơn nhập hàng 
+
+    private ArrayList<String> sanphammua; //thông tin tất cả sản phẩm đơn đó mua 
+    private String diachicuthe;
     private int sl;
-    private int dongia;
-    private int thanhtien; //don gia * sl
-    
+    //private int dongia;
+    private int thanhtien; // don gia * sl
+
     public order_details() {
     }
 
-    public order_details(String mactdh, String madon, String macthdnhap, int sl, int dongia, int thanhtien) {
+    public order_details(String mactdh, String madon, String macthdnhap, ArrayList<String> sanphammua, String diachicuthe, int sl, int thanhtien) {
         this.mactdh = mactdh;
         this.madon = madon;
         this.macthdnhap = macthdnhap;
+        this.sanphammua = sanphammua;
+        this.diachicuthe = diachicuthe;
         this.sl = sl;
-        this.dongia = dongia;
         this.thanhtien = thanhtien;
     }
 
@@ -25,47 +30,65 @@ public class order_details {
         return mactdh;
     }
 
-    public void setMactdh(String mactdh) {
-        this.mactdh = mactdh;
-    }
-
     public String getMadon() {
         return madon;
-    }
-
-    public void setMadon(String madon) {
-        this.madon = madon;
     }
 
     public String getMacthdnhap() {
         return macthdnhap;
     }
 
-    public void setMacthdnhap(String macthdnhap) {
-        this.macthdnhap = macthdnhap;
+    public ArrayList<String> getSanphammua() {
+        return sanphammua;
+    }
+
+    public String getDiachicuthe() {
+        return diachicuthe;
     }
 
     public int getSl() {
         return sl;
     }
 
-    public void setSl(int sl) {
-        this.sl = sl;
-    }
-
-    public int getDongia() {
-        return dongia;
-    }
-
-    public void setDongia(int dongia) {
-        this.dongia = dongia;
-    }
-
     public int getThanhtien() {
         return thanhtien;
+    }
+
+    public void setMactdh(String mactdh) {
+        this.mactdh = mactdh;
+    }
+
+    public void setMadon(String madon) {
+        this.madon = madon;
+    }
+
+    public void setMacthdnhap(String macthdnhap) {
+        this.macthdnhap = macthdnhap;
+    }
+
+    public void setSanphammua(ArrayList<String> sanphammua) {
+        this.sanphammua = sanphammua;
+    }
+
+    public void setDiachicuthe(String diachicuthe) {
+        this.diachicuthe = diachicuthe;
+    }
+
+    public void setSl(int sl) {
+        this.sl = sl;
     }
 
     public void setThanhtien(int thanhtien) {
         this.thanhtien = thanhtien;
     }
+
+
+
+    
+
+
+
+    
+
+   
 }

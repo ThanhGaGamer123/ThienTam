@@ -10,11 +10,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent; // Added correct import
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.ItemEvent;
+
 import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.event.DocumentListener;
 
 import medicine.medicine;
 import medicine.medicineArr;
@@ -269,6 +268,7 @@ public class cartGUI extends JFrame {
 
     private void showSP_incart() {
         giua.removeAll();
+        checkboxes.clear();
         ArrayList<cart> danhsachSPtronggio = giohang.getA();
 
         JPanel pn_contain_btn = new JPanel();
@@ -434,6 +434,46 @@ public class cartGUI extends JFrame {
             spPanel.add(cot3);
             spPanel.add(cot4);
 
+            /*
+             * xoasp.addActionListener(new ActionListener() {
+             * 
+             * @Override
+             * public void actionPerformed(ActionEvent e) {
+             * int result = JOptionPane.showConfirmDialog(
+             * null,
+             * "Bạn có chắc chắn muốn xoá sản phẩm này khỏi giỏ hàng?",
+             * "Xác nhận xoá",
+             * JOptionPane.YES_NO_OPTION);
+             * 
+             * if (result == JOptionPane.YES_OPTION) {
+             * // 1. Xoá khỏi cơ sở dữ liệu
+             * cartDAO dao = new cartDAO();
+             * dao.xoaSanPhamTrongGio(khachCurrent.getMakh(), c.getMathuoc());
+             * updateTongTien();
+             * 
+             * // 2. Cập nhật lại danh sách trong bộ nhớ từ DB
+             * giohang.readCartDatabase(giohang.getA(), khachCurrent.getMakh());
+             * 
+             * // 3. Refresh lại giao diện
+             * 
+             * showSP_incart();
+             * 
+             * }
+             * }
+             * });
+             * 
+             * 
+             */
+
+            boolean allChecked = checkboxes.stream().allMatch(AbstractButton::isSelected);
+            if (allChecked) {
+                select_all_btn.setText("Bỏ chọn tất cả");
+                select_all_btn.setPreferredSize(new Dimension(180, 18));
+            } else {
+                select_all_btn.setText("Chọn tất cả");
+                select_all_btn.setPreferredSize(new Dimension(120, 18));
+            }
+
             xoasp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -448,59 +488,58 @@ public class cartGUI extends JFrame {
                         cartDAO dao = new cartDAO();
                         dao.xoaSanPhamTrongGio(khachCurrent.getMakh(), c.getMathuoc());
 
-                        // 2. Cập nhật lại danh sách trong bộ nhớ từ DB
+                        // 2. Xoá khỏi danh sách sản phẩm đã chọn
+                        selectedProducts.removeIf(product -> product.getMathuoc().equals(c.getMathuoc()));
+
+                        // 3. Cập nhật lại danh sách trong bộ nhớ từ DB
                         giohang.readCartDatabase(giohang.getA(), khachCurrent.getMakh());
 
-                        // 3. Refresh lại giao diện
+                        // 4. Refresh lại giao diện
                         showSP_incart();
+
+                        // 5. Cập nhật bảng giá
+                        updateTongTien();
                     }
                 }
             });
-
             giua.add(Box.createRigidArea(new Dimension(0, 10)));
             giua.add(spPanel);
         }
 
-        boolean[] allSelected = { false }; // Dùng mảng 1 phần tử để cho phép thay đổi bên trong listener
+        boolean[] allSelected = { false }; // Dùng mảng để cho phép thay đổi bên trong listener
 
         select_all_btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean allSelected = true; // Kiểm tra trạng thái chọn
+                allSelected[0] = !allSelected[0]; // Đảo trạng thái
 
-                // Đảo trạng thái cho checkbox
-                for (JRadioButton checkbox : checkboxes) {
-                    if (!checkbox.isSelected()) {
-                        allSelected = false; // Nếu có ít nhất một checkbox không được chọn, đặt allSelected thành false
-                        break;
-                    }
-                }
+                for (int i = 0; i < checkboxes.size(); i++) {
+                    JRadioButton checkbox = checkboxes.get(i);
+                    checkbox.setSelected(allSelected[0]);
 
-                for (JRadioButton checkbox : checkboxes) {
-                    checkbox.setSelected(!allSelected);
-                    if (checkbox.isSelected()) {
+                    cart c = danhsachSPtronggio.get(i);
+                    medicine thuoc = medicineDAO.timThuocTheoMa(c.getMathuoc());
 
-                        int index = checkboxes.indexOf(checkbox);
-                        cart c = danhsachSPtronggio.get(index);
-                        medicine thuoc = medicineDAO.timThuocTheoMa(c.getMathuoc());
-                        selectedProducts.add(new sanphamchonmua(c.getMathuoc(), thuoc.getTenthuoc(), c.getSl(),
-                                String.join(", ", thuoc.getDonvi()), c.getDongia()));
+                    if (allSelected[0]) {
+                        selectedProducts.add(new sanphamchonmua(
+                                c.getMathuoc(),
+                                thuoc.getTenthuoc(),
+                                c.getSl(),
+                                String.join(", ", thuoc.getDonvi()),
+                                c.getDongia()));
                     } else {
-
-                        int index = checkboxes.indexOf(checkbox);
-                        cart c = danhsachSPtronggio.get(index);
                         selectedProducts.removeIf(product -> product.getMathuoc().equals(c.getMathuoc()));
                     }
                 }
 
                 updateTongTien();
 
-                if (allSelected) {
-                    select_all_btn.setText("Chọn tất cả");
-                    select_all_btn.setPreferredSize(new Dimension(120, 18));
-                } else {
+                if (allSelected[0]) {
                     select_all_btn.setText("Bỏ chọn tất cả");
                     select_all_btn.setPreferredSize(new Dimension(180, 18));
+                } else {
+                    select_all_btn.setText("Chọn tất cả");
+                    select_all_btn.setPreferredSize(new Dimension(120, 18));
                 }
             }
         });
@@ -508,6 +547,7 @@ public class cartGUI extends JFrame {
         giua.setPreferredSize(new Dimension(400, danhsachSPtronggio.size() * 90));
         giua.revalidate();
         giua.repaint();
+
     }
 
     private void create_footer() {
