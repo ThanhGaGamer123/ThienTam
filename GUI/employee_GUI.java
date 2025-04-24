@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -795,7 +796,10 @@ public class employee_GUI extends JFrame {
         btn_nhathuoc.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                employee_BUS.showStore(nv);
+                if(!employee_BUS.showStore(nv)) {
+                    JOptionPane.showMessageDialog(null, 
+                    "Không tìm thấy thông tin nhà thuốc.");
+                }
             }
         });
 
@@ -889,7 +893,10 @@ public class employee_GUI extends JFrame {
         xoaCollect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                orderSupply_BUS.deleteOrderSupply(tableCollect, modelCollect);
+                if(!orderSupply_BUS.deleteOrderSupply(tableCollect, modelCollect)) {
+                    JOptionPane.showMessageDialog(null, 
+                    "Đơn hàng nhập này đã ngừng hoạt động!");
+                }
             }
         });
 
@@ -1002,8 +1009,10 @@ public class employee_GUI extends JFrame {
         log_out.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (medicine_BUS.logOut()) {
-                    dispose();
+                int choice = JOptionPane.showConfirmDialog(null, 
+                "Bạn có chắc muốn đăng xuất không?");
+                if(choice == 0) {
+                    new login_GUI();
                 }
             }
         });
@@ -1053,7 +1062,10 @@ public class employee_GUI extends JFrame {
         suaMedic.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                medicine_BUS.rectifyMedicine(tableMedic, modelMedic);
+                if(!medicine_BUS.rectifyMedicine(tableMedic, modelMedic)) {
+                    JOptionPane.showMessageDialog(null, 
+                    "Thông tin thuốc này đã ngừng hoạt động!");
+                }
             }
         });
 
@@ -1061,7 +1073,10 @@ public class employee_GUI extends JFrame {
         xoaMedic.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                medicine_BUS.deleteMedicine(tableMedic, modelMedic, modelCollect);
+                if(!medicine_BUS.deleteMedicine(tableMedic, modelMedic, modelCollect)) {
+                    JOptionPane.showMessageDialog(null, 
+                    "Thông tin thuốc này đã ngừng hoạt động!");
+                }
             }
         });
 

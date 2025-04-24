@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -185,8 +186,10 @@ public class orderSupplySearch_GUI extends JFrame {
         tim.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                orderSupply_BUS.findOrderSupply(tf_mandon, tf_tenncc, tf_ngaynhap, 
-                orderSupplies, tf_tinhtrang, loc, modelSupplier);
+                if(!orderSupply_BUS.findOrderSupply(tf_mandon, tf_tenncc, tf_ngaynhap, 
+                orderSupplies, tf_tinhtrang, loc, modelSupplier)) {
+                    JOptionPane.showMessageDialog(null, "Ngày nhập không hợp lệ!");
+                }
             }
         });
 

@@ -27,7 +27,6 @@ import DAO.storage_DAO;
 import DTO.medicine_DTO;
 import DTO.orderSupply_details_DTO;
 import DTO.storage_DTO;
-import GUI.login_GUI;
 import GUI.medicine_GUI.medicineUpdate_GUI;
 import GUI.medicine_GUI.medicine_GUI;
 import advanceMethod.advance;
@@ -78,17 +77,6 @@ public class medicine_BUS {
         }
     }
 
-    public static Boolean logOut() {
-        int choice = JOptionPane.showConfirmDialog(null, 
-        "Bạn có chắc muốn đăng xuất không?");
-        if(choice == 0) {
-            new login_GUI();
-            return true;
-        }
-
-        return false;
-    }
-
     public static void showDetails(JTable tableMedic, DefaultTableModel modelMedic) {
         int selectColumn = tableMedic.getSelectedColumn();
         if(selectColumn == 4) {
@@ -107,15 +95,18 @@ public class medicine_BUS {
         return medDAO.selectByID(med);
     }
 
-    public static void rectifyMedicine(JTable tableMedic, DefaultTableModel modelMedic) {
+    public static Boolean rectifyMedicine(JTable tableMedic, DefaultTableModel modelMedic) {
         int selectedRow = tableMedic.getSelectedRow();
         if(selectedRow != -1) {
             String mathuoc = String.valueOf(modelMedic.getValueAt(selectedRow, 0));
             medicine_DTO med = throwMedicineObj(mathuoc);
-            if(med.getTinhtrang()) new medicineUpdate_GUI(modelMedic, mathuoc);
-            else JOptionPane.showMessageDialog(null, 
-            "Thông tin thuốc này đã ngừng hoạt động!");
+            if(med.getTinhtrang()) {
+                new medicineUpdate_GUI(modelMedic, mathuoc);
+                return true;
+            }
+            else return false;
         }
+        return null;
     }
 
     public static storage_DTO throwStorageObj(String maton) {
@@ -125,7 +116,7 @@ public class medicine_BUS {
         return strDAO.selectByID(str);
     }
 
-    public static void deleteMedicine(JTable tableMedic, DefaultTableModel modelMedic, DefaultTableModel modelCollect) {
+    public static Boolean deleteMedicine(JTable tableMedic, DefaultTableModel modelMedic, DefaultTableModel modelCollect) {
         int selectedRow = tableMedic.getSelectedRow();
         if(selectedRow != -1) {
             String mathuoc = String.valueOf(modelMedic.getValueAt(selectedRow, 0));
@@ -152,12 +143,12 @@ public class medicine_BUS {
                     storage_BUS.decreaseStock(osds);
                     loadData(modelMedic, true);
                     orderSupply_BUS.loadData(modelCollect, true);
+
+                    return true;
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, 
-                "Thông tin thuốc này đã ngừng hoạt động!");
-            }
+            } else return false;
         }
+        return null;
     }
 
     public static void searchMedicine(JTextField search_bar_3, DefaultTableModel modelMedic) {
@@ -258,7 +249,7 @@ public class medicine_BUS {
         || tf_xuatxu.getText().isEmpty() || sp_hansd.getValue().toString().equals("0")) 
             found = true;
 
-        if(found) JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ tất cả thông tin chính xác!");
+        if(found) return false;
         else {
             //gửi form
             medicine_DAO medDAO = new medicine_DAO();
@@ -303,8 +294,6 @@ public class medicine_BUS {
             loadData(modelMedic, true);
             return true;
         }
-
-        return false;
     }
 
     public static void resetAdd(JTextField tf_tenthuoc, JTextField tf_danhmuc,
@@ -500,7 +489,7 @@ public class medicine_BUS {
         || ta_thanhphan.getText().isEmpty() || ta_thongtin.getText().isEmpty()
         || tf_xuatxu.getText().isEmpty() || sp_hansd.getValue().toString() == "0") found = true;
 
-        if(found) JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ tất cả thông tin chính xác!");
+        if(found) return false;
         else {
             //gửi form
             medicine_DAO medDAO = new medicine_DAO();
@@ -541,8 +530,6 @@ public class medicine_BUS {
             loadData(modelMedic, true);
             return true;
         }
-
-        return false;
     }
 
     public static void resetUpdate(String mathuoc, JTextField tf_tenthuoc, JTextField tf_danhmuc,
@@ -646,16 +633,18 @@ public class medicine_BUS {
         loadDataOther(modelMedic, true);
     }
 
-    public static void chooseMedicine(JTable tableMedic, DefaultTableModel modelMedic, JTextField tf_tenthuoc) {
+    public static Boolean chooseMedicine(JTable tableMedic, DefaultTableModel modelMedic, JTextField tf_tenthuoc) {
         int selectedRow = tableMedic.getSelectedRow();
         if(selectedRow != -1) {
             String mathuoc = modelMedic.getValueAt(selectedRow, 0).toString();
             medicine_DTO med = throwMedicineObj(mathuoc);
             if(med.getTinhtrang()) {
                 tf_tenthuoc.setText(med.getTenthuoc());
+                return true;
             } else {
-                JOptionPane.showMessageDialog(null, "Thuốc này đã ngừng hoạt động!");
+                return false;
             }
         }
+        return null;
     }
 }

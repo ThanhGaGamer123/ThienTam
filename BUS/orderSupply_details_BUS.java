@@ -13,8 +13,8 @@ import DTO.orderSupply_details_DTO;
 import advanceMethod.advance;
 
 public class orderSupply_details_BUS {
-    //orderSupply_details của orderSupply trong medicine
-    public static void addOrderSupplyDetails(ArrayList<orderSupply_details_DTO> osds,
+    //orderSupply_details của medicine trong orderSupplyAdd
+    public static Boolean addOrderSupplyDetails(ArrayList<orderSupply_details_DTO> osds,
     DefaultTableModel modelMedic, JTable tableMedic, JSpinner sp_slnhap_hop,
     JSpinner sp_slnhap_vi, JSpinner sp_slnhap_vien, JSpinner sp_gianhap_hop,
     JSpinner sp_gianhap_vi, JSpinner sp_gianhap_vien, DefaultTableModel modelSupply,
@@ -54,17 +54,32 @@ public class orderSupply_details_BUS {
 
         osd.setTinhtrang(true);
 
-        if(!tf_tenthuoc.getText().isEmpty()) osds.add(osd);
-        else JOptionPane.showMessageDialog(null, "Vui lòng chọn thuốc trước!");
+        if(!tf_tenthuoc.getText().isEmpty()) {
+            osds.add(osd);
 
-        orderSupply_BUS.updateTableSupply(modelSupply, osds);
+            orderSupply_BUS.updateTableSupply(modelSupply, osds);
+    
+            sp_gianhap_hop.setValue(0);
+            sp_slnhap_hop.setValue(0);
+            sp_gianhap_vi.setValue(0);
+            sp_slnhap_vi.setValue(0);
+            sp_gianhap_vien.setValue(0);
+            sp_slnhap_vien.setValue(0);
 
-        sp_gianhap_hop.setValue(0);
-        sp_slnhap_hop.setValue(0);
-        sp_gianhap_vi.setValue(0);
-        sp_slnhap_vi.setValue(0);
-        sp_gianhap_vien.setValue(0);
-        sp_slnhap_vien.setValue(0);
+            return true;
+        }
+        else {
+            orderSupply_BUS.updateTableSupply(modelSupply, osds);
+    
+            sp_gianhap_hop.setValue(0);
+            sp_slnhap_hop.setValue(0);
+            sp_gianhap_vi.setValue(0);
+            sp_slnhap_vi.setValue(0);
+            sp_gianhap_vien.setValue(0);
+            sp_slnhap_vien.setValue(0);
+
+            return false;
+        }
     }
 
     public static void deleteOrderSupplyDetails(JTable tableSupply,
@@ -97,7 +112,7 @@ public class orderSupply_details_BUS {
     }
 
     //orderSupply_details trong oderSupply chi tiết
-    public static void deleteOrderSupplyDetail(DefaultTableModel modelSupply, 
+    public static Boolean deleteOrderSupplyDetail(DefaultTableModel modelSupply, 
     JTable tableSupply, String mahdnhap, DefaultTableModel modelCollect) {
         int selectedColumn = tableSupply.getSelectedColumn();
         if(selectedColumn == 7) {
@@ -118,11 +133,15 @@ public class orderSupply_details_BUS {
                         storage_BUS.decreaseStock(osd);
                         orderSupply_BUS.checkOrderSupply(mahdnhap, modelCollect);
                         orderSupply_BUS.loadOrderDetails(modelSupply, mahdnhap);
+
+                        return true;
                     } else {
-                        JOptionPane.showMessageDialog(null, "Chi tiết nhập này đã ngưng hoạt động!");
+                        return false;
                     }
                 }
             }
+            return null;
         }
+        return null;
     }
 }

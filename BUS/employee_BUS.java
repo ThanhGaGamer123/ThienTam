@@ -3,7 +3,6 @@ package BUS;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 import DAO.store_DAO;
 import DTO.employee_DTO;
@@ -35,8 +34,6 @@ public class employee_BUS {
                 return true;
             }
         }
-        JOptionPane.showMessageDialog(null, 
-        "Không tìm thấy thông tin nhà thuốc.");
         return false;
     }
 }

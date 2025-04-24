@@ -14,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -136,8 +137,10 @@ public class orderSupply_GUI extends JFrame {
         tableSupply.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                orderSupply_details_BUS.deleteOrderSupplyDetail(modelSupply, 
-                tableSupply, mahdnhap, modelCollect);
+                if(!orderSupply_details_BUS.deleteOrderSupplyDetail(modelSupply, 
+                tableSupply, mahdnhap, modelCollect)) {
+                    JOptionPane.showMessageDialog(null, "Chi tiết nhập này đã ngưng hoạt động!");
+                }
             }
 
             @Override

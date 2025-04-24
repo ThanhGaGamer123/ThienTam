@@ -63,7 +63,7 @@ public class orderSupply_BUS {
         return osDAO.selectByID(os);
     }
 
-    public static void deleteOrderSupply(JTable tableCollect, DefaultTableModel modelCollect) {
+    public static Boolean deleteOrderSupply(JTable tableCollect, DefaultTableModel modelCollect) {
         int selectedRow = tableCollect.getSelectedRow();
         if(selectedRow != -1) {
             String mahdnhap = modelCollect.getValueAt(selectedRow, 0).toString();
@@ -86,12 +86,14 @@ public class orderSupply_BUS {
 
                     storage_BUS.decreaseStock(osds);
                     orderSupply_BUS.loadData(modelCollect, true);
+
+                    return true;
                 }
             } else {
-                JOptionPane.showMessageDialog(null, 
-                "Đơn hàng nhập này đã ngừng hoạt động!");
+                return false;
             }
         }
+        return null;
     }
 
     public static void findOrderSupplyByID(ArrayList<orderSupply_DTO> orderSupplies, DefaultTableModel modelCollect, JTextField search_bar_2) {
@@ -242,7 +244,7 @@ public class orderSupply_BUS {
         }
     }
 
-    public static void addOrderSupply(JTextField tf_nhacc,
+    public static int addOrderSupply(JTextField tf_nhacc,
     ArrayList<orderSupply_details_DTO> osds, DefaultTableModel modelSupplier,
     DefaultTableModel modelMedic, DefaultTableModel modelSupply,
     JSpinner sp_gianhap_hop, JSpinner sp_gianhap_vi, JSpinner sp_gianhap_vien,
@@ -301,9 +303,11 @@ public class orderSupply_BUS {
                     resetAdd(tf_nhacc, modelMedic, modelSupply, sp_gianhap_hop, 
                     sp_gianhap_vi, sp_gianhap_vien, sp_slnhap_hop, sp_slnhap_vi, 
                     sp_slnhap_vien, tf_tenthuoc, search_bar, osds);
-                } else JOptionPane.showMessageDialog(null, "Nhà cung cấp này đã ngưng hoạt động!");
-            } else JOptionPane.showMessageDialog(null, "Không tìm thấy nhà cung cấp!");
-        } else JOptionPane.showMessageDialog(null, "Đơn hàng rỗng!");
+
+                    return 0;
+                } else return 1;
+            } else return 2;
+        } else return 3;
     }
 
     public static void resetAdd(JTextField tf_nhacc, DefaultTableModel modelMedic, 
@@ -340,7 +344,7 @@ public class orderSupply_BUS {
     }
 
     //orderSupply tìm kiếm
-    public static void findOrderSupply(JTextField tf_mandon, JTextField tf_tenncc,
+    public static Boolean findOrderSupply(JTextField tf_mandon, JTextField tf_tenncc,
     JTextField tf_ngaynhap, ArrayList<orderSupply_DTO> orderSupplies,
     JComboBox cb_tinhtrang, int loc, DefaultTableModel modelSupplier) {
         //kiểm tra
@@ -444,8 +448,10 @@ public class orderSupply_BUS {
 
             //reset
             resetFind(tf_mandon, tf_tenncc, tf_ngaynhap, cb_tinhtrang);
+
+            return true;
         } else {
-            JOptionPane.showMessageDialog(null, "Ngày nhập không hợp lệ!");
+            return false;
         }
     }
 

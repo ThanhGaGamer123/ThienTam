@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -474,7 +475,9 @@ public class orderSupplyAdd_GUI extends JFrame{
         tableMedic.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                medicine_BUS.chooseMedicine(tableMedic, modelMedic, tf_tenthuoc);
+                if(!medicine_BUS.chooseMedicine(tableMedic, modelMedic, tf_tenthuoc)) {
+                    JOptionPane.showMessageDialog(null, "Thuốc này đã ngừng hoạt động!");
+                }
             }
 
             @Override
@@ -507,9 +510,11 @@ public class orderSupplyAdd_GUI extends JFrame{
         themMedic.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                orderSupply_details_BUS.addOrderSupplyDetails(osds, modelMedic, 
+                if(!orderSupply_details_BUS.addOrderSupplyDetails(osds, modelMedic, 
                 tableMedic, sp_slnhap_hop, sp_slnhap_vi, sp_slnhap_vien, sp_gianhap_hop, 
-                sp_gianhap_vi, sp_gianhap_vien, modelSupply, tf_tenthuoc);
+                sp_gianhap_vi, sp_gianhap_vien, modelSupply, tf_tenthuoc)) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn thuốc trước!");
+                }
             }
         });
     
@@ -584,9 +589,16 @@ public class orderSupplyAdd_GUI extends JFrame{
         finish.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                orderSupply_BUS.addOrderSupply(tf_nhacc, osds, modelSupplier, 
+                int ketQua = orderSupply_BUS.addOrderSupply(tf_nhacc, osds, modelSupplier, 
                 modelMedic, modelSupply, sp_gianhap_hop, sp_gianhap_vi, sp_gianhap_vien, 
                 sp_slnhap_hop, sp_slnhap_vi, sp_slnhap_vien, tf_tenthuoc, search_bar);
+                if (ketQua == 1) {
+                    JOptionPane.showMessageDialog(null, "Nhà cung cấp này đã ngưng hoạt động!");
+                } else if (ketQua == 2) {
+                    JOptionPane.showMessageDialog(null, "Không tìm thấy nhà cung cấp!");
+                } else if (ketQua == 3) {
+                    JOptionPane.showMessageDialog(null, "Đơn hàng rỗng!");
+                }
             }
         });
     

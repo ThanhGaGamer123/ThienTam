@@ -147,7 +147,14 @@ public class login_GUI extends JFrame {
                 String username = user_field.getText();
                 String password = String.valueOf(pass_field.getPassword());
                 if(login_BUS.checkLogin(username, password, user_field, pass_field)) {
+                    JOptionPane.showMessageDialog(null, 
+                    "Đăng nhập thành công!");
                     dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, 
+                    "Tài khoản hoặc mật khẩu không chính xác. Vui lòng nhập lại!");
+                    user_field.requestFocus(true);
+                    pass_field.setText("");
                 }
             }
         });
