@@ -18,7 +18,7 @@ public class customer_DAO implements DAO<customer_DTO> {
         try (PreparedStatement pst = sql.prepareStatement(command)) {
             pst.setString(1, t.getMakh());
             pst.setString(2, t.getTenkh());
-            pst.setInt(3, t.getSdt());
+            pst.setString(3, t.getSdt());
             pst.setString(4, t.getEmail());
             pst.setString(5, t.getMasonha());
             pst.setString(6, t.getDuong());
@@ -49,7 +49,7 @@ public class customer_DAO implements DAO<customer_DTO> {
 
         try (PreparedStatement pst = sql.prepareStatement(command)) {
             pst.setString(1, t.getTenkh());
-            pst.setInt(2, t.getSdt());
+            pst.setString(2, t.getSdt());
             pst.setString(3, t.getEmail());
             pst.setString(4, t.getMasonha());
             pst.setString(5, t.getDuong());
@@ -108,7 +108,7 @@ public class customer_DAO implements DAO<customer_DTO> {
                 customer_DTO customer = new customer_DTO();
                 customer.setMakh(rs.getString("makh"));
                 customer.setTenkh(rs.getString("tenkh"));
-                customer.setSdt(rs.getInt("sdt"));
+                customer.setSdt(rs.getString("sdt"));
                 customer.setEmail(rs.getString("email"));
                 customer.setMasonha(rs.getString("masonha"));
                 customer.setDuong(rs.getString("duong"));
@@ -144,7 +144,7 @@ public class customer_DAO implements DAO<customer_DTO> {
                 customer_DTO customer = new customer_DTO();
                 customer.setMakh(rs.getString("makh"));
                 customer.setTenkh(rs.getString("tenkh"));
-                customer.setSdt(rs.getInt("sdt"));
+                customer.setSdt(rs.getString("sdt"));
                 customer.setEmail(rs.getString("email"));
                 customer.setMasonha(rs.getString("masonha"));
                 customer.setDuong(rs.getString("duong"));
@@ -180,7 +180,7 @@ public class customer_DAO implements DAO<customer_DTO> {
             if (rs.next()) {
                 customer.setMakh(rs.getString("makh"));
                 customer.setTenkh(rs.getString("tenkh"));
-                customer.setSdt(rs.getInt("sdt"));
+                customer.setSdt(rs.getString("sdt"));
                 customer.setEmail(rs.getString("email"));
                 customer.setMasonha(rs.getString("masonha"));
                 customer.setDuong(rs.getString("duong"));

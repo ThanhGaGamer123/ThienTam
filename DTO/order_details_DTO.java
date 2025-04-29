@@ -6,6 +6,7 @@ public class order_details_DTO {
     private String macthdnhap;
 
     private int sl;
+    private String donvi;
     private double dongia;
     private double thanhtien; //don gia * sl
 
@@ -14,12 +15,13 @@ public class order_details_DTO {
     public order_details_DTO() {
     }
 
-    public order_details_DTO(String mactdh, String madon, String macthdnhap, int sl, double dongia, double thanhtien,
-            Boolean tinhtrang) {
+    public order_details_DTO(String mactdh, String madon, String macthdnhap, int sl, String donvi, double dongia,
+            double thanhtien, Boolean tinhtrang) {
         this.mactdh = mactdh;
         this.madon = madon;
         this.macthdnhap = macthdnhap;
         this.sl = sl;
+        this.donvi = donvi;
         this.dongia = dongia;
         this.thanhtien = thanhtien;
         this.tinhtrang = tinhtrang;
@@ -79,6 +81,14 @@ public class order_details_DTO {
 
     public void setTinhtrang(Boolean tinhtrang) {
         this.tinhtrang = tinhtrang;
+    }
+
+    public String getDonvi() {
+        return donvi;
+    }
+
+    public void setDonvi(String donvi) {
+        this.donvi = donvi;
     }
 
     

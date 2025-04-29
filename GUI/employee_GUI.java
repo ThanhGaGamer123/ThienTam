@@ -37,12 +37,14 @@ import javax.swing.table.*;
 import BUS.employee_BUS;
 import BUS.medicine_BUS;
 import BUS.orderSupply_BUS;
+import BUS.order_BUS;
 import DTO.employee_DTO;
 import DTO.orderSupply_DTO;
 import GUI.medicine_GUI.medicineAdd_GUI;
 import GUI.medicine_GUI.medicineSearch_GUI;
 import GUI.orderSupply_GUI.orderSupplyAdd_GUI;
 import GUI.orderSupply_GUI.orderSupplySearch_GUI;
+import GUI.order_GUI.orderAdd_GUI;
 import advanceMethod.advance;
 
 public class employee_GUI extends JFrame {
@@ -281,7 +283,7 @@ public class employee_GUI extends JFrame {
         gdc_ordersell.fill = GridBagConstraints.NONE;
         gdc_ordersell.weightx = 0;
 
-        String columns[] = {"Mã đơn", "Mã khách", "Mã nhân viên", "Ngày đặt", 
+        String columns[] = {"Mã đơn", "Tên khách", "Tên nhân viên", "Thời gian lập", 
         "Tổng tiền", "Tình trạng", "Xem chi tiết"};
         DefaultTableModel model = new DefaultTableModel(columns,0) {
             @Override
@@ -331,24 +333,13 @@ public class employee_GUI extends JFrame {
         gdc_ordersell.insets = new Insets(0, 5, 30, 50);
         orderSell.add(themSell, gdc_ordersell);
 
-        JButton suaSell = new JButton("Sửa");
-        suaSell.setFont(new Font(null, Font.PLAIN, 18));
-        suaSell.setForeground(Color.BLACK);
-        suaSell.setIcon(data.imagePath.resize_fixButton);
-        // suaSell.setBounds(1120, 180, 115, 50);
-        gdc_ordersell.gridx = 4;
-        gdc_ordersell.gridy = 3;
-        gdc_ordersell.fill = GridBagConstraints.HORIZONTAL;
-        gdc_ordersell.insets = new Insets(0, 5, 30, 50);
-        orderSell.add(suaSell, gdc_ordersell);
-
         JButton xoaSell = new JButton("Xóa");
         xoaSell.setFont(new Font(null, Font.PLAIN, 18));
         xoaSell.setForeground(Color.BLACK);
         xoaSell.setIcon(data.imagePath.resize_deleteButton);
         // xoaSell.setBounds(1120, 270, 115, 50);
         gdc_ordersell.gridx = 4;
-        gdc_ordersell.gridy = 4;
+        gdc_ordersell.gridy = 3;
         gdc_ordersell.fill = GridBagConstraints.HORIZONTAL;
         gdc_ordersell.insets = new Insets(0, 5, 30, 50);
         orderSell.add(xoaSell, gdc_ordersell);
@@ -803,27 +794,9 @@ public class employee_GUI extends JFrame {
             }
         });
 
+        //Xử lý đơn hàng
         //Tự động cập nhật thông tin hóa đơn bán
-
-
-
-        table.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel label = (value instanceof JLabel) ? (JLabel) value : new JLabel();
-
-                // Thiết lập màu nền khi được chọn
-                if (isSelected) {
-                    label.setBackground(new Color(173, 216, 230)); // Màu nền sáng
-                    label.setOpaque(true); // Để màu nền có hiệu lực
-                } else {
-                    label.setBackground(Color.WHITE); // Màu nền mặc định
-                    label.setOpaque(true);
-                }
-
-                return label;
-            }   
-        });
+        order_BUS.loadData(model);
 
         table.getColumn("Xem chi tiết").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -840,6 +813,14 @@ public class employee_GUI extends JFrame {
                 button.setBorderPainted(false); // Ẩn viền nút
                 return button;
             }   
+        });
+
+        //Thêm đơn hàng
+        themSell.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new orderAdd_GUI(modelCollect, nv, model);
+            }
         });
 
         //xử lý đơn hàng nhập

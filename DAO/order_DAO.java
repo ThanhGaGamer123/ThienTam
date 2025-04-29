@@ -12,7 +12,7 @@ public class order_DAO implements DAO<order_DTO> {
     public int add(order_DTO t) {
         Connection sql = data.SQL.createConnection();
 
-        String command = "INSERT INTO DonHang (madon, makh, manv, masonha, duong, phuong, quan, tinh, ngaydat, pttt, tinhtrang, tongtien, ghichu, nguoinha, sdt_nguoinhan)" + 
+        String command = "INSERT INTO DonHang (madon, makh, manv, masonha, duong, phuong, quan, tinh, ngaydat, pttt, tinhtrang, tongtien, ghichu, nguoinhan, sdt_nguoinhan)" + 
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = sql.prepareStatement(command)) {

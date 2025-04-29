@@ -233,4 +233,41 @@ public class orderSupply_DAO implements DAO<orderSupply_DTO> {
             data.SQL.closeConnection(sql);
         }
     }
+
+    public void findOrderSupply(String madon, String tenncc, String ngaynhap,
+    ArrayList<orderSupply_DTO> orderSupplies, String cb_tinhtrang) {
+        String command = "select mahdnhap, HoaDonNhap.mancc,tenncc, soloaithuoc, ngaynhap, tongtien, HoaDonNhap.tinhtrang "
+        + "from HoaDonNhap, NhaCungCap where HoaDonNhap.mancc = NhaCungCap.mancc and "
+        + "mahdnhap like N'%" + madon + "%' and tenncc like N'%" + tenncc + "%' and "
+        + "ngaynhap like N'%" + ngaynhap + "%'";
+        Connection sql = data.SQL.createConnection();
+        orderSupplies.clear();
+
+        try {
+            PreparedStatement pst = sql.prepareStatement(command);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                orderSupply_DTO orderSupply = new orderSupply_DTO();
+                orderSupply.setMahdnhap(rs.getString("mahdnhap"));
+                orderSupply.setMancc("mancc");
+                tenncc = rs.getString("tenncc");
+                orderSupply.setNgaynhap(rs.getString("ngaynhap"));
+                orderSupply.setSoloaithuoc(rs.getInt("soloaithuoc"));
+                orderSupply.setTinhtrang(rs.getBoolean("tinhtrang"));
+                orderSupply.setTongtien(rs.getInt("tongtien"));
+                if((cb_tinhtrang.equals("Đang hoạt động")
+                && orderSupply.getTinhtrang()) 
+                || (cb_tinhtrang.equals("Ngừng hoạt động")
+                && !orderSupply.getTinhtrang())
+                || (cb_tinhtrang.equals("Không có"))) {
+                    orderSupplies.add(orderSupply);
+                }
+            }
+            System.out.println("Truy vấn thành công");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
+        }
+    }
 }

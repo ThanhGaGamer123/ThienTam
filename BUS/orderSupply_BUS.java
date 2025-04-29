@@ -2,9 +2,6 @@ package BUS;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -46,7 +43,9 @@ public class orderSupply_BUS {
             os = osDAO.selectByID(os);
             os.setTinhtrang(false);
             osDAO.update(os);
-            loadData(modelCollect, true);
+            if(modelCollect != null) {
+                loadData(modelCollect, true);
+            }
         }
     }
 
@@ -82,6 +81,9 @@ public class orderSupply_BUS {
                     for (orderSupply_details_DTO osd : osds) {
                         osd.setTinhtrang(false);
                         osdDAO.update(osd);
+
+                        medicine_DTO med = medicine_BUS.throwMedicineObj(osd.getMathuoc());
+                        medicine_BUS.updateSellPrice(med);
                     }
 
                     storage_BUS.decreaseStock(osds);
@@ -289,11 +291,12 @@ public class orderSupply_BUS {
                     for (orderSupply_details_DTO osd : osds) {
                         osd.setMahdnhap(os.getMahdnhap());
                         osdDAO.add(osd);
+
+                        medicine_DTO med = medicine_BUS.throwMedicineObj(osd.getMathuoc());
+                        medicine_BUS.updateSellPrice(med);
                     }
 
                     loadData(modelSupplier, true);
-
-                    medicine_BUS.updateSellPrice();
 
                     //cập nhật lượng tồn
                     storage_BUS.increaseStock(osds);
@@ -353,39 +356,9 @@ public class orderSupply_BUS {
         String ngaynhap = tf_ngaynhap.getText().toString();
 
         if(tf_ngaynhap.getText().isEmpty() || (!tf_ngaynhap.getText().isEmpty() && advance.checkDate(ngaynhap))) {
-            String command = "select mahdnhap, HoaDonNhap.mancc,tenncc, soloaithuoc, ngaynhap, tongtien, HoaDonNhap.tinhtrang "
-            + "from HoaDonNhap, NhaCungCap where HoaDonNhap.mancc = NhaCungCap.mancc and "
-            + "mahdnhap like N'%" + madon + "%' and tenncc like N'%" + tenncc + "%' and "
-            + "ngaynhap like N'%" + ngaynhap + "%'";
-            Connection sql = data.SQL.createConnection();
-            orderSupplies.clear();
-
-            try {
-                PreparedStatement pst = sql.prepareStatement(command);
-                ResultSet rs = pst.executeQuery();
-                while (rs.next()) {
-                    orderSupply_DTO orderSupply = new orderSupply_DTO();
-                    orderSupply.setMahdnhap(rs.getString("mahdnhap"));
-                    orderSupply.setMancc("mancc");
-                    tenncc = rs.getString("tenncc");
-                    orderSupply.setNgaynhap(rs.getString("ngaynhap"));
-                    orderSupply.setSoloaithuoc(rs.getInt("soloaithuoc"));
-                    orderSupply.setTinhtrang(rs.getBoolean("tinhtrang"));
-                    orderSupply.setTongtien(rs.getInt("tongtien"));
-                    if((cb_tinhtrang.getSelectedItem().toString().equals("Đang hoạt động")
-                    && orderSupply.getTinhtrang()) 
-                    || (cb_tinhtrang.getSelectedItem().toString().equals("Ngừng hoạt động")
-                    && !orderSupply.getTinhtrang())
-                    || (cb_tinhtrang.getSelectedItem().toString().equals("Không có"))) {
-                        orderSupplies.add(orderSupply);
-                    }
-                }
-                System.out.println("Truy vấn thành công");
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            } finally {
-                data.SQL.closeConnection(sql);
-            }
+            orderSupply_DAO osDAO = new orderSupply_DAO();
+            osDAO.findOrderSupply(madon, tenncc, ngaynhap, orderSupplies,
+            cb_tinhtrang.getSelectedItem().toString());
             
             //xử lý lọc
             System.out.println(loc);

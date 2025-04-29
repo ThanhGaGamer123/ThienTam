@@ -163,11 +163,12 @@ public class medicine_GUI extends JFrame {
         JTextArea ta_thanhphan = new JTextArea();
         ta_thanhphan.setForeground(Color.BLACK);
         ta_thanhphan.setFont(new Font(null, Font.PLAIN, 20));
-        ta_thanhphan.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-        ta_thanhphan.setPreferredSize(new Dimension(0, 100));
+        ta_thanhphan.setAutoscrolls(true);
+        ta_thanhphan.setLineWrap(true);
         
         JScrollPane scroll_thanhphan = new JScrollPane();
         scroll_thanhphan.setViewportView(ta_thanhphan);
+        scroll_thanhphan.setPreferredSize(new Dimension(0, 100));
 
         gdc.gridx = 1;
         gdc.gridy = 5;
@@ -193,11 +194,12 @@ public class medicine_GUI extends JFrame {
         JTextArea ta_thongtin = new JTextArea();
         ta_thongtin.setForeground(Color.BLACK);
         ta_thongtin.setFont(new Font(null, Font.PLAIN, 20));
-        ta_thongtin.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-        ta_thongtin.setPreferredSize(new Dimension(0, 100));
+        ta_thongtin.setAutoscrolls(true);
+        ta_thongtin.setLineWrap(true);
         
         JScrollPane scroll_thongtin = new JScrollPane();
         scroll_thongtin.setViewportView(ta_thongtin);
+        scroll_thongtin.setPreferredSize(new Dimension(0, 100));
 
         gdc.gridx = 1;
         gdc.gridy = 6;
@@ -475,11 +477,7 @@ public class medicine_GUI extends JFrame {
         tf_donvi.setBackground(Color.white);
         tf_donvi.setBorder(BorderFactory.createLineBorder(Color.black,1));
         ta_thanhphan.setEditable(false);
-        ta_thanhphan.setBackground(Color.white);
-        ta_thanhphan.setBorder(BorderFactory.createLineBorder(Color.black,1));
         ta_thongtin.setEditable(false);
-        ta_thongtin.setBackground(Color.white);
-        ta_thongtin.setBorder(BorderFactory.createLineBorder(Color.black,1));
         tf_xuatxu.setEditable(false);
         tf_xuatxu.setBackground(Color.white);
         tf_xuatxu.setBorder(BorderFactory.createLineBorder(Color.black,1));

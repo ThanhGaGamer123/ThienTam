@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -67,6 +68,26 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.insets = new Insets(20, 0, 30, 0);
         main.add(title, gdc);
 
+        JLabel title_thuoc = new JLabel("Thông Tin Nhập Thuốc");
+        title_thuoc.setForeground(Color.BLACK);
+        title_thuoc.setFont(new Font(null, Font.BOLD, 26));
+        gdc.gridx = 4;
+        gdc.gridy = 1;
+        gdc.gridwidth = 2;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.insets = new Insets(0, 0, 30, 0);
+        main.add(title_thuoc, gdc);
+
+        JLabel title_ds = new JLabel("Danh Sách Nhập Thuốc");
+        title_ds.setForeground(Color.BLACK);
+        title_ds.setFont(new Font(null, Font.BOLD, 26));
+        gdc.gridx = 0;
+        gdc.gridy = 12;
+        gdc.gridwidth = 6;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.insets = new Insets(20, 0, 30, 0);
+        main.add(title_ds, gdc);
+        
         JTextField search_bar = new JTextField("Nhập tên thuốc...");
         search_bar.setForeground(Color.BLACK);
         search_bar.setFont(new Font(null, Font.PLAIN, 20));
@@ -144,7 +165,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.gridx = 0;
         gdc.gridy = 2;
         gdc.gridwidth = 4;
-        gdc.gridheight = 9;
+        gdc.gridheight = 10;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
@@ -156,7 +177,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         tenthuoc.setForeground(Color.BLACK);
         tenthuoc.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 4;
-        gdc.gridy = 1;
+        gdc.gridy = 2;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -168,8 +189,10 @@ public class orderSupplyAdd_GUI extends JFrame{
         tf_tenthuoc.setForeground(Color.BLACK);
         tf_tenthuoc.setFont(new Font(null, Font.PLAIN, 20));
         tf_tenthuoc.setEditable(false);
+        tf_tenthuoc.setBackground(Color.white);
+        tf_tenthuoc.setBorder(BorderFactory.createLineBorder(Color.black, 1));
         gdc.gridx = 5;
-        gdc.gridy = 1;
+        gdc.gridy = 2;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -181,7 +204,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         slnhap_hop.setForeground(Color.BLACK);
         slnhap_hop.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 4;
-        gdc.gridy = 2;
+        gdc.gridy = 3;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -194,7 +217,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         sp_slnhap_hop.setForeground(Color.BLACK);
         sp_slnhap_hop.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 5;
-        gdc.gridy = 2;
+        gdc.gridy = 3;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -206,7 +229,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gianhap_hop.setForeground(Color.BLACK);
         gianhap_hop.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 4;
-        gdc.gridy = 3;
+        gdc.gridy = 4;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -219,7 +242,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         sp_gianhap_hop.setForeground(Color.BLACK);
         sp_gianhap_hop.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 5;
-        gdc.gridy = 3;
+        gdc.gridy = 4;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -231,7 +254,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         slnhap_vi.setForeground(Color.BLACK);
         slnhap_vi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 4;
-        gdc.gridy = 4;
+        gdc.gridy = 5;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -244,7 +267,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         sp_slnhap_vi.setForeground(Color.BLACK);
         sp_slnhap_vi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 5;
-        gdc.gridy = 4;
+        gdc.gridy = 5;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -256,7 +279,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gianhap_vi.setForeground(Color.BLACK);
         gianhap_vi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 4;
-        gdc.gridy = 5;
+        gdc.gridy = 6;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -269,7 +292,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         sp_gianhap_vi.setForeground(Color.BLACK);
         sp_gianhap_vi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 5;
-        gdc.gridy = 5;
+        gdc.gridy = 6;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -281,7 +304,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         slnhap_vien.setForeground(Color.BLACK);
         slnhap_vien.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 4;
-        gdc.gridy = 6;
+        gdc.gridy = 7;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -294,7 +317,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         sp_slnhap_vien.setForeground(Color.BLACK);
         sp_slnhap_vien.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 5;
-        gdc.gridy = 6;
+        gdc.gridy = 7;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -306,7 +329,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gianhap_vien.setForeground(Color.BLACK);
         gianhap_vien.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 4;
-        gdc.gridy = 7;
+        gdc.gridy = 9;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -319,19 +342,26 @@ public class orderSupplyAdd_GUI extends JFrame{
         sp_gianhap_vien.setForeground(Color.BLACK);
         sp_gianhap_vien.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 5;
-        gdc.gridy = 7;
+        gdc.gridy = 9;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1.5;
         gdc.insets = new Insets(0, 10, 30, 100);
         main.add(sp_gianhap_vien, gdc);
+
+        sp_slnhap_hop.setEnabled(false);
+        sp_slnhap_vi.setEnabled(false);
+        sp_slnhap_vien.setEnabled(false);
+        sp_gianhap_hop.setEnabled(false);
+        sp_gianhap_vi.setEnabled(false);
+        sp_gianhap_vien.setEnabled(false);
         
         JButton themMedic = new JButton("Thêm");
         themMedic.setForeground(Color.BLACK);
         themMedic.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 4;
-        gdc.gridy = 8;
+        gdc.gridy = 10;
         gdc.gridwidth = 2;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.BOTH;
@@ -362,13 +392,13 @@ public class orderSupplyAdd_GUI extends JFrame{
         JScrollPane scroll_supply = new JScrollPane();
         scroll_supply.setViewportView(tableSupply);
         gdc.gridx = 0;
-        gdc.gridy = 10;
+        gdc.gridy = 13;
         gdc.gridwidth = 6;
         gdc.gridheight = 4;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
         gdc.weightx = 1;
-        gdc.insets = new Insets(50, 100, 30, 50);
+        gdc.insets = new Insets(0, 100, 30, 100);
         main.add(scroll_supply, gdc);
         gdc.gridheight = 1;
 
@@ -376,7 +406,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         nhacc.setForeground(Color.BLACK);
         nhacc.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 15;
+        gdc.gridy = 18;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -388,7 +418,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         tf_nhacc.setForeground(Color.BLACK);
         tf_nhacc.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 2;
-        gdc.gridy = 15;
+        gdc.gridy = 18;
         gdc.gridwidth = 3;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -400,7 +430,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         finish.setForeground(Color.BLACK);
         finish.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 2;
-        gdc.gridy = 16;
+        gdc.gridy = 19;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.BOTH;
@@ -412,7 +442,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         reset_all.setForeground(Color.BLACK);
         reset_all.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 3;
-        gdc.gridy = 16;
+        gdc.gridy = 19;
         gdc.gridwidth = 2;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.BOTH;
@@ -475,7 +505,9 @@ public class orderSupplyAdd_GUI extends JFrame{
         tableMedic.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(!medicine_BUS.chooseMedicine(tableMedic, modelMedic, tf_tenthuoc)) {
+                if(!medicine_BUS.chooseMedicine(tableMedic, modelMedic, tf_tenthuoc
+                , sp_gianhap_hop, sp_gianhap_vi, sp_gianhap_vien, sp_slnhap_hop,
+                sp_slnhap_vi, sp_slnhap_vien)) {
                     JOptionPane.showMessageDialog(null, "Thuốc này đã ngừng hoạt động!");
                 }
             }

@@ -32,25 +32,43 @@ import GUI.medicine_GUI.medicine_GUI;
 import advanceMethod.advance;
 
 public class medicine_BUS {
-    public static void updateSellPrice() {
+    public static ArrayList<String> updateSellPrice(medicine_DTO med) {
+        ArrayList<Double> giaban = med.getGiaban();
+
+        giaban.set(0, 0.0);
+        giaban.set(1, 0.0);
+        giaban.set(2, 0.0);
+
+        ArrayList<String> macthd = new ArrayList<>();
+        macthd.add("null");
+        macthd.add("null");
+        macthd.add("null");
+
         ArrayList<orderSupply_details_DTO> osds = new ArrayList<>();
         orderSupply_details_DAO osdDAO = new orderSupply_details_DAO();
         osds = osdDAO.selectAll();
         for (orderSupply_details_DTO osd : osds) {
-            if(osd.getTinhtrang()) {
-                medicine_DTO med = throwMedicineObj(osd.getMathuoc());
-                ArrayList<Double> giaban = med.getGiaban();
-                if(giaban.get(0) == 0.0 && osd.getGianhap().get(0) != 0.0)
+            if(osd.getTinhtrang() && osd.getMathuoc().equals(med.getMathuoc())) {
+                if(giaban.get(0) == 0.0 && osd.getSlcon().get(0) != 0) {
                     giaban.set(0, osd.getGianhap().get(0) * 1.2);
-                if(giaban.get(1) == 0.0 && osd.getGianhap().get(1) != 0.0)
+                    macthd.set(0, osd.getMacthdnhap());
+                }
+                if(giaban.get(1) == 0.0 && osd.getSlcon().get(1) != 0) {
                     giaban.set(1, osd.getGianhap().get(1) * 1.2);
-                if(giaban.get(2) == 0.0 && osd.getGianhap().get(2) != 0.0)
+                    macthd.set(1, osd.getMacthdnhap());
+                }
+                if(giaban.get(2) == 0.0 && osd.getSlcon().get(2) != 0) {
                     giaban.set(2, osd.getGianhap().get(2) * 1.2);
-                med.setGiaban(giaban);
-                medicine_DAO medDAO = new medicine_DAO();
-                medDAO.update(med);
+                    macthd.set(2, osd.getMacthdnhap());
+                }
             }
         }
+
+        med.setGiaban(giaban);
+        medicine_DAO medDAO = new medicine_DAO();
+        medDAO.update(med);
+
+        return macthd;
     }
 
     //medicine trong employee
@@ -138,6 +156,9 @@ public class medicine_BUS {
                         osd.setTinhtrang(false);
                         osdDAO.update(osd);
                         orderSupply_BUS.checkOrderSupply(osd.getMahdnhap(), modelCollect);
+
+                        medicine_DTO medicine = throwMedicineObj(osd.getMathuoc());
+                        updateSellPrice(medicine);
                     }
 
                     storage_BUS.decreaseStock(osds);
@@ -630,21 +651,100 @@ public class medicine_BUS {
         sp_slnhap_vi.setValue(0);
         sp_gianhap_vien.setValue(0);
         sp_slnhap_vien.setValue(0);
+        sp_gianhap_hop.setEnabled(false);
+        sp_slnhap_hop.setEnabled(false);
+        sp_gianhap_vi.setEnabled(false);
+        sp_slnhap_vi.setEnabled(false);
+        sp_gianhap_vien.setEnabled(false);
+        sp_slnhap_vien.setEnabled(false);
         loadDataOther(modelMedic, true);
     }
 
-    public static Boolean chooseMedicine(JTable tableMedic, DefaultTableModel modelMedic, JTextField tf_tenthuoc) {
+    public static Boolean chooseMedicine(JTable tableMedic, DefaultTableModel modelMedic, 
+    JTextField tf_tenthuoc, JSpinner sp_slnhap_hop, JSpinner sp_slnhap_vi,
+    JSpinner sp_slnhap_vien, JSpinner sp_gianhap_hop, JSpinner sp_gianhap_vi,
+    JSpinner sp_gianhap_vien) {
         int selectedRow = tableMedic.getSelectedRow();
         if(selectedRow != -1) {
             String mathuoc = modelMedic.getValueAt(selectedRow, 0).toString();
             medicine_DTO med = throwMedicineObj(mathuoc);
             if(med.getTinhtrang()) {
+                sp_gianhap_hop.setValue(0);
+                sp_slnhap_hop.setValue(0);
+                sp_gianhap_vi.setValue(0);
+                sp_slnhap_vi.setValue(0);
+                sp_gianhap_vien.setValue(0);
+                sp_slnhap_vien.setValue(0);
+                sp_gianhap_hop.setEnabled(false);
+                sp_slnhap_hop.setEnabled(false);
+                sp_gianhap_vi.setEnabled(false);
+                sp_slnhap_vi.setEnabled(false);
+                sp_gianhap_vien.setEnabled(false);
+                sp_slnhap_vien.setEnabled(false);
+                
                 tf_tenthuoc.setText(med.getTenthuoc());
+                for (String donvi : med.getDonvi()) {
+                    if(donvi.equals("hộp")) {
+                        sp_gianhap_hop.setEnabled(true);
+                        sp_slnhap_hop.setEnabled(true);
+                    }
+                    if(donvi.equals("vỉ")) {
+                        sp_gianhap_vi.setEnabled(true);
+                        sp_slnhap_vi.setEnabled(true);
+                    }
+                    if(donvi.equals("viên")) {
+                        sp_gianhap_vien.setEnabled(true);
+                        sp_slnhap_vien.setEnabled(true);
+                    }
+                }
                 return true;
             } else {
                 return false;
             }
         }
         return null;
+    }
+
+    //medicine trong orderAdd
+    public static void chooseMed(JTable table, DefaultTableModel model, JTextField tenthuoc,
+    JTextField slhop, JTextField slvi, JTextField slvien, medicine_DTO medicine) {
+        int selectedRow = table.getSelectedRow();
+        if(selectedRow != -1) {
+            String mathuoc = model.getValueAt(selectedRow, 0).toString();
+            medicine_DTO med = throwMedicineObj(mathuoc);
+            ArrayList<String> dsctdhnhap = updateSellPrice(med);
+
+            tenthuoc.setText(med.getTenthuoc());
+
+            for (int i = 0; i < 3; i++) {
+                if(!dsctdhnhap.get(i).equals("null")) {
+                    orderSupply_details_DTO osd = new orderSupply_details_DTO();
+                    osd.setMacthdnhap(dsctdhnhap.get(i));
+                    orderSupply_details_DAO osdDAO = new orderSupply_details_DAO();
+                    osd = osdDAO.selectByID(osd);
+
+                    if(i == 0) slhop.setText(osd.getSlcon().get(i).toString());
+                    if(i == 1) slvi.setText(osd.getSlcon().get(i).toString());
+                    if(i == 2) slvien.setText(osd.getSlcon().get(i).toString());
+                } else {
+                    if(i == 0) slhop.setText("0");
+                    if(i == 1) slvi.setText("0");
+                    if(i == 2) slvien.setText("0");
+                }
+            }
+
+            medicine.setMathuoc(med.getMathuoc());
+        }
+    }
+
+    public static void radioDonVi(medicine_DTO med, JTextField giaban, int index) {
+        med = throwMedicineObj(med.getMathuoc());
+        updateSellPrice(med);
+        storage_DTO str = throwStorageObj(med.getMaton());
+        if(str.getSlton().get(index) != 0) {
+            giaban.setText(med.getGiaban().get(index).toString());
+        } else {
+            giaban.setText("0.0");
+        }
     }
 }

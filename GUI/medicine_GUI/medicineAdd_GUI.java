@@ -174,11 +174,12 @@ public class medicineAdd_GUI extends JFrame {
         JTextArea ta_thanhphan = new JTextArea();
         ta_thanhphan.setForeground(Color.BLACK);
         ta_thanhphan.setFont(new Font(null, Font.PLAIN, 20));
-        ta_thanhphan.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-        ta_thanhphan.setPreferredSize(new Dimension(0, 100));
+        ta_thanhphan.setAutoscrolls(true);
+        ta_thanhphan.setLineWrap(true);
         
         JScrollPane scroll_thanhphan = new JScrollPane();
         scroll_thanhphan.setViewportView(ta_thanhphan);
+        scroll_thanhphan.setPreferredSize(new Dimension(0, 100));
 
         gdc.gridx = 1;
         gdc.gridy = 4;
@@ -204,11 +205,12 @@ public class medicineAdd_GUI extends JFrame {
         JTextArea ta_thongtin = new JTextArea();
         ta_thongtin.setForeground(Color.BLACK);
         ta_thongtin.setFont(new Font(null, Font.PLAIN, 20));
-        ta_thongtin.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-        ta_thongtin.setPreferredSize(new Dimension(0, 100));
+        ta_thongtin.setAutoscrolls(true);
+        ta_thongtin.setLineWrap(true);
         
         JScrollPane scroll_thongtin = new JScrollPane();
         scroll_thongtin.setViewportView(ta_thongtin);
+        scroll_thongtin.setPreferredSize(new Dimension(0, 100));
 
         gdc.gridx = 1;
         gdc.gridy = 5;

@@ -12,17 +12,18 @@ public class promotion_DAO implements DAO<promotion_DTO> {
     public int add(promotion_DTO t) {
         Connection sql = data.SQL.createConnection();
 
-        String command = "INSERT INTO ChuongTrinhKhuyenMai (makm, tenkm, ngaybatdau, ngayketthuc, noidung, diem, tinhtrang)" + 
-        "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String command = "INSERT INTO ChuongTrinhKhuyenMai (makm, tenkm, ngaybatdau, ngayketthuc, giam, noidung, diem, tinhtrang)" + 
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = sql.prepareStatement(command)) {
             pst.setString(1, t.getMakm());
             pst.setString(2, t.getTenkm());
             pst.setString(3, t.getNgaybatdau());
             pst.setString(4, t.getNgayketthuc());
-            pst.setString(5, t.getNoidung());
-            pst.setInt(6, t.getDiem());
-            pst.setBoolean(7, t.getTinhtrang());
+            pst.setInt(5, t.getGiam());
+            pst.setString(6, t.getNoidung());
+            pst.setInt(7, t.getDiem());
+            pst.setBoolean(8, t.getTinhtrang());
 
             int ketQua = pst.executeUpdate();
             System.out.println("Bạn đã thực thi: " + command);
@@ -40,16 +41,17 @@ public class promotion_DAO implements DAO<promotion_DTO> {
     public int update(promotion_DTO t) {
         Connection sql = data.SQL.createConnection();
 
-        String command = "UPDATE ChuongTrinhKhuyenMai SET tenkm = ?, ngaybatdau = ?, ngayketthuc = ?, noidung = ?, diem = ?, tinhtrang = ? WHERE makm = ?";
+        String command = "UPDATE ChuongTrinhKhuyenMai SET tenkm = ?, ngaybatdau = ?, ngayketthuc = ?, giam = ?, noidung = ?, diem = ?, tinhtrang = ? WHERE makm = ?";
 
         try (PreparedStatement pst = sql.prepareStatement(command)) {
             pst.setString(1, t.getTenkm());
             pst.setString(2, t.getNgaybatdau());
             pst.setString(3, t.getNgayketthuc());
-            pst.setString(4, t.getNoidung());
-            pst.setInt(5, t.getDiem());
-            pst.setBoolean(6, t.getTinhtrang());
-            pst.setString(7, t.getMakm());
+            pst.setInt(4, t.getGiam());
+            pst.setString(5, t.getNoidung());
+            pst.setInt(6, t.getDiem());
+            pst.setBoolean(7, t.getTinhtrang());
+            pst.setString(8, t.getMakm());
 
             int ketQua = pst.executeUpdate();
             System.out.println("Bạn đã thực thi: " + command);
@@ -100,6 +102,7 @@ public class promotion_DAO implements DAO<promotion_DTO> {
                 promotion.setTenkm(rs.getString("tenkm"));
                 promotion.setNgaybatdau(rs.getString("ngaybatdau"));
                 promotion.setNgayketthuc(rs.getString("ngayketthuc"));
+                promotion.setGiam(rs.getInt("giam"));
                 promotion.setNoidung(rs.getString("noidung"));
                 promotion.setDiem(rs.getInt("diem"));
                 promotion.setTinhtrang(rs.getBoolean("tinhtrang"));
@@ -131,6 +134,7 @@ public class promotion_DAO implements DAO<promotion_DTO> {
                 promotion.setTenkm(rs.getString("tenkm"));
                 promotion.setNgaybatdau(rs.getString("ngaybatdau"));
                 promotion.setNgayketthuc(rs.getString("ngayketthuc"));
+                promotion.setGiam(rs.getInt("giam"));
                 promotion.setNoidung(rs.getString("noidung"));
                 promotion.setDiem(rs.getInt("diem"));
                 promotion.setTinhtrang(rs.getBoolean("tinhtrang"));
@@ -162,6 +166,7 @@ public class promotion_DAO implements DAO<promotion_DTO> {
                 promotion.setTenkm(rs.getString("tenkm"));
                 promotion.setNgaybatdau(rs.getString("ngaybatdau"));
                 promotion.setNgayketthuc(rs.getString("ngayketthuc"));
+                promotion.setGiam(rs.getInt("giam"));
                 promotion.setNoidung(rs.getString("noidung"));
                 promotion.setDiem(rs.getInt("diem"));
                 promotion.setTinhtrang(rs.getBoolean("tinhtrang"));

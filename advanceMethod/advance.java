@@ -162,6 +162,18 @@ public class advance {
         }
     }
 
+    public static Boolean date1EqualDate2(String date1, String date2) {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        try {
+            LocalDate parse_date1 = LocalDate.parse(date1,format);
+            LocalDate parse_date2 = LocalDate.parse(date2,format);
+            return parse_date1.isEqual(parse_date2);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static Boolean fulldate1BeforeFullDate2(String date1, String date2) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
         try {

@@ -12,17 +12,18 @@ public class order_details_DAO implements DAO<order_details_DTO> {
     public int add(order_details_DTO t) {
         Connection sql = data.SQL.createConnection();
 
-        String command = "INSERT INTO ChiTietDonHang (mactdh, sl, thanhtien, madon, dongia, macthdnhap, tinhtrang)" + 
-        "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String command = "INSERT INTO ChiTietDonHang (mactdh, donvi, sl, thanhtien, madon, dongia, macthdnhap, tinhtrang)" + 
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = sql.prepareStatement(command)) {
             pst.setString(1, t.getMactdh());
-            pst.setInt(2, t.getSl());
-            pst.setDouble(3, t.getThanhtien());
-            pst.setString(4, t.getMadon());
-            pst.setDouble(5, t.getDongia());
-            pst.setString(6, t.getMacthdnhap());
-            pst.setBoolean(7, t.getTinhtrang());
+            pst.setString(2, t.getDonvi());
+            pst.setInt(3, t.getSl());
+            pst.setDouble(4, t.getThanhtien());
+            pst.setString(5, t.getMadon());
+            pst.setDouble(6, t.getDongia());
+            pst.setString(7, t.getMacthdnhap());
+            pst.setBoolean(8, t.getTinhtrang());
 
             int ketQua = pst.executeUpdate();
             System.out.println("Bạn đã thực thi: " + command);
@@ -40,16 +41,17 @@ public class order_details_DAO implements DAO<order_details_DTO> {
     public int update(order_details_DTO t) {
         Connection sql = data.SQL.createConnection();
 
-        String command = "UPDATE ChiTietDonHang SET sl = ?, thanhtien = ?, madon = ?, dongia = ?, macthdnhap = ?, tinhtrang = ? WHERE mactdh = ?";
+        String command = "UPDATE ChiTietDonHang SET donvi = ?, sl = ?, thanhtien = ?, madon = ?, dongia = ?, macthdnhap = ?, tinhtrang = ? WHERE mactdh = ?";
 
         try (PreparedStatement pst = sql.prepareStatement(command)) {
-            pst.setInt(1, t.getSl());
-            pst.setDouble(2, t.getThanhtien());
-            pst.setString(3, t.getMadon());
-            pst.setDouble(4, t.getDongia());
-            pst.setString(5, t.getMacthdnhap());
-            pst.setBoolean(6, t.getTinhtrang());
-            pst.setString(7, t.getMactdh());
+            pst.setString(1, t.getDonvi());
+            pst.setInt(2, t.getSl());
+            pst.setDouble(3, t.getThanhtien());
+            pst.setString(4, t.getMadon());
+            pst.setDouble(5, t.getDongia());
+            pst.setString(6, t.getMacthdnhap());
+            pst.setBoolean(7, t.getTinhtrang());
+            pst.setString(8, t.getMactdh());
 
             int ketQua = pst.executeUpdate();
             System.out.println("Bạn đã thực thi: " + command);
@@ -97,6 +99,7 @@ public class order_details_DAO implements DAO<order_details_DTO> {
             while (rs.next()) {
                 order_details_DTO orderDetail = new order_details_DTO();
                 orderDetail.setMactdh(rs.getString("mactdh"));
+                orderDetail.setDonvi(rs.getString("donvi"));
                 orderDetail.setSl(rs.getInt("sl"));
                 orderDetail.setMadon(rs.getString("madon"));
                 orderDetail.setThanhtien(rs.getDouble("thanhtien"));
@@ -128,6 +131,7 @@ public class order_details_DAO implements DAO<order_details_DTO> {
             while (rs.next()) {
                 order_details_DTO orderDetail = new order_details_DTO();
                 orderDetail.setMactdh(rs.getString("mactdh"));
+                orderDetail.setDonvi(rs.getString("donvi"));
                 orderDetail.setSl(rs.getInt("sl"));
                 orderDetail.setMadon(rs.getString("madon"));
                 orderDetail.setThanhtien(rs.getDouble("thanhtien"));
@@ -159,6 +163,7 @@ public class order_details_DAO implements DAO<order_details_DTO> {
 
             if (rs.next()) {
                 orderDetail.setMactdh(rs.getString("mactdh"));
+                orderDetail.setDonvi(rs.getString("donvi"));
                 orderDetail.setSl(rs.getInt("sl"));
                 orderDetail.setMadon(rs.getString("madon"));
                 orderDetail.setThanhtien(rs.getDouble("thanhtien"));

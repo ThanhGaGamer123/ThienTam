@@ -51,6 +51,11 @@ CREATE TABLE KhachHang (
     passwordkh VARCHAR(50),
 	tinhtrang BIT,
 );
+insert into KhachHang values ('KH0001', N'Tran Linh C', '0904221123', 'tranlinhchi@gmail.com', '267',
+N'Mã Lò', N'Bình Trị Đông A', N'Bình Tân', N'TPHCM', 9999, '123', 1);
+insert into KhachHang values ('KH0002', N'Vu Dinh T', '0904221123', 'vudinhT@gmail.com', '267',
+N'Mã Lò', N'Bình Trị Đông A', N'Bình Tân', N'TPHCM', 9999, '123', 1);
+select * from KhachHang where tinhtrang = 'True'
 
 CREATE TABLE GioHang (
     makh VARCHAR(10) PRIMARY KEY,
@@ -64,7 +69,7 @@ CREATE TABLE ChiTietKM (
     mactkm VARCHAR(10) PRIMARY KEY,         
     madon VARCHAR(10),             
     makm VARCHAR(10), 
-	ngayapdung VARCHAR(10),
+	ngayapdung VARCHAR(100),
 	tinhtrang BIT,
 );
 
@@ -72,11 +77,20 @@ CREATE TABLE ChuongTrinhKhuyenMai (
     makm VARCHAR(10) PRIMARY KEY,          
     tenkm NVARCHAR(100),           
     ngaybatdau VARCHAR(10),                   
-    ngayketthuc VARCHAR(10),                   
+    ngayketthuc VARCHAR(10),    
+	giam INT,
     noidung NVARCHAR(200),      
 	diem INT,
 	tinhtrang BIT,
 );
+insert into ChuongTrinhKhuyenMai values ('KM0001', N'Kỉ Niệm 30/4', N'30/04/2025', N'31/05/2025', 10, 
+N'Chào mừng 50 năm giải phóng miền Nam thống nhất đất nước.', 0, 1);
+insert into ChuongTrinhKhuyenMai values ('KM0002', N'Sale Cuối Tuần', N'30/04/2025', N'31/05/2025', 10, 
+N'Cuối tuần sale cực hot.', 1000, 1);
+insert into ChuongTrinhKhuyenMai values ('KM0003', N'ADMIN', N'30/04/2025', N'31/05/2025', 100, 
+N'Admin.', 99999999, 1);
+
+select * from ChuongTrinhKhuyenMai where tinhtrang = 'True'
 
 CREATE TABLE DonHang (
     madon VARCHAR(10) PRIMARY KEY,          
@@ -87,7 +101,7 @@ CREATE TABLE DonHang (
 	phuong NVARCHAR(20),
 	quan NVARCHAR(20),
 	tinh NVARCHAR(20),                   
-    ngaydat VARCHAR(10),                 
+    ngaydat VARCHAR(100),                 
     pttt NVARCHAR(50),            
     tinhtrang NVARCHAR(50),       
     tongtien DECIMAL,
@@ -97,7 +111,8 @@ CREATE TABLE DonHang (
 );
 
 CREATE TABLE ChiTietDonHang (
-    mactdh VARCHAR(10) PRIMARY KEY,          
+    mactdh VARCHAR(10) PRIMARY KEY,
+	donvi NVARCHAR(10),
     sl INT,                   
     thanhtien DECIMAL,      
     madon VARCHAR(10),             
@@ -175,3 +190,8 @@ ALTER TABLE ChiTietHoaDonNhap ADD CONSTRAINT FK_CTHDN_HDN FOREIGN KEY (mahdnhap)
 ALTER TABLE ChiTietHoaDonNhap ADD CONSTRAINT FK_CTHDN_Thuoc FOREIGN KEY (mathuoc) REFERENCES Thuoc(mathuoc);
 ALTER TABLE Thuoc ADD CONSTRAINT FK_Thuoc_Kho FOREIGN KEY (maton) REFERENCES Kho(maton);
 ALTER TABLE GioHang ADD CONSTRAINT FK_GioHang_KhachHang FOREIGN KEY (maKH) REFERENCES KhachHang(maKH);
+
+delete from ChiTietHoaDonNhap
+delete from HoaDonNhap
+delete from Thuoc
+delete from Kho

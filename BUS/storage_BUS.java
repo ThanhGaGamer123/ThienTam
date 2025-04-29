@@ -3,6 +3,7 @@ package BUS;
 import java.util.ArrayList;
 
 import DAO.medicine_DAO;
+import DAO.orderSupply_details_DAO;
 import DAO.storage_DAO;
 import DTO.medicine_DTO;
 import DTO.orderSupply_details_DTO;
@@ -95,6 +96,37 @@ public class storage_BUS {
         storage_DTO str = medicine_BUS.throwStorageObj(med.getMaton());
         str.setTinhtrang(false);
         storage_DAO strDAO = new storage_DAO();
+        strDAO.update(str);
+    }
+
+    //load lại số lượng tồn của thuốc
+    public static void loadQuantity(orderSupply_details_DTO osd) {
+        medicine_DTO med = new medicine_DTO();
+        med.setMathuoc(osd.getMathuoc());
+        medicine_DAO medDAO = new medicine_DAO();
+        med = medDAO.selectByID(med);
+
+        storage_DTO str = new storage_DTO();
+        str.setMaton(med.getMaton());
+        storage_DAO strDAO = new storage_DAO();
+        str = strDAO.selectByID(str);
+
+        ArrayList<orderSupply_details_DTO> osds = new ArrayList<>();
+        orderSupply_details_DAO osdDAO = new orderSupply_details_DAO();
+        osds = osdDAO.selectAll();
+
+        str.getSlton().set(0, 0);
+        str.getSlton().set(1, 0);
+        str.getSlton().set(2, 0);
+
+        for (orderSupply_details_DTO osD : osds) {
+            if(osD.getTinhtrang() && osD.getMathuoc().equals(osd.getMathuoc())) {
+                for (int i = 0; i < 3; i++) {
+                    str.getSlton().set(i, str.getSlton().get(i) + osD.getSlcon().get(i));
+                }
+            }
+        }
+
         strDAO.update(str);
     }
 }

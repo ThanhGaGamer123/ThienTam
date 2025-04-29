@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import DAO.orderSupply_details_DAO;
+import DTO.medicine_DTO;
 import DTO.orderSupply_details_DTO;
 import advanceMethod.advance;
 
@@ -132,6 +133,10 @@ public class orderSupply_details_BUS {
                         
                         storage_BUS.decreaseStock(osd);
                         orderSupply_BUS.checkOrderSupply(mahdnhap, modelCollect);
+
+                        medicine_DTO med = medicine_BUS.throwMedicineObj(osd.getMathuoc());
+                        medicine_BUS.updateSellPrice(med);
+
                         orderSupply_BUS.loadOrderDetails(modelSupply, mahdnhap);
 
                         return true;
@@ -144,4 +149,44 @@ public class orderSupply_details_BUS {
         }
         return null;
     }
+
+    //orderSupply_details trong order_details_BUS
+    public static void deleteOrderSupplyDetail(String macthdnhap, DefaultTableModel modelCollect) {
+        orderSupply_details_DTO osd = new orderSupply_details_DTO();
+        osd.setMacthdnhap(macthdnhap);
+        orderSupply_details_DAO osdDAO = new orderSupply_details_DAO();
+        osd = osdDAO.selectByID(osd);
+        if(osd.getTinhtrang()) {
+            osd.setTinhtrang(false);
+            osdDAO.update(osd);
+            
+            storage_BUS.loadQuantity(osd);
+            orderSupply_BUS.checkOrderSupply(osd.getMahdnhap(), modelCollect);
+
+            medicine_DTO med = medicine_BUS.throwMedicineObj(osd.getMathuoc());
+            medicine_BUS.updateSellPrice(med);
+        }
+    }
+
+    public static void checkOrderSupplyDetail(String mactdhnhap, String donvi, int sl,
+    DefaultTableModel modelCollect) {
+        orderSupply_details_DTO osd = new orderSupply_details_DTO();
+        osd.setMacthdnhap(mactdhnhap);
+        orderSupply_details_DAO osdDAO = new orderSupply_details_DAO();
+        osd = osdDAO.selectByID(osd);
+
+        if(donvi.equals("hộp"))
+            osd.getSlcon().set(0, osd.getSlcon().get(0) - sl);
+        if(donvi.equals("vỉ"))
+            osd.getSlcon().set(1, osd.getSlcon().get(1) - sl);
+        if(donvi.equals("viên"))
+            osd.getSlcon().set(2, osd.getSlcon().get(2) - sl);
+
+        osdDAO.update(osd);
+
+        if(osd.getSlcon().get(0) == 0 && osd.getSlcon().get(1) == 0
+        && osd.getSlcon().get(2) == 0) {
+            deleteOrderSupplyDetail(osd.getMacthdnhap(), modelCollect);
+        }
+    } 
 }
