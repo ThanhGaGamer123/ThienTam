@@ -1,14 +1,14 @@
-package dao;
+package DAO;
 
+import DTO.medicine_DTO;
 import advanceMethod.advance;
 import java.sql.*;
 import java.util.ArrayList;
-import medicine.medicine;
 
 public class medicineDAO {
 
-    public static medicine timThuocTheoMa(String maThuoc) {
-        medicine thuoc = null;
+    public static medicine_DTO timThuocTheoMa(String maThuoc) {
+        medicine_DTO thuoc = null;
 
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -31,18 +31,25 @@ public class medicineDAO {
                     String thongtin = rs.getString("ThongTin");
                     String xuatxu = rs.getString("XuatXu");
                     String doituongStr = rs.getString("DoiTuongSuDung");
+                    String hansudung = rs.getString("HanSuDung");
                     String giabanStr = rs.getString("GiaBan");
                     Boolean tinhtrang = rs.getBoolean("TinhTrang");
 
-                    // Chuyển đổi kiểu dữ liệu
-                    ArrayList<String> donvi = advance.StringconvertToStringArrayList(donviStr);
-                    ArrayList<String> doituongsudung = advance.StringconvertToStringArrayList(doituongStr);
-                    ArrayList<Integer> giaban = advance.StringArrayListToIntArrayList(
-                            advance.StringconvertToStringArrayList(giabanStr));
+                    ArrayList<String> donvi = (donviStr != null && !donviStr.isEmpty())
+                            ? advance.StringconvertToStringArrayList(donviStr)
+                            : new ArrayList<>();
 
-                    // Tạo đối tượng medicine
-                    thuoc = new medicine(maThuoc, maton, tenthuoc, danhmuc, donvi, thanhphan,
-                            thongtin, xuatxu, doituongsudung, giaban, tinhtrang);
+                    ArrayList<String> doituongsudung = (doituongStr != null && !doituongStr.isEmpty())
+                            ? advance.StringconvertToStringArrayList(doituongStr)
+                            : new ArrayList<>();
+
+                    ArrayList<Double> giaban = (giabanStr != null && !giabanStr.isEmpty())
+                            ? advance
+                                    .StringArrayListToDoubleArrayList(advance.StringconvertToStringArrayList(giabanStr))
+                            : new ArrayList<>();
+
+                    thuoc = new medicine_DTO(maThuoc, maton, tenthuoc, danhmuc, donvi, thanhphan,
+                            thongtin, xuatxu, doituongsudung, hansudung, giaban, tinhtrang);
                 }
             }
         } catch (Exception e) {
@@ -51,7 +58,5 @@ public class medicineDAO {
 
         return thuoc;
     }
-
-
 
 }

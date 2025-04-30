@@ -1,4 +1,4 @@
-package dao;
+package DAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -45,7 +45,7 @@ public class orderDAO {
         String password = "123";
 
         // Gộp danh sách sản phẩm thành một chuỗi cách nhau bởi dấu ";"
-        String sanphammuaChuoi = String.join("     ;     ", sanphammua);
+        String sanphammuaChuoi = String.join(";", sanphammua);
 
         String sql = "INSERT INTO DonHang (madon, makh, sdt, manv, tennguoinhan, sdtnguoinhan, phuong, quan, tinh, diachicuthe, sanphammua, ngaydat, ghichu, pttt, tongtien, tinhtrang) "
                 +

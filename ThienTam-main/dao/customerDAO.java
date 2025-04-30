@@ -1,5 +1,6 @@
-package dao;
+package DAO;
 
+import connection.MyConnection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -78,4 +79,28 @@ public class customerDAO {
         }
     }
 
+    public static void capNhatThongtinKH(String tenkh, String sdt, String email, String makh) {
+        try (Connection con = MyConnection.createConnection()) {
+            String sql = "UPDATE KhachHang SET tenkh = ?, sdt = ?, email = ? WHERE makh = ?";
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, tenkh);
+                ps.setString(2, sdt); // Sửa lại vị trí tham số cho đúng
+                ps.setString(3, email);
+                ps.setString(4, makh); // Sửa lại vị trí tham số cho đúng
+
+                int rows = ps.executeUpdate();
+                if (rows > 0) {
+                    System.out.println("Đã cập nhật thông tin thành công.");
+                } else {
+                    System.out.println("Không tìm thấy khách hàng để cập nhật.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Lỗi SQL khi cập nhật thông tin: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi kết nối SQL: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

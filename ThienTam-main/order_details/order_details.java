@@ -3,20 +3,23 @@ package order_details;
 import java.util.ArrayList;
 
 public class order_details {
-    private String mactdh; // mã chi tiết hóa đơn 
+    private String mactdh; // mã chi tiết hóa đơn
     private String madon;
-    private String macthdnhap;  // mã hóa đơn nhập hàng 
+    private String macthdnhap; // mã hóa đơn nhập hàng
 
-    private ArrayList<String> sanphammua; //thông tin tất cả sản phẩm đơn đó mua 
+    private ArrayList<String> sanphammua; // thông tin tất cả sản phẩm đơn đó mua
     private String diachicuthe;
     private int sl;
-    //private int dongia;
+    // private int dongia;
     private int thanhtien; // don gia * sl
+
+    private String ngaydat;
 
     public order_details() {
     }
 
-    public order_details(String mactdh, String madon, String macthdnhap, ArrayList<String> sanphammua, String diachicuthe, int sl, int thanhtien) {
+    public order_details(String mactdh, String madon, String macthdnhap, ArrayList<String> sanphammua,
+            String diachicuthe, int sl, int thanhtien, String ngaydat) {
         this.mactdh = mactdh;
         this.madon = madon;
         this.macthdnhap = macthdnhap;
@@ -24,6 +27,7 @@ public class order_details {
         this.diachicuthe = diachicuthe;
         this.sl = sl;
         this.thanhtien = thanhtien;
+        this.ngaydat = ngaydat;
     }
 
     public String getMactdh() {
@@ -54,6 +58,10 @@ public class order_details {
         return thanhtien;
     }
 
+    public String getNgaydat() {
+        return ngaydat;
+    }
+
     public void setMactdh(String mactdh) {
         this.mactdh = mactdh;
     }
@@ -82,13 +90,4 @@ public class order_details {
         this.thanhtien = thanhtien;
     }
 
-
-
-    
-
-
-
-    
-
-   
 }

@@ -1,5 +1,6 @@
 package cart;
 
+import DTO.cart_DTO;
 import connection.MyConnection;
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,24 +10,20 @@ public class cartArr {
     public cartArr() {
     }
 
-    private static ArrayList<cart> a = new ArrayList<>();
+    private static ArrayList<cart_DTO> a = new ArrayList<>();
 
-    public static ArrayList<cart> getA() {
+    public static ArrayList<cart_DTO> getA() {
         return a;
     }
 
-    public void setA(ArrayList<cart> c) {
+    public void setA(ArrayList<cart_DTO> c) {
         a = c;
     }
 
-    public void readCartDatabase(ArrayList<cart> cartList, String makh) {
+    public void readCartDatabase(ArrayList<cart_DTO> cartList, String makh) {
         try (Connection con = MyConnection.createConnection();
                 PreparedStatement pst = con.prepareStatement("SELECT * FROM GioHang WHERE MaKH = ?")) {
 
-            if (con == null) {
-                System.out.println("Không thể kết nối đến SQL Server.");
-                return;
-            }
 
             pst.setString(1, makh);
 
@@ -37,7 +34,7 @@ public class cartArr {
             cartList.clear();
 
             while (rs.next()) {
-                cart c = new cart(
+                cart_DTO c = new cart_DTO(
                         rs.getString("MaKH"),
                         rs.getString("MaThuoc"),
                         rs.getInt("SoLuong"),
@@ -54,7 +51,7 @@ public class cartArr {
         }
     }
 
-    public void updateCartDatabase(ArrayList<cart> cartList) {
+    public void updateCartDatabase(ArrayList<cart_DTO> cartList) {
         try (Connection con = MyConnection.createConnection()) {
             if (con == null) {
                 System.out.println("Không thể kết nối đến SQL Server.");
@@ -75,12 +72,12 @@ public class cartArr {
             // Bước 2: Chèn lại các mục trong giỏ hàng
             String insertQuery = "INSERT INTO GioHang (MaKH, MaThuoc, SoLuong, ThanhTien, DonGia) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement insertStmt = con.prepareStatement(insertQuery)) {
-                for (cart c : cartList) {
+                for (cart_DTO c : cartList) {
                     insertStmt.setString(1, c.getMakh());
                     insertStmt.setString(2, c.getMathuoc());
                     insertStmt.setInt(3, c.getSl());
-                    insertStmt.setInt(4, c.getThanhtien());
-                    insertStmt.setInt(5, c.getDongia());
+                    insertStmt.setDouble(4, c.getThanhtien());
+                    insertStmt.setDouble(5, c.getDongia());
 
                     insertStmt.addBatch(); // Thêm vào batch
                 }
