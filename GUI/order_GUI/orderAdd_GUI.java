@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -1044,8 +1046,10 @@ public class orderAdd_GUI extends JFrame {
         table.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                customer_BUS.upData(table, model, tf_tenkh, tf_email, tf_sdt, ta_diachi,
-                tf_diemkm);
+                if(!customer_BUS.upData(table, model, tf_tenkh, tf_email, tf_sdt, ta_diachi,
+                tf_diemkm))
+                    JOptionPane.showMessageDialog(null, 
+                    "Thông tin khách hàng này đã ngừng hoạt động.");
             }
 
             @Override
@@ -1083,8 +1087,7 @@ public class orderAdd_GUI extends JFrame {
                 }
                 System.out.println(customer.getMakh());
                 
-                order_BUS.purchase(customer, em, modelKM, null, tf_tenKH, tf_tenNV, 
-                ta_diachiTT, tf_km, tf_tongtien, tableKM);
+                order_BUS.purchase(customer, em, null, tf_tenKH, tf_tenNV, ta_diachiTT, tf_tongtien);
             }
         });
         
@@ -1147,8 +1150,10 @@ public class orderAdd_GUI extends JFrame {
         tableMedic.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                medicine_BUS.chooseMed(tableMedic, modelMedic, tf_tenthuoc, tf_hop, tf_vi, 
-                tf_vien, med);
+                if(!medicine_BUS.chooseMed(tableMedic, modelMedic, tf_tenthuoc, tf_hop, tf_vi, 
+                tf_vien, med))
+                    JOptionPane.showMessageDialog(null, 
+                    "Thông tin thuốc này đã ngừng hoạt động.");
                 if(rad_hop.isSelected())
                     medicine_BUS.radioDonVi(med, tf_giaban, 0);
                 if(rad_vi.isSelected())
@@ -1228,8 +1233,7 @@ public class orderAdd_GUI extends JFrame {
                 }
 
                 
-                order_BUS.purchase(customer, em, modelKM, ods, tf_tenKH, tf_tenNV, 
-                ta_diachiTT, tf_km, tf_tongtien, tableKM);
+                order_BUS.purchase(customer, em, ods, tf_tenKH, tf_tenNV, ta_diachiTT, tf_tongtien);
             }
         });
 
@@ -1255,10 +1259,9 @@ public class orderAdd_GUI extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 order_details_BUS.deleteOrderDetails(ods, model_ds, table_ds, rad_hop, 
-                rad_vi, rad_vien, tf_hop, tf_vi, tf_vien, tf_giaban);
+                rad_vi, rad_vien, tf_hop, tf_vi, tf_vien, tf_giaban, modelCollect);
                 
-                order_BUS.purchase(customer, em, modelKM, ods, tf_tenKH, tf_tenNV, 
-                ta_diachiTT, tf_km, tf_tongtien, tableKM);
+                order_BUS.purchase(customer, em, ods, tf_tenKH, tf_tenNV, ta_diachiTT, tf_tongtien);
             }
 
             @Override
@@ -1299,6 +1302,9 @@ public class orderAdd_GUI extends JFrame {
                 buttonGroup.clearSelection();
                 tf_giaban.setText("");
                 tf_slmua.setValue(1);
+
+                order_details_BUS.resetDelete(ods, model_ds, tf_hop, tf_vi, tf_vien, rad_hop, 
+                rad_vi, rad_vien, tf_giaban);
                 ods.clear();
                 order_details_BUS.loadData(ods, model_ds);
             }
@@ -1350,22 +1356,28 @@ public class orderAdd_GUI extends JFrame {
                 promotion_BUS.loadData(modelKM);
                 tf_km.setText("");
 
-                order_BUS.purchase(customer, em, modelKM, ods, tf_tenKH, tf_tenNV, 
-                ta_diachiTT, tf_km, tf_tongtien, tableKM);
+                order_BUS.purchase(customer, em, ods, tf_tenKH, tf_tenNV, ta_diachiTT, tf_tongtien);
             }
         });
     
         //load thanh toán
-        order_BUS.purchase(customer, em, modelKM, ods, tf_tenKH, tf_tenNV, 
-        ta_diachiTT, tf_km, tf_tongtien, tableKM);
+        order_BUS.purchase(customer, em, ods, tf_tenKH, tf_tenNV, ta_diachiTT, tf_tongtien);
 
+        //chọn khuyến mãi
         tableKM.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(!order_BUS.purchase(customer, em, modelKM, ods, tf_tenKH, tf_tenNV, 
-                ta_diachiTT, tf_km, tf_tongtien, tableKM)) {
+                order_BUS.purchase(customer, em, ods, tf_tenKH, tf_tenNV, ta_diachiTT, tf_tongtien);
+
+                int ketQua = promotion_BUS.choosePromotion(modelKM, tableKM, tf_tenKH, 
+                tf_km, customer, tf_tongtien);
+                if(ketQua == 3) {
                     JOptionPane.showMessageDialog(null, 
                     "Khách hàng không đủ điểm để áp dụng chương trình khuyến mãi này.");
+                }
+                if(ketQua == 2) {
+                    JOptionPane.showMessageDialog(null, 
+                    "Chương trình khuyến mãi này đã ngừng hoạt động.");
                 }
             }
 
@@ -1402,15 +1414,8 @@ public class orderAdd_GUI extends JFrame {
                     JOptionPane.showMessageDialog(null, 
                     "Danh sách mua thuốc đang rỗng!");
                 }
-            }
-        });
 
-        //reset all
-        reset_all.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                order_BUS.purchase(customer, em, modelKM, ods, tf_tenKH, tf_tenNV, 
-                ta_diachiTT, tf_km, tf_tongtien, tableKM);
+                order_BUS.purchase(customer, em, ods, tf_tenKH, tf_tenNV, ta_diachiTT, tf_tongtien);
 
                 //khách hàng
                 search_bar.setText("Nhập tên khách hàng...");
@@ -1440,6 +1445,57 @@ public class orderAdd_GUI extends JFrame {
                 search_bar_km.setText("Nhập tên khuyến mãi...");
                 promotion_BUS.loadData(modelKM);
                 tf_km.setText("");
+            }
+        });
+
+        //reset all
+        reset_all.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                order_BUS.purchase(customer, em, ods, tf_tenKH, tf_tenNV, ta_diachiTT, tf_tongtien);
+
+                //khách hàng
+                search_bar.setText("Nhập tên khách hàng...");
+                tf_tenkh.setText("");
+                tf_email.setText("");
+                tf_sdt.setText("");
+                ta_diachi.setText("");
+                tf_diemkm.setText("");
+                customer_BUS.loadData(model, true);
+                customer.setMakh(null);
+                tf_tenKH.setText("");
+                
+                //thuốc
+                search_bar_med.setText("Nhập tên thuốc...");
+                medicine_BUS.loadDataOther(modelMedic, true);
+                tf_tenthuoc.setText("");
+                tf_hop.setText("");
+                tf_vi.setText("");
+                tf_vien.setText("");
+                buttonGroup.clearSelection();
+                tf_giaban.setText("");
+                tf_slmua.setValue(1);
+
+                order_details_BUS.resetDelete(ods, model_ds, tf_hop, tf_vi, tf_vien, rad_hop, 
+                rad_vi, rad_vien, tf_giaban);
+                ods.clear();
+                order_details_BUS.loadData(ods, model_ds);
+
+                //khuyến mãi
+                search_bar_km.setText("Nhập tên khuyến mãi...");
+                promotion_BUS.loadData(modelKM);
+                tf_km.setText("");
+            }
+        });
+    
+        //reset thuốc khi tắt window
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                order_details_BUS.resetDelete(ods, model_ds, tf_hop, tf_vi, tf_vien, rad_hop, 
+                rad_vi, rad_vien, tf_giaban);
+
+                dispose();
             }
         });
     }

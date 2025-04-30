@@ -48,7 +48,7 @@ public class order_DAO implements DAO<order_DTO> {
     public int update(order_DTO t) {
         Connection sql = data.SQL.createConnection();
 
-        String command = "UPDATE DonHang SET makh = ?, manv = ?, masonha = ?, duong = ?, phuong = ?, quan = ?, tinh = ?, ngaydat = ?, pttt = ?, tinhtrang = ?, tongtien = ?, ghichu = ?, nguoinha = ?, sdt_nguoinhan = ? WHERE madon = ?";
+        String command = "UPDATE DonHang SET makh = ?, manv = ?, masonha = ?, duong = ?, phuong = ?, quan = ?, tinh = ?, ngaydat = ?, pttt = ?, tinhtrang = ?, tongtien = ?, ghichu = ?, nguoinhan = ?, sdt_nguoinhan = ? WHERE madon = ?";
 
         try (PreparedStatement pst = sql.prepareStatement(command)) {
             pst.setString(1, t.getMakh());

@@ -90,7 +90,7 @@ N'Cuối tuần sale cực hot.', 1000, 1);
 insert into ChuongTrinhKhuyenMai values ('KM0003', N'ADMIN', N'30/04/2025', N'31/05/2025', 100, 
 N'Admin.', 99999999, 1);
 
-select * from ChuongTrinhKhuyenMai where tinhtrang = 'True'
+select * from ChuongTrinhKhuyenMai where tinhtrang = 1
 
 CREATE TABLE DonHang (
     madon VARCHAR(10) PRIMARY KEY,          
@@ -109,6 +109,9 @@ CREATE TABLE DonHang (
 	nguoinhan NVARCHAR(100),
 	sdt_nguoinhan INT,
 );
+
+select * from DonHang where madon like N'%DH0001%' and makh like N'%KH0001%' 
+and manv like N'%NV0001%' and pttt like N'%Trả bằng tiền mặt%' and tinhtrang like N'%Đang xử lý%'
 
 CREATE TABLE ChiTietDonHang (
     mactdh VARCHAR(10) PRIMARY KEY,
@@ -191,6 +194,9 @@ ALTER TABLE ChiTietHoaDonNhap ADD CONSTRAINT FK_CTHDN_Thuoc FOREIGN KEY (mathuoc
 ALTER TABLE Thuoc ADD CONSTRAINT FK_Thuoc_Kho FOREIGN KEY (maton) REFERENCES Kho(maton);
 ALTER TABLE GioHang ADD CONSTRAINT FK_GioHang_KhachHang FOREIGN KEY (maKH) REFERENCES KhachHang(maKH);
 
+delete from ChiTietDonHang
+delete from ChiTietKM
+delete from DonHang
 delete from ChiTietHoaDonNhap
 delete from HoaDonNhap
 delete from Thuoc

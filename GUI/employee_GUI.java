@@ -37,14 +37,20 @@ import javax.swing.table.*;
 import BUS.employee_BUS;
 import BUS.medicine_BUS;
 import BUS.orderSupply_BUS;
+import BUS.orderSupply_details_BUS;
 import BUS.order_BUS;
+import BUS.promotion_BUS;
+import BUS.storage_BUS;
 import DTO.employee_DTO;
 import DTO.orderSupply_DTO;
+import DTO.order_DTO;
 import GUI.medicine_GUI.medicineAdd_GUI;
 import GUI.medicine_GUI.medicineSearch_GUI;
 import GUI.orderSupply_GUI.orderSupplyAdd_GUI;
 import GUI.orderSupply_GUI.orderSupplySearch_GUI;
 import GUI.order_GUI.orderAdd_GUI;
+import GUI.order_GUI.orderGUI;
+import GUI.order_GUI.orderSearch_GUI;
 import advanceMethod.advance;
 
 public class employee_GUI extends JFrame {
@@ -283,7 +289,7 @@ public class employee_GUI extends JFrame {
         gdc_ordersell.fill = GridBagConstraints.NONE;
         gdc_ordersell.weightx = 0;
 
-        String columns[] = {"Mã đơn", "Tên khách", "Tên nhân viên", "Thời gian lập", 
+        String columns[] = {"Mã đơn", "Tên khách hàng", "Tên nhân viên", "Thời gian lập", 
         "Tổng tiền", "Tình trạng", "Xem chi tiết"};
         DefaultTableModel model = new DefaultTableModel(columns,0) {
             @Override
@@ -823,9 +829,98 @@ public class employee_GUI extends JFrame {
             }
         });
 
+        //Hủy đơn hàng
+        xoaSell.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!order_BUS.cancelOrder(model, table)) {
+                    JOptionPane.showMessageDialog(null, 
+                    "Đơn hàng này đã hủy.");
+                }
+            }
+        });
+
+        //tìm kiếm
+        search.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                order_BUS.findOrder(search_bar, model);
+            }
+        });
+
+        //tìm kiếm nâng cao
+        ArrayList<order_DTO> ords = new ArrayList<>();
+        search_advance.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new orderSearch_GUI(model, loc.getSelectedIndex(), ords);
+            }
+        });
+
+        //lọc
+        loc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                order_BUS.filter(ords, model, loc.getSelectedIndex());
+            }
+        });
+
+        //reset
+        reset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                search_bar.setText("Nhập mã đơn...");
+                loc.setSelectedIndex(0);
+                ords.clear();
+                order_BUS.loadData(model);
+            }
+        });
+
+        //xem chi tiết
+        table.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedColumn = table.getSelectedColumn();
+                if(selectedColumn == 6) {
+                    int selectedRow = table.getSelectedRow();
+                    if(selectedRow != -1) {
+                        String madh = model.getValueAt(selectedRow, 0).toString();
+                        new orderGUI(madh, model, modelCollect);
+                    }
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+        });
+
         //xử lý đơn hàng nhập
         //cập nhật thông tin đơn hàng nhập
         orderSupply_BUS.loadData(modelCollect, true);
+
+        //kiểm tra hạn chi tiết đơn hàng nhập
+        orderSupply_details_BUS.autoCheckExpired(modelCollect);
 
         tableCollect.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -949,7 +1044,11 @@ public class employee_GUI extends JFrame {
 
         //Xử lý thuốc
         //Tự động cập nhật thông tin thuốc
+        medicine_BUS.autoUpdateSellPrice();
+
         medicine_BUS.loadData(modelMedic, true);
+
+        storage_BUS.autoLoadQuantity();
 
         tableMedic.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -1084,6 +1183,9 @@ public class employee_GUI extends JFrame {
                 medicine_BUS.reset(search_bar_3, modelMedic);
             }
         });
+    
+        //kiểm tra hạn ctr khuyến mãi
+        promotion_BUS.autoCheckExpired();
     }
 
     public static void main(String[] args) {

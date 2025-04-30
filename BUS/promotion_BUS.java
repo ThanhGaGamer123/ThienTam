@@ -6,11 +6,14 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import DAO.customer_DAO;
 import DAO.promotion_DAO;
+import DTO.customer_DTO;
 import DTO.promotion_DTO;
 import advanceMethod.advance;
 
@@ -26,7 +29,8 @@ public class promotion_BUS {
             } else {
                 statusImg = new JLabel(data.imagePath.resize_exitIcon);
             }
-            model.addRow(new Object[]{pr.getMakm(), pr.getTenkm(), pr.getGiam(), statusImg});
+            if(pr.getTinhtrang())
+                model.addRow(new Object[]{pr.getMakm(), pr.getTenkm(), pr.getGiam(), statusImg});
         }
     }
 
@@ -42,6 +46,32 @@ public class promotion_BUS {
             }
             model.addRow(new Object[]{pr.getMakm(), pr.getTenkm(), pr.getGiam(), statusImg});
         }
+    }
+
+    public static int choosePromotion(DefaultTableModel model, JTable table,
+    JTextField tenkh, JTextField adkm, customer_DTO cus, JTextField tongtien) {
+        int selectedRow = table.getSelectedRow();
+        if(selectedRow != -1) {
+            String makm = model.getValueAt(selectedRow, 0).toString();
+            promotion_DTO pro = new promotion_DTO();
+            pro.setMakm(makm);
+            promotion_DAO proDAO = new promotion_DAO();
+            pro = proDAO.selectByID(pro);
+
+            if(pro.getTinhtrang()) {
+                if(!tenkh.getText().isEmpty()) {
+                    cus = new customer_DAO().selectByID(cus);
+                    if(cus.getDiemKM() >= pro.getDiem()) {
+                        adkm.setText(pro.getMakm());
+                        double money = Double.parseDouble(tongtien.getText());
+                        money = money - money * pro.getGiam() / 100;
+                        tongtien.setText(money + "");
+                        return 1;
+                    } else return 3;
+                } else return 4;
+            }
+        }
+        return 2;
     }
 
     //promotion trong promotionAdd_GUI
@@ -94,5 +124,25 @@ public class promotion_BUS {
         } else 
             JOptionPane.showMessageDialog(null, 
             "Ngày bắt đầu không hợp lệ");
+    }
+
+    public static void checkExpired(promotion_DTO pro) {
+        String[] current = advance.currentTime().split(" ");
+        String ngayketthuc = pro.getNgayketthuc();
+
+        if(advance.date1BeforeDate2(ngayketthuc, current[1])) {
+            pro.setTinhtrang(false);
+            promotion_DAO proDAO = new promotion_DAO();
+            proDAO.update(pro);
+
+            System.out.println("XÓA!!!");
+        }
+    }
+
+    public static void autoCheckExpired() {
+        ArrayList<promotion_DTO> pros = new promotion_DAO().selectAll();
+        for (promotion_DTO pro : pros) {
+            checkExpired(pro);
+        }
     }
 }

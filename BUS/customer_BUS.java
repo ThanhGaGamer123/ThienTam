@@ -52,7 +52,7 @@ public class customer_BUS {
         }
     }
 
-    public static void upData(JTable table, DefaultTableModel model,
+    public static Boolean upData(JTable table, DefaultTableModel model,
     JTextField tenkh, JTextField email, JTextField sdt, JTextArea diachi,
     JTextField diemkm) {
         int selectedRow = table.getSelectedRow();
@@ -63,13 +63,18 @@ public class customer_BUS {
             customer.setMakh(makh);
             customer = new customer_DAO().selectByID(customer);
 
-            tenkh.setText(customer.getTenkh());
-            email.setText(customer.getEmail());
-            sdt.setText(customer.getSdt());
-            diachi.setText(customer.getMasonha() + ", " + customer.getDuong()+ ", " + 
-            customer.getPhuong() + ", " + customer.getQuan() + ", " + customer.getTinh());
-            diemkm.setText(String.valueOf(customer.getDiemKM()));
+            if(customer.getTinhtrang()) {
+                tenkh.setText(customer.getTenkh());
+                email.setText(customer.getEmail());
+                sdt.setText(customer.getSdt());
+                diachi.setText(customer.getMasonha() + ", " + customer.getDuong()+ ", " + 
+                customer.getPhuong() + ", " + customer.getQuan() + ", " + customer.getTinh());
+                diemkm.setText(String.valueOf(customer.getDiemKM()));
+
+                return true;
+            }
         }
+        return false;
     }
 
     public static Boolean chooseCus(JTextField email, customer_DTO cus) {

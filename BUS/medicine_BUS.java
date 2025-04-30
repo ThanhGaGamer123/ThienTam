@@ -71,6 +71,13 @@ public class medicine_BUS {
         return macthd;
     }
 
+    public static void autoUpdateSellPrice() {
+        ArrayList<medicine_DTO> meds = new medicine_DAO().selectAll();
+        for (medicine_DTO med : meds) {
+            updateSellPrice(med);
+        }
+    }
+
     //medicine trong employee
     public static void loadData(DefaultTableModel modelMedic, Boolean flag) {
         modelMedic.setRowCount(0);
@@ -398,7 +405,10 @@ public class medicine_BUS {
         System.out.println(result);
 
         medicine_DAO medDAO = new medicine_DAO();
-        ArrayList<medicine_DTO> medicines = medDAO.selectByCondition(result);
+        ArrayList<medicine_DTO> medicines = new ArrayList<>();
+        if(!result.isEmpty())
+            medicines = medDAO.selectByCondition(result);
+        else medicines = medDAO.selectAll();
 
         if(modelMedic == null) {
             modelMedicSupply.setRowCount(0);
@@ -437,7 +447,8 @@ public class medicine_BUS {
     public static void resetFind(JTextField tf_mathuoc ,JTextField tf_tenthuoc, 
     JTextField tf_danhmuc, JSpinner sp_gia_hop, JSpinner sp_gia_vi, 
     JSpinner sp_gia_vien, JTextField tf_xuatxu, JComboBox cb_doituong, 
-    JLabel ds_doituong, ArrayList<String> chosen, JSpinner sp_hansd, JComboBox cb_hansd) {
+    JLabel ds_doituong, ArrayList<String> chosen, JSpinner sp_hansd, JComboBox cb_hansd,
+    JComboBox cb_tinhtrang) {
         tf_mathuoc.setText("");
         tf_tenthuoc.setText("");
         tf_danhmuc.setText("");
@@ -450,6 +461,7 @@ public class medicine_BUS {
         chosen.clear();
         sp_hansd.setValue(0);
         cb_hansd.setSelectedIndex(0);
+        cb_tinhtrang.setSelectedIndex(0);
     }
 
     //medicine cập nhật
@@ -706,7 +718,7 @@ public class medicine_BUS {
     }
 
     //medicine trong orderAdd
-    public static void chooseMed(JTable table, DefaultTableModel model, JTextField tenthuoc,
+    public static Boolean chooseMed(JTable table, DefaultTableModel model, JTextField tenthuoc,
     JTextField slhop, JTextField slvi, JTextField slvien, medicine_DTO medicine) {
         int selectedRow = table.getSelectedRow();
         if(selectedRow != -1) {
@@ -714,27 +726,33 @@ public class medicine_BUS {
             medicine_DTO med = throwMedicineObj(mathuoc);
             ArrayList<String> dsctdhnhap = updateSellPrice(med);
 
-            tenthuoc.setText(med.getTenthuoc());
+            if(med.getTinhtrang()) {
+                tenthuoc.setText(med.getTenthuoc());
 
-            for (int i = 0; i < 3; i++) {
-                if(!dsctdhnhap.get(i).equals("null")) {
-                    orderSupply_details_DTO osd = new orderSupply_details_DTO();
-                    osd.setMacthdnhap(dsctdhnhap.get(i));
-                    orderSupply_details_DAO osdDAO = new orderSupply_details_DAO();
-                    osd = osdDAO.selectByID(osd);
+                for (int i = 0; i < 3; i++) {
+                    if(!dsctdhnhap.get(i).equals("null")) {
+                        orderSupply_details_DTO osd = new orderSupply_details_DTO();
+                        osd.setMacthdnhap(dsctdhnhap.get(i));
+                        orderSupply_details_DAO osdDAO = new orderSupply_details_DAO();
+                        osd = osdDAO.selectByID(osd);
 
-                    if(i == 0) slhop.setText(osd.getSlcon().get(i).toString());
-                    if(i == 1) slvi.setText(osd.getSlcon().get(i).toString());
-                    if(i == 2) slvien.setText(osd.getSlcon().get(i).toString());
-                } else {
-                    if(i == 0) slhop.setText("0");
-                    if(i == 1) slvi.setText("0");
-                    if(i == 2) slvien.setText("0");
+                        if(i == 0) slhop.setText(osd.getSlcon().get(i).toString());
+                        if(i == 1) slvi.setText(osd.getSlcon().get(i).toString());
+                        if(i == 2) slvien.setText(osd.getSlcon().get(i).toString());
+                    } else {
+                        if(i == 0) slhop.setText("0");
+                        if(i == 1) slvi.setText("0");
+                        if(i == 2) slvien.setText("0");
+                    }
                 }
-            }
 
-            medicine.setMathuoc(med.getMathuoc());
+                medicine.setMathuoc(med.getMathuoc());
+
+                return true;
+            }
         }
+
+        return false;
     }
 
     public static void radioDonVi(medicine_DTO med, JTextField giaban, int index) {

@@ -188,7 +188,8 @@ public class orderSupplySearch_GUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if(!orderSupply_BUS.findOrderSupply(tf_mandon, tf_tenncc, tf_ngaynhap, 
                 orderSupplies, tf_tinhtrang, loc, modelSupplier)) {
-                    JOptionPane.showMessageDialog(null, "Ngày nhập không hợp lệ!");
+                    JOptionPane.showMessageDialog(null, 
+                    "Ngày nhập không hợp lệ!");
                 }
             }
         });

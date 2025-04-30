@@ -418,7 +418,7 @@ public class medicineSearch_GUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 medicine_BUS.resetFind(tf_mathuoc, tf_tenthuoc, tf_danhmuc, sp_gia_hop, 
                 sp_gia_vi, sp_gia_vien, tf_xuatxu, cb_doituong, ds_doituong, chosen,
-                sp_hansd, cb_hansd);
+                sp_hansd, cb_hansd, cb_tinhtrang);
             }
         });
     }

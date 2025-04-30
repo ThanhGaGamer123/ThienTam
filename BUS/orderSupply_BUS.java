@@ -347,19 +347,39 @@ public class orderSupply_BUS {
     }
 
     //orderSupply tìm kiếm
-    public static Boolean findOrderSupply(JTextField tf_mandon, JTextField tf_tenncc,
+    public static Boolean findOrderSupply(JTextField tf_madon, JTextField tf_tenncc,
     JTextField tf_ngaynhap, ArrayList<orderSupply_DTO> orderSupplies,
     JComboBox cb_tinhtrang, int loc, DefaultTableModel modelSupplier) {
-        //kiểm tra
-        String madon = tf_mandon.getText().toString();
-        String tenncc = tf_tenncc.getText().toString();
-        String ngaynhap = tf_ngaynhap.getText().toString();
-
-        if(tf_ngaynhap.getText().isEmpty() || (!tf_ngaynhap.getText().isEmpty() && advance.checkDate(ngaynhap))) {
+        if(tf_ngaynhap.getText().isEmpty() || (!tf_ngaynhap.getText().isEmpty() && advance.checkDate(tf_ngaynhap.getText()))) {
+            ArrayList<String> condition = new ArrayList<>();
+            if(!tf_madon.getText().isEmpty()) 
+                condition.add("mahdnhap like N'%" + tf_madon.getText() + "%' ");
+            if(!tf_tenncc.getText().isEmpty()) {
+                ArrayList<supplier_DTO> sp = new supplier_DAO().selectByCondition("tenncc like N'%" + tf_tenncc.getText() + "%'");
+                condition.add("mancc like N'%" + sp.get(0).getMancc() + "%' ");
+            }
+            if(cb_tinhtrang.getSelectedItem().equals("Đang hoạt động"))
+                condition.add("tinhtrang = 1 ");
+            if(cb_tinhtrang.getSelectedItem().equals("Ngừng hoạt động"))
+                condition.add("tinhtrang = 0 ");
+            String result = String.join("and ", condition);
             orderSupply_DAO osDAO = new orderSupply_DAO();
-            osDAO.findOrderSupply(madon, tenncc, ngaynhap, orderSupplies,
-            cb_tinhtrang.getSelectedItem().toString());
-            
+            ArrayList<orderSupply_DTO> TEMP = new ArrayList<>();
+            if(!result.isEmpty())
+                TEMP = osDAO.selectByCondition(result);
+            else TEMP = osDAO.selectAll();
+
+            //kiểm tra ngày
+            orderSupplies.clear();
+            for (orderSupply_DTO os : TEMP) {
+                String [] time = os.getNgaynhap().split(" ");
+                if(tf_ngaynhap.getText().isEmpty() || (!tf_ngaynhap.getText().isEmpty()
+                && (advance.date1BeforeDate2(tf_ngaynhap.getText(), time[1])
+                || advance.date1EqualDate2(tf_ngaynhap.getText(), time[1])))) {
+                    orderSupplies.add(os);
+                }
+            }
+
             //xử lý lọc
             System.out.println(loc);
             if(loc == 1) {
@@ -414,13 +434,17 @@ public class orderSupply_BUS {
                     statusImg = new JLabel(data.imagePath.resize_exitIcon);
                 }
                 JButton eyeButton = new JButton(data.imagePath.resize_eye);
-                modelSupplier.addRow(new Object[]{orderSupply.getMahdnhap(), tenncc,
+                supplier_DTO sp = new supplier_DTO();
+                sp.setMancc(orderSupply.getMancc());
+                supplier_DAO spDAO = new supplier_DAO();
+                sp = spDAO.selectByID(sp);
+                modelSupplier.addRow(new Object[]{orderSupply.getMahdnhap(), sp.getTenncc(),
                 orderSupply.getSoloaithuoc(), orderSupply.getNgaynhap(),
                 orderSupply.getTongtien(), statusImg, eyeButton});
             }
 
             //reset
-            resetFind(tf_mandon, tf_tenncc, tf_ngaynhap, cb_tinhtrang);
+            resetFind(tf_madon, tf_tenncc, tf_ngaynhap, cb_tinhtrang);
 
             return true;
         } else {

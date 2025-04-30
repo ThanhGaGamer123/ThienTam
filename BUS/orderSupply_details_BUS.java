@@ -8,8 +8,11 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import DAO.medicine_DAO;
+import DAO.orderSupply_DAO;
 import DAO.orderSupply_details_DAO;
 import DTO.medicine_DTO;
+import DTO.orderSupply_DTO;
 import DTO.orderSupply_details_DTO;
 import advanceMethod.advance;
 
@@ -189,4 +192,38 @@ public class orderSupply_details_BUS {
             deleteOrderSupplyDetail(osd.getMacthdnhap(), modelCollect);
         }
     } 
+
+    public static void checkExpired(orderSupply_details_DTO osd, DefaultTableModel modelCollect) {
+        orderSupply_DTO os = new orderSupply_DTO();
+        os.setMahdnhap(osd.getMahdnhap());
+        orderSupply_DAO osDAO = new orderSupply_DAO();
+        os = osDAO.selectByID(os);
+
+        medicine_DTO med = new medicine_DTO();
+        med.setMathuoc(osd.getMathuoc());
+        medicine_DAO medDAO = new medicine_DAO();
+        med = medDAO.selectByID(med);
+
+        String[] date = os.getNgaynhap().split(" ");
+        String[] hansd = med.getHansudung().split(" ");
+        int time = Integer.parseInt(hansd[0]);
+        String loai = hansd[1];
+
+        if(loai.equals("tháng")) {
+            if(advance.checkExpiredByMonths(date[1], time)) {
+                deleteOrderSupplyDetail(osd.getMacthdnhap(), modelCollect);
+            }
+        } else {
+            if(advance.checkExpiredByYears(date[1], time)) {
+                deleteOrderSupplyDetail(osd.getMacthdnhap(), modelCollect);
+            }
+        }
+    }
+
+    public static void autoCheckExpired(DefaultTableModel modelCollect) {
+        ArrayList<orderSupply_details_DTO> osds = new orderSupply_details_DAO().selectAll();
+        for (orderSupply_details_DTO osd : osds) {
+            checkExpired(osd, modelCollect);
+        }
+    }
 }

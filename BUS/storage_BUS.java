@@ -129,4 +129,23 @@ public class storage_BUS {
 
         strDAO.update(str);
     }
+
+    public static void autoLoadQuantity() {
+        ArrayList<storage_DTO> strS = new ArrayList<>();
+        storage_DAO strDAO = new storage_DAO();
+        strS = strDAO.selectAll();
+        for (storage_DTO str : strS) {
+            ArrayList<Integer> sl = new ArrayList<>();
+            sl.add(0);
+            sl.add(0);
+            sl.add(0);
+            str.setSlton(sl);
+            strDAO.update(str);
+        }
+        
+        ArrayList<orderSupply_details_DTO> osds = new orderSupply_details_DAO().selectAll();
+        for (orderSupply_details_DTO osd : osds) {
+            loadQuantity(osd);
+        }
+    }
 }

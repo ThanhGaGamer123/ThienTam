@@ -212,7 +212,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.insets = new Insets(0, 0, 30, 0);
         main.add(slnhap_hop, gdc);
 
-        SpinnerNumberModel sp_slhop = new SpinnerNumberModel(0, 0, null, 1000);
+        SpinnerNumberModel sp_slhop = new SpinnerNumberModel(0, 0, null, 1);
         JSpinner sp_slnhap_hop = new JSpinner(sp_slhop);
         sp_slnhap_hop.setForeground(Color.BLACK);
         sp_slnhap_hop.setFont(new Font(null, Font.PLAIN, 20));
@@ -262,7 +262,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.insets = new Insets(0, 0, 30, 0);
         main.add(slnhap_vi, gdc);
 
-        SpinnerNumberModel sp_slvi = new SpinnerNumberModel(0, 0, null, 1000);
+        SpinnerNumberModel sp_slvi = new SpinnerNumberModel(0, 0, null, 1);
         JSpinner sp_slnhap_vi = new JSpinner(sp_slvi);
         sp_slnhap_vi.setForeground(Color.BLACK);
         sp_slnhap_vi.setFont(new Font(null, Font.PLAIN, 20));
@@ -312,7 +312,7 @@ public class orderSupplyAdd_GUI extends JFrame{
         gdc.insets = new Insets(0, 0, 30, 0);
         main.add(slnhap_vien, gdc);
 
-        SpinnerNumberModel sp_slvien = new SpinnerNumberModel(0, 0, null, 1000);
+        SpinnerNumberModel sp_slvien = new SpinnerNumberModel(0, 0, null, 1);
         JSpinner sp_slnhap_vien = new JSpinner(sp_slvien);
         sp_slnhap_vien.setForeground(Color.BLACK);
         sp_slnhap_vien.setFont(new Font(null, Font.PLAIN, 20));

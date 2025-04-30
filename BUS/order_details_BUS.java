@@ -82,7 +82,7 @@ public class order_details_BUS {
             ods2 = odDAO.selectAll();
 
             order_details_DTO od = new order_details_DTO();
-            od.setMactdh("CTĐH" + advance.calculateID(0 + ods.size() + ods2.size()));
+            od.setMactdh("CTDH" + advance.calculateID(0 + ods.size() + ods2.size()));
             od.setSl(Integer.parseInt(slmua.getValue().toString()));
             od.setDonvi(donvi);
             od.setDongia(Double.parseDouble(giaban.getText()));
@@ -135,7 +135,7 @@ public class order_details_BUS {
     public static void deleteOrderDetails(ArrayList<order_details_DTO> ods, 
     DefaultTableModel model, JTable table, JRadioButton hop, 
     JRadioButton vi, JRadioButton vien, JTextField slhop, JTextField slvi, 
-    JTextField slvien, JTextField giaban) {
+    JTextField slvien, JTextField giaban, DefaultTableModel modelCollect) {
         int selectedColumn = table.getSelectedColumn();
         if(selectedColumn == 6) {
             int selectedRow = table.getSelectedRow();
@@ -151,7 +151,7 @@ public class order_details_BUS {
                 ods2 = odDAO.selectAll();
                 int i = 0 + ods2.size();
                 for (order_details_DTO od : ods) {
-                    od.setMactdh("CTĐH" + advance.calculateID(i));
+                    od.setMactdh("CTDH" + advance.calculateID(i));
                     i++;
                 }
 
@@ -187,6 +187,8 @@ public class order_details_BUS {
                 
                 loadData(ods, model);
 
+                orderSupply_details_BUS.checkExpired(osd, modelCollect);
+
                 for (int j = 0; j < 3; j++) {
                     if(!dsctdhnhap.get(j).equals("null")) {
                         osd = new orderSupply_details_DTO();
@@ -211,6 +213,67 @@ public class order_details_BUS {
                 if(vien.isSelected())
                         medicine_BUS.radioDonVi(med, giaban, 2);
             }
+        }
+    }
+
+    public static void resetDelete(ArrayList<order_details_DTO> ods, DefaultTableModel model,
+    JTextField  slhop, JTextField slvi, JTextField slvien, JRadioButton hop, JRadioButton vi,
+    JRadioButton vien, JTextField giaban) {
+        for (order_details_DTO od : ods) {
+            orderSupply_details_DTO osd = new orderSupply_details_DTO();
+            osd.setMacthdnhap(od.getMacthdnhap());
+            orderSupply_details_DAO osdDAO = new orderSupply_details_DAO();
+            osd = osdDAO.selectByID(osd);
+
+            if(!osd.getTinhtrang()) osd.setTinhtrang(true);
+            if(od.getDonvi().equals("hộp")) 
+                osd.getSlcon().set(0, osd.getSlcon().get(0) + od.getSl());
+            if(od.getDonvi().equals("vỉ")) 
+                osd.getSlcon().set(1, osd.getSlcon().get(1) + od.getSl());
+            if(od.getDonvi().equals("viên")) 
+                osd.getSlcon().set(2, osd.getSlcon().get(2) + od.getSl());
+            osdDAO.update(osd);
+            storage_BUS.loadQuantity(osd);
+
+            orderSupply_DTO os = new orderSupply_DTO();
+            os.setMahdnhap(osd.getMahdnhap());
+            orderSupply_DAO osDAO = new orderSupply_DAO();
+            os = osDAO.selectByID(os);
+
+            if(!os.getTinhtrang()) os.setTinhtrang(true);
+            osDAO.update(os);
+            
+            medicine_DTO med = new medicine_DTO();
+            med.setMathuoc(osd.getMathuoc());
+            medicine_DAO medDAO = new medicine_DAO();
+            med = medDAO.selectByID(med);
+            ArrayList<String> dsctdhnhap = medicine_BUS.updateSellPrice(med);
+            
+            loadData(ods, model);
+
+            for (int j = 0; j < 3; j++) {
+                if(!dsctdhnhap.get(j).equals("null")) {
+                    osd = new orderSupply_details_DTO();
+                    osd.setMacthdnhap(dsctdhnhap.get(j));
+                    osdDAO = new orderSupply_details_DAO();
+                    osd = osdDAO.selectByID(osd);
+
+                    if(j == 0) slhop.setText(osd.getSlcon().get(j).toString());
+                    if(j == 1) slvi.setText(osd.getSlcon().get(j).toString());
+                    if(j == 2) slvien.setText(osd.getSlcon().get(j).toString());
+                } else {
+                    if(j == 0) slhop.setText("0");
+                    if(j == 1) slvi.setText("0");
+                    if(j == 2) slvien.setText("0");
+                }
+            }
+
+            if(hop.isSelected())
+                    medicine_BUS.radioDonVi(med, giaban, 0);
+            if(vi.isSelected())
+                    medicine_BUS.radioDonVi(med, giaban, 1);
+            if(vien.isSelected())
+                    medicine_BUS.radioDonVi(med, giaban, 2);
         }
     }
 }

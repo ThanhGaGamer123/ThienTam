@@ -154,7 +154,7 @@ public class medicine_GUI extends JFrame {
         gdc.gridx = 0;
         gdc.gridy = 5;
         gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.EAST;
+        gdc.anchor = GridBagConstraints.NORTHEAST;
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
         gdc.insets = new Insets(0, 100, 30, 0);
@@ -185,7 +185,7 @@ public class medicine_GUI extends JFrame {
         gdc.gridx = 0;
         gdc.gridy = 6;
         gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.EAST;
+        gdc.anchor = GridBagConstraints.NORTHEAST;
         gdc.fill = GridBagConstraints.NONE;
         gdc.weightx = 0;
         gdc.insets = new Insets(0, 100, 30, 0);

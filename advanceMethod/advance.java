@@ -185,4 +185,36 @@ public class advance {
             return null;
         }
     }
+
+    public static Boolean checkExpiredByMonths(String date, int time) {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        try {
+            LocalDate parse_date = LocalDate.parse(date, format);
+            LocalDate current_date = LocalDate.now();
+            LocalDate parse_current = LocalDate.parse(current_date.format(format),format);
+            LocalDate expiredDate = parse_date.plusMonths(time);
+            System.out.println(expiredDate);
+
+            return expiredDate.isBefore(parse_current);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Boolean checkExpiredByYears(String date, int time) {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        try {
+            LocalDate parse_date = LocalDate.parse(date, format);
+            LocalDate current_date = LocalDate.now();
+            LocalDate parse_current = LocalDate.parse(current_date.format(format),format);
+            LocalDate expiredDate = parse_date.plusYears(time);
+            System.out.println(expiredDate);
+
+            return expiredDate.isBefore(parse_current);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
