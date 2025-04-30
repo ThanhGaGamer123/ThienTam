@@ -2,7 +2,6 @@ package DAO;
 
 import connection.MyConnection;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -10,13 +9,9 @@ public class customerDAO {
 
     public static String taoMaKHMoi() {
         String newMaKH = "KH1"; // mặc định nếu bảng rỗng
-        String url = "jdbc:sqlserver://localhost:1433;databaseName=Thientam;encrypt=true;trustServerCertificate=true";
-        String username = "sa";
-        String password = "123"; // Sử dụng mật khẩu của cơ sở dữ liệu
-
         String sql = "SELECT TOP 1 MaKH FROM KhachHang ORDER BY CAST(SUBSTRING(MaKH, 3, LEN(MaKH)) AS INT) DESC";
 
-        try (Connection con = DriverManager.getConnection(url, username, password);
+        try (Connection con = MyConnection.createConnection();
                 PreparedStatement pst = con.prepareStatement(sql)) {
 
             var rs = pst.executeQuery();
@@ -24,7 +19,7 @@ public class customerDAO {
                 String lastMaKH = rs.getString("MaKH"); // ví dụ: "KH999"
                 int num = Integer.parseInt(lastMaKH.substring(2)); // lấy phần số
                 num++;
-                newMaKH = "KH0" + num;
+                newMaKH = "KH" + num; // Tạo mã mới
             }
 
         } catch (SQLException e) {
@@ -36,12 +31,7 @@ public class customerDAO {
     }
 
     public static void themKhachhang(String tenkh, String email, String sdt, String masonha, String duong,
-            String phuong,
-            String quan, String tinh, String password) {
-
-        String url = "jdbc:sqlserver://localhost:1433;databaseName=Thientam;encrypt=true;trustServerCertificate=true";
-        String username = "sa";
-        String passwordDB = "123"; // Sử dụng mật khẩu của cơ sở dữ liệu
+            String phuong, String quan, String tinh, String password) {
 
         // Gọi hàm tạo mã khách hàng mới
         String maKH = taoMaKHMoi();
@@ -49,7 +39,7 @@ public class customerDAO {
         String sql = "INSERT INTO KhachHang (MaKH, TenKH, SDT, Email, maSoNha, Duong, Phuong, Quan, Tinh, DiemKM, Passwordkh, tinhtrang) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection con = DriverManager.getConnection(url, username, passwordDB);
+        try (Connection con = MyConnection.createConnection();
                 PreparedStatement pst = con.prepareStatement(sql)) {
 
             // Thiết lập tham số cho PreparedStatement
