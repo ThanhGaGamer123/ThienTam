@@ -1,10 +1,9 @@
-package customer;
+package GUI;
 
 import BUS.login_BUS;
 import DAO.orderDetailsDAO;
 import DTO.customer_DTO;
-import GUI.customer_GUI;
-import cart.cart_GUI;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.*;
+
 import order_details.order_details;
 import order_details.order_detailsArr;
 
@@ -224,7 +224,7 @@ public class trangCaNhan_GUI extends JFrame {
                 int choice = JOptionPane.showConfirmDialog(null,
                         "Bạn có chắc muốn đăng xuất không?");
                 if (choice == 0) {
-                    new login_BUS();
+                    new login_GUI();
                     dispose();
                 }
             }
@@ -367,26 +367,29 @@ public class trangCaNhan_GUI extends JFrame {
             lblEmpty.setForeground(Color.GRAY);
             tab2_right.add(lblEmpty, gbc);
         } else {
+            // JPanel orderDetailsPanel = new JPanel();
+            // orderDetailsPanel.setLayout(new GridLayout(0, 1, 10, 10));
+            // orderDetailsPanel.setBackground(linen);
+            // orderDetailsPanel.setPreferredSize(new Dimension(500, 100));
+            // orderDetailsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+
             JPanel orderDetailsPanel = new JPanel();
             orderDetailsPanel.setLayout(new GridLayout(0, 1, 10, 10));
             orderDetailsPanel.setBackground(linen);
-            orderDetailsPanel.setPreferredSize(new Dimension(500, 50));
-            orderDetailsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+            orderDetailsPanel.setBorder(BorderFactory.createLineBorder(xanhla, 2));
 
             for (order_details od : danhSachDonHang) {
                 JPanel orderPanel = new JPanel(new GridLayout(1, 4));
                 orderPanel.setBackground(Color.WHITE);
+                orderPanel.setPreferredSize(new Dimension((int) (chieurong - 400), 80));
                 orderPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
-                // Mã đơn
                 JLabel orderLabel = new JLabel("        Mã đơn: " + od.getMadon());
                 orderPanel.add(orderLabel);
 
-                // Ngày đặt
                 JLabel ngaydat = new JLabel("Ngày đặt: " + od.getNgaydat());
                 orderPanel.add(ngaydat);
 
-                // Địa chỉ cụ thể
                 JLabel diachi = new JLabel("Địa chỉ: " + od.getDiachicuthe());
                 orderPanel.add(diachi);
 
@@ -522,9 +525,13 @@ public class trangCaNhan_GUI extends JFrame {
             JScrollPane scrollPane = new JScrollPane(orderDetailsPanel);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-            scrollPane.setPreferredSize(new Dimension((int) (chieurong - 400), 400));
+            scrollPane.setPreferredSize(new Dimension((int) (chieurong - 400), 400)); // Điều chỉnh kích thước
 
             tab2_right.add(scrollPane, gbc);
+
+            tab2_right.revalidate();
+            tab2_right.repaint();
+
         }
 
         tab2_right.revalidate();

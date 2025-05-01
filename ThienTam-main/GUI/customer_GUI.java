@@ -3,9 +3,8 @@ package GUI;
 import DTO.customer_DTO;
 import DTO.medicine_DTO;
 import cart.cartArr;
-import cart.cart_GUI;
 import customer.customer_DTOArr;
-import customer.trangCaNhan_GUI;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
@@ -68,7 +67,7 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
     }
 
     public void create(ArrayList<medicine_DTO> foundProductsFilter) {
-        setTitle("Customer");
+        setTitle("Trang chủ - Nhà thuốc Thiện Tâm ");
         setSize(1280, 720);
         setResizable(true);
         setLocationRelativeTo(null);

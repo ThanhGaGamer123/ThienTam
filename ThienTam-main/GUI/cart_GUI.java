@@ -1,21 +1,23 @@
-package cart;
+package GUI;
 
 import DTO.cart_DTO;
 import DTO.customer_DTO;
 import DTO.medicine_DTO;
 import DTO.sanphamchonmua_DTO;
-import GUI.customer_GUI;
-import GUI.thanhtoan_GUI;
+import cart.cartArr;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.text.NumberFormat;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
 import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
+import java.util.Locale;
+
 import javax.swing.*;
 
 import DAO.cartDAO;
@@ -49,7 +51,7 @@ public class cart_GUI extends JFrame {
     public cart_GUI(customer_GUI khach, customer_DTO khachCurrent) {
         this.khach = khach;
         this.khachCurrent = khachCurrent;
-        this.sanpham = new medicineArr(); // Khởi tạo
+        this.sanpham = new medicineArr();
         this.giohang = new cartArr();
         giohang.readCartDatabase(giohang.getA(), khachCurrent.getMakh());
 
@@ -101,6 +103,18 @@ public class cart_GUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 khach.setVisible(true);
                 dispose();
+            }
+        });
+
+        back.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                back.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Chuyển thành bàn tay
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                back.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
             }
         });
 
@@ -332,6 +346,18 @@ public class cart_GUI extends JFrame {
                 JRadioButton checkbuy = new JRadioButton();
                 checkboxes.add(checkbuy);
 
+                checkbuy.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        checkbuy.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Chuyển thành bàn tay
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        checkbuy.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+                    }
+                });
+
                 JPanel hinhsp = new JPanel();
                 hinhsp.setPreferredSize(new Dimension(60, 50));
                 hinhsp.setBackground(vang);
@@ -405,7 +431,17 @@ public class cart_GUI extends JFrame {
                 // ---- Cột 4: Đơn giá + Nút xóa ----
                 JPanel cot4 = new JPanel(new GridBagLayout());
                 cot4.setOpaque(false);
-                JLabel donGiaLabel = new JLabel("Đơn giá: " + c.getDongia() + "đ");
+
+                NumberFormat nf = NumberFormat.getInstance(Locale.FRANCE);
+                nf.setMaximumFractionDigits(2);
+
+                String formattedNumber = nf.format(c.getDongia());
+                String formattedPrice = (c.getDongia() % 1 == 0)
+                        ? String.format("Đơn giá: %sđ", nf.format((long) c.getDongia()))
+
+                        : String.format("Đơn giá: %sđ", formattedNumber);
+
+                JLabel donGiaLabel = new JLabel(formattedPrice);
                 cot4.add(donGiaLabel);
 
                 // Nút xóa
@@ -433,6 +469,18 @@ public class cart_GUI extends JFrame {
                         giohang.readCartDatabase(giohang.getA(), khachCurrent.getMakh());
                         showSP_incart(); // Refresh giao diện
                         updateTongTien();
+                    }
+                });
+
+                xoasp.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        back.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Chuyển thành bàn tay
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        back.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
                     }
                 });
 
@@ -562,8 +610,15 @@ public class cart_GUI extends JFrame {
             }
         }
 
-        cost.setText(tongTien + " đ");
-        costreal.setText(tongTien + "đ");
+        NumberFormat nf = NumberFormat.getInstance(Locale.FRANCE);
+        nf.setMaximumFractionDigits(2); // Tối đa 2 chữ số sau dấu phẩy
+
+        String formattedTongTien = (tongTien % 1 == 0)
+                ? nf.format((long) tongTien)
+                : nf.format(tongTien);
+
+        cost.setText(formattedTongTien + " đ");
+        costreal.setText(formattedTongTien + "đ");
         costreal.setFont(new Font("Bookman", Font.PLAIN, 17));
         sosp.setText(Integer.toString(sumsp));
 
