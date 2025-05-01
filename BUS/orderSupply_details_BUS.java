@@ -223,7 +223,7 @@ public class orderSupply_details_BUS {
     public static void autoCheckExpired(DefaultTableModel modelCollect) {
         ArrayList<orderSupply_details_DTO> osds = new orderSupply_details_DAO().selectAll();
         for (orderSupply_details_DTO osd : osds) {
-            checkExpired(osd, modelCollect);
+            if(osd.getTinhtrang()) checkExpired(osd, modelCollect);
         }
     }
 }

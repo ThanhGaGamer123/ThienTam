@@ -67,7 +67,7 @@ public class orderGUI extends JFrame {
         title_ds.setForeground(Color.BLACK);
         title_ds.setFont(new Font(null, Font.BOLD, 30));
         gdc.gridx = 0;
-        gdc.gridy = 9;
+        gdc.gridy = 10;
         gdc.gridwidth = 7;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.insets = new Insets(20, 0, 30, 0);
@@ -412,6 +412,54 @@ public class orderGUI extends JFrame {
         gdc.insets = new Insets(0, 10, 30, 100);
         main.add(tf_sdt_nguoinhan, gdc);
 
+        JLabel makm = new JLabel("Mã khuyến mãi:");
+        makm.setForeground(Color.BLACK);
+        makm.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 0;
+        gdc.gridy = 9;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.WEST;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 0;
+        gdc.insets = new Insets(0, 100, 30, 0);
+        main.add(makm, gdc);
+
+        JTextField tf_makm = new JTextField();
+        tf_makm.setForeground(Color.BLACK);
+        tf_makm.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 1;
+        gdc.gridy = 9;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 10, 30, 0);
+        main.add(tf_makm, gdc);
+        
+        JLabel tenkm = new JLabel("Chương trình khuyến mãi:");
+        tenkm.setForeground(Color.BLACK);
+        tenkm.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 3;
+        gdc.gridy = 9;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.EAST;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 0;
+        gdc.insets = new Insets(0, 20, 30, 0);
+        main.add(tenkm, gdc);
+
+        JTextField tf_tenkm = new JTextField();
+        tf_tenkm.setForeground(Color.BLACK);
+        tf_tenkm.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 4;
+        gdc.gridy = 9;
+        gdc.gridwidth = 2;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 10, 30, 100);
+        main.add(tf_tenkm, gdc);
+
         String[] columns = {"Mã CTĐH", "Tên thuốc", "Đơn vị", "Số lượng", "Đơn giá", 
         "Thành tiền", "Mã CTĐHN", "Tình trạng", ""};
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
@@ -438,7 +486,7 @@ public class orderGUI extends JFrame {
         JScrollPane scroll_supply = new JScrollPane();
         scroll_supply.setViewportView(table);
         gdc.gridx = 0;
-        gdc.gridy = 10;
+        gdc.gridy = 11;
         gdc.gridwidth = 7;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -453,7 +501,7 @@ public class orderGUI extends JFrame {
         //load dữ liệu đơn hàng
         order_BUS.loadOrder(madh, tf_mandon, tf_makh, tf_tenkh, tf_manv, tf_tennv, 
         ta_diachi, tf_ngaydat, cb_tinhtrang, tf_tongtien, tf_pttt, ta_ghichu, 
-        tf_nguoinhan, tf_sdt_nguoinhan, model);
+        tf_nguoinhan, tf_sdt_nguoinhan, model, tf_makm, tf_tenkm);
 
         table.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -498,7 +546,7 @@ public class orderGUI extends JFrame {
                 if(ketQua == 1) {
                     order_BUS.loadOrder(madh, tf_mandon, tf_makh, tf_tenkh, tf_manv, tf_tennv, 
                     ta_diachi, tf_ngaydat, cb_tinhtrang, tf_tongtien, tf_pttt, ta_ghichu, 
-                    tf_nguoinhan, tf_sdt_nguoinhan, model);
+                    tf_nguoinhan, tf_sdt_nguoinhan, model, tf_makm, tf_tenkm);
 
                     order_BUS.loadData(modelSell);
                 }
@@ -524,7 +572,7 @@ public class orderGUI extends JFrame {
                 if(order_BUS.deleteOrderDetail(model, table, modelCollect)) {
                     order_BUS.loadOrder(madh, tf_mandon, tf_makh, tf_tenkh, tf_manv, tf_tennv, 
                     ta_diachi, tf_ngaydat, cb_tinhtrang, tf_tongtien, tf_pttt, ta_ghichu, 
-                    tf_nguoinhan, tf_sdt_nguoinhan, model);
+                    tf_nguoinhan, tf_sdt_nguoinhan, model, tf_makm, tf_tenkm);
                 } else {
                     JOptionPane.showMessageDialog(null, 
                     "Chi tiết đơn hàng này đã ngừng hoạt động.");

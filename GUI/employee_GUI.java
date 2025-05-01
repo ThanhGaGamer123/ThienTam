@@ -84,8 +84,6 @@ public class employee_GUI extends JFrame {
         JScrollPane employeeScroll = new JScrollPane();
         employeeScroll.setViewportView(employeeStatus);
 
-        tab.addTab("Thông tin", data.imagePath.resize_statusIcon, employeeScroll);
-
         GridBagConstraints gdc_employee = new GridBagConstraints();
 
         gdc_employee.gridwidth = 1;
@@ -208,8 +206,6 @@ public class employee_GUI extends JFrame {
         
         JScrollPane orderScroll = new JScrollPane();
         orderScroll.setViewportView(orderSell);
-
-        tab.addTab("Hóa đơn bán", data.imagePath.resize_orderSell, orderScroll);
 
         GridBagConstraints gdc_ordersell = new GridBagConstraints();
 
@@ -357,8 +353,6 @@ public class employee_GUI extends JFrame {
 
         JScrollPane orderCollectScroll = new JScrollPane();
         orderCollectScroll.setViewportView(orderCollect);
-
-        tab.addTab("Hóa đơn nhập", data.imagePath.resize_package, orderCollectScroll);
 
         GridBagConstraints gdc_ordercollect = new GridBagConstraints();
 
@@ -509,8 +503,6 @@ public class employee_GUI extends JFrame {
         JScrollPane medicScroll = new JScrollPane();
         medicScroll.setViewportView(medic);
 
-        tab.addTab("Thuốc", data.imagePath.resize_medic, medicScroll);
-
         GridBagConstraints gdc_medic = new GridBagConstraints();
 
         JLabel titleMedic = new JLabel("Danh Sách Thuốc");
@@ -659,8 +651,6 @@ public class employee_GUI extends JFrame {
         JScrollPane statisticScroll = new JScrollPane();
         statisticScroll.setViewportView(statistic);
 
-        tab.addTab("Thống kê", data.imagePath.resize_statistic, statisticScroll);
-
         GridBagConstraints gdc_statistic = new GridBagConstraints();
 
         JLabel titleStatistic = new JLabel("Thống Kê Nhân Viên");
@@ -742,6 +732,13 @@ public class employee_GUI extends JFrame {
         // backgroundStatistic.setIcon(new ImageIcon(advance.img+"backgrounds.jpg"));
         // backgroundStatistic.setBounds(0,0, 1280, 720);
         // statistic.add(backgroundStatistic);
+
+        
+        tab.addTab("Thông tin", data.imagePath.resize_statusIcon, employeeScroll);
+        tab.addTab("Thuốc", data.imagePath.resize_medic, medicScroll);
+        tab.addTab("Hóa đơn nhập", data.imagePath.resize_package, orderCollectScroll);
+        tab.addTab("Hóa đơn bán", data.imagePath.resize_orderSell, orderScroll);
+        tab.addTab("Thống kê", data.imagePath.resize_statistic, statisticScroll);
 
         //Menu
         JMenuBar menuBar = new JMenuBar();

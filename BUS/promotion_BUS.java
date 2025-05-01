@@ -142,7 +142,7 @@ public class promotion_BUS {
     public static void autoCheckExpired() {
         ArrayList<promotion_DTO> pros = new promotion_DAO().selectAll();
         for (promotion_DTO pro : pros) {
-            checkExpired(pro);
+            if(pro.getTinhtrang()) checkExpired(pro);
         }
     }
 }

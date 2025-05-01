@@ -403,7 +403,8 @@ public class order_BUS {
     public static void loadOrder(String madh, JTextField madon, JTextField makh,
     JTextField tenkh, JTextField manv, JTextField tennv, JTextArea diachi, JTextField ngaydat,
     JComboBox tinhtrang, JTextField tongtien, JTextField pttt, JTextArea ghichu,
-    JTextField nguoinhan, JTextField sdt_nguoinhan, DefaultTableModel model) {
+    JTextField nguoinhan, JTextField sdt_nguoinhan, DefaultTableModel model, JTextField makm,
+    JTextField tenkm) {
         order_DTO ord = new order_DTO();
         ord.setMadon(madh);
         order_DAO ordDAO = new order_DAO();
@@ -416,8 +417,10 @@ public class order_BUS {
         customer_DAO cusDAO = new customer_DAO();
         cus = cusDAO.selectByID(cus);
 
-        makh.setText(cus.getMakh());
-        tenkh.setText(cus.getTenkh());
+        if(cus.getMakh() != null && !cus.getMakh().isEmpty()) makh.setText(cus.getMakh());
+        else makh.setText("Không có");
+        if(cus.getTenkh() != null && !cus.getTenkh().isEmpty()) tenkh.setText(cus.getTenkh());
+        else tenkh.setText("Không có");
 
         employee_DTO em = new employee_DTO();
         em.setManv(ord.getManv());
@@ -451,7 +454,27 @@ public class order_BUS {
 
         if(ord.getSdt_nguoinhan() == 0) sdt_nguoinhan.setText("" + ord.getSdt_nguoinhan());
         else sdt_nguoinhan.setText("Không có");
-        
+
+        Boolean flag = false;
+        ArrayList<promotion_details_DTO> prods = new promotion_details_DAO().selectAll();
+        for (promotion_details_DTO prod : prods) {
+            if(prod.getMadon().equals(ord.getMadon())) {
+                promotion_DTO pro = new promotion_DTO();
+                pro.setMakm(prod.getMakm());
+                pro = new promotion_DAO().selectByID(pro);
+
+                makm.setText(pro.getMakm());
+                tenkm.setText(pro.getTenkm());
+
+                flag = true;
+                break;
+            }
+        }
+        if(!flag) {
+            makm.setText("Không có");
+            tenkm.setText("Không có");
+        }
+
         ArrayList<order_details_DTO> ods = new order_details_DAO().selectByCondition("madon like N'%" + ord.getMadon() + "%' ");
         model.setRowCount(0);
         for (order_details_DTO od : ods) {
