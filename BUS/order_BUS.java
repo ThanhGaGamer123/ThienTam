@@ -233,17 +233,18 @@ public class order_BUS {
                 ArrayList<order_DTO> ods = new ArrayList<>();
                 for (order_DTO od : temp) {
                     String[] time = od.getNgaydat().split(" ");
-                    if((ngaybatdau.getText().isEmpty() && ngayketthuc.getText().isEmpty())
-                    || (!ngaybatdau.getText().isEmpty() && ngayketthuc.getText().isEmpty()
-                    && (!advance.date1BeforeDate2(time[1], ngaybatdau.getText())
-                    || advance.date1EqualDate2(time[1], ngaybatdau.getText())))
-                    || (ngaybatdau.getText().isEmpty() && !ngayketthuc.getText().isEmpty()
-                    && (advance.date1BeforeDate2(time[1], ngayketthuc.getText())
-                    || advance.date1EqualDate2(time[1], ngayketthuc.getText())))
-                    || ((!advance.date1BeforeDate2(time[1], ngaybatdau.getText())
-                    || advance.date1EqualDate2(time[1], ngaybatdau.getText()))
-                    && (advance.date1BeforeDate2(time[1], ngayketthuc.getText())
-                    || advance.date1EqualDate2(time[1], ngayketthuc.getText())))) {
+                    if(((ngaybatdau.getText().isEmpty() || ngaybatdau.getText().equals("dd/MM/yyyy"))
+                    && (ngayketthuc.getText().isEmpty() || ngayketthuc.getText().equals("dd/MM/yyyy")))
+                    || ((!ngaybatdau.getText().isEmpty() || !ngaybatdau.getText().equals("dd/MM/yyyy"))
+                    && (ngayketthuc.getText().isEmpty() || ngayketthuc.getText().equals("dd/MM/yyyy"))
+                    && (advance.date1BeforeDate2(ngaybatdau.getText(), time[1]) || advance.date1EqualDate2(ngaybatdau.getText(), time[1])))
+                    || ((ngaybatdau.getText().isEmpty() || ngaybatdau.getText().equals("dd/MM/yyyy"))
+                    && (!ngayketthuc.getText().isEmpty() || !ngayketthuc.getText().equals("dd/MM/yyyy"))
+                    && (advance.date1BeforeDate2(time[1], ngayketthuc.getText()) || advance.date1EqualDate2(ngayketthuc.getText(), time[1])))
+                    || ((!ngaybatdau.getText().isEmpty() || !ngaybatdau.getText().equals("dd/MM/yyyy"))
+                    && (!ngayketthuc.getText().isEmpty() || !ngayketthuc.getText().equals("dd/MM/yyyy"))
+                    && (advance.date1BeforeDate2(time[1], ngayketthuc.getText()) || advance.date1EqualDate2(ngayketthuc.getText(), time[1]))
+                    && (advance.date1BeforeDate2(ngaybatdau.getText(), time[1]) || advance.date1EqualDate2(ngaybatdau.getText(), time[1])))) {
                         ods.add(od);
                     }
                 }

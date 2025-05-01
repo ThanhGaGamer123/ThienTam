@@ -59,7 +59,7 @@ public class promotion_BUS {
             pro = proDAO.selectByID(pro);
 
             if(pro.getTinhtrang()) {
-                if(!tenkh.getText().isEmpty()) {
+                if(pro.getDiem() == 0 || !tenkh.getText().isEmpty()) {
                     cus = new customer_DAO().selectByID(cus);
                     if(cus.getDiemKM() >= pro.getDiem()) {
                         adkm.setText(pro.getMakm());

@@ -3,7 +3,6 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -15,7 +14,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -32,7 +30,15 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.*;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 import BUS.employee_BUS;
 import BUS.medicine_BUS;
@@ -655,11 +661,11 @@ public class employee_GUI extends JFrame {
 
         JLabel titleStatistic = new JLabel("Thống Kê Nhân Viên");
         titleStatistic.setForeground(Color.BLACK);
-        titleStatistic.setFont(new Font(null, Font.BOLD, 30));
+        titleStatistic.setFont(new Font(null, Font.BOLD, 36));
         // titleStatistic.setBounds(450, 20, 500, 50);
         gdc_statistic.gridx = 0;
         gdc_statistic.gridy = 0;
-        gdc_statistic.gridwidth = 5;
+        gdc_statistic.gridwidth = 12;
         gdc_statistic.anchor = GridBagConstraints.CENTER;
         gdc_statistic.insets = new Insets(20, 0, 20, 0);
         statistic.add(titleStatistic, gdc_statistic);
@@ -667,72 +673,139 @@ public class employee_GUI extends JFrame {
         // reset
         gdc_statistic.gridwidth = 1;
         
-        JLabel wallet = new JLabel();
-        wallet.setIcon(data.imagePath.resize_wallet);
-        wallet.setBorder(BorderFactory.createEmptyBorder(0,0,0,250));
-        // wallet.setBounds(70, 150, 100, 100);
-        gdc_statistic.gridx = 0;
+        JLabel ngaybatdau = new JLabel("Từ ngày:");
+        ngaybatdau.setForeground(Color.BLACK);
+        ngaybatdau.setFont(new Font(null, Font.PLAIN, 20));
+        gdc_statistic.gridx = 3;
         gdc_statistic.gridy = 1;
+        gdc_statistic.gridwidth = 1;
+        gdc_statistic.anchor = GridBagConstraints.CENTER;
         gdc_statistic.fill = GridBagConstraints.HORIZONTAL;
-        gdc_statistic.insets = new Insets(0, 50, 20, 50);
-        statistic.add(wallet, gdc_statistic);
+        gdc_statistic.weightx = 0;
+        gdc_statistic.insets = new Insets(0, 20, 30, 0);
+        statistic.add(ngaybatdau, gdc_statistic);
+
+        JTextField tf_ngaybatdau = new JTextField("dd/MM/yyyy");
+        tf_ngaybatdau.setForeground(Color.BLACK);
+        tf_ngaybatdau.setFont(new Font(null, Font.PLAIN, 20));
+        gdc_statistic.gridx = 4;
+        gdc_statistic.gridy = 1;
+        gdc_statistic.gridwidth = 2;
+        gdc_statistic.anchor = GridBagConstraints.CENTER;
+        gdc_statistic.fill = GridBagConstraints.HORIZONTAL;
+        gdc_statistic.weightx = 1;
+        gdc_statistic.insets = new Insets(0, 20, 30, 10);
+        statistic.add(tf_ngaybatdau, gdc_statistic);
+
+        JLabel ngayketthuc = new JLabel("Đến ngày:");
+        ngayketthuc.setForeground(Color.BLACK);
+        ngayketthuc.setFont(new Font(null, Font.PLAIN, 20));
+        gdc_statistic.gridx = 6;
+        gdc_statistic.gridy = 1;
+        gdc_statistic.gridwidth = 1;
+        gdc_statistic.anchor = GridBagConstraints.CENTER;
+        gdc_statistic.fill = GridBagConstraints.HORIZONTAL;
+        gdc_statistic.weightx = 0;
+        gdc_statistic.insets = new Insets(0, 20, 30, 0);
+        statistic.add(ngayketthuc, gdc_statistic);
+
+        JTextField tf_ngayketthuc = new JTextField("dd/MM/yyyy");
+        tf_ngayketthuc.setForeground(Color.BLACK);
+        tf_ngayketthuc.setFont(new Font(null, Font.PLAIN, 20));
+        gdc_statistic.gridx = 7;
+        gdc_statistic.gridy = 1;
+        gdc_statistic.gridwidth = 2;
+        gdc_statistic.anchor = GridBagConstraints.CENTER;
+        gdc_statistic.fill = GridBagConstraints.HORIZONTAL;
+        gdc_statistic.weightx = 1;
+        gdc_statistic.insets = new Insets(0, 20, 30, 10);
+        statistic.add(tf_ngayketthuc, gdc_statistic);
+
+        String[] options = {"Không có", "Theo doanh thu", "Theo lượng khách hàng"};
+        JComboBox loai = new JComboBox(options);
+        loai.setForeground(Color.BLACK);
+        loai.setFont(new Font(null, Font.PLAIN, 20));
+        gdc_statistic.gridx = 9;
+        gdc_statistic.gridy = 1;
+        gdc_statistic.gridwidth = 2;
+        gdc_statistic.anchor = GridBagConstraints.CENTER;
+        gdc_statistic.fill = GridBagConstraints.HORIZONTAL;
+        gdc_statistic.weightx = 1;
+        gdc_statistic.insets = new Insets(0, 20, 30, 10);
+        statistic.add(loai, gdc_statistic);
+
+        JButton chon = new JButton("Chọn");
+        chon.setForeground(Color.BLACK);
+        chon.setFont(new Font(null, Font.PLAIN, 20));
+        gdc_statistic.gridx = 11;
+        gdc_statistic.gridy = 1;
+        gdc_statistic.gridwidth = 1;
+        gdc_statistic.anchor = GridBagConstraints.CENTER;
+        gdc_statistic.fill = GridBagConstraints.HORIZONTAL;
+        gdc_statistic.weightx = 1;
+        gdc_statistic.insets = new Insets(0, 20, 30, 70);
+        statistic.add(chon, gdc_statistic);
 
         JPanel sellStatistic = new JPanel();
         sellStatistic.setBackground(Color.white);
         sellStatistic.setBorder(new LineBorder(Color.green, 3));
-        sellStatistic.setPreferredSize(new Dimension(300, 200));
+        sellStatistic.setLayout(new BorderLayout());
         // sellStatistic.setBounds(100, 100, 300, 200);
         gdc_statistic.gridx = 0;
-        gdc_statistic.gridy = 1;
+        gdc_statistic.gridy = 2;
+        gdc_statistic.gridwidth = 3;
         gdc_statistic.fill = GridBagConstraints.BOTH;
-        gdc_statistic.weightx = 1;
+        gdc_statistic.weightx = 0.8;
         gdc_statistic.weighty = 1;
-        gdc_statistic.insets = new Insets(0, 70, 20, 20);
+        gdc_statistic.insets = new Insets(0, 70, 20, 0);
         statistic.add(sellStatistic, gdc_statistic);
 
-        JLabel customer = new JLabel();
-        customer.setIcon(data.imagePath.resize_customer);
-        customer.setBorder(BorderFactory.createEmptyBorder(0,0,0,250));
-        // customer.setBounds(70, 390, 120, 100);
-        gdc_statistic.gridx = 0;
-        gdc_statistic.gridy = 2;
-        gdc_statistic.fill = GridBagConstraints.HORIZONTAL;
-        gdc_statistic.insets = new Insets(0, 50, 20, 50);
-        statistic.add(customer, gdc_statistic);
+        JLabel wallet = new JLabel("0 VND");
+        wallet.setIcon(data.imagePath.resize_wallet);
+        wallet.setForeground(Color.GREEN);
+        wallet.setFont(new Font(null, Font.BOLD, 30));
+        wallet.setHorizontalTextPosition(SwingConstants.RIGHT);
+        sellStatistic.add(wallet, BorderLayout.CENTER);
 
         JPanel customerStatistic = new JPanel();
         customerStatistic.setBackground(Color.white);
         customerStatistic.setBorder(new LineBorder(Color.blue,3));
-        customerStatistic.setPreferredSize(new Dimension(300, 200));
+        customerStatistic.setLayout(new BorderLayout());
         // customerStatistic.setBounds(100, 340, 300, 200);
         gdc_statistic.gridx = 0;
-        gdc_statistic.gridy = 2;
+        gdc_statistic.gridy = 3;
+        gdc_statistic.gridwidth = 3;
         gdc_statistic.fill = GridBagConstraints.BOTH;
-        gdc_statistic.weightx = 1;
+        gdc_statistic.weightx = 0.8;
         gdc_statistic.weighty = 1;
-        gdc_statistic.insets = new Insets(0, 70, 20, 20);
+        gdc_statistic.insets = new Insets(0, 70, 20, 0);
         statistic.add(customerStatistic, gdc_statistic);
 
-        JPanel columnStatistic = new JPanel();
+        JLabel customer = new JLabel("0");
+        customer.setIcon(data.imagePath.resize_customer);
+        customer.setForeground(Color.blue);
+        customer.setFont(new Font(null, Font.BOLD, 30));
+        customer.setHorizontalTextPosition(SwingConstants.RIGHT);
+        customerStatistic.add(customer, BorderLayout.CENTER);
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        JFreeChart chart = ChartFactory.createBarChart3D("", "", "", dataset, 
+        PlotOrientation.VERTICAL, true, false, false);
+        
+        ChartPanel columnStatistic = new ChartPanel(chart, false);
+        columnStatistic.setMouseWheelEnabled(false);
+        columnStatistic.setMouseZoomable(false);
         columnStatistic.setBackground(Color.white);
-        columnStatistic.setBorder(new LineBorder(Color.red, 3));
-        columnStatistic.setPreferredSize(new Dimension(700, 440));
-        // columnStatistic.setBounds(500, 100, 700, 440);
-        gdc_statistic.gridx = 1;
-        gdc_statistic.gridy = 1;
-        gdc_statistic.fill = GridBagConstraints.BOTH;
-        gdc_statistic.weightx = 1;
-        gdc_statistic.weighty = 1;
-        gdc_statistic.insets = new Insets(0, 20, 20, 20);
-        gdc_statistic.gridwidth = 4;
+        gdc_statistic.gridx = 3;
+        gdc_statistic.gridy = 2;
+        gdc_statistic.gridwidth = 9;
         gdc_statistic.gridheight = 2;
+        gdc_statistic.fill = GridBagConstraints.BOTH;
+        gdc_statistic.weightx = 1.2;
+        gdc_statistic.weighty = 1;
+        gdc_statistic.insets = new Insets(0, 20, 20, 70);
         statistic.add(columnStatistic, gdc_statistic);
-
-        // JLabel backgroundStatistic = new JLabel();
-        // backgroundStatistic.setIcon(new ImageIcon(advance.img+"backgrounds.jpg"));
-        // backgroundStatistic.setBounds(0,0, 1280, 720);
-        // statistic.add(backgroundStatistic);
-
         
         tab.addTab("Thông tin", data.imagePath.resize_statusIcon, employeeScroll);
         tab.addTab("Thuốc", data.imagePath.resize_medic, medicScroll);
@@ -909,6 +982,15 @@ public class employee_GUI extends JFrame {
             public void mouseReleased(MouseEvent e) {
                 // TODO Auto-generated method stub
                 
+            }
+        });
+
+        //load lại thống kê khi bảng thay đổi
+        model.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                employee_BUS.loadStatistic(tf_ngaybatdau, tf_ngayketthuc, wallet, 
+                customer, nv, loai);
             }
         });
 
@@ -1183,6 +1265,30 @@ public class employee_GUI extends JFrame {
     
         //kiểm tra hạn ctr khuyến mãi
         promotion_BUS.autoCheckExpired();
+        
+        //tự động thống kê
+        employee_BUS.loadStatistic(tf_ngaybatdau, tf_ngayketthuc, wallet, 
+        customer, nv, loai);
+
+        //thống kê
+        chon.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int ketQua = employee_BUS.loadStatistic(tf_ngaybatdau, tf_ngayketthuc, 
+                wallet, customer, nv, loai);
+                if(ketQua == 0)
+                    employee_BUS.loadMap(dataset, loai, tf_ngaybatdau, tf_ngayketthuc, nv);
+                if(ketQua == 1)
+                    JOptionPane.showMessageDialog(null, 
+                    "Ngày bắt đầu không hợp lệ.");
+                if(ketQua == 2)
+                    JOptionPane.showMessageDialog(null, 
+                    "Ngày kết thúc không hợp lệ.");
+            }
+        });
+    
+        //load biểu đồ
+        employee_BUS.loadMap(dataset, loai, tf_ngaybatdau, tf_ngayketthuc, nv);
     }
 
     public static void main(String[] args) {

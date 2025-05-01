@@ -373,7 +373,8 @@ public class orderSupply_BUS {
             orderSupplies.clear();
             for (orderSupply_DTO os : TEMP) {
                 String [] time = os.getNgaynhap().split(" ");
-                if(tf_ngaynhap.getText().isEmpty() || (!tf_ngaynhap.getText().isEmpty()
+                if((tf_ngaynhap.getText().isEmpty() || tf_ngaynhap.getText().equals("dd/MM/yyyy"))
+                || (!tf_ngaynhap.getText().isEmpty() && !tf_ngaynhap.getText().equals("dd/MM/yyyy")
                 && (advance.date1BeforeDate2(tf_ngaynhap.getText(), time[1])
                 || advance.date1EqualDate2(tf_ngaynhap.getText(), time[1])))) {
                     orderSupplies.add(os);

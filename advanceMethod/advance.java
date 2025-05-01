@@ -139,6 +139,13 @@ public class advance {
         return currentTime.format(format);
     }
 
+    public static String currentDate() {
+        LocalDate currenDate = LocalDate.now();
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        return currenDate.format(format);
+    }
+
     public static Boolean checkDate(String date) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {
@@ -158,7 +165,7 @@ public class advance {
             return parse_date1.isBefore(parse_date2);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return false;
         }
     }
 
@@ -170,7 +177,7 @@ public class advance {
             return parse_date1.isEqual(parse_date2);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return false;
         }
     }
 
@@ -212,6 +219,24 @@ public class advance {
             System.out.println(expiredDate);
 
             return expiredDate.isBefore(parse_current);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String formatNumber(int number) {
+        try {
+            String so = String.valueOf(number);
+            String result = new String();
+            for (int i = 0; i < so.length(); i++) {
+                if(i > 0 && i % 3 == 0) {
+                    result = result + ",";
+                }
+                result = result + so.charAt(i);
+            }
+
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
