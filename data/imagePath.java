@@ -30,6 +30,8 @@ public class imagePath {
     public static final ImageIcon resize_systemIcon = new ImageIcon(systemIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
     public static final ImageIcon saveIcon = new ImageIcon(advance.img+"save.png");
     public static final ImageIcon resize_saveIcon = new ImageIcon(saveIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+    public static final ImageIcon importIcon = new ImageIcon(advance.img+"import.png");
+    public static final ImageIcon resize_importIcon = new ImageIcon(importIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
     public static final ImageIcon exportIcon = new ImageIcon(advance.img+"export.png");
     public static final ImageIcon resize_exportIcon = new ImageIcon(exportIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
     public static final ImageIcon logOut = new ImageIcon(advance.img+"log_out.png");

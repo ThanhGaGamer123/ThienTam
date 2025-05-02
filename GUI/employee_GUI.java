@@ -52,6 +52,8 @@ import DTO.orderSupply_DTO;
 import DTO.order_DTO;
 import GUI.medicine_GUI.medicineAdd_GUI;
 import GUI.medicine_GUI.medicineSearch_GUI;
+import GUI.menu_GUI.export_GUI;
+import GUI.menu_GUI.import_GUI;
 import GUI.orderSupply_GUI.orderSupplyAdd_GUI;
 import GUI.orderSupply_GUI.orderSupplySearch_GUI;
 import GUI.order_GUI.orderAdd_GUI;
@@ -825,11 +827,11 @@ public class employee_GUI extends JFrame {
         system.setFont(new Font(null, Font.BOLD, 16));
         system.setMnemonic('H');
         system.setIcon(data.imagePath.resize_systemIcon);
-        JMenuItem save = new JMenuItem("Lưu");
-        save.setForeground(Color.BLACK);
-        save.setFont(new Font(null, Font.PLAIN, 16));
-        save.setMnemonic('L');
-        save.setIcon(data.imagePath.resize_saveIcon);
+        JMenuItem importData = new JMenuItem("Nhập");
+        importData.setForeground(Color.BLACK);
+        importData.setFont(new Font(null, Font.PLAIN, 16));
+        importData.setMnemonic('N');
+        importData.setIcon(data.imagePath.resize_importIcon);
         JMenuItem export = new JMenuItem("Xuất");
         export.setForeground(Color.BLACK);
         export.setFont(new Font(null, Font.PLAIN, 16));
@@ -845,7 +847,7 @@ public class employee_GUI extends JFrame {
         exit.setFont(new Font(null, Font.PLAIN, 16));
         exit.setMnemonic('T');
         exit.setIcon(data.imagePath.resize_exitIcon);
-        file.add(save);
+        file.add(importData);
         file.add(export);
         system.add(log_out);
         system.add(exit);
@@ -1289,6 +1291,22 @@ public class employee_GUI extends JFrame {
     
         //load biểu đồ
         employee_BUS.loadMap(dataset, loai, tf_ngaybatdau, tf_ngayketthuc, nv);
+    
+        //xuất dữ liệu
+        export.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new export_GUI();
+            }
+        });
+    
+        //nhập dữ liệu
+        importData.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new import_GUI(modelMedic);
+            }
+        });
     }
 
     public static void main(String[] args) {

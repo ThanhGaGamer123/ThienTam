@@ -9,6 +9,7 @@ public class advance {
     public static final String img = "D:\\IT\\GitHub Projects\\ThienTam\\img\\";
     public static final String medIMG = "D:\\IT\\GitHub Projects\\ThienTam\\img\\medIMG\\";
     public static final String file_path = "C:\\Users\\thanh\\Downloads\\";
+    public static final String data_path = "D:\\IT\\GitHub Projects\\ThienTam\\data\\";
 
     public static ArrayList<Double> StringArrayListToDoubleArrayList(ArrayList<String> stringArray) {
         try {
