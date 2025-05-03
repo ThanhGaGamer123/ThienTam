@@ -1,6 +1,7 @@
 package GUI;
 
 import DTO.customer_DTO;
+import DTO.order_details_DTO;
 import DTO.sanphamchonmua_DTO;
 
 import java.awt.*;
@@ -253,6 +254,7 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
                 quanHuyen.removeAllItems();
                 quanHuyen.addItem("Chọn quận/huyện");
                 quanHuyen.addItem("Quận 1");
+                quanHuyen.addItem("Quận 2");
                 quanHuyen.addItem("Quận 3");
                 quanHuyen.addItem("Quận 4");
                 quanHuyen.addItem("Quận 5");
@@ -283,392 +285,391 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         });
 
         // Action listener cho quận/huyện
-        // Action listener cho quận/huyện
         quanHuyen.addActionListener(e -> {
             phuongXa.removeAllItems();
             phuongXa.addItem("Chọn phường/xã");
 
-            switch (quanHuyen.getSelectedItem().toString()) {
-                case "Quận 1":
-                    phuongXa.addItem("Phường Bến Nghé");
-                    phuongXa.addItem("Phường Bến Thành");
-                    phuongXa.addItem("Phường Cô Giang");
-                    phuongXa.addItem("Phường Cầu Kho");
-                    phuongXa.addItem("Phường Cầu Ông Lãnh");
-                    phuongXa.addItem("Phường Đa Kao");
-                    phuongXa.addItem("Phường Nguyễn Cư Trinh");
-                    phuongXa.addItem("Phường Nguyễn Thái Bình");
-                    phuongXa.addItem("Phường Phạm Ngũ Lão");
-                    phuongXa.addItem("Phường Tân Định");
+            if (quanHuyen.getSelectedItem() != null) {
+                switch (quanHuyen.getSelectedItem().toString()) {
+                    case "Quận 1":
+                        phuongXa.addItem("Phường Bến Nghé");
+                        phuongXa.addItem("Phường Bến Thành");
+                        phuongXa.addItem("Phường Cô Giang");
+                        phuongXa.addItem("Phường Cầu Kho");
+                        phuongXa.addItem("Phường Cầu Ông Lãnh");
+                        phuongXa.addItem("Phường Đa Kao");
+                        phuongXa.addItem("Phường Nguyễn Cư Trinh");
+                        phuongXa.addItem("Phường Nguyễn Thái Bình");
+                        phuongXa.addItem("Phường Phạm Ngũ Lão");
+                        phuongXa.addItem("Phường Tân Định");
+                        break;
+                    case "Quận 2":
+                        phuongXa.addItem("Phường An Khánh");
+                        phuongXa.addItem("Phường An Lợi Đông");
+                        phuongXa.addItem("Phường An Phú");
+                        phuongXa.addItem("Phường Bình An");
+                        phuongXa.addItem("Phường Bình Khánh");
+                        phuongXa.addItem("Phường Bình Trưng Đông");
+                        phuongXa.addItem("Phường Bình Trưng Tây");
+                        phuongXa.addItem("Phường Cát Lái");
+                        phuongXa.addItem("Phường Thạnh Mỹ Lợi");
+                        phuongXa.addItem("Phường Thảo Điền");
+                        phuongXa.addItem("Phường Thủ Thiêm");
+                        break;
+                    case "Quận 3":
+                        phuongXa.addItem("Phường 1");
+                        phuongXa.addItem("Phường 2");
+                        phuongXa.addItem("Phường 3");
+                        phuongXa.addItem("Phường 4");
+                        phuongXa.addItem("Phường 5");
+                        phuongXa.addItem("Phường 9");
+                        phuongXa.addItem("Phường 10");
+                        phuongXa.addItem("Phường 11");
+                        phuongXa.addItem("Phường 12");
+                        phuongXa.addItem("Phường 13");
+                        phuongXa.addItem("Phường 14");
+                        phuongXa.addItem("Phường Võ Thị Sáu");
+                        break;
+                    case "Quận 4":
+                        phuongXa.addItem("Phường 1");
+                        phuongXa.addItem("Phường 2");
+                        phuongXa.addItem("Phường 3");
+                        phuongXa.addItem("Phường 4");
+                        phuongXa.addItem("Phường 5");
+                        phuongXa.addItem("Phường 6");
+                        phuongXa.addItem("Phường 8");
+                        phuongXa.addItem("Phường 9");
+                        phuongXa.addItem("Phường 10");
+                        phuongXa.addItem("Phường 12");
+                        phuongXa.addItem("Phường 13");
+                        phuongXa.addItem("Phường 14");
+                        phuongXa.addItem("Phường 15");
+                        phuongXa.addItem("Phường 16");
+                        phuongXa.addItem("Phường 18");
 
-                    break;
-                case "Quận 2":
-                    phuongXa.addItem("Phường An Khánh");
-                    phuongXa.addItem("Phường An Lợi Đông");
-                    phuongXa.addItem("Phường An Phú");
-                    phuongXa.addItem("Phường Bình An");
-                    phuongXa.addItem("Phường Bình Khánh");
-                    phuongXa.addItem("Phường Bình Trưng Đông");
-                    phuongXa.addItem("Phường Bình Trưng Tây");
-                    phuongXa.addItem("Phường Cát Lái");
-                    phuongXa.addItem("Phường Thạnh Mỹ Lợi");
-                    phuongXa.addItem("Phường Thảo Điền");
-                    phuongXa.addItem("Phường Thủ Thiêm");
+                        break;
+                    case "Quận 5":
+                        phuongXa.addItem("Phường 1");
+                        phuongXa.addItem("Phường 2");
+                        phuongXa.addItem("Phường 3");
+                        phuongXa.addItem("Phường 4");
+                        phuongXa.addItem("Phường 5");
+                        phuongXa.addItem("Phường 6");
+                        phuongXa.addItem("Phường 7");
+                        phuongXa.addItem("Phường 8");
+                        phuongXa.addItem("Phường 9");
+                        phuongXa.addItem("Phường 10");
+                        phuongXa.addItem("Phường 11");
+                        phuongXa.addItem("Phường 12");
+                        phuongXa.addItem("Phường 13");
+                        phuongXa.addItem("Phường 14");
+                        phuongXa.addItem("Phường 15");
 
-                    break;
-                case "Quận 3":
-                    phuongXa.addItem("Phường 1");
-                    phuongXa.addItem("Phường 2");
-                    phuongXa.addItem("Phường 3");
-                    phuongXa.addItem("Phường 4");
-                    phuongXa.addItem("Phường 5");
-                    phuongXa.addItem("Phường 9");
-                    phuongXa.addItem("Phường 10");
-                    phuongXa.addItem("Phường 11");
-                    phuongXa.addItem("Phường 12");
-                    phuongXa.addItem("Phường 13");
-                    phuongXa.addItem("Phường 14");
-                    phuongXa.addItem("Phường Võ Thị Sáu");
-                    break;
-                case "Quận 4":
-                    phuongXa.addItem("Phường 1");
-                    phuongXa.addItem("Phường 2");
-                    phuongXa.addItem("Phường 3");
-                    phuongXa.addItem("Phường 4");
-                    phuongXa.addItem("Phường 5");
-                    phuongXa.addItem("Phường 6");
-                    phuongXa.addItem("Phường 8");
-                    phuongXa.addItem("Phường 9");
-                    phuongXa.addItem("Phường 10");
-                    phuongXa.addItem("Phường 12");
-                    phuongXa.addItem("Phường 13");
-                    phuongXa.addItem("Phường 14");
-                    phuongXa.addItem("Phường 15");
-                    phuongXa.addItem("Phường 16");
-                    phuongXa.addItem("Phường 18");
+                        break;
+                    case "Quận 6":
+                        phuongXa.addItem("Phường 1");
+                        phuongXa.addItem("Phường 2");
+                        phuongXa.addItem("Phường 3");
+                        phuongXa.addItem("Phường 4");
+                        phuongXa.addItem("Phường 5");
+                        phuongXa.addItem("Phường 6");
+                        phuongXa.addItem("Phường 7");
+                        phuongXa.addItem("Phường 8");
+                        phuongXa.addItem("Phường 9");
+                        phuongXa.addItem("Phường 10");
+                        phuongXa.addItem("Phường 11");
+                        phuongXa.addItem("Phường 12");
+                        phuongXa.addItem("Phường 13");
+                        phuongXa.addItem("Phường 14");
 
-                    break;
-                case "Quận 5":
-                    phuongXa.addItem("Phường 1");
-                    phuongXa.addItem("Phường 2");
-                    phuongXa.addItem("Phường 3");
-                    phuongXa.addItem("Phường 4");
-                    phuongXa.addItem("Phường 5");
-                    phuongXa.addItem("Phường 6");
-                    phuongXa.addItem("Phường 7");
-                    phuongXa.addItem("Phường 8");
-                    phuongXa.addItem("Phường 9");
-                    phuongXa.addItem("Phường 10");
-                    phuongXa.addItem("Phường 11");
-                    phuongXa.addItem("Phường 12");
-                    phuongXa.addItem("Phường 13");
-                    phuongXa.addItem("Phường 14");
-                    phuongXa.addItem("Phường 15");
+                        break;
+                    case "Quận 7":
+                        phuongXa.addItem("Phường Tân Thuận Đông");
+                        phuongXa.addItem("Phường Tân Thuận Tây");
+                        phuongXa.addItem("Phường Tân Kiểng");
+                        phuongXa.addItem("Phường Tân Hưng");
+                        phuongXa.addItem("Phường Tân Phong");
+                        phuongXa.addItem("Phường Phú Mỹ");
+                        phuongXa.addItem("Phường Phú Thuận");
+                        phuongXa.addItem("Phường Bình Thuận");
+                        phuongXa.addItem("Phường Tân Phú");
+                        phuongXa.addItem("Phường Tân Quy");
 
-                    break;
-                case "Quận 6":
-                    phuongXa.addItem("Phường 1");
-                    phuongXa.addItem("Phường 2");
-                    phuongXa.addItem("Phường 3");
-                    phuongXa.addItem("Phường 4");
-                    phuongXa.addItem("Phường 5");
-                    phuongXa.addItem("Phường 6");
-                    phuongXa.addItem("Phường 7");
-                    phuongXa.addItem("Phường 8");
-                    phuongXa.addItem("Phường 9");
-                    phuongXa.addItem("Phường 10");
-                    phuongXa.addItem("Phường 11");
-                    phuongXa.addItem("Phường 12");
-                    phuongXa.addItem("Phường 13");
-                    phuongXa.addItem("Phường 14");
+                        break;
+                    case "Quận 8":
+                        phuongXa.addItem("Phường 1");
+                        phuongXa.addItem("Phường 2");
+                        phuongXa.addItem("Phường 3");
+                        phuongXa.addItem("Phường 4");
+                        phuongXa.addItem("Phường 5");
+                        phuongXa.addItem("Phường 6");
+                        phuongXa.addItem("Phường 7");
+                        phuongXa.addItem("Phường 8");
+                        phuongXa.addItem("Phường 9");
+                        phuongXa.addItem("Phường 10");
+                        phuongXa.addItem("Phường 11");
+                        phuongXa.addItem("Phường 12");
+                        phuongXa.addItem("Phường 13");
+                        phuongXa.addItem("Phường 14");
+                        phuongXa.addItem("Phường 15");
+                        phuongXa.addItem("Phường 16");
 
-                    break;
-                case "Quận 7":
-                    phuongXa.addItem("Phường Tân Thuận Đông");
-                    phuongXa.addItem("Phường Tân Thuận Tây");
-                    phuongXa.addItem("Phường Tân Kiểng");
-                    phuongXa.addItem("Phường Tân Hưng");
-                    phuongXa.addItem("Phường Tân Phong");
-                    phuongXa.addItem("Phường Phú Mỹ");
-                    phuongXa.addItem("Phường Phú Thuận");
-                    phuongXa.addItem("Phường Bình Thuận");
-                    phuongXa.addItem("Phường Tân Phú");
-                    phuongXa.addItem("Phường Tân Quy");
+                        break;
+                    case "Quận 10":
+                        phuongXa.addItem("Phường 1");
+                        phuongXa.addItem("Phường 2");
+                        phuongXa.addItem("Phường 3");
+                        phuongXa.addItem("Phường 4");
+                        phuongXa.addItem("Phường 5");
+                        phuongXa.addItem("Phường 6");
+                        phuongXa.addItem("Phường 7");
+                        phuongXa.addItem("Phường 8");
+                        phuongXa.addItem("Phường 9");
+                        phuongXa.addItem("Phường 10");
+                        phuongXa.addItem("Phường 11");
+                        phuongXa.addItem("Phường 12");
+                        phuongXa.addItem("Phường 13");
+                        phuongXa.addItem("Phường 14");
+                        phuongXa.addItem("Phường 15");
 
-                    break;
-                case "Quận 8":
-                    phuongXa.addItem("Phường 1");
-                    phuongXa.addItem("Phường 2");
-                    phuongXa.addItem("Phường 3");
-                    phuongXa.addItem("Phường 4");
-                    phuongXa.addItem("Phường 5");
-                    phuongXa.addItem("Phường 6");
-                    phuongXa.addItem("Phường 7");
-                    phuongXa.addItem("Phường 8");
-                    phuongXa.addItem("Phường 9");
-                    phuongXa.addItem("Phường 10");
-                    phuongXa.addItem("Phường 11");
-                    phuongXa.addItem("Phường 12");
-                    phuongXa.addItem("Phường 13");
-                    phuongXa.addItem("Phường 14");
-                    phuongXa.addItem("Phường 15");
-                    phuongXa.addItem("Phường 16");
+                        break;
+                    case "Quận 11":
+                        phuongXa.addItem("Phường 1");
+                        phuongXa.addItem("Phường 2");
+                        phuongXa.addItem("Phường 3");
+                        phuongXa.addItem("Phường 4");
+                        phuongXa.addItem("Phường 5");
+                        phuongXa.addItem("Phường 6");
+                        phuongXa.addItem("Phường 7");
+                        phuongXa.addItem("Phường 8");
+                        phuongXa.addItem("Phường 9");
+                        phuongXa.addItem("Phường 10");
+                        phuongXa.addItem("Phường 11");
+                        phuongXa.addItem("Phường 12");
+                        phuongXa.addItem("Phường 13");
+                        phuongXa.addItem("Phường 14");
+                        phuongXa.addItem("Phường 15");
+                        phuongXa.addItem("Phường 16");
 
-                    break;
-                case "Quận 10":
-                    phuongXa.addItem("Phường 1");
-                    phuongXa.addItem("Phường 2");
-                    phuongXa.addItem("Phường 3");
-                    phuongXa.addItem("Phường 4");
-                    phuongXa.addItem("Phường 5");
-                    phuongXa.addItem("Phường 6");
-                    phuongXa.addItem("Phường 7");
-                    phuongXa.addItem("Phường 8");
-                    phuongXa.addItem("Phường 9");
-                    phuongXa.addItem("Phường 10");
-                    phuongXa.addItem("Phường 11");
-                    phuongXa.addItem("Phường 12");
-                    phuongXa.addItem("Phường 13");
-                    phuongXa.addItem("Phường 14");
-                    phuongXa.addItem("Phường 15");
+                        break;
+                    case "Quận 12":
+                        phuongXa.addItem("Phường An Phú Đông");
+                        phuongXa.addItem("Phường Đông Hưng Thuận");
+                        phuongXa.addItem("Phường Hiệp Thành");
+                        phuongXa.addItem("Phường Tân Chánh Hiệp");
+                        phuongXa.addItem("Phường Tân Hưng Thuận");
+                        phuongXa.addItem("Phường Tân Thới Hiệp");
+                        phuongXa.addItem("Phường Tân Thới Nhất");
+                        phuongXa.addItem("Phường Thạnh Lộc");
+                        phuongXa.addItem("Phường Thạnh Xuân");
+                        phuongXa.addItem("Phường Thới An");
+                        phuongXa.addItem("Phường Trung Mỹ Tây");
 
-                    break;
-                case "Quận 11":
-                    phuongXa.addItem("Phường 1");
-                    phuongXa.addItem("Phường 2");
-                    phuongXa.addItem("Phường 3");
-                    phuongXa.addItem("Phường 4");
-                    phuongXa.addItem("Phường 5");
-                    phuongXa.addItem("Phường 6");
-                    phuongXa.addItem("Phường 7");
-                    phuongXa.addItem("Phường 8");
-                    phuongXa.addItem("Phường 9");
-                    phuongXa.addItem("Phường 10");
-                    phuongXa.addItem("Phường 11");
-                    phuongXa.addItem("Phường 12");
-                    phuongXa.addItem("Phường 13");
-                    phuongXa.addItem("Phường 14");
-                    phuongXa.addItem("Phường 15");
-                    phuongXa.addItem("Phường 16");
+                        break;
+                    case "Quận Bình Tân":
+                        phuongXa.addItem("Phường An Lạc");
+                        phuongXa.addItem("Phường An Lạc A");
+                        phuongXa.addItem("Phường Bình Hưng Hòa");
+                        phuongXa.addItem("Phường Bình Hưng Hòa A");
+                        phuongXa.addItem("Phường Bình Hưng Hòa B");
+                        phuongXa.addItem("Phường Bình Trị Đông");
+                        phuongXa.addItem("Phường Bình Trị Đông A");
+                        phuongXa.addItem("Phường Bình Trị Đông B");
+                        phuongXa.addItem("Phường Tân Tạo");
+                        phuongXa.addItem("Phường Tân Tạo A");
 
-                    break;
-                case "Quận 12":
-                    phuongXa.addItem("Phường An Phú Đông");
-                    phuongXa.addItem("Phường Đông Hưng Thuận");
-                    phuongXa.addItem("Phường Hiệp Thành");
-                    phuongXa.addItem("Phường Tân Chánh Hiệp");
-                    phuongXa.addItem("Phường Tân Hưng Thuận");
-                    phuongXa.addItem("Phường Tân Thới Hiệp");
-                    phuongXa.addItem("Phường Tân Thới Nhất");
-                    phuongXa.addItem("Phường Thạnh Lộc");
-                    phuongXa.addItem("Phường Thạnh Xuân");
-                    phuongXa.addItem("Phường Thới An");
-                    phuongXa.addItem("Phường Trung Mỹ Tây");
+                        break;
+                    case "Quận Bình Thạnh":
+                        phuongXa.addItem("Phường 1");
+                        phuongXa.addItem("Phường 2");
+                        phuongXa.addItem("Phường 3");
+                        phuongXa.addItem("Phường 5");
+                        phuongXa.addItem("Phường 6");
+                        phuongXa.addItem("Phường 7");
+                        phuongXa.addItem("Phường 11");
+                        phuongXa.addItem("Phường 12");
+                        phuongXa.addItem("Phường 13");
+                        phuongXa.addItem("Phường 14");
+                        phuongXa.addItem("Phường 15");
+                        phuongXa.addItem("Phường 17");
+                        phuongXa.addItem("Phường 19");
+                        phuongXa.addItem("Phường 21");
+                        phuongXa.addItem("Phường 22");
+                        phuongXa.addItem("Phường 24");
+                        phuongXa.addItem("Phường 25");
+                        phuongXa.addItem("Phường 26");
+                        phuongXa.addItem("Phường 27");
+                        phuongXa.addItem("Phường 28");
 
-                    break;
-                case "Quận Bình Tân":
-                    phuongXa.addItem("Phường An Lạc");
-                    phuongXa.addItem("Phường An Lạc A");
-                    phuongXa.addItem("Phường Bình Hưng Hòa");
-                    phuongXa.addItem("Phường Bình Hưng Hòa A");
-                    phuongXa.addItem("Phường Bình Hưng Hòa B");
-                    phuongXa.addItem("Phường Bình Trị Đông");
-                    phuongXa.addItem("Phường Bình Trị Đông A");
-                    phuongXa.addItem("Phường Bình Trị Đông B");
-                    phuongXa.addItem("Phường Tân Tạo");
-                    phuongXa.addItem("Phường Tân Tạo A");
+                        break;
+                    case "Quận Gò Vấp":
+                        phuongXa.addItem("Phường 1");
+                        phuongXa.addItem("Phường 3");
+                        phuongXa.addItem("Phường 4");
+                        phuongXa.addItem("Phường 5");
+                        phuongXa.addItem("Phường 6");
+                        phuongXa.addItem("Phường 7");
+                        phuongXa.addItem("Phường 8");
+                        phuongXa.addItem("Phường 9");
+                        phuongXa.addItem("Phường 10");
+                        phuongXa.addItem("Phường 11");
+                        phuongXa.addItem("Phường 12");
+                        phuongXa.addItem("Phường 13");
+                        phuongXa.addItem("Phường 14");
+                        phuongXa.addItem("Phường 15");
+                        phuongXa.addItem("Phường 16");
+                        phuongXa.addItem("Phường 17");
 
-                    break;
-                case "Quận Bình Thạnh":
-                    phuongXa.addItem("Phường 1");
-                    phuongXa.addItem("Phường 2");
-                    phuongXa.addItem("Phường 3");
-                    phuongXa.addItem("Phường 5");
-                    phuongXa.addItem("Phường 6");
-                    phuongXa.addItem("Phường 7");
-                    phuongXa.addItem("Phường 11");
-                    phuongXa.addItem("Phường 12");
-                    phuongXa.addItem("Phường 13");
-                    phuongXa.addItem("Phường 14");
-                    phuongXa.addItem("Phường 15");
-                    phuongXa.addItem("Phường 17");
-                    phuongXa.addItem("Phường 19");
-                    phuongXa.addItem("Phường 21");
-                    phuongXa.addItem("Phường 22");
-                    phuongXa.addItem("Phường 24");
-                    phuongXa.addItem("Phường 25");
-                    phuongXa.addItem("Phường 26");
-                    phuongXa.addItem("Phường 27");
-                    phuongXa.addItem("Phường 28");
-
-                    break;
-                case "Quận Gò Vấp":
-                    phuongXa.addItem("Phường 1");
-                    phuongXa.addItem("Phường 3");
-                    phuongXa.addItem("Phường 4");
-                    phuongXa.addItem("Phường 5");
-                    phuongXa.addItem("Phường 6");
-                    phuongXa.addItem("Phường 7");
-                    phuongXa.addItem("Phường 8");
-                    phuongXa.addItem("Phường 9");
-                    phuongXa.addItem("Phường 10");
-                    phuongXa.addItem("Phường 11");
-                    phuongXa.addItem("Phường 12");
-                    phuongXa.addItem("Phường 13");
-                    phuongXa.addItem("Phường 14");
-                    phuongXa.addItem("Phường 15");
-                    phuongXa.addItem("Phường 16");
-                    phuongXa.addItem("Phường 17");
-
-                    break;
-                case "Quận Phú Nhuận":
-                    phuongXa.addItem("Phường 1");
-                    phuongXa.addItem("Phường 2");
-                    phuongXa.addItem("Phường 3");
-                    phuongXa.addItem("Phường 4");
-                    phuongXa.addItem("Phường 5");
-                    phuongXa.addItem("Phường 7");
-                    phuongXa.addItem("Phường 8");
-                    phuongXa.addItem("Phường 9");
-                    phuongXa.addItem("Phường 10");
-                    phuongXa.addItem("Phường 11");
-                    phuongXa.addItem("Phường 12");
-                    phuongXa.addItem("Phường 13");
-                    phuongXa.addItem("Phường 15");
-                    phuongXa.addItem("Phường 17");
-                    break;
-                case "Quận Tân Bình":
-                    phuongXa.addItem("Phường 1");
-                    phuongXa.addItem("Phường 2");
-                    phuongXa.addItem("Phường 3");
-                    phuongXa.addItem("Phường 4");
-                    phuongXa.addItem("Phường 5");
-                    phuongXa.addItem("Phường 6");
-                    phuongXa.addItem("Phường 7");
-                    phuongXa.addItem("Phường 8");
-                    phuongXa.addItem("Phường 9");
-                    phuongXa.addItem("Phường 10");
-                    phuongXa.addItem("Phường 11");
-                    phuongXa.addItem("Phường 12");
-                    phuongXa.addItem("Phường 13");
-                    phuongXa.addItem("Phường 14");
-                    phuongXa.addItem("Phường 15");
-                    break;
-                case "Quận Tân Phú":
-                    phuongXa.addItem("Phường Hiệp Tân");
-                    phuongXa.addItem("Phường Hòa Thạnh");
-                    phuongXa.addItem("Phường Phú Thạnh");
-                    phuongXa.addItem("Phường Phú Thọ Hòa");
-                    phuongXa.addItem("Phường Phú Trung");
-                    phuongXa.addItem("Phường Sơn Kỳ");
-                    phuongXa.addItem("Phường Tân Quý");
-                    phuongXa.addItem("Phường Tân Sơn Nhì");
-                    phuongXa.addItem("Phường Tân Thành");
-                    phuongXa.addItem("Phường Tây Thạnh");
-                    break;
-                case "Thành phố Thủ Đức":
-                    phuongXa.addItem("Phường An Khánh");
-                    phuongXa.addItem("Phường An Lợi Đông");
-                    phuongXa.addItem("Phường An Phú");
-                    phuongXa.addItem("Phường Bình Chiểu");
-                    phuongXa.addItem("Phường Bình Thọ");
-                    phuongXa.addItem("Phường Cát Lái");
-                    phuongXa.addItem("Phường Hiệp Bình Chánh");
-                    phuongXa.addItem("Phường Hiệp Bình Phước");
-                    phuongXa.addItem("Phường Linh Chiểu");
-                    phuongXa.addItem("Phường Linh Đông");
-                    phuongXa.addItem("Phường Linh Tây");
-                    phuongXa.addItem("Phường Linh Trung");
-                    phuongXa.addItem("Phường Linh Xuân");
-                    phuongXa.addItem("Phường Long Bình");
-                    phuongXa.addItem("Phường Long Phước");
-                    phuongXa.addItem("Phường Long Thạnh Mỹ");
-                    phuongXa.addItem("Phường Long Trường");
-                    phuongXa.addItem("Phường Phú Hữu");
-                    phuongXa.addItem("Phường Phước Bình");
-                    phuongXa.addItem("Phường Phước Long A");
-                    phuongXa.addItem("Phường Phước Long B");
-                    phuongXa.addItem("Phường Tăng Nhơn Phú A");
-                    phuongXa.addItem("Phường Tăng Nhơn Phú B");
-                    phuongXa.addItem("Phường Tam Bình");
-                    phuongXa.addItem("Phường Tam Phú");
-                    phuongXa.addItem("Phường Thạnh Mỹ Lợi");
-                    phuongXa.addItem("Phường Thảo Điền");
-                    phuongXa.addItem("Phường Thủ Thiêm");
-                    phuongXa.addItem("Phường Trường Thạnh");
-                    break;
-                case "Huyện Bình Chánh":
-                    phuongXa.addItem("Xã An Phú Tây");
-                    phuongXa.addItem("Xã Bình Chánh");
-                    phuongXa.addItem("Xã Bình Hưng");
-                    phuongXa.addItem("Xã Bình Lợi");
-                    phuongXa.addItem("Xã Đa Phước");
-                    phuongXa.addItem("Xã Hưng Long");
-                    phuongXa.addItem("Xã Lê Minh Xuân");
-                    phuongXa.addItem("Xã Phạm Văn Hai");
-                    phuongXa.addItem("Xã Phong Phú");
-                    phuongXa.addItem("Xã Quy Đức");
-                    phuongXa.addItem("Xã Tân Kiên");
-                    phuongXa.addItem("Xã Tân Nhựt");
-                    phuongXa.addItem("Xã Tân Quý Tây");
-                    phuongXa.addItem("Xã Vĩnh Lộc A");
-                    phuongXa.addItem("Xã Vĩnh Lộc B");
-                    break;
-                case "Huyện Cần Giờ":
-                    phuongXa.addItem("Xã An Thới Đông");
-                    phuongXa.addItem("Xã Bình Khánh");
-                    phuongXa.addItem("Xã Long Hòa");
-                    phuongXa.addItem("Xã Lý Nhơn");
-                    phuongXa.addItem("Xã Tam Thôn Hiệp");
-                    phuongXa.addItem("Xã Thạnh An");
-                    phuongXa.addItem("Thị trấn Cần Thạnh");
-                    break;
-                case "Huyện Củ Chi":
-                    phuongXa.addItem("Xã An Nhơn Tây");
-                    phuongXa.addItem("Xã An Phú");
-                    phuongXa.addItem("Xã Bình Mỹ");
-                    phuongXa.addItem("Xã Hòa Phú");
-                    phuongXa.addItem("Xã Nhuận Đức");
-                    phuongXa.addItem("Xã Phạm Văn Cội");
-                    phuongXa.addItem("Xã Phú Hòa Đông");
-                    phuongXa.addItem("Xã Phú Mỹ Hưng");
-                    phuongXa.addItem("Xã Phước Hiệp");
-                    phuongXa.addItem("Xã Phước Thạnh");
-                    phuongXa.addItem("Xã Phước Vĩnh An");
-                    phuongXa.addItem("Xã Tân An Hội");
-                    phuongXa.addItem("Xã Tân Phú Trung");
-                    phuongXa.addItem("Xã Tân Thông Hội");
-                    phuongXa.addItem("Xã Thái Mỹ");
-                    phuongXa.addItem("Xã Trung An");
-                    phuongXa.addItem("Xã Trung Lập Hạ");
-                    phuongXa.addItem("Xã Trung Lập Thượng");
-                    phuongXa.addItem("Thị trấn Củ Chi");
-                    break;
-                case "Huyện Hóc Môn":
-                    phuongXa.addItem("Xã Bà Điểm");
-                    phuongXa.addItem("Xã Đông Thạnh");
-                    phuongXa.addItem("Xã Nhị Bình");
-                    phuongXa.addItem("Xã Tân Hiệp");
-                    phuongXa.addItem("Xã Tân Thới Nhì");
-                    phuongXa.addItem("Xã Thới Tam Thôn");
-                    phuongXa.addItem("Xã Trung Chánh");
-                    phuongXa.addItem("Xã Xuân Thới Đông");
-                    phuongXa.addItem("Xã Xuân Thới Sơn");
-                    phuongXa.addItem("Xã Xuân Thới Thượng");
-                    phuongXa.addItem("Thị trấn Hóc Môn");
-                    break;
-                case "Huyện Nhà Bè":
-                    phuongXa.addItem("Xã Hiệp Phước");
-                    phuongXa.addItem("Xã Long Thới");
-                    phuongXa.addItem("Xã Nhơn Đức");
-                    phuongXa.addItem("Xã Phú Xuân");
-                    phuongXa.addItem("Xã Phước Kiển");
-                    phuongXa.addItem("Xã Phước Lộc");
-                    phuongXa.addItem("Thị trấn Nhà Bè");
-                    break;
-                default:
-                    phuongXa.addItem("Chọn phường/xã");
-                    break;
+                        break;
+                    case "Quận Phú Nhuận":
+                        phuongXa.addItem("Phường 1");
+                        phuongXa.addItem("Phường 2");
+                        phuongXa.addItem("Phường 3");
+                        phuongXa.addItem("Phường 4");
+                        phuongXa.addItem("Phường 5");
+                        phuongXa.addItem("Phường 7");
+                        phuongXa.addItem("Phường 8");
+                        phuongXa.addItem("Phường 9");
+                        phuongXa.addItem("Phường 10");
+                        phuongXa.addItem("Phường 11");
+                        phuongXa.addItem("Phường 12");
+                        phuongXa.addItem("Phường 13");
+                        phuongXa.addItem("Phường 15");
+                        phuongXa.addItem("Phường 17");
+                        break;
+                    case "Quận Tân Bình":
+                        phuongXa.addItem("Phường 1");
+                        phuongXa.addItem("Phường 2");
+                        phuongXa.addItem("Phường 3");
+                        phuongXa.addItem("Phường 4");
+                        phuongXa.addItem("Phường 5");
+                        phuongXa.addItem("Phường 6");
+                        phuongXa.addItem("Phường 7");
+                        phuongXa.addItem("Phường 8");
+                        phuongXa.addItem("Phường 9");
+                        phuongXa.addItem("Phường 10");
+                        phuongXa.addItem("Phường 11");
+                        phuongXa.addItem("Phường 12");
+                        phuongXa.addItem("Phường 13");
+                        phuongXa.addItem("Phường 14");
+                        phuongXa.addItem("Phường 15");
+                        break;
+                    case "Quận Tân Phú":
+                        phuongXa.addItem("Phường Hiệp Tân");
+                        phuongXa.addItem("Phường Hòa Thạnh");
+                        phuongXa.addItem("Phường Phú Thạnh");
+                        phuongXa.addItem("Phường Phú Thọ Hòa");
+                        phuongXa.addItem("Phường Phú Trung");
+                        phuongXa.addItem("Phường Sơn Kỳ");
+                        phuongXa.addItem("Phường Tân Quý");
+                        phuongXa.addItem("Phường Tân Sơn Nhì");
+                        phuongXa.addItem("Phường Tân Thành");
+                        phuongXa.addItem("Phường Tây Thạnh");
+                        break;
+                    case "Thành phố Thủ Đức":
+                        phuongXa.addItem("Phường An Khánh");
+                        phuongXa.addItem("Phường An Lợi Đông");
+                        phuongXa.addItem("Phường An Phú");
+                        phuongXa.addItem("Phường Bình Chiểu");
+                        phuongXa.addItem("Phường Bình Thọ");
+                        phuongXa.addItem("Phường Cát Lái");
+                        phuongXa.addItem("Phường Hiệp Bình Chánh");
+                        phuongXa.addItem("Phường Hiệp Bình Phước");
+                        phuongXa.addItem("Phường Linh Chiểu");
+                        phuongXa.addItem("Phường Linh Đông");
+                        phuongXa.addItem("Phường Linh Tây");
+                        phuongXa.addItem("Phường Linh Trung");
+                        phuongXa.addItem("Phường Linh Xuân");
+                        phuongXa.addItem("Phường Long Bình");
+                        phuongXa.addItem("Phường Long Phước");
+                        phuongXa.addItem("Phường Long Thạnh Mỹ");
+                        phuongXa.addItem("Phường Long Trường");
+                        phuongXa.addItem("Phường Phú Hữu");
+                        phuongXa.addItem("Phường Phước Bình");
+                        phuongXa.addItem("Phường Phước Long A");
+                        phuongXa.addItem("Phường Phước Long B");
+                        phuongXa.addItem("Phường Tăng Nhơn Phú A");
+                        phuongXa.addItem("Phường Tăng Nhơn Phú B");
+                        phuongXa.addItem("Phường Tam Bình");
+                        phuongXa.addItem("Phường Tam Phú");
+                        phuongXa.addItem("Phường Thạnh Mỹ Lợi");
+                        phuongXa.addItem("Phường Thảo Điền");
+                        phuongXa.addItem("Phường Thủ Thiêm");
+                        phuongXa.addItem("Phường Trường Thạnh");
+                        break;
+                    case "Huyện Bình Chánh":
+                        phuongXa.addItem("Xã An Phú Tây");
+                        phuongXa.addItem("Xã Bình Chánh");
+                        phuongXa.addItem("Xã Bình Hưng");
+                        phuongXa.addItem("Xã Bình Lợi");
+                        phuongXa.addItem("Xã Đa Phước");
+                        phuongXa.addItem("Xã Hưng Long");
+                        phuongXa.addItem("Xã Lê Minh Xuân");
+                        phuongXa.addItem("Xã Phạm Văn Hai");
+                        phuongXa.addItem("Xã Phong Phú");
+                        phuongXa.addItem("Xã Quy Đức");
+                        phuongXa.addItem("Xã Tân Kiên");
+                        phuongXa.addItem("Xã Tân Nhựt");
+                        phuongXa.addItem("Xã Tân Quý Tây");
+                        phuongXa.addItem("Xã Vĩnh Lộc A");
+                        phuongXa.addItem("Xã Vĩnh Lộc B");
+                        break;
+                    case "Huyện Cần Giờ":
+                        phuongXa.addItem("Xã An Thới Đông");
+                        phuongXa.addItem("Xã Bình Khánh");
+                        phuongXa.addItem("Xã Long Hòa");
+                        phuongXa.addItem("Xã Lý Nhơn");
+                        phuongXa.addItem("Xã Tam Thôn Hiệp");
+                        phuongXa.addItem("Xã Thạnh An");
+                        phuongXa.addItem("Thị trấn Cần Thạnh");
+                        break;
+                    case "Huyện Củ Chi":
+                        phuongXa.addItem("Xã An Nhơn Tây");
+                        phuongXa.addItem("Xã An Phú");
+                        phuongXa.addItem("Xã Bình Mỹ");
+                        phuongXa.addItem("Xã Hòa Phú");
+                        phuongXa.addItem("Xã Nhuận Đức");
+                        phuongXa.addItem("Xã Phạm Văn Cội");
+                        phuongXa.addItem("Xã Phú Hòa Đông");
+                        phuongXa.addItem("Xã Phú Mỹ Hưng");
+                        phuongXa.addItem("Xã Phước Hiệp");
+                        phuongXa.addItem("Xã Phước Thạnh");
+                        phuongXa.addItem("Xã Phước Vĩnh An");
+                        phuongXa.addItem("Xã Tân An Hội");
+                        phuongXa.addItem("Xã Tân Phú Trung");
+                        phuongXa.addItem("Xã Tân Thông Hội");
+                        phuongXa.addItem("Xã Thái Mỹ");
+                        phuongXa.addItem("Xã Trung An");
+                        phuongXa.addItem("Xã Trung Lập Hạ");
+                        phuongXa.addItem("Xã Trung Lập Thượng");
+                        phuongXa.addItem("Thị trấn Củ Chi");
+                        break;
+                    case "Huyện Hóc Môn":
+                        phuongXa.addItem("Xã Bà Điểm");
+                        phuongXa.addItem("Xã Đông Thạnh");
+                        phuongXa.addItem("Xã Nhị Bình");
+                        phuongXa.addItem("Xã Tân Hiệp");
+                        phuongXa.addItem("Xã Tân Thới Nhì");
+                        phuongXa.addItem("Xã Thới Tam Thôn");
+                        phuongXa.addItem("Xã Trung Chánh");
+                        phuongXa.addItem("Xã Xuân Thới Đông");
+                        phuongXa.addItem("Xã Xuân Thới Sơn");
+                        phuongXa.addItem("Xã Xuân Thới Thượng");
+                        phuongXa.addItem("Thị trấn Hóc Môn");
+                        break;
+                    case "Huyện Nhà Bè":
+                        phuongXa.addItem("Xã Hiệp Phước");
+                        phuongXa.addItem("Xã Long Thới");
+                        phuongXa.addItem("Xã Nhơn Đức");
+                        phuongXa.addItem("Xã Phú Xuân");
+                        phuongXa.addItem("Xã Phước Kiển");
+                        phuongXa.addItem("Xã Phước Lộc");
+                        phuongXa.addItem("Thị trấn Nhà Bè");
+                        break;
+                    default:
+                        phuongXa.addItem("Chọn phường/xã");
+                        break;
+                }
             }
         });
 
@@ -871,6 +872,12 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
                     return;
                 }
 
+                if (paymentGroup.getSelection() == null) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn phương thức thanh toán!");
+
+                    return;
+                }
+
                 // Hiển thị hộp thoại xác nhận
                 int choice = JOptionPane.showConfirmDialog(null,
                         "Bạn có chắc muốn xác nhận thanh toán không?",
@@ -905,12 +912,44 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
     }
 
     public void xacNhanThanhToan() {
+       
+        String madon = taoDonHang();
+
+        if (madon != null) {
+          
+
+           
+            updateSummary();
+
+           
+            selectedProducts.clear();
+            JOptionPane.showMessageDialog(null, "Đặt hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Đặt hàng không thành công. Vui lòng thử lại.", "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
+        khach.setVisible(true);
+        dispose();
+    }
+
+    private String getSelectedPaymentMethod() {
+        if (momoRadio.isSelected()) {
+            return momoRadio.getText();
+        } else if (cashRadio.isSelected()) {
+            return cashRadio.getText();
+        } else if (qrRadio.isSelected()) {
+            return qrRadio.getText();
+        }
+        return "";
+    }
+
+    public String taoDonHang() {
         customer_DTO khachDangNhap = getKhachHangDangNhap();
         String makh = khachDangNhap.getMakh();
-        int sdt = khachDangNhap.getSdt();
+        String sdtnguoidat = khachDangNhap.getSdt();
 
-        String manv = "1"; // ************ chua sua lailai
-
+        String manv = "NV0001"; // Mã nhân viên giả định
         String tennguoinhan = tenNguoiNhan.getText().trim();
         String sdtnguoinhan = sdtNguoiNhan.getText().trim();
         String phuong = phuongXa.getSelectedItem().toString().trim();
@@ -918,93 +957,82 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         String tinh = tinhThanh.getSelectedItem().toString();
         String diachicuthe = diaChiCuThe.getText().trim();
         String ghichu = ghiChu.getText().trim();
-
-        String pttt = "";
-        if (momoRadio.isSelected()) {
-            pttt = momoRadio.getText();
-        } else if (cashRadio.isSelected()) {
-            pttt = cashRadio.getText();
-        } else if (qrRadio.isSelected()) {
-            pttt = qrRadio.getText();
-        }
-
+        String pttt = getSelectedPaymentMethod();
         String ngaydat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
 
-        int tongtien = 0;
-        ArrayList<String> danhSachSanPham = new ArrayList<>();
-        int tongSoLuong = 0;
-
-        for (sanphamchonmua_DTO sp : selectedProducts) {
-            int thanhTienSanPham = sp.getDonGia() * sp.getSoLuong();
-            tongtien += thanhTienSanPham;
-            tongSoLuong += sp.getSoLuong();
-
-            String spString = sp.getTenthuoc() + "      x" + sp.getSoLuong() + "      - "
-                    + sp.getDonvi() + "      - " + sp.getDonGia();
-            danhSachSanPham.add(spString);
-        }
-
+        // Tạo mã đơn hàng
         String madon = orderDAO.taoMaHDMoi();
-
-        String mactdh = "CT_" + madon;
-
         String tinhtrang = "Chờ xác nhận";
 
-        orderDAO.taodonhangmoi(madon, makh, sdt, manv, tennguoinhan, sdtnguoinhan,
-                phuong, quan, tinh, diachicuthe, danhSachSanPham, ngaydat, ghichu, pttt, tongtien, tinhtrang);
+        // Tạo đơn hàng chính
+        boolean isSuccess = orderDAO.taodonhangmoi(madon, makh, sdtnguoidat, manv, diachicuthe, phuong, quan, tinh,
+                ngaydat, pttt,
+                tinhtrang, 0, ghichu, tennguoinhan, sdtnguoinhan); // Tổng tiền tạm thời là 0
 
-        order_details ct = new order_details(
-                mactdh,
-                madon,
-                "",
-                danhSachSanPham,
-                diachicuthe,
-                tongSoLuong,
-                tongtien,
-                tinhtrang);
+        if (isSuccess) {
+            // Tạo chi tiết đơn hàng
+            double tongtien = taoChiTietDonHang(madon); // Lấy tổng tiền từ việc tạo chi tiết
 
-        orderDetailsDAO.themChiTietDonHang(ct);
+            // Cập nhật tổng tiền vào hóa đơn
+            orderDAO.capNhatTongTien(madon, tongtien);
 
-        // Xóa các sản phẩm trong giỏ hàng
+            return madon; // Trả về mã đơn hàng nếu thành công
+        } else {
+            return null; // Trả về null nếu có lỗi
+        }
+    }
+
+    public double taoChiTietDonHang(String madon) {
+        double tongtien = 0; // Khởi tạo tổng tiền
+
+        // Thêm từng sản phẩm vào chi tiết đơn hàng
         for (sanphamchonmua_DTO sp : selectedProducts) {
-            String mathuoc = sp.getMathuoc();
-            DAO.cartDAO.xoaSanPhamTrongGio(makh, mathuoc);
+            double thanhTienSanPham = sp.getDonGia() * sp.getSoLuong(); // Tính thành tiền cho sản phẩm
+
+            // Cộng dồn vào tổng tiền
+            tongtien += thanhTienSanPham;
+
+            // Tạo mã chi tiết đơn hàng
+            String macthd = orderDetailsDAO.taoMaCTHDMoi();
+
+            // Tạo đối tượng chi tiết đơn hàng
+            order_details_DTO ct = new order_details_DTO(
+                    macthd, // Mã chi tiết đơn hàng
+                    madon, // Mã đơn hàng
+                    sp.getMathuoc(), // Mã sản phẩm
+                    sp.getSoLuong(), // Số lượng
+                    sp.getDonvi(), // Đơn vị
+                    sp.getDonGia(), // Giá đơn vị
+                    thanhTienSanPham, // Tổng giá cho sản phẩm này
+                    true // Trạng thái
+            );
+
+            // Thêm chi tiết đơn hàng vào cơ sở dữ liệu
+            orderDetailsDAO.themChiTietDonHang(ct);
         }
 
-        // 11. Thông báo
-        JOptionPane.showMessageDialog(null, "Đặt hàng thành công!", "Thông báo",
-                JOptionPane.INFORMATION_MESSAGE);
-
-        // 12. Xóa giỏ hàng
-        selectedProducts.clear();
-
-        khach.setVisible(true);
-        dispose();
-
+        return tongtien; // Trả về tổng tiền
     }
 
     private void updateSummary() {
-        int totalAmount = 0; // Tổng tiền
+        double totalAmount = 0; // Tổng tiền
         int totalProducts = 0; // Tổng số sản phẩm
 
         for (sanphamchonmua_DTO sp : selectedProducts) {
-            totalAmount += sp.getDonGia() * sp.getSoLuong(); // Tính tiền từng sản phẩm
+            double thanhTienSanPham = sp.getDonGia() * sp.getSoLuong(); // Tính tiền từng sản phẩm
+            totalAmount += thanhTienSanPham; // Cộng dồn vào tổng tiền
             totalProducts += sp.getSoLuong(); // Tính tổng số lượng sản phẩm
         }
 
+        // Định dạng và cập nhật giao diện
         NumberFormat nf = NumberFormat.getInstance(Locale.FRANCE);
         nf.setMaximumFractionDigits(2);
-
-        // Định dạng totalAmount có khoảng cách nhóm ngàn
-        String fmTongtien = (totalAmount % 1 == 0)
-                ? nf.format((long) totalAmount)
-                : nf.format(totalAmount);
+        String fmTongtien = nf.format(totalAmount);
 
         // Cập nhật vào các JLabel
         cost.setText(fmTongtien + " đ"); // Hiển thị tổng tiền
         sosp.setText(String.valueOf(totalProducts)); // Hiển thị tổng số sản phẩm
         costreal.setText(fmTongtien + " đ"); // Hiển thị thành tiền (nếu cần)
-
     }
 
     @Override

@@ -4,13 +4,13 @@ public class customer_DTO {
     private String makh;
     private String tenkh;
 
-    private int sdt;
+    private String sdt;
     private String masonha;
     private String duong;
     private String phuong;
     private String quan;
     private String tinh;
-    
+
     private String email;
     private String password;
 
@@ -20,9 +20,8 @@ public class customer_DTO {
     public customer_DTO() {
     }
 
-    public customer_DTO(String makh, String tenkh, int sdt, String masonha, String duong, String phuong, String quan,
-            String tinh, String email, String password, int diemKM,
-            Boolean tinhtrang) {
+    public customer_DTO(String makh, String tenkh, String sdt, String masonha, String duong, String phuong, String quan,
+            String tinh, String email, String password, int diemKM, Boolean tinhtrang) {
         this.makh = makh;
         this.tenkh = tenkh;
         this.sdt = sdt;
@@ -53,11 +52,11 @@ public class customer_DTO {
         this.tenkh = tenkh;
     }
 
-    public int getSdt() {
+    public String getSdt() {
         return sdt;
     }
 
-    public void setSdt(int sdt) {
+    public void setSdt(String sdt) {
         this.sdt = sdt;
     }
 
@@ -133,5 +132,4 @@ public class customer_DTO {
         this.tinhtrang = tinhtrang;
     }
 
-    
 }

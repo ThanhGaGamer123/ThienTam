@@ -33,7 +33,7 @@ public class customer_DTOArr {
                 customer_DTO kh = new customer_DTO(
                         rs.getString("makh"),
                         rs.getString("tenkh"),
-                        Integer.parseInt(rs.getString("sdt")),
+                        rs.getString("sdt"),
                         rs.getString("masonha"),
                         rs.getString("duong"),
                         rs.getString("phuong"),

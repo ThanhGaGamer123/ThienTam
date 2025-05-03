@@ -1,8 +1,12 @@
 package GUI;
 
-import BUS.login_BUS;
+import DAO.orderDAO;
 import DAO.orderDetailsDAO;
 import DTO.customer_DTO;
+import DTO.order_DTO;
+import DTO.order_details_DTO;
+import order_details.order_details;
+import order_details.order_detailsArr;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,9 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.*;
-
-import order_details.order_details;
-import order_details.order_detailsArr;
+import javax.swing.table.DefaultTableModel;
 
 public class trangCaNhan_GUI extends JFrame {
     private JPanel header, tail, body, tab1_left, tab1_right, tab1_center, tab1_tren, tab1_duoi, tab2_left, tab2_right,
@@ -320,6 +322,470 @@ public class trangCaNhan_GUI extends JFrame {
         });
     }
 
+    /*
+     * private void create_tab2() {
+     * GridBagConstraints gbc = new GridBagConstraints();
+     * gbc.insets = new Insets(0, 0, 20, 0);
+     * gbc.gridx = 0;
+     * gbc.anchor = GridBagConstraints.CENTER;
+     * 
+     * JLabel tieudekh = new JLabel("ĐƠN HÀNG");
+     * tieudekh.setForeground(dodo);
+     * tieudekh.setFont(new Font("Bookman", Font.PLAIN, 22));
+     * gbc.gridy = 0;
+     * tab2_left.add(tieudekh, gbc);
+     * 
+     * JButton ttnd = new JButton("Thông tin đơn hàng");
+     * 
+     * ttnd.setBackground(xanhla);
+     * ttnd.setPreferredSize(new Dimension(220, 50));
+     * ttnd.setFont(new Font("Bookman", Font.PLAIN, 20));
+     * 
+     * ttnd.setForeground(Color.WHITE);
+     * gbc.gridy = 1;
+     * tab2_left.add(ttnd, gbc);
+     * 
+     * JButton tttc = new JButton("Giỏ hàng");
+     * tttc.setBackground(xanhla);
+     * tttc.setPreferredSize(new Dimension(220, 50));
+     * tttc.setFont(new Font("Bookman", Font.PLAIN, 20));
+     * tttc.setForeground(Color.WHITE);
+     * gbc.gridy = 2;
+     * tab2_left.add(tttc, gbc);
+     * 
+     * tttc.addActionListener(new ActionListener() {
+     * 
+     * @Override
+     * public void actionPerformed(ActionEvent e) {
+     * new cart_GUI(khach, khachCurrent);
+     * dispose();
+     * }
+     * });
+     * ArrayList<order_DTO> danhSachDonHang =
+     * orderDAO.layTatCaDonHangTheoKhachHang(khachCurrent.getMakh());
+     * orderArr donHangArr = new orderArr(danhSachDonHang);
+     * 
+     * if (danhSachDonHang.isEmpty()) {
+     * JLabel lblEmpty = new JLabel("Bạn chưa có đơn hàng nào.");
+     * lblEmpty.setFont(new Font("Bookman", Font.ITALIC, 18));
+     * lblEmpty.setForeground(Color.GRAY);
+     * tab2_right.add(lblEmpty, gbc);
+     * } else {
+     * 
+     * 
+     * JPanel orderDetailsPanel = new JPanel();
+     * orderDetailsPanel.setLayout(new GridLayout(0, 1, 10, 10));
+     * orderDetailsPanel.setBackground(linen);
+     * orderDetailsPanel.setBorder(BorderFactory.createLineBorder(xanhla, 2));
+     * 
+     * for (order_DTO : danhSachDonHang) {
+     * JPanel orderPanel = new JPanel(new GridLayout(1, 4));
+     * orderPanel.setBackground(Color.WHITE);
+     * orderPanel.setPreferredSize(new Dimension((int) (chieurong - 400), 80));
+     * orderPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+     * 
+     * JLabel orderLabel = new JLabel(" Mã đơn: " + od.getMadon());
+     * orderPanel.add(orderLabel);
+     * 
+     * JLabel ngaydat = new JLabel("Ngày đặt: " + od.getNgaydat());
+     * orderPanel.add(ngaydat);
+     * 
+     * JLabel diachi = new JLabel("Địa chỉ: " + od.getDiachicuthe());
+     * orderPanel.add(diachi);
+     * 
+     * JLabel sotien = new JLabel(("Tổng tiền: " + od.getThanhtien() + " đ"),
+     * SwingConstants.CENTER);
+     * orderPanel.add(sotien);
+     * 
+     * orderPanel.addMouseListener(new MouseAdapter() {
+     * 
+     * @Override
+     * public void mouseClicked(MouseEvent e) {
+     * // Tạo panel chi tiết
+     * JPanel detailPanel = new JPanel(new BorderLayout());
+     * detailPanel.setPreferredSize(new Dimension(900, 530));
+     * detailPanel.setBackground(hong);
+     * detailPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+     * 
+     * // Tạo dialog
+     * JDialog dialog = new JDialog((JFrame)
+     * SwingUtilities.getWindowAncestor(tab2_right),
+     * "Chi tiết đơn hàng", true);
+     * dialog.setUndecorated(true);
+     * dialog.getContentPane().add(detailPanel);
+     * dialog.pack();
+     * dialog.setLocationRelativeTo(null);
+     * 
+     * // Tạo nút "Thoát"
+     * JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+     * JButton close_btn = new JButton("Thoát");
+     * close_btn.setBackground(dodo);
+     * close_btn.setFocusPainted(false);
+     * topPanel.add(close_btn);
+     * detailPanel.add(topPanel, BorderLayout.NORTH);
+     * 
+     * JPanel duoiPanel = new JPanel();
+     * JLabel namelabel = new JLabel("nhathuocthientam@gmail.com.vn");
+     * namelabel.setHorizontalAlignment(SwingConstants.CENTER);
+     * namelabel.setFont(new Font("Arial", Font.ITALIC, 12));
+     * duoiPanel.add(namelabel);
+     * duoiPanel.setPreferredSize(new Dimension(0, 30));
+     * duoiPanel.setBackground(xanhla);
+     * detailPanel.add(duoiPanel, BorderLayout.SOUTH);
+     * 
+     * JPanel traiPanel = new JPanel();
+     * traiPanel.setPreferredSize(new Dimension(0, 0));
+     * detailPanel.add(traiPanel, BorderLayout.WEST);
+     * 
+     * JPanel phaiPanel = new JPanel(new BorderLayout());
+     * phaiPanel.setPreferredSize(new Dimension(600, 400));
+     * phaiPanel.setBorder(BorderFactory.createTitledBorder(
+     * BorderFactory.createLineBorder(xam, 1),
+     * "Sản phẩm đã mua",
+     * 0,
+     * 0,
+     * new Font("Bookman", Font.BOLD, 18),
+     * Color.BLACK));
+     * phaiPanel.setBackground(linen);
+     * detailPanel.add(phaiPanel, BorderLayout.EAST);
+     * JTextArea sanphamTextArea = new JTextArea();
+     * ArrayList<String> sanPhamMuaList = od.getSanphammua();
+     * StringBuilder sanPhamMua = new StringBuilder();
+     * for (String sanPham : sanPhamMuaList) {
+     * sanPhamMua.append(sanPham).append("\n");
+     * }
+     * sanphamTextArea.setText(sanPhamMua.toString());
+     * sanphamTextArea.setEditable(false);
+     * sanphamTextArea.setLineWrap(false); // Disable line wrapping
+     * sanphamTextArea.setWrapStyleWord(false); // Disable word wrapping
+     * sanphamTextArea.setBackground(Color.WHITE);
+     * sanphamTextArea.setFont(new Font("Bookman", Font.PLAIN, 16));
+     * sanphamTextArea.setMargin(new Insets(10, 10, 10, 10));
+     * 
+     * // Đưa JTextArea vào JScrollPane
+     * JScrollPane scrollPane = new JScrollPane(sanphamTextArea);
+     * scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+     * scrollPane.setBorder(BorderFactory.createEmptyBorder());
+     * phaiPanel.add(scrollPane, BorderLayout.CENTER);
+     * 
+     * // Panel giữa với GridBagLayout
+     * JPanel centerPanel = new JPanel(new GridBagLayout());
+     * centerPanel.setPreferredSize(new Dimension(100, 200));
+     * centerPanel.setBorder(BorderFactory.createLineBorder(xam, 2));
+     * 
+     * centerPanel.setBackground(linen);
+     * detailPanel.add(centerPanel, BorderLayout.CENTER);
+     * 
+     * // Cấu hình GridBagConstraints
+     * GridBagConstraints gbc = new GridBagConstraints();
+     * gbc.fill = GridBagConstraints.HORIZONTAL;
+     * gbc.weightx = 1;
+     * gbc.insets = new Insets(10, 50, 10, 10);
+     * gbc.anchor = GridBagConstraints.CENTER;
+     * 
+     * gbc.gridx = 0;
+     * gbc.gridy = 0;
+     * JLabel tieude = new JLabel("HÓA ĐƠN MUA HÀNG", SwingConstants.CENTER);
+     * tieude.setFont(new Font("Bookman", Font.PLAIN, 17));
+     * tieude.setForeground(dodo);
+     * centerPanel.add(tieude, gbc);
+     * 
+     * gbc.gridy++;
+     * centerPanel.add(new JLabel("Người đặt: " + khachCurrent.getTenkh()), gbc);
+     * 
+     * // Thêm địa chỉ đặt vé
+     * gbc.gridy++;
+     * centerPanel.add(new JLabel("Địa chỉ: " + od.getDiachicuthe()), gbc);
+     * 
+     * // Thêm mã đơn
+     * gbc.gridy++;
+     * centerPanel.add(new JLabel("Mã đơn: " + od.getMadon()), gbc);
+     * 
+     * // Thêm ngày đặt
+     * gbc.gridy++;
+     * centerPanel.add(new JLabel("Ngày đặt: " + od.getNgaydat()), gbc);
+     * 
+     * gbc.gridy++;
+     * centerPanel.add(new JLabel("Tổng số sản phẩm : " + od.getSl()), gbc);
+     * 
+     * gbc.gridy++;
+     * centerPanel.add(new JLabel("Tổng hóa đơn : " + od.getThanhtien() + " đ"),
+     * gbc);
+     * 
+     * // Sự kiện cho nút "Thoát"
+     * close_btn.addActionListener(new ActionListener() {
+     * 
+     * @Override
+     * public void actionPerformed(ActionEvent e) {
+     * dialog.dispose();
+     * }
+     * });
+     * 
+     * dialog.setVisible(true);
+     * }
+     * });
+     * orderDetailsPanel.add(orderPanel);
+     * }
+     * 
+     * JScrollPane scrollPane = new JScrollPane(orderDetailsPanel);
+     * scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+     * scrollPane.setHorizontalScrollBarPolicy(JScrollPane.
+     * HORIZONTAL_SCROLLBAR_NEVER);
+     * scrollPane.setPreferredSize(new Dimension((int) (chieurong - 400), 400));
+     * tab2_right.add(scrollPane, gbc);
+     * 
+     * tab2_right.revalidate();
+     * tab2_right.repaint();
+     * 
+     * }
+     * 
+     * tab2_right.revalidate();
+     * tab2_right.repaint();
+     * 
+     * }
+     */
+
+    // Phương thức hiển thị chi tiết đơn hàng
+
+    // *
+    // ArrayList<order_DTO> danhSachDonHang =
+    // orderDAO.layTatCaDonHangTheoKhachHang(khachCurrent.getMakh());
+
+    // if (danhSachDonHang.isEmpty()) {
+    // JLabel lblEmpty = new JLabel("Bạn chưa có đơn hàng nào.");
+    // lblEmpty.setFont(new Font("Bookman", Font.ITALIC, 18));
+    // lblEmpty.setForeground(Color.GRAY);
+    // tab2_right.add(lblEmpty, gbc);
+    // } else { *//
+
+    // private void create_tab2() {
+    // GridBagConstraints gbc = new GridBagConstraints();
+    // gbc.insets = new Insets(0, 0, 20, 0);
+    // gbc.gridx = 0;
+    // gbc.anchor = GridBagConstraints.CENTER;
+
+    // JLabel tieudekh = new JLabel("ĐƠN HÀNG");
+    // tieudekh.setForeground(dodo);
+    // tieudekh.setFont(new Font("Bookman", Font.PLAIN, 22));
+    // gbc.gridy = 0;
+    // tab2_left.add(tieudekh, gbc);
+
+    // JButton ttnd = new JButton("Thông tin đơn hàng");
+    // ttnd.setBackground(xanhla);
+    // ttnd.setPreferredSize(new Dimension(220, 50));
+    // ttnd.setFont(new Font("Bookman", Font.PLAIN, 20));
+    // ttnd.setForeground(Color.WHITE);
+    // gbc.gridy = 1;
+    // tab2_left.add(ttnd, gbc);
+
+    // JButton tttc = new JButton("Giỏ hàng");
+    // tttc.setBackground(xanhla);
+    // tttc.setPreferredSize(new Dimension(220, 50));
+    // tttc.setFont(new Font("Bookman", Font.PLAIN, 20));
+    // tttc.setForeground(Color.WHITE);
+    // gbc.gridy = 2;
+    // tab2_left.add(tttc, gbc);
+
+    // tttc.addActionListener(new ActionListener() {
+    // @Override
+    // public void actionPerformed(ActionEvent e) {
+    // new cart_GUI(khach, khachCurrent);
+    // dispose();
+    // }
+    // });
+
+    // ArrayList<order_DTO> danhSachDonHang =
+    // orderDAO.layTatCaDonHangTheoKhachHang(khachCurrent.getMakh());
+
+    // if (danhSachDonHang.isEmpty()) {
+    // JLabel lblEmpty = new JLabel("Bạn chưa có đơn hàng nào.");
+    // lblEmpty.setFont(new Font("Bookman", Font.ITALIC, 18));
+    // lblEmpty.setForeground(Color.GRAY);
+    // tab2_right.add(lblEmpty, gbc);
+    // } else {
+    // JPanel orderDetailsPanel = new JPanel();
+    // orderDetailsPanel.setLayout(new GridLayout(0, 1, 10, 10));
+    // orderDetailsPanel.setBackground(linen);
+    // orderDetailsPanel.setBorder(BorderFactory.createLineBorder(xanhla, 2));
+
+    // for (order_DTO od : danhSachDonHang) {
+    // JPanel orderPanel = new JPanel(new GridLayout(1, 4));
+    // orderPanel.setBackground(Color.WHITE);
+    // orderPanel.setPreferredSize(new Dimension((int) (chieurong - 400), 80));
+    // orderPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+
+    // JLabel orderLabel = new JLabel(" Mã đơn: " + od.getMadon());
+    // orderPanel.add(orderLabel);
+
+    // JLabel ngaydat = new JLabel("Ngày đặt: " + od.getNgaydat());
+    // orderPanel.add(ngaydat);
+
+    // JLabel diachi = new JLabel("Địa chỉ: " + od.getDiachicuthe());
+    // orderPanel.add(diachi);
+
+    // JLabel sotien = new JLabel("Tổng tiền: " + od.getTongtien() + " đ",
+    // SwingConstants.LEFT);
+    // orderPanel.add(sotien);
+
+    // orderPanel.addMouseListener(new MouseAdapter() {
+    // @Override
+    // public void mouseClicked(MouseEvent e) {
+    // // Tạo panel chi tiết
+    // JPanel detailPanel = new JPanel(new BorderLayout());
+    // detailPanel.setPreferredSize(new Dimension(900, 530));
+    // detailPanel.setBackground(hong);
+    // detailPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+
+    // // Tạo dialog
+    // JDialog dialog = new JDialog((JFrame)
+    // SwingUtilities.getWindowAncestor(tab2_right),
+    // "Chi tiết đơn hàng", true);
+    // dialog.setUndecorated(true);
+    // dialog.getContentPane().add(detailPanel);
+    // dialog.pack();
+    // dialog.setLocationRelativeTo(null);
+
+    // // Tạo nút "Thoát"
+    // JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    // JButton close_btn = new JButton("Thoát");
+    // close_btn.setBackground(dodo);
+    // close_btn.setFocusPainted(false);
+    // topPanel.add(close_btn);
+    // detailPanel.add(topPanel, BorderLayout.NORTH);
+
+    // JPanel duoiPanel = new JPanel();
+    // JLabel namelabel = new JLabel("nhathuocthientam@gmail.com.vn");
+    // namelabel.setHorizontalAlignment(SwingConstants.CENTER);
+    // namelabel.setFont(new Font("Arial", Font.ITALIC, 12));
+    // duoiPanel.add(namelabel);
+    // duoiPanel.setPreferredSize(new Dimension(0, 30));
+    // duoiPanel.setBackground(xanhla);
+    // detailPanel.add(duoiPanel, BorderLayout.SOUTH);
+
+    // JPanel traiPanel = new JPanel();
+    // traiPanel.setPreferredSize(new Dimension(0, 0));
+    // detailPanel.add(traiPanel, BorderLayout.WEST);
+
+    // JPanel phaiPanel = new JPanel(new BorderLayout());
+    // phaiPanel.setPreferredSize(new Dimension(600, 400));
+    // phaiPanel.setBorder(BorderFactory.createTitledBorder(
+    // BorderFactory.createLineBorder(xam, 1),
+    // "Sản phẩm đã mua",
+    // 0,
+    // 0,
+    // new Font("Bookman", Font.BOLD, 18),
+    // Color.BLACK));
+    // phaiPanel.setBackground(linen);
+    // detailPanel.add(phaiPanel, BorderLayout.EAST);
+    // JPanel sanphammua = new JPanel();
+
+    // // Đưa JTextArea vào JScrollPane
+    // // JScrollPane scrollPane = new JScrollPane(sanphamTextArea);
+    // //
+    // scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    // // scrollPane.setBorder(BorderFactory.createEmptyBorder());
+    // phaiPanel.add(sanphammua, BorderLayout.CENTER);
+
+    // DefaultTableModel model = new DefaultTableModel();
+    // model.addColumn("Tên Sản Phẩm");
+    // model.addColumn("Số Lượng Mua");
+    // model.addColumn("Đơn Giá");
+    // model.addColumn("Thành Tiền");
+
+    // // Tạo JTable
+    // JTable table = new JTable(model);
+    // JScrollPane tableScroll = new JScrollPane(table);
+    // sanphammua.add(tableScroll); // Thêm JTable vào sanphammua
+
+    // // Lấy chi tiết đơn hàng từ DAO
+    // orderDetailsDAO.hienThiChiTietDonHang(od.getMadon(), model);
+
+    // ArrayList<order_details_DTO> chiTietDonHang = orderDetailsDAO
+    // .layChiTietDonHangTheoMaDon(od.getMadon());
+    // for (order_details_DTO ct : chiTietDonHang) {
+    // model.addRow(new Object[] {
+    // ct.getMadon(), // <-- cái này là lỗi (bạn không muốn dùng field tenSanPham
+    // nữa)
+    // ct.getSl(),
+    // ct.getDongia(),
+    // ct.getThanhtien()
+    // });
+    // }
+
+    // // Panel giữa với GridBagLayout
+    // JPanel centerPanel = new JPanel(new GridBagLayout());
+    // centerPanel.setPreferredSize(new Dimension(100, 200));
+    // centerPanel.setBorder(BorderFactory.createLineBorder(xam, 2));
+
+    // centerPanel.setBackground(linen);
+    // detailPanel.add(centerPanel, BorderLayout.CENTER);
+
+    // // Cấu hình GridBagConstraints
+    // GridBagConstraints gbc = new GridBagConstraints();
+    // gbc.fill = GridBagConstraints.HORIZONTAL;
+    // gbc.weightx = 1;
+    // gbc.insets = new Insets(10, 50, 10, 10);
+    // gbc.anchor = GridBagConstraints.CENTER;
+
+    // gbc.gridx = 0;
+    // gbc.gridy = 0;
+    // JLabel tieude = new JLabel("HÓA ĐƠN MUA HÀNG", SwingConstants.CENTER);
+    // tieude.setFont(new Font("Bookman", Font.PLAIN, 17));
+    // tieude.setForeground(dodo);
+    // centerPanel.add(tieude, gbc);
+
+    // gbc.gridy++;
+    // centerPanel.add(new JLabel("Người đặt: " + khachCurrent.getTenkh()), gbc);
+
+    // // Thêm địa chỉ đặt vé
+    // gbc.gridy++;
+    // centerPanel.add(new JLabel("Địa chỉ: " + od.getDiachicuthe()), gbc);
+
+    // // Thêm mã đơn
+    // gbc.gridy++;
+    // centerPanel.add(new JLabel("Mã đơn: " + od.getMadon()), gbc);
+
+    // // Thêm ngày đặt
+    // gbc.gridy++;
+    // centerPanel.add(new JLabel("Ngày đặt: " + od.getNgaydat()), gbc);
+
+    // gbc.gridy++;
+    // // centerPanel.add(new JLabel("Tổng số sản phẩm: " + od.getSl()), gbc);
+
+    // gbc.gridy++;
+    // // centerPanel.add(new JLabel("Tổng hóa đơn: " + od.getThanhtien() + " đ"),
+    // // gbc);
+
+    // // Sự kiện cho nút "Thoát"
+    // close_btn.addActionListener(new ActionListener() {
+    // @Override
+    // public void actionPerformed(ActionEvent e) {
+    // dialog.dispose();
+    // }
+    // });
+
+    // dialog.setVisible(true);
+    // }
+    // });
+    // orderDetailsPanel.add(orderPanel);
+    // }
+
+    // JScrollPane scrollPane = new JScrollPane(orderDetailsPanel);
+    // scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    // scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    // scrollPane.setPreferredSize(new Dimension((int) (chieurong - 400), 400)); //
+    // Điều chỉnh kích thước
+
+    // tab2_right.add(scrollPane, gbc);
+
+    // tab2_right.revalidate();
+    // tab2_right.repaint();
+    // }
+
+    // tab2_right.revalidate();
+    // tab2_right.repaint();
+    // }
+
     private void create_tab2() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 0, 20, 0);
@@ -333,11 +799,9 @@ public class trangCaNhan_GUI extends JFrame {
         tab2_left.add(tieudekh, gbc);
 
         JButton ttnd = new JButton("Thông tin đơn hàng");
-
         ttnd.setBackground(xanhla);
         ttnd.setPreferredSize(new Dimension(220, 50));
         ttnd.setFont(new Font("Bookman", Font.PLAIN, 20));
-
         ttnd.setForeground(Color.WHITE);
         gbc.gridy = 1;
         tab2_left.add(ttnd, gbc);
@@ -358,8 +822,7 @@ public class trangCaNhan_GUI extends JFrame {
             }
         });
 
-        ArrayList<order_details> danhSachDonHang = new order_detailsArr(
-                orderDetailsDAO.layDanhSachDonHangTheoMaKH(khachCurrent.getMakh())).getArr();
+        ArrayList<order_DTO> danhSachDonHang = orderDAO.layTatCaDonHangTheoKhachHang(khachCurrent.getMakh());
 
         if (danhSachDonHang.isEmpty()) {
             JLabel lblEmpty = new JLabel("Bạn chưa có đơn hàng nào.");
@@ -367,18 +830,12 @@ public class trangCaNhan_GUI extends JFrame {
             lblEmpty.setForeground(Color.GRAY);
             tab2_right.add(lblEmpty, gbc);
         } else {
-            // JPanel orderDetailsPanel = new JPanel();
-            // orderDetailsPanel.setLayout(new GridLayout(0, 1, 10, 10));
-            // orderDetailsPanel.setBackground(linen);
-            // orderDetailsPanel.setPreferredSize(new Dimension(500, 100));
-            // orderDetailsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-
             JPanel orderDetailsPanel = new JPanel();
             orderDetailsPanel.setLayout(new GridLayout(0, 1, 10, 10));
             orderDetailsPanel.setBackground(linen);
             orderDetailsPanel.setBorder(BorderFactory.createLineBorder(xanhla, 2));
 
-            for (order_details od : danhSachDonHang) {
+            for (order_DTO od : danhSachDonHang) {
                 JPanel orderPanel = new JPanel(new GridLayout(1, 4));
                 orderPanel.setBackground(Color.WHITE);
                 orderPanel.setPreferredSize(new Dimension((int) (chieurong - 400), 80));
@@ -393,7 +850,7 @@ public class trangCaNhan_GUI extends JFrame {
                 JLabel diachi = new JLabel("Địa chỉ: " + od.getDiachicuthe());
                 orderPanel.add(diachi);
 
-                JLabel sotien = new JLabel(("Tổng tiền: " + od.getThanhtien() + "  đ"), SwingConstants.CENTER);
+                JLabel sotien = new JLabel("Tổng tiền: " + od.getTongtien() + " đ", SwingConstants.LEFT);
                 orderPanel.add(sotien);
 
                 orderPanel.addMouseListener(new MouseAdapter() {
@@ -421,6 +878,7 @@ public class trangCaNhan_GUI extends JFrame {
                         topPanel.add(close_btn);
                         detailPanel.add(topPanel, BorderLayout.NORTH);
 
+                        // Panel dưới
                         JPanel duoiPanel = new JPanel();
                         JLabel namelabel = new JLabel("nhathuocthientam@gmail.com.vn");
                         namelabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -434,42 +892,36 @@ public class trangCaNhan_GUI extends JFrame {
                         traiPanel.setPreferredSize(new Dimension(0, 0));
                         detailPanel.add(traiPanel, BorderLayout.WEST);
 
+                        // Bảng chi tiết sản phẩm
                         JPanel phaiPanel = new JPanel(new BorderLayout());
                         phaiPanel.setPreferredSize(new Dimension(600, 400));
-                        phaiPanel.setBorder(BorderFactory.createTitledBorder(
-                                BorderFactory.createLineBorder(xam, 1),
-                                "Sản phẩm đã mua",
-                                0,
-                                0,
-                                new Font("Bookman", Font.BOLD, 18),
-                                Color.BLACK));
+                        phaiPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(xam, 1),
+                                "Sản phẩm đã mua", 0, 0, new Font("Bookman", Font.BOLD, 18), Color.BLACK));
                         phaiPanel.setBackground(linen);
                         detailPanel.add(phaiPanel, BorderLayout.EAST);
-                        JTextArea sanphamTextArea = new JTextArea();
-                        ArrayList<String> sanPhamMuaList = od.getSanphammua();
-                        StringBuilder sanPhamMua = new StringBuilder();
-                        for (String sanPham : sanPhamMuaList) {
-                            sanPhamMua.append(sanPham).append("\n");
-                        }
-                        sanphamTextArea.setText(sanPhamMua.toString());
-                        sanphamTextArea.setEditable(false);
-                        sanphamTextArea.setLineWrap(false); // Disable line wrapping
-                        sanphamTextArea.setWrapStyleWord(false); // Disable word wrapping
-                        sanphamTextArea.setBackground(Color.WHITE);
-                        sanphamTextArea.setFont(new Font("Bookman", Font.PLAIN, 16));
-                        sanphamTextArea.setMargin(new Insets(10, 10, 10, 10));
+                        JPanel sanphammua = new JPanel();
+                        sanphammua.setPreferredSize(new Dimension(phaiPanel.getWidth(), 100));
 
-                        // Đưa JTextArea vào JScrollPane
-                        JScrollPane scrollPane = new JScrollPane(sanphamTextArea);
-                        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-                        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-                        phaiPanel.add(scrollPane, BorderLayout.CENTER);
+                        DefaultTableModel model = new DefaultTableModel();
+                        model.addColumn("Tên Sản Phẩm");
+                        model.addColumn("Số Lượng Mua");
+                        model.addColumn("Đơn Giá");
+                        model.addColumn("Thành Tiền");
+
+                        JTable table = new JTable(model);
+                        // table.setPreferredSize(new Dimension(sanphammua.getWidth(), 200));
+                        JScrollPane tableScroll = new JScrollPane(table);
+                        sanphammua.add(tableScroll); // Thêm JTable vào sanphammua
+
+                        // Lấy chi tiết đơn hàng từ DAO
+                        orderDetailsDAO.hienThiChiTietDonHang(od.getMadon(), model);
+
+                        phaiPanel.add(tableScroll, BorderLayout.CENTER);
 
                         // Panel giữa với GridBagLayout
                         JPanel centerPanel = new JPanel(new GridBagLayout());
                         centerPanel.setPreferredSize(new Dimension(100, 200));
                         centerPanel.setBorder(BorderFactory.createLineBorder(xam, 2));
-
                         centerPanel.setBackground(linen);
                         detailPanel.add(centerPanel, BorderLayout.CENTER);
 
@@ -503,10 +955,10 @@ public class trangCaNhan_GUI extends JFrame {
                         centerPanel.add(new JLabel("Ngày đặt: " + od.getNgaydat()), gbc);
 
                         gbc.gridy++;
-                        centerPanel.add(new JLabel("Tổng số sản phẩm : " + od.getSl()), gbc);
+                        centerPanel.add(new JLabel(od.getPttt()), gbc);
 
                         gbc.gridy++;
-                        centerPanel.add(new JLabel("Tổng hóa đơn : " + od.getThanhtien() + "  đ"), gbc);
+                        centerPanel.add(new JLabel("Tổng tiền: " + od.getTongtien()), gbc);
 
                         // Sự kiện cho nút "Thoát"
                         close_btn.addActionListener(new ActionListener() {
@@ -531,11 +983,101 @@ public class trangCaNhan_GUI extends JFrame {
 
             tab2_right.revalidate();
             tab2_right.repaint();
-
         }
 
         tab2_right.revalidate();
         tab2_right.repaint();
+    }
+
+    private void showOrderDetails(order_DTO od) {
+        // Tạo panel chi tiết
+        JPanel detailPanel = new JPanel(new BorderLayout());
+        detailPanel.setPreferredSize(new Dimension(900, 530));
+        detailPanel.setBackground(hong);
+        detailPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+
+        // Tạo dialog
+        JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(tab2_right),
+                "Chi tiết đơn hàng", true);
+        dialog.setUndecorated(true);
+        dialog.getContentPane().add(detailPanel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+
+        // Tạo nút "Thoát"
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton close_btn = new JButton("Thoát");
+        close_btn.setBackground(dodo);
+        close_btn.setFocusPainted(false);
+        topPanel.add(close_btn);
+        detailPanel.add(topPanel, BorderLayout.NORTH);
+
+        // Thêm thông tin chi tiết đơn hàng
+        JTextArea sanphamTextArea = new JTextArea();
+        // ArrayList<String> sanPhamMuaList = od.getSanphammua();
+        StringBuilder sanPhamMua = new StringBuilder();
+        // for (String sanPham : sanPhamMuaList) {
+        // sanPhamMua.append(sanPham).append("\n");
+        // }
+        sanphamTextArea.setText(sanPhamMua.toString());
+        sanphamTextArea.setEditable(false);
+        sanphamTextArea.setLineWrap(false);
+        sanphamTextArea.setWrapStyleWord(false);
+        sanphamTextArea.setBackground(Color.WHITE);
+        sanphamTextArea.setFont(new Font("Bookman", Font.PLAIN, 16));
+        sanphamTextArea.setMargin(new Insets(10, 10, 10, 10));
+
+        // Đưa JTextArea vào JScrollPane
+        JScrollPane scrollPane = new JScrollPane(sanphamTextArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+        detailPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Thêm thông tin hóa đơn
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        centerPanel.setPreferredSize(new Dimension(100, 200));
+        centerPanel.setBorder(BorderFactory.createLineBorder(xam, 2));
+        centerPanel.setBackground(linen);
+        detailPanel.add(centerPanel, BorderLayout.CENTER);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1;
+        gbc.insets = new Insets(10, 50, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        JLabel tieude = new JLabel("HÓA ĐƠN MUA HÀNG", SwingConstants.CENTER);
+        tieude.setFont(new Font("Bookman", Font.PLAIN, 17));
+        tieude.setForeground(dodo);
+        centerPanel.add(tieude, gbc);
+
+        gbc.gridy++;
+        centerPanel.add(new JLabel("Người đặt: " + khachCurrent.getTenkh()), gbc);
+        gbc.gridy++;
+        centerPanel.add(new JLabel("Địa chỉ: " + od.getDiachicuthe()), gbc);
+        gbc.gridy++;
+        centerPanel.add(new JLabel("Mã đơn: " + od.getMadon()), gbc);
+        gbc.gridy++;
+        centerPanel.add(new JLabel("Ngày đặt: " + od.getNgaydat()), gbc);
+        gbc.gridy++;
+        // centerPanel.add(new JLabel("Tổng số sản phẩm: " + od.get), gbc);
+        gbc.gridy++;
+        // centerPanel.add(new JLabel("Tổng hóa đơn: " + od.getThanhtien() + " đ"),
+        // gbc);
+
+        // Sự kiện cho nút "Thoát"
+        close_btn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose();
+            }
+        });
+
+        dialog.setVisible(true);
     }
 
     private void create_footer() {

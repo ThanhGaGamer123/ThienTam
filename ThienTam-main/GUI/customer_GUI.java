@@ -521,9 +521,10 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
             medicine_DTO product = foundProductsFilter.get(i);
 
             // Lấy giá đầu tiên trong danh sách giá bán (nếu có)
-            double price = product.getGiaban().get(0); // Nhớ kiểm tra tránh IndexOutOfBounds nếu danh sách rỗng
+            double price = product.getGiaban().get(0);
 
-            String donvi = product.getDonvi().get(0); // Lấy đơn vị đầu tiên
+            String donvi = product.getDonvi().get(0);
+            
             String formattedPrice = nf.format(price) + " / " + donvi;
 
             System.out.println(formattedPrice);

@@ -1,8 +1,7 @@
 package medicine;
 
+import DAO.medicineDAO;
 import DTO.medicine_DTO;
-import advanceMethod.advance;
-import java.sql.*;
 import java.util.ArrayList;
 
 public class medicineArr {
@@ -80,66 +79,11 @@ public class medicineArr {
         return result;
     }
 
-    public ArrayList<medicine_DTO> selectAll() {
-        ArrayList<medicine_DTO> medicines = new ArrayList<>();
-        String command = "SELECT t.*, k.tinhtrang FROM Thuoc t JOIN Kho k ON t.maton = k.maton";
-
-        try (Connection sql = data.SQL.createConnection();
-                PreparedStatement pst = sql.prepareStatement(command);
-                ResultSet rs = pst.executeQuery()) {
-
-            while (rs.next()) {
-                medicine_DTO med = new medicine_DTO();
-                med.setMathuoc(rs.getString("mathuoc"));
-                med.setTenthuoc(rs.getString("tenthuoc"));
-
-                // Kiểm tra và chuyển đổi 'donvi' nếu có dữ liệu
-                String donviStr = rs.getString("donvi");
-                if (donviStr != null && !donviStr.isEmpty()) {
-                    med.setDonvi(advance.StringconvertToStringArrayList(donviStr));
-                }
-
-                med.setThanhphan(rs.getString("thanhphan"));
-                med.setThongtin(rs.getString("thongtin"));
-                med.setXuatxu(rs.getString("xuatxu"));
-                med.setDanhmuc(rs.getString("danhmuc"));
-
-                // Kiểm tra và chuyển đổi 'giaban' từ chuỗi sang ArrayList<Double>
-                String giabanStr = rs.getString("giaban");
-                if (giabanStr != null && !giabanStr.isEmpty()) {
-                    med.setGiaban(advance
-                            .StringArrayListToDoubleArrayList(advance.StringconvertToStringArrayList(giabanStr)));
-                }
-
-                med.setMaton(rs.getString("maton"));
-
-                // Chuyển đổi 'doituongsudung' từ chuỗi thành ArrayList nếu có dữ liệu
-                String doituongsudungStr = rs.getString("doituongsudung");
-                if (doituongsudungStr != null && !doituongsudungStr.isEmpty()) {
-                    med.setDoituongsudung(advance.StringconvertToStringArrayList(doituongsudungStr));
-                }
-
-                // Lấy giá trị 'tinhtrang' từ bảng 'Kho'
-                med.setTinhtrang(rs.getBoolean("tinhtrang"));
-
-                // Đọc trường 'hansudung' (hạn sử dụng) và gán giá trị
-                med.setHansudung(rs.getString("hansudung"));
-
-                // Thêm đối tượng thuốc vào danh sách
-                medicines.add(med);
-            }
-            System.out.println("Truy vấn thành công");
-        } catch (SQLException e) {
-            System.out.println("Lỗi truy vấn thuốc: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return medicines; // Trả về danh sách thuốc
-    }
-
     public void readDatabase() {
         try {
-            sp = selectAll(); // Gọi hàm đã có sẵn để đọc dữ liệu
+            medicineDAO dao = new medicineDAO();
+            sp = dao.selectAll();
+
             System.out.println("Dữ liệu đã tải từ bảng Thuoc.");
         } catch (Exception e) {
             System.out.println("Lỗi khi đọc dữ liệu từ database: " + e.getMessage());

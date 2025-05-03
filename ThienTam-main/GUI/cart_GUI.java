@@ -623,5 +623,6 @@ public class cart_GUI extends JFrame {
         sosp.setText(Integer.toString(sumsp));
 
     }
+    
 
 }
