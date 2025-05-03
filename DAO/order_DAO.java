@@ -12,15 +12,15 @@ public class order_DAO implements DAO<order_DTO> {
     public int add(order_DTO t) {
         Connection sql = data.SQL.createConnection();
 
-        String command = "INSERT INTO DonHang (madon, makh, manv, masonha, duong, phuong, quan, tinh, ngaydat, pttt, tinhtrang, tongtien, ghichu, nguoinhan, sdt_nguoinhan)" + 
+        String command = "INSERT INTO DonHang (madon, makh, sdt_nguoidat, manv, diachicuthe, phuong, quan, tinh, ngaydat, pttt, tinhtrang, tongtien, ghichu, nguoinhan, sdt_nguoinhan)" + 
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = sql.prepareStatement(command)) {
             pst.setString(1, t.getMadon());
             pst.setString(2, t.getMakh());
-            pst.setString(3, t.getManv());
-            pst.setString(4, t.getMasonha());
-            pst.setString(5, t.getDuong());
+            pst.setString(3, t.getSdt_nguoidat());
+            pst.setString(4, t.getManv());
+            pst.setString(5, t.getDiachicuthe());
             pst.setString(6, t.getPhuong());
             pst.setString(7, t.getQuan());
             pst.setString(8, t.getTinh());
@@ -30,7 +30,7 @@ public class order_DAO implements DAO<order_DTO> {
             pst.setDouble(12, t.getTongtien());
             pst.setString(13, t.getGhichu());
             pst.setString(14, t.getNguoinhan());
-            pst.setInt(15, t.getSdt_nguoinhan());
+            pst.setString(15, t.getSdt_nguoinhan());
 
             int ketQua = pst.executeUpdate();
             System.out.println("Bạn đã thực thi: " + command);
@@ -48,13 +48,13 @@ public class order_DAO implements DAO<order_DTO> {
     public int update(order_DTO t) {
         Connection sql = data.SQL.createConnection();
 
-        String command = "UPDATE DonHang SET makh = ?, manv = ?, masonha = ?, duong = ?, phuong = ?, quan = ?, tinh = ?, ngaydat = ?, pttt = ?, tinhtrang = ?, tongtien = ?, ghichu = ?, nguoinhan = ?, sdt_nguoinhan = ? WHERE madon = ?";
+        String command = "UPDATE DonHang SET makh = ?, sdt_nguoidat = ?, manv = ?, diachicuthe = ?, phuong = ?, quan = ?, tinh = ?, ngaydat = ?, pttt = ?, tinhtrang = ?, tongtien = ?, ghichu = ?, nguoinhan = ?, sdt_nguoinhan = ? WHERE madon = ?";
 
         try (PreparedStatement pst = sql.prepareStatement(command)) {
             pst.setString(1, t.getMakh());
-            pst.setString(2, t.getManv());
-            pst.setString(3, t.getMasonha());
-            pst.setString(4, t.getDuong());
+            pst.setString(2, t.getSdt_nguoidat());
+            pst.setString(3, t.getManv());
+            pst.setString(4, t.getDiachicuthe());
             pst.setString(5, t.getPhuong());
             pst.setString(6, t.getQuan());
             pst.setString(7, t.getTinh());
@@ -64,7 +64,7 @@ public class order_DAO implements DAO<order_DTO> {
             pst.setDouble(11, t.getTongtien());
             pst.setString(12, t.getGhichu());
             pst.setString(13, t.getNguoinhan());
-            pst.setInt(14, t.getSdt_nguoinhan());
+            pst.setString(14, t.getSdt_nguoinhan());
             pst.setString(15, t.getMadon());
 
             int ketQua = pst.executeUpdate();
@@ -114,9 +114,9 @@ public class order_DAO implements DAO<order_DTO> {
                 order_DTO order = new order_DTO();
                 order.setMadon(rs.getString("madon"));
                 order.setMakh(rs.getString("makh"));
+                order.setSdt_nguoidat(rs.getString("sdt_nguoidat"));
                 order.setManv(rs.getString("manv"));
-                order.setMasonha(rs.getString("masonha"));
-                order.setDuong(rs.getString("duong"));
+                order.setDiachicuthe(rs.getString("diachicuthe"));
                 order.setPhuong(rs.getString("phuong"));
                 order.setQuan(rs.getString("quan"));
                 order.setTinh(rs.getString("tinh"));
@@ -126,7 +126,7 @@ public class order_DAO implements DAO<order_DTO> {
                 order.setTongtien(rs.getDouble("tongtien"));
                 order.setGhichu(rs.getString("ghichu"));
                 order.setNguoinhan(rs.getString("nguoinhan"));
-                order.setSdt_nguoinhan(rs.getInt("sdt_nguoinhan"));
+                order.setSdt_nguoinhan(rs.getString("sdt_nguoinhan"));
                 orders.add(order);
             }
             System.out.println("Truy vấn thành công");
@@ -153,9 +153,9 @@ public class order_DAO implements DAO<order_DTO> {
                 order_DTO order = new order_DTO();
                 order.setMadon(rs.getString("madon"));
                 order.setMakh(rs.getString("makh"));
+                order.setSdt_nguoidat(rs.getString("sdt_nguoidat"));
                 order.setManv(rs.getString("manv"));
-                order.setMasonha(rs.getString("masonha"));
-                order.setDuong(rs.getString("duong"));
+                order.setDiachicuthe(rs.getString("diachicuthe"));
                 order.setPhuong(rs.getString("phuong"));
                 order.setQuan(rs.getString("quan"));
                 order.setTinh(rs.getString("tinh"));
@@ -165,7 +165,7 @@ public class order_DAO implements DAO<order_DTO> {
                 order.setTongtien(rs.getDouble("tongtien"));
                 order.setGhichu(rs.getString("ghichu"));
                 order.setNguoinhan(rs.getString("nguoinhan"));
-                order.setSdt_nguoinhan(rs.getInt("sdt_nguoinhan"));
+                order.setSdt_nguoinhan(rs.getString("sdt_nguoinhan"));
                 orders.add(order);
             }
             System.out.println("Truy vấn thành công");
@@ -192,9 +192,9 @@ public class order_DAO implements DAO<order_DTO> {
             if (rs.next()) {
                 order.setMadon(rs.getString("madon"));
                 order.setMakh(rs.getString("makh"));
+                order.setSdt_nguoidat(rs.getString("sdt_nguoidat"));
                 order.setManv(rs.getString("manv"));
-                order.setMasonha(rs.getString("masonha"));
-                order.setDuong(rs.getString("duong"));
+                order.setDiachicuthe(rs.getString("diachicuthe"));
                 order.setPhuong(rs.getString("phuong"));
                 order.setQuan(rs.getString("quan"));
                 order.setTinh(rs.getString("tinh"));
@@ -204,7 +204,7 @@ public class order_DAO implements DAO<order_DTO> {
                 order.setTongtien(rs.getDouble("tongtien"));
                 order.setGhichu(rs.getString("ghichu"));
                 order.setNguoinhan(rs.getString("nguoinhan"));
-                order.setSdt_nguoinhan(rs.getInt("sdt_nguoinhan"));
+                order.setSdt_nguoinhan(rs.getString("sdt_nguoinhan"));
             }
             System.out.println("Truy vấn thành công");
         } catch (Exception e) {

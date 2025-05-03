@@ -55,7 +55,7 @@ public class order_BUS {
         }
     }
 
-    public static Boolean cancelOrder(DefaultTableModel model, JTable table) {
+    public static int cancelOrder(DefaultTableModel model, JTable table) {
         int selectedRow = table.getSelectedRow();
         if(selectedRow != -1) {
             String mahd = model.getValueAt(selectedRow, 0).toString();
@@ -65,19 +65,21 @@ public class order_BUS {
             ord = ordDAO.selectByID(ord);
             
             if(!ord.getTinhtrang().equals("Đã hủy")) {
-                int choice = JOptionPane.showConfirmDialog(null, 
-                "Bạn có chắc muốn xóa không?");
-                if(choice == 0) {
-                    ord.setTinhtrang("Đã hủy");
-                    ordDAO.update(ord);
-                    loadData(model);
-
-                    return true;
-                } else return null;
+                if(!ord.getTinhtrang().equals("Đã giao")) {
+                    int choice = JOptionPane.showConfirmDialog(null, 
+                    "Bạn có chắc muốn xóa không?");
+                    if(choice == 0) {
+                        ord.setTinhtrang("Đã hủy");
+                        ordDAO.update(ord);
+                        loadData(model);
+    
+                        return 0;
+                    } else return -1;
+                } else return 2;
             }
         }
 
-        return false;
+        return 1;
     }
 
     public static void findOrder(JTextField search, DefaultTableModel model) {
@@ -135,8 +137,7 @@ public class order_BUS {
             ord.setMadon("DH" + advance.calculateID(ords.size()));
             ord.setMakh(cus.getMakh());
             ord.setManv(em.getManv());
-            ord.setMasonha(em.getMasonha());
-            ord.setDuong(em.getDuong());
+            ord.setDiachicuthe(em.getMasonha() + ", " + em.getDuong());
             ord.setPhuong(em.getPhuong());
             ord.setQuan(em.getQuan());
             ord.setTinh(em.getTinh());
@@ -146,7 +147,7 @@ public class order_BUS {
             ord.setTongtien(Double.parseDouble(tongtien.getText()));
             ord.setGhichu(null);
             ord.setNguoinhan(null);
-            ord.setSdt_nguoinhan(0);
+            ord.setSdt_nguoinhan(null);
 
             ordDAO.add(ord);
 
@@ -431,7 +432,7 @@ public class order_BUS {
         manv.setText(em.getManv());
         tennv.setText(em.getTennv());
 
-        diachi.setText(ord.getMasonha() + ", " + ord.getDuong() + ", " + ord.getPhuong()
+        diachi.setText(ord.getDiachicuthe() + ", " + ord.getPhuong()
         + ", " + ord.getQuan() + ", " + ord.getTinh());
 
         ngaydat.setText(ord.getNgaydat());
@@ -453,7 +454,7 @@ public class order_BUS {
         if(ord.getNguoinhan() != null && !ord.getNguoinhan().isEmpty()) nguoinhan.setText(ord.getNguoinhan());
         else nguoinhan.setText("Không có");
 
-        if(ord.getSdt_nguoinhan() == 0) sdt_nguoinhan.setText("" + ord.getSdt_nguoinhan());
+        if(ord.getSdt_nguoinhan() != null) sdt_nguoinhan.setText(ord.getSdt_nguoinhan());
         else sdt_nguoinhan.setText("Không có");
 
         Boolean flag = false;
@@ -589,7 +590,6 @@ public class order_BUS {
                         cus.setMakh(ord.getMakh());
                         cus = new customer_DAO().selectByID(cus);
 
-
                         //bồi thường cho khách (10%)
                         double diem = od.getThanhtien() * 10 / 100;
                         cus.setDiemKM(cus.getDiemKM() + (int) Math.round(diem));
@@ -597,11 +597,11 @@ public class order_BUS {
                         cusDAO.update(cus);
                     
                         return true;
-                    } else return null;
-                }
+                    }
+                } else return false;
             }
         }
 
-        return false;
+        return null;
     }
 }

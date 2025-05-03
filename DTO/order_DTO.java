@@ -3,10 +3,10 @@ package DTO;
 public class order_DTO {
     private String madon;
     private String makh;
+    private String sdt_nguoidat;
     private String manv;
 
-    private String masonha;
-    private String duong;
+    private String diachicuthe;
     private String phuong;
     private String quan;
     private String tinh;
@@ -18,19 +18,19 @@ public class order_DTO {
 
     private String ghichu;
     private String nguoinhan;
-    private int sdt_nguoinhan;
+    private String sdt_nguoinhan;
     
     public order_DTO() {
     }
 
-    public order_DTO(String madon, String makh, String manv, String masonha, String duong, String phuong, String quan,
-            String tinh, String ngaydat, String pttt, double tongtien, String tinhtrang, String ghichu, String nguoinhan,
-            int sdt_nguoinhan) {
+    public order_DTO(String madon, String makh, String sdt_nguoidat, String manv, String diachicuthe, String phuong,
+            String quan, String tinh, String ngaydat, String pttt, double tongtien, String tinhtrang, String ghichu,
+            String nguoinhan, String sdt_nguoinhan) {
         this.madon = madon;
         this.makh = makh;
+        this.sdt_nguoidat = sdt_nguoidat;
         this.manv = manv;
-        this.masonha = masonha;
-        this.duong = duong;
+        this.diachicuthe = diachicuthe;
         this.phuong = phuong;
         this.quan = quan;
         this.tinh = tinh;
@@ -59,6 +59,14 @@ public class order_DTO {
         this.makh = makh;
     }
 
+    public String getSdt_nguoidat() {
+        return sdt_nguoidat;
+    }
+
+    public void setSdt_nguoidat(String sdt_nguoidat) {
+        this.sdt_nguoidat = sdt_nguoidat;
+    }
+
     public String getManv() {
         return manv;
     }
@@ -67,20 +75,12 @@ public class order_DTO {
         this.manv = manv;
     }
 
-    public String getMasonha() {
-        return masonha;
+    public String getDiachicuthe() {
+        return diachicuthe;
     }
 
-    public void setMasonha(String masonha) {
-        this.masonha = masonha;
-    }
-
-    public String getDuong() {
-        return duong;
-    }
-
-    public void setDuong(String duong) {
-        this.duong = duong;
+    public void setDiachicuthe(String diachicuthe) {
+        this.diachicuthe = diachicuthe;
     }
 
     public String getPhuong() {
@@ -155,13 +155,15 @@ public class order_DTO {
         this.nguoinhan = nguoinhan;
     }
 
-    public int getSdt_nguoinhan() {
+    public String getSdt_nguoinhan() {
         return sdt_nguoinhan;
     }
 
-    public void setSdt_nguoinhan(int sdt_nguoinhan) {
+    public void setSdt_nguoinhan(String sdt_nguoinhan) {
         this.sdt_nguoinhan = sdt_nguoinhan;
     }
+
+    
 
     
 }

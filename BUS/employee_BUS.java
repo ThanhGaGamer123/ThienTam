@@ -87,7 +87,7 @@ public class employee_BUS {
 
     public static void loadMap(DefaultCategoryDataset dataset, JComboBox loai,
     JTextField ngaybatdau, JTextField ngayketthuc, employee_DTO em) {
-        String ngaybd = "-1", ngaykt = "-1"; 
+        String ngaybd = "-1", ngaykt = "-1";
         String thangbatdau = "-1", thangketthuc = "-1";
         String nambatdau = "-1", namketthuc = "-1";
         

@@ -70,9 +70,9 @@ public class import_BUS {
 
                                 workbook.close();
                                 path.setText("");
-                                return 0;
                             }
 
+                            return 0;
                         } catch (Exception e) {
                             e.printStackTrace();
                             return 4;

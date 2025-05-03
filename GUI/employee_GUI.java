@@ -905,9 +905,14 @@ public class employee_GUI extends JFrame {
         xoaSell.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!order_BUS.cancelOrder(model, table)) {
+                int ketQua = order_BUS.cancelOrder(model, table);
+                if(ketQua == 1) {
                     JOptionPane.showMessageDialog(null, 
                     "Đơn hàng này đã hủy.");
+                }
+                if(ketQua == 2) {
+                    JOptionPane.showMessageDialog(null, 
+                    "Đơn hàng này đã giao.");
                 }
             }
         });

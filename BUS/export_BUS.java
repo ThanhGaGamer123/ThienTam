@@ -106,18 +106,17 @@ public class export_BUS {
                                 row.createCell(0).setCellValue("Mã đơn hàng");
                                 row.createCell(1).setCellValue("Mã khách hàng");
                                 row.createCell(2).setCellValue("Mã nhân viên");
-                                row.createCell(3).setCellValue("Mã số nhà");
-                                row.createCell(4).setCellValue("Đường");
-                                row.createCell(5).setCellValue("Phường");
-                                row.createCell(6).setCellValue("Quận");
-                                row.createCell(7).setCellValue("Tỉnh");
-                                row.createCell(8).setCellValue("Thời gian đặt");
-                                row.createCell(9).setCellValue("Phương thức thanh toán");
-                                row.createCell(10).setCellValue("Tình trạng");
-                                row.createCell(11).setCellValue("Tổng tiền");
+                                row.createCell(3).setCellValue("Địa chỉ nhà");
+                                row.createCell(4).setCellValue("Phường");
+                                row.createCell(5).setCellValue("Quận");
+                                row.createCell(6).setCellValue("Tỉnh");
+                                row.createCell(7).setCellValue("Thời gian đặt");
+                                row.createCell(8).setCellValue("Phương thức thanh toán");
+                                row.createCell(9).setCellValue("Tình trạng");
+                                row.createCell(10).setCellValue("Tổng tiền");
                                 row.createCell(11).setCellValue("Ghi chú");
-                                row.createCell(11).setCellValue("Người nhận");
-                                row.createCell(11).setCellValue("Số điện thoại người nhận");
+                                row.createCell(12).setCellValue("Người nhận");
+                                row.createCell(13).setCellValue("Số điện thoại người nhận");
 
                                 //lưu dữ liệu thành từng dòng
                                 ArrayList<order_DTO> ords = new order_DAO().selectAll();
@@ -127,18 +126,17 @@ public class export_BUS {
                                     row.createCell(0).setCellValue(ord.getMadon());
                                     row.createCell(1).setCellValue(ord.getMakh());
                                     row.createCell(2).setCellValue(ord.getManv());
-                                    row.createCell(3).setCellValue(ord.getMasonha());
-                                    row.createCell(4).setCellValue(ord.getDuong());
-                                    row.createCell(5).setCellValue(ord.getPhuong());
-                                    row.createCell(6).setCellValue(ord.getQuan());
-                                    row.createCell(7).setCellValue(ord.getTinh());
-                                    row.createCell(8).setCellValue(ord.getNgaydat());
-                                    row.createCell(9).setCellValue(ord.getPttt());
-                                    row.createCell(10).setCellValue(ord.getTinhtrang());
-                                    row.createCell(11).setCellValue(ord.getTongtien());
+                                    row.createCell(3).setCellValue(ord.getDiachicuthe());
+                                    row.createCell(4).setCellValue(ord.getPhuong());
+                                    row.createCell(5).setCellValue(ord.getQuan());
+                                    row.createCell(6).setCellValue(ord.getTinh());
+                                    row.createCell(7).setCellValue(ord.getNgaydat());
+                                    row.createCell(8).setCellValue(ord.getPttt());
+                                    row.createCell(9).setCellValue(ord.getTinhtrang());
+                                    row.createCell(10).setCellValue(ord.getTongtien());
                                     row.createCell(11).setCellValue(ord.getGhichu());
-                                    row.createCell(11).setCellValue(ord.getNguoinhan());
-                                    row.createCell(11).setCellValue(ord.getSdt_nguoinhan());
+                                    row.createCell(12).setCellValue(ord.getNguoinhan());
+                                    row.createCell(13).setCellValue(ord.getSdt_nguoinhan());
                                     i++;
                                 }
                             }
@@ -264,7 +262,7 @@ public class export_BUS {
                                 document.close();   
                             }
                             else if(data.getSelectedIndex() == 1) {
-                                Document document = new Document(pdf, PageSize.A2);
+                                Document document = new Document(pdf, PageSize.A3);
                                 document.setLeftMargin(10);
                                 document.setRightMargin(10);
                                 
@@ -279,13 +277,12 @@ public class export_BUS {
                                 document.add(new Paragraph("Thời gian: " + advance.currentTime())
                                 .setFont(font).setFontSize(12));
 
-                                Table table = new Table(15);
+                                Table table = new Table(11);
                                 table.setFont(font2).setFontSize(12);
 
                                 //tiêu đề
                                 String[] headers = {
-                                    "Mã đơn hàng", "Mã khách hàng", "Mã nhân viên", "Mã số nhà", 
-                                    "Đường", "Phường", "Quận", "Tỉnh", 
+                                    "Mã đơn hàng", "Mã khách hàng", "Mã nhân viên", "Địa chỉ",
                                     "Thời gian đặt", "Phương thức thanh toán", "Tình trạng", 
                                     "Tổng tiền", "Ghi chú", "Người nhận", "Số điện thoại người nhận"
                                 };
@@ -307,18 +304,15 @@ public class export_BUS {
                                     table.addCell(new Paragraph(ord.getMadon()));
                                     table.addCell(new Paragraph(ord.getMakh() == null ? "Không có" : ord.getMakh()));
                                     table.addCell(new Paragraph(ord.getManv()));
-                                    table.addCell(new Paragraph(ord.getMasonha()));
-                                    table.addCell(new Paragraph(ord.getDuong()));
-                                    table.addCell(new Paragraph(ord.getPhuong()));
-                                    table.addCell(new Paragraph(ord.getQuan()));
-                                    table.addCell(new Paragraph(ord.getTinh()));
+                                    table.addCell(new Paragraph(ord.getDiachicuthe() + ", " + ord.getPhuong()
+                                    + ", " + ord.getQuan() + ", " + ord.getTinh()));
                                     table.addCell(new Paragraph(ord.getNgaydat()));
                                     table.addCell(new Paragraph(ord.getPttt()));
                                     table.addCell(new Paragraph(ord.getTinhtrang()));
                                     table.addCell(new Paragraph(String.valueOf(ord.getTongtien())));
                                     table.addCell(new Paragraph(ord.getGhichu() == null ? "Không có" : ord.getGhichu()));
                                     table.addCell(new Paragraph(ord.getNguoinhan() == null ? "Không có" : ord.getNguoinhan()));
-                                    table.addCell(new Paragraph(String.valueOf(ord.getSdt_nguoinhan())));
+                                    table.addCell(new Paragraph(ord.getSdt_nguoinhan() == null ? "Không có" : ord.getSdt_nguoinhan()));
                                 }
                                 
                                 document.add(table);
