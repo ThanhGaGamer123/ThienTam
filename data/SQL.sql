@@ -58,11 +58,12 @@ N'Mã Lò', N'Bình Trị Đông A', N'Bình Tân', N'TPHCM', 9999, '123', 1);
 select * from KhachHang where tinhtrang = 'True'
 
 CREATE TABLE GioHang (
-    makh VARCHAR(10) PRIMARY KEY,
-    mathuoc VARCHAR(10),
-    soluong INT,
-    thanhtien DECIMAL,
-    dongia DECIMAL,
+    MaKH VARCHAR(10) NOT NULL,
+    MaThuoc VARCHAR(10) NOT NULL,
+    SoLuong INT NOT NULL,
+    ThanhTien DECIMAL NOT NULL,
+    DonGia DECIMAL NOT NULL,
+    PRIMARY KEY (MaKH, MaThuoc)
 );
 
 CREATE TABLE ChiTietKM (
@@ -93,11 +94,11 @@ N'Admin.', 99999999, 1);
 select * from ChuongTrinhKhuyenMai where tinhtrang = 1
 
 CREATE TABLE DonHang (
-    madon VARCHAR(10) PRIMARY KEY,          
-    makh VARCHAR(10),             
+    madon VARCHAR(10) PRIMARY KEY,         
+    makh VARCHAR(10),     
+	sdt_nguoidat VARCHAR(11),
     manv VARCHAR(10),   
-	masonha NVARCHAR(20),
-	duong NVARCHAR(50),
+	diachicuthe NVARCHAR(100),
 	phuong NVARCHAR(20),
 	quan NVARCHAR(20),
 	tinh NVARCHAR(20),                   
@@ -107,16 +108,13 @@ CREATE TABLE DonHang (
     tongtien DECIMAL,
 	ghichu NVARCHAR(1000),
 	nguoinhan NVARCHAR(100),
-	sdt_nguoinhan INT,
+	sdt_nguoinhan VARCHAR(11),
 );
-
-select * from DonHang where madon like N'%DH0001%' and makh like N'%KH0001%' 
-and manv like N'%NV0001%' and pttt like N'%Trả bằng tiền mặt%' and tinhtrang like N'%Đang xử lý%'
 
 CREATE TABLE ChiTietDonHang (
     mactdh VARCHAR(10) PRIMARY KEY,
 	donvi NVARCHAR(10),
-    sl INT,                   
+    sl INT,     
     thanhtien DECIMAL,      
     madon VARCHAR(10),             
     dongia DECIMAL,         
@@ -192,7 +190,8 @@ ALTER TABLE HoaDonNhap ADD CONSTRAINT FK_HDN_NCC FOREIGN KEY (mancc) REFERENCES 
 ALTER TABLE ChiTietHoaDonNhap ADD CONSTRAINT FK_CTHDN_HDN FOREIGN KEY (mahdnhap) REFERENCES HoaDonNhap(mahdnhap); 
 ALTER TABLE ChiTietHoaDonNhap ADD CONSTRAINT FK_CTHDN_Thuoc FOREIGN KEY (mathuoc) REFERENCES Thuoc(mathuoc);
 ALTER TABLE Thuoc ADD CONSTRAINT FK_Thuoc_Kho FOREIGN KEY (maton) REFERENCES Kho(maton);
-ALTER TABLE GioHang ADD CONSTRAINT FK_GioHang_KhachHang FOREIGN KEY (maKH) REFERENCES KhachHang(maKH);
+ALTER TABLE GioHang ADD CONSTRAINT FK_GioHang_KhachHang FOREIGN KEY (MaKH) REFERENCES KhachHang(maKH);
+ALTER TABLE GioHang ADD CONSTRAINT FK_GioHang_Thuoc FOREIGN KEY (MaThuoc) REFERENCES Thuoc(mathuoc);
 
 delete from ChiTietDonHang
 delete from ChiTietKM
