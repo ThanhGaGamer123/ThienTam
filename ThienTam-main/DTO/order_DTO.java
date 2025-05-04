@@ -7,15 +7,14 @@ public class order_DTO {
     private String manv;
 
     private String diachicuthe;
-
     private String phuong;
     private String quan;
     private String tinh;
 
     private String ngaydat;
     private String pttt;
-    private String tinhtrang;
     private double tongtien;
+    private String tinhtrang;
 
     private String ghichu;
     private String nguoinhan;

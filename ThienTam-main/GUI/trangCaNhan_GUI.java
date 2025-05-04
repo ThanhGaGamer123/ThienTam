@@ -258,7 +258,7 @@ public class trangCaNhan_GUI extends JFrame {
         line2.setBackground(linen);
         JLabel sdtkh = new JLabel("SĐT người dùng:");
         sdtkh.setPreferredSize(new Dimension(120, 30));
-        String sdtkhachdangsd = "+84 " + khachCurrent.getSdt();
+        String sdtkhachdangsd = khachCurrent.getSdt();
         JTextField fillsdtkh = new JTextField(sdtkhachdangsd);
         fillsdtkh.setPreferredSize(new Dimension(300, 30));
         fillsdtkh.setFont(new Font("Arial", Font.PLAIN, 18));

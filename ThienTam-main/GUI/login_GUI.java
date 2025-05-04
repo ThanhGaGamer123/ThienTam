@@ -149,8 +149,8 @@ public class login_GUI extends JFrame {
                 String username = user_field.getText();
                 String password = String.valueOf(pass_field.getPassword());
 
-                boolean isEmployee = login_BUS.checkLogin(username, password, user_field, pass_field);
-                if (!isEmployee) {
+           //     boolean isEmployee = login_BUS.checkLogin(username, password, user_field, pass_field);
+             //   if (!isEmployee) {
                     boolean isCustomer = login_BUS.checkLoginKH(username, password, user_field, pass_field);
                     if (!isCustomer) {
                         // Nếu cả 2 đều sai thì mới hiện thông báo ở đây
@@ -161,9 +161,9 @@ public class login_GUI extends JFrame {
                     } else {
                         dispose(); // login thành công với khách hàng
                     }
-                } else {
+             //   } else {
                     dispose(); // login thành công với nhân viên
-                }
+           //     }
             }
         });
 

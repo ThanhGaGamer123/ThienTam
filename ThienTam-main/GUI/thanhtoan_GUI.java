@@ -199,7 +199,7 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
 
         sdtNguoiDat = new JTextField();
         sdtNguoiDat.setBorder(BorderFactory.createTitledBorder("SDT người đặt"));
-        String tempsdtsdt = "+84 " + String.valueOf(khachDangNhap.getSdt());
+        String tempsdtsdt = String.valueOf(khachDangNhap.getSdt());
         sdtNguoiDat.setText(tempsdtsdt);
 
         panelNguoiDat.add(tenNguoiDat);
@@ -224,7 +224,7 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         sdtNguoiNhan = new JTextField();
         sdtNguoiNhan.setBorder(BorderFactory.createTitledBorder("SDT người nhận"));
 
-        String sdtnguoinhan = "0" + String.valueOf(khachDangNhap.getSdt());
+        String sdtnguoinhan = String.valueOf(khachDangNhap.getSdt());
         sdtNguoiNhan.setText(sdtnguoinhan);
 
         panelNguoiNhan.add(tenNguoiNhan);
