@@ -1,11 +1,11 @@
 package BUS;
 
+import Arr_xt.customer_DTOArr;
 import DAO.employee_DAO;
 import DTO.customer_DTO;
 import DTO.employee_DTO;
 import GUI.customer_GUI;
 import GUI.employee_GUI;
-import customer.customer_DTOArr;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;

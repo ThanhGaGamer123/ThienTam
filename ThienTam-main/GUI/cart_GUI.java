@@ -1,28 +1,26 @@
 package GUI;
 
+import DAO.cartDAO;
+import DAO.medicineDAO;
 import DTO.cart_DTO;
 import DTO.customer_DTO;
 import DTO.medicine_DTO;
 import DTO.sanphamchonmua_DTO;
-import cart.cartArr;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.text.NumberFormat;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-
 import javax.swing.*;
 
-import DAO.cartDAO;
-import DAO.medicineDAO;
-import medicine.medicineArr;
+import Arr_xt.cartArr;
+import Arr_xt.medicineArr;
 
 public class cart_GUI extends JFrame {
     private JPanel header, tail, body, giua;
@@ -53,7 +51,7 @@ public class cart_GUI extends JFrame {
         this.khachCurrent = khachCurrent;
         this.sanpham = new medicineArr();
         this.giohang = new cartArr();
-        giohang.readCartDatabase(giohang.getA(), khachCurrent.getMakh());
+        giohang.readCartDatabase(khachCurrent.getMakh());
 
         customer_DTO khachDangnhap = getKhachHangDangNhap();
 
@@ -283,6 +281,8 @@ public class cart_GUI extends JFrame {
     }
 
     private void showSP_incart() {
+        // refreshCart(khachCurrent.getMakh());
+
         giua.removeAll(); // Xóa tất cả các thành phần hiện có trong panel giua
         checkboxes.clear(); // Xóa danh sách checkboxes đã chọn
         ArrayList<cart_DTO> danhsachSPtronggio = giohang.getA(); // Lấy danh sách sản phẩm từ giỏ hàng
@@ -299,6 +299,7 @@ public class cart_GUI extends JFrame {
 
         // Chỉ hiển thị nút "Chọn tất cả" nếu giỏ hàng không rỗng
         if (!danhsachSPtronggio.isEmpty()) {
+            // showSP_incart();
             JPanel nutChonTatCa = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 1));
             JButton select_all_btn = new JButton("Chọn tất cả");
             select_all_btn.setBackground(hong);
@@ -415,7 +416,7 @@ public class cart_GUI extends JFrame {
                                 cartDAO dao = new cartDAO();
                                 dao.capNhatSoLuong(khachCurrent.getMakh(), c.getMathuoc(), newSL);
 
-                                giohang.readCartDatabase(giohang.getA(), khachCurrent.getMakh());
+                                giohang.readCartDatabase(khachCurrent.getMakh());
                                 updateTongTien();
                             }
                         } catch (NumberFormatException ex) {
@@ -466,9 +467,14 @@ public class cart_GUI extends JFrame {
                         cartDAO dao = new cartDAO();
                         dao.xoaSanPhamTrongGio(khachCurrent.getMakh(), c.getMathuoc());
                         selectedProducts.removeIf(product -> product.getMathuoc().equals(c.getMathuoc()));
-                        giohang.readCartDatabase(giohang.getA(), khachCurrent.getMakh());
+                        giohang.readCartDatabase(khachCurrent.getMakh());
+                        if (giohang.getA().isEmpty()) {
+                            System.out.println("Giỏ hàng đã trống.");
+                        }
+
                         showSP_incart(); // Refresh giao diện
                         updateTongTien();
+                        refreshCart(khachCurrent.getMakh());
                     }
                 });
 
@@ -532,6 +538,11 @@ public class cart_GUI extends JFrame {
             giua.setPreferredSize(new Dimension(400, danhsachSPtronggio.size() * 90));
             giua.revalidate(); // Cập nhật lại giao diện
             giua.repaint();
+        } else {
+            JLabel emptyCartLabel = new JLabel("Giỏ hàng của bạn đang trống.", SwingConstants.CENTER);
+            emptyCartLabel.setFont(new Font("Bookman", Font.ITALIC, 16));
+            emptyCartLabel.setForeground(Color.GRAY);
+            giua.add(emptyCartLabel);
         }
     }
 
@@ -623,6 +634,9 @@ public class cart_GUI extends JFrame {
         sosp.setText(Integer.toString(sumsp));
 
     }
-    
 
+    public void refreshCart(String makh) {
+        giohang.readCartDatabase(makh);
+        showSP_incart();
+    }
 }

@@ -1,4 +1,4 @@
-package medicine;
+package Arr_xt;
 
 import DAO.medicineDAO;
 import DTO.medicine_DTO;

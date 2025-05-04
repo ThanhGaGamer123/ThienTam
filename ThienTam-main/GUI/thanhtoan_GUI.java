@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+import Arr_xt.medicineArr;
+
 import java.awt.event.MouseEvent;
 
 import DAO.orderDAO;
@@ -21,8 +23,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
 import java.text.NumberFormat;
 import java.util.Locale;
-import medicine.medicineArr;
-import order_details.order_details;
 
 public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListener {
 
@@ -912,16 +912,13 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
     }
 
     public void xacNhanThanhToan() {
-       
+
         String madon = taoDonHang();
 
         if (madon != null) {
-          
 
-           
             updateSummary();
 
-           
             selectedProducts.clear();
             JOptionPane.showMessageDialog(null, "Đặt hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } else {

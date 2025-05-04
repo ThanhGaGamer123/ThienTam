@@ -1,4 +1,4 @@
-package cart;
+package Arr_xt;
 
 import DTO.cart_DTO;
 import connection.MyConnection;
@@ -20,18 +20,17 @@ public class cartArr {
         a = c;
     }
 
-    public void readCartDatabase(ArrayList<cart_DTO> cartList, String makh) {
+    public void readCartDatabase(String makh) {
         try (Connection con = MyConnection.createConnection();
                 PreparedStatement pst = con.prepareStatement("SELECT * FROM GioHang WHERE MaKH = ?")) {
 
-
             pst.setString(1, makh);
-
             ResultSet rs = pst.executeQuery();
 
             System.out.println("Kết nối SQL Server thành công với bảng GioHang!");
 
-            cartList.clear();
+            // Clear list before loading
+            a.clear();
 
             while (rs.next()) {
                 cart_DTO c = new cart_DTO(
@@ -40,7 +39,7 @@ public class cartArr {
                         rs.getInt("SoLuong"),
                         rs.getInt("ThanhTien"),
                         rs.getInt("DonGia"));
-                cartList.add(c);
+                a.add(c);
             }
 
             System.out.println("Đã tải giỏ hàng cho khách hàng: " + makh);

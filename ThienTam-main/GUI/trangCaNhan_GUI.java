@@ -5,8 +5,6 @@ import DAO.orderDetailsDAO;
 import DTO.customer_DTO;
 import DTO.order_DTO;
 import DTO.order_details_DTO;
-import order_details.order_details;
-import order_details.order_detailsArr;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,6 +14,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import Arr_xt.order_detailsArr;
 
 public class trangCaNhan_GUI extends JFrame {
     private JPanel header, tail, body, tab1_left, tab1_right, tab1_center, tab1_tren, tab1_duoi, tab2_left, tab2_right,

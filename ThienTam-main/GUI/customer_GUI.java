@@ -2,8 +2,6 @@ package GUI;
 
 import DTO.customer_DTO;
 import DTO.medicine_DTO;
-import cart.cartArr;
-import customer.customer_DTOArr;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -15,7 +13,9 @@ import java.util.Comparator;
 import java.util.Locale;
 import javax.swing.*;
 
-import medicine.medicineArr;
+import Arr_xt.cartArr;
+import Arr_xt.customer_DTOArr;
+import Arr_xt.medicineArr;
 
 public class customer_GUI extends JFrame implements MouseListener, ActionListener {
 
@@ -50,7 +50,7 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
         this.sanpham = new medicineArr();
 
         this.giohang = new cartArr();
-        giohang.readCartDatabase(giohang.getA(), khachCurrent.getMakh());
+        giohang.readCartDatabase(khachCurrent.getMakh());
 
         sanpham.readDatabase();
         ArrayList<medicine_DTO> ds = sanpham.getSp();
@@ -524,7 +524,7 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
             double price = product.getGiaban().get(0);
 
             String donvi = product.getDonvi().get(0);
-            
+
             String formattedPrice = nf.format(price) + " / " + donvi;
 
             System.out.println(formattedPrice);
