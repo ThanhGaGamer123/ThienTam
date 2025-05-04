@@ -65,6 +65,54 @@ public class promotion_DAO implements DAO<promotion_DTO> {
         return 0;
     }
 
+    public int update1(promotion_DTO t) {
+        Connection sql = data.SQL.createConnection();
+
+        String command = "UPDATE ChuongTrinhKhuyenMai SET tenkm = ?, ngaybatdau = ?, ngayketthuc = ?, giam = ?, noidung = ?, diem = ?, tinhtrang = ? WHERE makm = ?";
+
+        try (PreparedStatement pst = sql.prepareStatement(command)) {
+            pst.setString(1, t.getTenkm());
+            pst.setString(2, t.getNgaybatdau());
+            pst.setString(3, t.getNgayketthuc());
+            pst.setInt(4, t.getGiam());
+            pst.setString(5, t.getNoidung());
+            pst.setInt(6, t.getDiem());
+            pst.setBoolean(7, false);
+            pst.setString(8, t.getMakm());
+
+            int ketQua = pst.executeUpdate();
+            System.out.println("Bạn đã thực thi: " + command);
+            System.out.println("Có " + ketQua + " dòng bị thay đổi");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
+        }
+
+        return 0;
+    }
+
+    public String autoUpdateMaKM() {
+        String maKM = null;
+        Connection con = data.SQL.createConnection();
+        try (PreparedStatement ps = con
+                .prepareStatement("select top 1 makm from ChuongTrinhKhuyenMai order by makm desc")) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                maKM = rs.getString("makm");
+                int newMaKM = Integer.parseInt(maKM.substring(2)) + 1;
+                maKM = String.format("KM%04d", newMaKM);
+            } else {
+                maKM = "KM0001";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(con);
+        }
+        return maKM;
+    }
+
     @Override
     public int delete(promotion_DTO t) {
         Connection sql = data.SQL.createConnection();

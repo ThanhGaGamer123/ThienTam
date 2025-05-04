@@ -2,6 +2,8 @@ package BUS;
 
 import java.util.ArrayList;
 
+import javax.swing.table.DefaultTableModel;
+
 import DAO.medicine_DAO;
 import DAO.orderSupply_details_DAO;
 import DAO.storage_DAO;
@@ -146,6 +148,26 @@ public class storage_BUS {
         ArrayList<orderSupply_details_DTO> osds = new orderSupply_details_DAO().selectAll();
         for (orderSupply_details_DTO osd : osds) {
             loadQuantity(osd);
+        }
+    }
+
+    //Tuấn
+    public static void loadDataTable(DefaultTableModel table) {
+        storage_DAO dao = new storage_DAO();
+        medicine_DAO meddao = new medicine_DAO();
+        ArrayList<storage_DTO> storagelist = new ArrayList<>();
+        ArrayList<medicine_DTO> medlist = new ArrayList<>();
+        storagelist = dao.selectAll();
+        medlist = meddao.selectAll();
+        for (storage_DTO sto : storagelist) {
+            ArrayList<Integer> sl = sto.getSlton();
+            String tenSP = null;
+            for (medicine_DTO med : medlist) {
+                if (med.getMaton().equals(sto.getMaton())) {
+                    tenSP = med.getTenthuoc();
+                }
+            }
+            table.addRow(new Object[] { sto.getMaton(), tenSP, sl.get(0), sl.get(1), sl.get(2) });
         }
     }
 }

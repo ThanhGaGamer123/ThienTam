@@ -146,4 +146,35 @@ public class promotion_BUS {
             if(pro.getTinhtrang()) checkExpired(pro);
         }
     }
+
+    //Tuấn
+    public static String getLastID() {
+        promotion_DAO dao = new promotion_DAO();
+        String lastID = dao.autoUpdateMaKM();
+        return lastID;
+    }
+
+    public static void insert(promotion_DTO pro) {
+        promotion_DAO dao = new promotion_DAO();
+        dao.add(pro);
+    }
+
+    public static void edit(promotion_DTO pro) {
+        promotion_DAO dao = new promotion_DAO();
+        dao.update(pro);
+    }
+
+    public static void delete(promotion_DTO pro) {
+        promotion_DAO dao = new promotion_DAO();
+        dao.update1(pro);
+    }
+
+    public static void loadTable(DefaultTableModel table) {
+        promotion_DAO dao = new promotion_DAO();
+        table.setRowCount(0);
+        for (promotion_DTO pro : dao.selectAll()) {
+            table.addRow(new Object[] { pro.getMakm(), pro.getTenkm(), pro.getNgaybatdau(), pro.getNgayketthuc(),
+                    pro.getGiam(), pro.getNoidung(), pro.getDiem(), pro.getTinhtrang() });
+        }
+    }
 }

@@ -73,6 +73,57 @@ public class customer_DAO implements DAO<customer_DTO> {
         return 0;
     }
 
+    public int update1(customer_DTO t) {
+        Connection sql = data.SQL.createConnection();
+
+        String command = "UPDATE KhachHang SET tenkh = ?, sdt = ?, email = ?, masonha = ?, duong = ?, phuong = ?, quan = ?, tinh = ?, diemkm = ?, passwordkh = ?, tinhtrang = ? WHERE makh = ?";
+
+        try (PreparedStatement pst = sql.prepareStatement(command)) {
+            pst.setString(1, t.getTenkh());
+            pst.setString(2, t.getSdt());
+            pst.setString(3, t.getEmail());
+            pst.setString(4, t.getMasonha());
+            pst.setString(5, t.getDuong());
+            pst.setString(6, t.getPhuong());
+            pst.setString(7, t.getQuan());
+            pst.setString(8, t.getTinh());
+            pst.setInt(9, t.getDiemKM());
+            pst.setString(10, t.getPassword());
+            pst.setBoolean(11, false);
+            pst.setString(12, t.getMakh());
+
+            int ketQua = pst.executeUpdate();
+            System.out.println("Bạn đã thực thi: " + command);
+            System.out.println("Có " + ketQua + " dòng bị thay đổi");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
+        }
+
+        return 0;
+    }
+
+    public String autoUpdateMaKH() {
+        String maKH = null;
+        Connection con = data.SQL.createConnection();
+        try (PreparedStatement ps = con.prepareStatement("select top 1 makh from KhachHang order by makh desc")) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                maKH = rs.getString("makh");
+                int newMaKH = Integer.parseInt(maKH.substring(2)) + 1;
+                maKH = String.format("KH%04d", newMaKH);
+            } else {
+                maKH = "KH0001";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(con);
+        }
+        return maKH;
+    }
+
     @Override
     public int delete(customer_DTO t) {
         Connection sql = data.SQL.createConnection();

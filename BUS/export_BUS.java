@@ -259,7 +259,7 @@ public class export_BUS {
                                 }
                                 
                                 document.add(table);
-                                document.close();   
+                                document.close();
                             }
                             else if(data.getSelectedIndex() == 1) {
                                 Document document = new Document(pdf, PageSize.A3);
@@ -316,7 +316,7 @@ public class export_BUS {
                                 }
                                 
                                 document.add(table);
-                                document.close();   
+                                document.close();
                             }
                             else if(data.getSelectedIndex() == 2) {
                                 Document document = new Document(pdf, PageSize.A4);

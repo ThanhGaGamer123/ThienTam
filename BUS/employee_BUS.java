@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import DAO.employee_DAO;
 import DAO.order_DAO;
 import DAO.store_DAO;
 import DTO.employee_DTO;
@@ -273,4 +275,55 @@ public class employee_BUS {
         ngaybatdau.setText("dd/MM/yyyy");
         ngayketthuc.setText("dd/MM/yyyy");
     }   
+
+    //Tuấn
+    public static String getLastID() {
+        employee_DAO dao = new employee_DAO();
+        String lastID = dao.autoUpdateMaNV();
+        return lastID;
+    }
+
+    public static void insert(employee_DTO nv) {
+        employee_DAO dao = new employee_DAO();
+        dao.add(nv);
+    }
+
+    public static void edit(employee_DTO nv) {
+        employee_DAO dao = new employee_DAO();
+        dao.update(nv);
+    }
+
+    public static void delete(employee_DTO nv) {
+        employee_DAO dao = new employee_DAO();
+        dao.update1(nv);
+    }
+
+    public static void loadTable(DefaultTableModel table) {
+        employee_DAO dao = new employee_DAO();
+        table.setRowCount(0);
+        for (employee_DTO nv : dao.selectAll()) {
+            String diaChi = nv.getMasonha() + "," + nv.getDuong() + "," + nv.getPhuong() + ","
+                    + nv.getQuan() + "," + nv.getTinh();
+
+            String nhathuoc = null;
+            String mant = nv.getManhathuoc();
+            ArrayList<store_DTO> ntlist = store_BUS.getAll();
+            for (store_DTO st : ntlist) {
+                String dc = st.getMasonha() + "," + st.getDuong() + "," + st.getPhuong() + "," + st.getQuan() + ","
+                        + st.getTinh();
+                if (mant.equals(st.getMant())) {
+                    nhathuoc = dc;
+                }
+            }
+
+            table.addRow(new Object[] { nv.getManv(), nv.getTennv(), nv.getChucvu(), nv.getGioitinh(), nv.getCccd(),
+                    nv.getSdt(),
+                    diaChi, nv.getUsername(), nv.getPassword(), nhathuoc, nv.getTinhtrang() });
+        }
+    }
+
+    public static ArrayList<employee_DTO> getAll() {
+        employee_DAO dao = new employee_DAO();
+        return dao.selectAll();
+    }
 }

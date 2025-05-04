@@ -67,6 +67,54 @@ public class supplier_DAO implements DAO<supplier_DTO> {
         return 0;
     }
 
+    public int update1(supplier_DTO t) {
+        Connection sql = data.SQL.createConnection();
+
+        String command = "UPDATE NhaCungCap SET tenncc = ?, sdt = ?, masonha = ?, duong = ?, phuong = ?, quan = ?, tinh = ?, tinhtrang = ? WHERE mancc = ?";
+
+        try (PreparedStatement pst = sql.prepareStatement(command)) {
+            pst.setString(1, t.getTenncc());
+            pst.setString(2, t.getSdt());
+            pst.setString(3, t.getMasonha());
+            pst.setString(4, t.getDuong());
+            pst.setString(5, t.getPhuong());
+            pst.setString(6, t.getQuan());
+            pst.setString(7, t.getTinh());
+            pst.setBoolean(8, false);
+            pst.setString(9, t.getMancc());
+
+            int ketQua = pst.executeUpdate();
+            System.out.println("Bạn đã thực thi: " + command);
+            System.out.println("Có " + ketQua + " dòng bị thay đổi");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
+        }
+
+        return 0;
+    }
+
+    public String autoUpdateMaNCC() {
+        String maNCC = null;
+        Connection con = data.SQL.createConnection();
+        try (PreparedStatement ps = con.prepareStatement("select top 1 mancc from NhaCungCap order by mancc desc")) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                maNCC = rs.getString("mancc");
+                int newMaNCC = Integer.parseInt(maNCC.substring(3)) + 1;
+                maNCC = String.format("NCC%04d", newMaNCC);
+            } else {
+                maNCC = "NCC0001";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(con);
+        }
+        return maNCC;
+    }
+
     @Override
     public int delete(supplier_DTO t) {
         Connection sql = data.SQL.createConnection();

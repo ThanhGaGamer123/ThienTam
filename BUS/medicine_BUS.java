@@ -765,4 +765,5 @@ public class medicine_BUS {
             giaban.setText("0.0");
         }
     }
+
 }

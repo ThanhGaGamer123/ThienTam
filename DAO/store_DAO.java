@@ -65,6 +65,53 @@ public class store_DAO implements DAO<store_DTO> {
         return 0;
     }
 
+    public int update1(store_DTO t) {
+        Connection sql = data.SQL.createConnection();
+
+        String command = "UPDATE NhaThuoc SET masonha = ?, duong = ?, phuong = ?, quan = ?, tinh = ?, manql = ?, tinhtrang = ? WHERE mant = ?";
+
+        try (PreparedStatement pst = sql.prepareStatement(command)) {
+            pst.setString(1, t.getMasonha());
+            pst.setString(2, t.getDuong());
+            pst.setString(3, t.getPhuong());
+            pst.setString(4, t.getQuan());
+            pst.setString(5, t.getTinh());
+            pst.setString(6, t.getManql());
+            pst.setBoolean(7, false);
+            pst.setString(8, t.getMant());
+
+            int ketQua = pst.executeUpdate();
+            System.out.println("Bạn đã thực thi: " + command);
+            System.out.println("Có " + ketQua + " dòng bị thay đổi");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
+        }
+
+        return 0;
+    }
+
+    public String autoUpdateMaNT() {
+        String maNT = null;
+        Connection con = data.SQL.createConnection();
+        try (PreparedStatement ps = con.prepareStatement("select top 1 mant from NhaThuoc order by mant desc")) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                maNT = rs.getString("mant");
+                int newMaNT = Integer.parseInt(maNT.substring(2)) + 1;
+                maNT = String.format("NT%04d", newMaNT);
+            } else {
+                maNT = "NT0001";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(con);
+        }
+        return maNT;
+    }
+
     @Override
     public int delete(store_DTO t) {
         Connection sql = data.SQL.createConnection();

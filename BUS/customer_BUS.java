@@ -126,4 +126,37 @@ public class customer_BUS {
         tinhtrang.setSelectedIndex(0);
         loadData(model_kh, true);
     }
+
+    //Tuấn
+    public static String getLastID() {
+        customer_DAO dao = new customer_DAO();
+        String lastID = dao.autoUpdateMaKH();
+        return lastID;
+    }
+
+    public static void loadTable(DefaultTableModel table) {
+        customer_DAO dao = new customer_DAO();
+        table.setRowCount(0);
+        for (customer_DTO kh : dao.selectAll()) {
+            String diaChi = kh.getMasonha() + "," + kh.getDuong() + "," + kh.getPhuong() + ","
+                    + kh.getQuan() + "," + kh.getTinh();
+            table.addRow(new Object[] { kh.getMakh(), kh.getTenkh(), kh.getSdt(), kh.getEmail(),
+                    diaChi, kh.getPassword(), kh.getDiemKM(), kh.getTinhtrang() });
+        }
+    }
+
+    public static void insert(customer_DTO kh) {
+        customer_DAO dao = new customer_DAO();
+        dao.add(kh);
+    }
+
+    public static void edit(customer_DTO kh) {
+        customer_DAO dao = new customer_DAO();
+        dao.update(kh);
+    }
+
+    public static void delete(customer_DTO kh) {
+        customer_DAO dao = new customer_DAO();
+        dao.update1(kh);
+    }
 }

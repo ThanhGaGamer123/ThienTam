@@ -33,7 +33,7 @@ CREATE TABLE NhanVien (
 	tinhtrang BIT
 );
 
-insert into NhanVien values ('NV0001', N'Nguyễn Văn A', N'quản lý', N'Nam', N'1231231234', 1231231234,
+insert into NhanVien values ('NV0001', N'Nguyễn Văn A', N'Quản lý', N'Nam', N'1231231234', 1231231234,
 N'267', N'Mã Lò', N'Bình Trị Đông A', N'Bình Tân', N'TPHCM', N'nv1', N'123', 'NT0001', 1);
 update NhaThuoc set manql = 'NV0001' where mant = 'NT0001';
 

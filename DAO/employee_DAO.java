@@ -79,6 +79,60 @@ public class employee_DAO implements DAO<employee_DTO> {
         return 0;
     }
 
+    public int update1(employee_DTO t) {
+        Connection sql = data.SQL.createConnection();
+
+        String command = "UPDATE NhanVien SET tennv = ?, chucvu = ?, gioitinh = ?, cccd = ?, sdt = ?, masonha = ?, duong = ?, phuong = ?, quan = ?, tinh = ?, username = ?, passwordnv = ?, manhathuoc = ?, tinhtrang = ? WHERE manv = ?";
+
+        try (PreparedStatement pst = sql.prepareStatement(command)) {
+            pst.setString(1, t.getTennv());
+            pst.setString(2, t.getChucvu());
+            pst.setString(3, t.getGioitinh());
+            pst.setString(4, t.getCccd());
+            pst.setString(5, t.getSdt());
+            pst.setString(6, t.getMasonha());
+            pst.setString(7, t.getDuong());
+            pst.setString(8, t.getPhuong());
+            pst.setString(9, t.getQuan());
+            pst.setString(10, t.getTinh());
+            pst.setString(11, t.getUsername());
+            pst.setString(12, t.getPassword());
+            pst.setString(13, t.getManhathuoc());
+            pst.setBoolean(14, false);
+            pst.setString(15, t.getManv());
+
+            int ketQua = pst.executeUpdate();
+            System.out.println("Bạn đã thực thi: " + command);
+            System.out.println("Có " + ketQua + " dòng bị thay đổi");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
+        }
+
+        return 0;
+    }
+
+    public String autoUpdateMaNV() {
+        String maNV = null;
+        Connection con = data.SQL.createConnection();
+        try (PreparedStatement ps = con.prepareStatement("select top 1 manv from NhanVien order by manv desc")) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                maNV = rs.getString("manv");
+                int newMaNV = Integer.parseInt(maNV.substring(2)) + 1;
+                maNV = String.format("NV%04d", newMaNV);
+            } else {
+                maNV = "NV0001";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(con);
+        }
+        return maNV;
+    }
+
     @Override
     public int delete(employee_DTO t) {
         Connection sql = data.SQL.createConnection();

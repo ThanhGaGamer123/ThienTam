@@ -143,45 +143,26 @@ public class login_GUI extends JFrame {
             }
         });
 
-        // login.addActionListener(new ActionListener() {
-        //     @Override
-        //     public void actionPerformed(ActionEvent e) {
-        //         String username = user_field.getText();
-        //         String password = String.valueOf(pass_field.getPassword());
-        //         if(login_BUS.checkLogin(username, password, user_field, pass_field)) {
-        //             JOptionPane.showMessageDialog(null, 
-        //             "Đăng nhập thành công!");
-        //             dispose();
-        //         } else {
-        //             JOptionPane.showMessageDialog(null, 
-        //             "Tài khoản hoặc mật khẩu không chính xác. Vui lòng nhập lại!");
-        //             user_field.requestFocus(true);
-        //             pass_field.setText("");
-        //         }
-        //     }
-        // });
-
+        //login merge
         login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String username = user_field.getText();
                 String password = String.valueOf(pass_field.getPassword());
-
-               boolean isEmployee = login_BUS.checkLogin(username, password, user_field, pass_field);
-               if (!isEmployee) {
-                    boolean isCustomer = login_BUS.checkLoginKH(username, password, user_field, pass_field);
-                    if (!isCustomer) {
-                        // Nếu cả 2 đều sai thì mới hiện thông báo ở đây
-                        JOptionPane.showMessageDialog(null,
-                                "Tài khoản hoặc mật khẩu không chính xác. Vui lòng nhập lại!");
-                        user_field.requestFocus(true);
-                        pass_field.setText("");
-                    } else {
-                        dispose(); // login thành công với khách hàng
-                    }
-               } else {
-                    dispose(); // login thành công với nhân viên
-               }
+                if (login_BUS.checkLogin(username, password, user_field, pass_field)) {
+                    dispose();
+                } else if (login_BUS.checkLogin1(username, password, user_field, pass_field)) {
+                    JOptionPane.showMessageDialog(null,
+                            "Đăng nhập thành công!");
+                    dispose();
+                } else if (login_BUS.checkLoginKH(username, password, user_field, pass_field)) {
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "Tài khoản hoặc mật khẩu không chính xác. Vui lòng nhập lại!");
+                    user_field.requestFocus(true);
+                    pass_field.setText("");
+                }
             }
         });
 
