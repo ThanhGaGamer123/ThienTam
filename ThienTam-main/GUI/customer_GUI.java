@@ -50,7 +50,7 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
         this.sanpham = new medicineArr();
 
         this.giohang = new cartArr();
-        giohang.readCartDatabase(khachCurrent.getMakh());
+        giohang.readDatabase(khachCurrent.getMakh());
 
         sanpham.readDatabase();
         ArrayList<medicine_DTO> ds = sanpham.getSp();

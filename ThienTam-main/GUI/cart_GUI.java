@@ -51,7 +51,7 @@ public class cart_GUI extends JFrame {
         this.khachCurrent = khachCurrent;
         this.sanpham = new medicineArr();
         this.giohang = new cartArr();
-        giohang.readCartDatabase(khachCurrent.getMakh());
+        giohang.readDatabase(khachCurrent.getMakh());
 
         customer_DTO khachDangnhap = getKhachHangDangNhap();
 
@@ -416,7 +416,7 @@ public class cart_GUI extends JFrame {
                                 cartDAO dao = new cartDAO();
                                 dao.capNhatSoLuong(khachCurrent.getMakh(), c.getMathuoc(), newSL);
 
-                                giohang.readCartDatabase(khachCurrent.getMakh());
+                                giohang.readDatabase(khachCurrent.getMakh());
                                 updateTongTien();
                             }
                         } catch (NumberFormatException ex) {
@@ -467,7 +467,7 @@ public class cart_GUI extends JFrame {
                         cartDAO dao = new cartDAO();
                         dao.xoaSanPhamTrongGio(khachCurrent.getMakh(), c.getMathuoc());
                         selectedProducts.removeIf(product -> product.getMathuoc().equals(c.getMathuoc()));
-                        giohang.readCartDatabase(khachCurrent.getMakh());
+                        giohang.readDatabase(khachCurrent.getMakh());
                         if (giohang.getA().isEmpty()) {
                             System.out.println("Giỏ hàng đã trống.");
                         }
@@ -636,7 +636,7 @@ public class cart_GUI extends JFrame {
     }
 
     public void refreshCart(String makh) {
-        giohang.readCartDatabase(makh);
+        giohang.readDatabase(makh);
         showSP_incart();
     }
 }
