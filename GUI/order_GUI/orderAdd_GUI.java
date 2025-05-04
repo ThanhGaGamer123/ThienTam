@@ -799,7 +799,7 @@ public class orderAdd_GUI extends JFrame {
         main.add(scroll_ds, gdc);
         gdc.gridheight = 1;
 
-        String[] columns_km = {"Mã KM", "Tên KM", "Giảm (%)", "Tình trạng"};
+        String[] columns_km = {"Mã KM", "Tên KM", "Giảm (%)", "Điểm", "Tình trạng"};
         DefaultTableModel modelKM = new DefaultTableModel(columns_km, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {

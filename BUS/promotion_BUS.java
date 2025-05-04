@@ -30,7 +30,8 @@ public class promotion_BUS {
                 statusImg = new JLabel(data.imagePath.resize_exitIcon);
             }
             if(pr.getTinhtrang())
-                model.addRow(new Object[]{pr.getMakm(), pr.getTenkm(), pr.getGiam(), statusImg});
+                model.addRow(new Object[]{pr.getMakm(), pr.getTenkm(), pr.getGiam(), 
+                pr.getDiem(), statusImg});
         }
     }
 
