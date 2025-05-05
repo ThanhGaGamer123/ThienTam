@@ -403,7 +403,7 @@ public class order_BUS {
 
     //order trong orderGUI
     public static void loadOrder(String madh, JTextField madon, JTextField makh,
-    JTextField tenkh, JTextField manv, JTextField tennv, JTextArea diachi, JTextField ngaydat,
+    JTextField tenkh, JTextField sdt, JTextField manv, JTextField tennv, JTextArea diachi, JTextField ngaydat,
     JComboBox tinhtrang, JTextField tongtien, JTextField pttt, JTextArea ghichu,
     JTextField nguoinhan, JTextField sdt_nguoinhan, DefaultTableModel model, JTextField makm,
     JTextField tenkm) {
@@ -423,6 +423,8 @@ public class order_BUS {
         else makh.setText("Không có");
         if(cus.getTenkh() != null && !cus.getTenkh().isEmpty()) tenkh.setText(cus.getTenkh());
         else tenkh.setText("Không có");
+        if(cus.getSdt() != null && !cus.getSdt().isEmpty()) sdt.setText(cus.getSdt());
+        else sdt.setText("Không có");
 
         employee_DTO em = new employee_DTO();
         em.setManv(ord.getManv());

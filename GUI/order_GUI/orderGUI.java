@@ -67,7 +67,7 @@ public class orderGUI extends JFrame {
         title_ds.setForeground(Color.BLACK);
         title_ds.setFont(new Font(null, Font.BOLD, 30));
         gdc.gridx = 0;
-        gdc.gridy = 10;
+        gdc.gridy = 11;
         gdc.gridwidth = 7;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.insets = new Insets(20, 0, 30, 0);
@@ -88,6 +88,8 @@ public class orderGUI extends JFrame {
         JTextField tf_mandon = new JTextField();
         tf_mandon.setForeground(Color.BLACK);
         tf_mandon.setFont(new Font(null, Font.PLAIN, 20));
+        tf_mandon.setEditable(false);
+        tf_mandon.setBackground(Color.white);
         gdc.gridx = 1;
         gdc.gridy = 1;
         gdc.gridwidth = 5;
@@ -112,6 +114,8 @@ public class orderGUI extends JFrame {
         JTextField tf_makh = new JTextField();
         tf_makh.setForeground(Color.BLACK);
         tf_makh.setFont(new Font(null, Font.PLAIN, 20));
+        tf_makh.setEditable(false);
+        tf_makh.setBackground(Color.white);
         gdc.gridx = 1;
         gdc.gridy = 2;
         gdc.gridwidth = 1;
@@ -136,6 +140,8 @@ public class orderGUI extends JFrame {
         JTextField tf_tenkh = new JTextField();
         tf_tenkh.setForeground(Color.BLACK);
         tf_tenkh.setFont(new Font(null, Font.PLAIN, 20));
+        tf_tenkh.setEditable(false);
+        tf_tenkh.setBackground(Color.white);
         gdc.gridx = 4;
         gdc.gridy = 2;
         gdc.gridwidth = 2;
@@ -145,11 +151,37 @@ public class orderGUI extends JFrame {
         gdc.insets = new Insets(0, 10, 30, 100);
         main.add(tf_tenkh, gdc);
 
+        JLabel sdt = new JLabel("Số điện thoại:");
+        sdt.setForeground(Color.BLACK);
+        sdt.setFont(new Font(null, Font.PLAIN, 20));
+        gdc.gridx = 0;
+        gdc.gridy = 3;
+        gdc.gridwidth = 1;
+        gdc.anchor = GridBagConstraints.EAST;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 0;
+        gdc.insets = new Insets(0, 100, 30, 0);
+        main.add(sdt, gdc);
+
+        JTextField tf_sdt = new JTextField();
+        tf_sdt.setForeground(Color.BLACK);
+        tf_sdt.setFont(new Font(null, Font.PLAIN, 20));
+        tf_sdt.setEditable(false);
+        tf_sdt.setBackground(Color.white);
+        gdc.gridx = 1;
+        gdc.gridy = 3;
+        gdc.gridwidth = 5;
+        gdc.anchor = GridBagConstraints.CENTER;
+        gdc.fill = GridBagConstraints.HORIZONTAL;
+        gdc.weightx = 1;
+        gdc.insets = new Insets(0, 10, 30, 100);
+        main.add(tf_sdt, gdc);
+
         JLabel manv = new JLabel("Mã nhân viên:");
         manv.setForeground(Color.BLACK);
         manv.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 3;
+        gdc.gridy = 4;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -160,8 +192,10 @@ public class orderGUI extends JFrame {
         JTextField tf_manv = new JTextField();
         tf_manv.setForeground(Color.BLACK);
         tf_manv.setFont(new Font(null, Font.PLAIN, 20));
+        tf_manv.setEditable(false);
+        tf_manv.setBackground(Color.white);
         gdc.gridx = 1;
-        gdc.gridy = 3;
+        gdc.gridy = 4;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -173,7 +207,7 @@ public class orderGUI extends JFrame {
         tennv.setForeground(Color.BLACK);
         tennv.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 3;
-        gdc.gridy = 3;
+        gdc.gridy = 4;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -184,8 +218,10 @@ public class orderGUI extends JFrame {
         JTextField tf_tennv = new JTextField();
         tf_tennv.setForeground(Color.BLACK);
         tf_tennv.setFont(new Font(null, Font.PLAIN, 20));
+        tf_tennv.setEditable(false);
+        tf_tennv.setBackground(Color.white);
         gdc.gridx = 4;
-        gdc.gridy = 3;
+        gdc.gridy = 4;
         gdc.gridwidth = 2;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -197,7 +233,7 @@ public class orderGUI extends JFrame {
         diachi.setForeground(Color.BLACK);
         diachi.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 4;
+        gdc.gridy = 5;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.NORTHWEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -210,13 +246,15 @@ public class orderGUI extends JFrame {
         ta_diachi.setFont(new Font(null, Font.PLAIN, 20));
         ta_diachi.setLineWrap(true);
         ta_diachi.setAutoscrolls(true);
+        ta_diachi.setEditable(false);
+        ta_diachi.setBackground(Color.white);
 
         JScrollPane diachi_scroll = new JScrollPane();
         diachi_scroll.setViewportView(ta_diachi);
         diachi_scroll.setPreferredSize(new Dimension(0, 100));
 
         gdc.gridx = 1;
-        gdc.gridy = 4;
+        gdc.gridy = 5;
         gdc.gridwidth = 5;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -228,7 +266,7 @@ public class orderGUI extends JFrame {
         ngaydat.setForeground(Color.BLACK);
         ngaydat.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 5;
+        gdc.gridy = 6;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -239,8 +277,10 @@ public class orderGUI extends JFrame {
         JTextField tf_ngaydat = new JTextField();
         tf_ngaydat.setForeground(Color.BLACK);
         tf_ngaydat.setFont(new Font(null, Font.PLAIN, 20));
+        tf_ngaydat.setEditable(false);
+        tf_ngaydat.setBackground(Color.white);
         gdc.gridx = 1;
-        gdc.gridy = 5;
+        gdc.gridy = 6;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -252,7 +292,7 @@ public class orderGUI extends JFrame {
         tinhtrang.setForeground(Color.BLACK);
         tinhtrang.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 3;
-        gdc.gridy = 5;
+        gdc.gridy = 6;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -265,7 +305,7 @@ public class orderGUI extends JFrame {
         cb_tinhtrang.setForeground(Color.BLACK);
         cb_tinhtrang.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 4;
-        gdc.gridy = 5;
+        gdc.gridy = 6;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -277,7 +317,7 @@ public class orderGUI extends JFrame {
         capnhat.setForeground(Color.BLACK);
         capnhat.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 5;
-        gdc.gridy = 5;
+        gdc.gridy = 6;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -289,7 +329,7 @@ public class orderGUI extends JFrame {
         tongtien.setForeground(Color.BLACK);
         tongtien.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 6;
+        gdc.gridy = 7;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -300,8 +340,10 @@ public class orderGUI extends JFrame {
         JTextField tf_tongtien = new JTextField();
         tf_tongtien.setForeground(Color.BLACK);
         tf_tongtien.setFont(new Font(null, Font.PLAIN, 20));
+        tf_tongtien.setEditable(false);
+        tf_tongtien.setBackground(Color.white);
         gdc.gridx = 1;
-        gdc.gridy = 6;
+        gdc.gridy = 7;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -313,7 +355,7 @@ public class orderGUI extends JFrame {
         pttt.setForeground(Color.BLACK);
         pttt.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 3;
-        gdc.gridy = 6;
+        gdc.gridy = 7;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -324,8 +366,10 @@ public class orderGUI extends JFrame {
         JTextField tf_pttt = new JTextField();
         tf_pttt.setForeground(Color.BLACK);
         tf_pttt.setFont(new Font(null, Font.PLAIN, 20));
+        tf_pttt.setEditable(false);
+        tf_pttt.setBackground(Color.white);
         gdc.gridx = 4;
-        gdc.gridy = 6;
+        gdc.gridy = 7;
         gdc.gridwidth = 2;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -337,7 +381,7 @@ public class orderGUI extends JFrame {
         ghichu.setForeground(Color.BLACK);
         ghichu.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 7;
+        gdc.gridy = 8;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.NORTHWEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -350,13 +394,15 @@ public class orderGUI extends JFrame {
         ta_ghichu.setFont(new Font(null, Font.PLAIN, 20));
         ta_ghichu.setLineWrap(true);
         ta_ghichu.setAutoscrolls(true);
+        ta_ghichu.setEditable(false);
+        ta_ghichu.setBackground(Color.white);
 
         JScrollPane ghichu_scroll = new JScrollPane();
         ghichu_scroll.setViewportView(ta_ghichu);
         ghichu_scroll.setPreferredSize(new Dimension(0, 100));
 
         gdc.gridx = 1;
-        gdc.gridy = 7;
+        gdc.gridy = 8;
         gdc.gridwidth = 5;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -368,7 +414,7 @@ public class orderGUI extends JFrame {
         nguoinhan.setForeground(Color.BLACK);
         nguoinhan.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 8;
+        gdc.gridy = 9;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -379,8 +425,10 @@ public class orderGUI extends JFrame {
         JTextField tf_nguoinhan = new JTextField();
         tf_nguoinhan.setForeground(Color.BLACK);
         tf_nguoinhan.setFont(new Font(null, Font.PLAIN, 20));
+        tf_nguoinhan.setEditable(false);
+        tf_nguoinhan.setBackground(Color.white);
         gdc.gridx = 1;
-        gdc.gridy = 8;
+        gdc.gridy = 9;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -392,7 +440,7 @@ public class orderGUI extends JFrame {
         sdt_nguoinhan.setForeground(Color.BLACK);
         sdt_nguoinhan.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 3;
-        gdc.gridy = 8;
+        gdc.gridy = 9;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -403,8 +451,10 @@ public class orderGUI extends JFrame {
         JTextField tf_sdt_nguoinhan = new JTextField();
         tf_sdt_nguoinhan.setForeground(Color.BLACK);
         tf_sdt_nguoinhan.setFont(new Font(null, Font.PLAIN, 20));
+        tf_sdt_nguoinhan.setEditable(false);
+        tf_sdt_nguoinhan.setBackground(Color.white);
         gdc.gridx = 4;
-        gdc.gridy = 8;
+        gdc.gridy = 9;
         gdc.gridwidth = 2;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -416,7 +466,7 @@ public class orderGUI extends JFrame {
         makm.setForeground(Color.BLACK);
         makm.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 9;
+        gdc.gridy = 10;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -427,8 +477,10 @@ public class orderGUI extends JFrame {
         JTextField tf_makm = new JTextField();
         tf_makm.setForeground(Color.BLACK);
         tf_makm.setFont(new Font(null, Font.PLAIN, 20));
+        tf_makm.setEditable(false);
+        tf_makm.setBackground(Color.white);
         gdc.gridx = 1;
-        gdc.gridy = 9;
+        gdc.gridy = 10;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -440,7 +492,7 @@ public class orderGUI extends JFrame {
         tenkm.setForeground(Color.BLACK);
         tenkm.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 3;
-        gdc.gridy = 9;
+        gdc.gridy = 10;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.EAST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -451,8 +503,10 @@ public class orderGUI extends JFrame {
         JTextField tf_tenkm = new JTextField();
         tf_tenkm.setForeground(Color.BLACK);
         tf_tenkm.setFont(new Font(null, Font.PLAIN, 20));
+        tf_tenkm.setEditable(false);
+        tf_tenkm.setBackground(Color.white);
         gdc.gridx = 4;
-        gdc.gridy = 9;
+        gdc.gridy = 10;
         gdc.gridwidth = 2;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -486,7 +540,7 @@ public class orderGUI extends JFrame {
         JScrollPane scroll_supply = new JScrollPane();
         scroll_supply.setViewportView(table);
         gdc.gridx = 0;
-        gdc.gridy = 11;
+        gdc.gridy = 12;
         gdc.gridwidth = 7;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -499,7 +553,7 @@ public class orderGUI extends JFrame {
         //xử lý tính năng
 
         //load dữ liệu đơn hàng
-        order_BUS.loadOrder(madh, tf_mandon, tf_makh, tf_tenkh, tf_manv, tf_tennv, 
+        order_BUS.loadOrder(madh, tf_mandon, tf_makh, tf_tenkh, tf_sdt, tf_manv, tf_tennv, 
         ta_diachi, tf_ngaydat, cb_tinhtrang, tf_tongtien, tf_pttt, ta_ghichu, 
         tf_nguoinhan, tf_sdt_nguoinhan, model, tf_makm, tf_tenkm);
 
@@ -544,9 +598,9 @@ public class orderGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int ketQua = order_BUS.updateStatus(cb_tinhtrang, madh);
                 if(ketQua == 1) {
-                    order_BUS.loadOrder(madh, tf_mandon, tf_makh, tf_tenkh, tf_manv, tf_tennv, 
-                    ta_diachi, tf_ngaydat, cb_tinhtrang, tf_tongtien, tf_pttt, ta_ghichu, 
-                    tf_nguoinhan, tf_sdt_nguoinhan, model, tf_makm, tf_tenkm);
+                    order_BUS.loadOrder(madh, tf_mandon, tf_makh, tf_tenkh, tf_sdt, tf_manv, 
+                    tf_tennv, ta_diachi, tf_ngaydat, cb_tinhtrang, tf_tongtien, tf_pttt, 
+                    ta_ghichu, tf_nguoinhan, tf_sdt_nguoinhan, model, tf_makm, tf_tenkm);
 
                     order_BUS.loadData(modelSell);
                 }
@@ -570,9 +624,9 @@ public class orderGUI extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(order_BUS.deleteOrderDetail(model, table, modelCollect)) {
-                    order_BUS.loadOrder(madh, tf_mandon, tf_makh, tf_tenkh, tf_manv, tf_tennv, 
-                    ta_diachi, tf_ngaydat, cb_tinhtrang, tf_tongtien, tf_pttt, ta_ghichu, 
-                    tf_nguoinhan, tf_sdt_nguoinhan, model, tf_makm, tf_tenkm);
+                    order_BUS.loadOrder(madh, tf_mandon, tf_makh, tf_tenkh, tf_sdt, tf_manv, 
+                    tf_tennv, ta_diachi, tf_ngaydat, cb_tinhtrang, tf_tongtien, tf_pttt, 
+                    ta_ghichu, tf_nguoinhan, tf_sdt_nguoinhan, model, tf_makm, tf_tenkm);
                 } else {
                     JOptionPane.showMessageDialog(null, 
                     "Chi tiết đơn hàng này đã ngừng hoạt động.");
