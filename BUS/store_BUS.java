@@ -10,15 +10,18 @@ import DTO.employee_DTO;
 import DTO.store_DTO;
 
 public class store_BUS {
-    public static void loadData(store_DTO nt ,JLabel mant, JLabel manql, JLabel diachi, JLabel tinhtrang) {
+    public static void loadData(store_DTO nt, JLabel mant, JLabel manql, JLabel diachi, JLabel tinhtrang) {
         mant.setText(mant.getText() + nt.getMant());
-        diachi.setText(diachi.getText() + nt.getMasonha() + ", " + nt.getDuong() + ", " + nt.getPhuong() + ", " + nt.getQuan() + ", " + nt.getTinh());
+        diachi.setText(diachi.getText() + nt.getMasonha() + ", " + nt.getDuong() + ", " + nt.getPhuong() + ", "
+                + nt.getQuan() + ", " + nt.getTinh());
         manql.setText(manql.getText() + nt.getManql());
-        if(nt.getTinhtrang()) tinhtrang.setText(tinhtrang.getText() + "Đang hoạt động");
-        else tinhtrang.setText(tinhtrang.getText() + "Ngừng hoạt động");
+        if (nt.getTinhtrang())
+            tinhtrang.setText(tinhtrang.getText() + "Đang hoạt động");
+        else
+            tinhtrang.setText(tinhtrang.getText() + "Ngừng hoạt động");
     }
 
-    //Tuấn
+    // Tuấn
     public static ArrayList<store_DTO> getAll() {
         store_DAO dao = new store_DAO();
         return dao.selectAll();
@@ -53,7 +56,13 @@ public class store_BUS {
                     nql = st.getTennv();
                 }
             }
-            table.addRow(new Object[] { kh.getMant(), diaChi, nql, kh.getTinhtrang() });
+            JLabel statusImg;
+            if (kh.getTinhtrang()) {
+                statusImg = new JLabel(data.imagePath.resize_check);
+            } else {
+                statusImg = new JLabel(data.imagePath.resize_exitIcon);
+            }
+            table.addRow(new Object[] { kh.getMant(), diaChi, nql, statusImg });
         }
     }
 

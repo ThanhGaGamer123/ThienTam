@@ -24,13 +24,23 @@ import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
 
+import DAO.customer_DAO;
+import DAO.employee_DAO;
 import DAO.medicine_DAO;
 import DAO.orderSupply_DAO;
 import DAO.order_DAO;
+import DAO.order_details_DAO;
+import DTO.customer_DTO;
+import DTO.employee_DTO;
 import DTO.medicine_DTO;
 import DTO.orderSupply_DTO;
 import DTO.order_DTO;
+import DTO.order_details_DTO;
+import DTO.promotion_DTO;
+import DTO.store_DTO;
+import DTO.supplier_DTO;
 import advanceMethod.advance;
 
 public class export_BUS {
@@ -40,30 +50,33 @@ public class export_BUS {
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         int choice = fileChooser.showSaveDialog(null);
-        if(choice == JFileChooser.APPROVE_OPTION) {
+        if (choice == JFileChooser.APPROVE_OPTION) {
             File pathFile = fileChooser.getSelectedFile();
             tf_path.setText(pathFile.getAbsolutePath());
         }
     }
 
     public static int exportFile(JComboBox xuatas, JComboBox data, JTextField filename,
-    JTextField path) {
-        if(!filename.getText().isEmpty()) {
-            if(!path.getText().isEmpty()) {
+            JTextField path, JTextField mahd) {
+        if (!filename.getText().isEmpty()) {
+            if (!path.getText().isEmpty()) {
                 String exportPath = path.getText() + File.separator + filename.getText();
 
-                //Xuất excel
-                if(xuatas.getSelectedIndex() == 0) {
+                // Xuất excel
+                if (xuatas.getSelectedIndex() == 0) {
                     exportPath += ".xlsx";
                     File isexist = new File(exportPath);
-                    if(!isexist.exists()) {
+                    if (!isexist.exists()) {
                         try {
                             XSSFWorkbook workbook = new XSSFWorkbook();
 
-                            if(data.getSelectedIndex() == 0) {
+                            if (data.getSelectedIndex() == 0) {
+                                workbook.close();
+                                return 5;
+                            } else if (data.getSelectedIndex() == 1) {
                                 XSSFSheet sheet = workbook.createSheet("Danh sách thuốc");
 
-                                //tiêu đề
+                                // tiêu đề
                                 Row row = sheet.createRow(0);
                                 row.createCell(0).setCellValue("Mã thuốc");
                                 row.createCell(1).setCellValue("Tên thuốc");
@@ -78,7 +91,7 @@ public class export_BUS {
                                 row.createCell(10).setCellValue("Hạn sử dụng");
                                 row.createCell(11).setCellValue("Tình trạng");
 
-                                //lưu dữ liệu thành từng dòng
+                                // lưu dữ liệu thành từng dòng
                                 ArrayList<medicine_DTO> meds = new medicine_DAO().selectAll();
                                 int i = 1;
                                 for (medicine_DTO med : meds) {
@@ -92,16 +105,16 @@ public class export_BUS {
                                     row.createCell(6).setCellValue(med.getDanhmuc());
                                     row.createCell(7).setCellValue(advance.DoubleArrayListToString(med.getGiaban()));
                                     row.createCell(8).setCellValue(med.getMaton());
-                                    row.createCell(9).setCellValue(advance.StringArrayListToString(med.getDoituongsudung()));
+                                    row.createCell(9)
+                                            .setCellValue(advance.StringArrayListToString(med.getDoituongsudung()));
                                     row.createCell(10).setCellValue(med.getHansudung());
                                     row.createCell(11).setCellValue(med.getTinhtrang());
                                     i++;
                                 }
-                            }
-                            else if(data.getSelectedIndex() == 1) {
+                            } else if (data.getSelectedIndex() == 2) {
                                 XSSFSheet sheet = workbook.createSheet("Danh sách đơn hàng");
 
-                                //tiêu đề
+                                // tiêu đề
                                 Row row = sheet.createRow(0);
                                 row.createCell(0).setCellValue("Mã đơn hàng");
                                 row.createCell(1).setCellValue("Mã khách hàng");
@@ -118,7 +131,7 @@ public class export_BUS {
                                 row.createCell(12).setCellValue("Người nhận");
                                 row.createCell(13).setCellValue("Số điện thoại người nhận");
 
-                                //lưu dữ liệu thành từng dòng
+                                // lưu dữ liệu thành từng dòng
                                 ArrayList<order_DTO> ords = new order_DAO().selectAll();
                                 int i = 1;
                                 for (order_DTO ord : ords) {
@@ -139,11 +152,10 @@ public class export_BUS {
                                     row.createCell(13).setCellValue(ord.getSdt_nguoinhan());
                                     i++;
                                 }
-                            }
-                            else if(data.getSelectedIndex() == 2) {
+                            } else if (data.getSelectedIndex() == 3) {
                                 XSSFSheet sheet = workbook.createSheet("Danh sách đơn hàng nhập");
 
-                                //tiêu đề
+                                // tiêu đề
                                 Row row = sheet.createRow(0);
                                 row.createCell(0).setCellValue("Mã đơn hàng nhập");
                                 row.createCell(1).setCellValue("Mã nhà cung cấp");
@@ -152,7 +164,7 @@ public class export_BUS {
                                 row.createCell(4).setCellValue("Tổng tiền");
                                 row.createCell(5).setCellValue("Tình trạng");
 
-                                //lưu dữ liệu thành từng dòng
+                                // lưu dữ liệu thành từng dòng
                                 ArrayList<orderSupply_DTO> oss = new orderSupply_DAO().selectAll();
                                 int i = 1;
                                 for (orderSupply_DTO os : oss) {
@@ -167,7 +179,7 @@ public class export_BUS {
                                 }
                             }
 
-                            //xuất file
+                            // xuất file
                             try {
                                 System.out.println(exportPath);
                                 FileOutputStream fileOut = new FileOutputStream(exportPath);
@@ -184,64 +196,200 @@ public class export_BUS {
                             e.printStackTrace();
                             return 4;
                         }
-                    } else return 3;
+                    } else
+                        return 3;
                 }
 
-                //Xuất PDF
-                if(xuatas.getSelectedIndex() == 1) {
+                // Xuất PDF
+                if (xuatas.getSelectedIndex() == 1) {
                     exportPath += ".pdf";
                     File isexist = new File(exportPath);
-                    if(!isexist.exists()) {
+                    if (!isexist.exists()) {
                         try {
                             PdfWriter writer = new PdfWriter(exportPath);
                             PdfDocument pdf = new PdfDocument(writer);
 
-                            PdfFont font = PdfFontFactory.createFont(advance.data_path + 
-                            "dejavu-sans\\ttf\\DejaVuSans-Bold.ttf", PdfEncodings.IDENTITY_H,
-                            pdf);
+                            PdfFont font = PdfFontFactory.createFont(advance.data_path +
+                                    "dejavu-sans\\ttf\\DejaVuSans-Bold.ttf", PdfEncodings.IDENTITY_H,
+                                    pdf);
 
-                            PdfFont font2 = PdfFontFactory.createFont(advance.data_path + 
-                            "dejavu-sans\\ttf\\DejaVuSans.ttf", PdfEncodings.IDENTITY_H,
-                            pdf);
+                            PdfFont font2 = PdfFontFactory.createFont(advance.data_path +
+                                    "dejavu-sans\\ttf\\DejaVuSans.ttf", PdfEncodings.IDENTITY_H,
+                                    pdf);
 
-                            if(data.getSelectedIndex() == 0) {
+                            if (data.getSelectedIndex() == 0) {
+                                Document document = new Document(pdf, PageSize.A4);
+                                document.setLeftMargin(10);
+                                document.setRightMargin(10);
+
+                                document.add(new Paragraph("Nhà Thuốc Thiện Tâm")
+                                        .setFont(font).setFontSize(18)
+                                        .setTextAlignment(TextAlignment.CENTER))
+                                        .setBackgroundColor(ColorConstants.GREEN);
+
+                                document.add(new Paragraph("Hóa Đơn Bán Hàng")
+                                        .setFont(font).setFontSize(14));
+
+                                document.add(new Paragraph("Thời gian: " + advance.currentTime())
+                                        .setFont(font).setFontSize(12));
+
+                                // lưu hóa đơn
+                                try {
+                                    order_DTO ord = new order_DTO();
+                                    ord.setMadon(mahd.getText());
+                                    ord = new order_DAO().selectByID(ord);
+
+                                    document.add(new Paragraph("Mã đơn hàng: " + ord.getMadon())
+                                    .setFont(font2).setFontSize(12));
+
+                                    customer_DTO cus = new customer_DTO();
+                                    cus.setMakh(ord.getMakh());
+                                    customer_DAO cusDAO = new customer_DAO();
+                                    cus = cusDAO.selectByID(cus);
+
+                                    if(cus.getMakh() != null && !cus.getMakh().isEmpty()) 
+                                        document.add(new Paragraph("Mã khách hàng: " + ord.getMakh())
+                                        .setFont(font2).setFontSize(12));
+                                    else 
+                                        document.add(new Paragraph("Mã khách hàng: Không có")
+                                        .setFont(font2).setFontSize(12));
+                                    if(cus.getTenkh() != null && !cus.getTenkh().isEmpty()) 
+                                        document.add(new Paragraph("Tên khách hàng: " + cus.getTenkh())
+                                        .setFont(font2).setFontSize(12));
+                                    else 
+                                        document.add(new Paragraph("Tên khách hàng: Không có")
+                                        .setFont(font2).setFontSize(12));
+                                    if(cus.getSdt() != null && !cus.getSdt().isEmpty()) 
+                                        document.add(new Paragraph("Số điện thoại: " + cus.getSdt())
+                                        .setFont(font2).setFontSize(12));
+                                    else 
+                                        document.add(new Paragraph("Số điện thoại: Không có")
+                                        .setFont(font2).setFontSize(12));
+
+                                    employee_DTO em = new employee_DTO();
+                                    em.setManv(ord.getManv());
+                                    employee_DAO emDAO = new employee_DAO();
+                                    em = emDAO.selectByID(em);
+                                    
+                                    if(em.getManv() != null && !em.getManv().isEmpty()) 
+                                        document.add(new Paragraph("Mã nhân viên: " + em.getManv())
+                                        .setFont(font2).setFontSize(12));
+                                    else 
+                                        document.add(new Paragraph("Mã nhân viên: Không có")
+                                        .setFont(font2).setFontSize(12));
+                                    if(em.getTennv() != null && !em.getTennv().isEmpty()) 
+                                        document.add(new Paragraph("Tên nhân viên: " + em.getTennv())
+                                        .setFont(font2).setFontSize(12));
+                                    else 
+                                        document.add(new Paragraph("Tên nhân viên: Không có")
+                                        .setFont(font2).setFontSize(12));
+                                    
+                                    document.add(new Paragraph("Địa chỉ: " + ord.getDiachicuthe()
+                                    + ", " + ord.getPhuong() + ", " + ord.getQuan() + ", "
+                                    + ord.getTinh())
+                                    .setFont(font2).setFontSize(12));
+
+                                    document.add(new Paragraph("Thời gian đặt: " + ord.getNgaydat())
+                                    .setFont(font2).setFontSize(12));
+
+                                    document.add(new Paragraph("Tổng tiền: " + ord.getTongtien())
+                                    .setFont(font2).setFontSize(12));
+
+                                    if(ord.getGhichu() != null && !ord.getGhichu().isEmpty()) 
+                                        document.add(new Paragraph("Ghi chú: " + ord.getGhichu())
+                                        .setFont(font2).setFontSize(12));
+                                    else 
+                                        document.add(new Paragraph("Ghi chú: Không có")
+                                        .setFont(font2).setFontSize(12));
+                                    if(ord.getNguoinhan() != null && !ord.getNguoinhan().isEmpty()) 
+                                        document.add(new Paragraph("Tên người nhận: " + ord.getNguoinhan())
+                                        .setFont(font2).setFontSize(12));
+                                    else 
+                                        document.add(new Paragraph("Tên người nhận: Không có")
+                                        .setFont(font2).setFontSize(12));
+                                    if(ord.getSdt_nguoinhan() != null && !ord.getSdt_nguoinhan().isEmpty()) 
+                                        document.add(new Paragraph("Số điện thoại người nhận: " + ord.getSdt_nguoinhan())
+                                        .setFont(font2).setFontSize(12));
+                                    else 
+                                        document.add(new Paragraph("Số điện thoại người nhận: Không có")
+                                        .setFont(font2).setFontSize(12));
+
+                                    //lưu từng chi tiết đơn hàng
+                                    // tiêu đề
+                                    String[] headers = {
+                                            "Mã chi tiết đơn hàng", "Đơn vị", "Số lượng", "Đơn giá", "Thành tiền"
+                                    };
+
+                                    Table table = new Table(UnitValue.createPercentArray(new float[]{1,1,1,1,1}));
+                                    table.setFont(font2).setFontSize(12);
+
+                                    for (String header : headers) {
+                                        Cell headerCell = new Cell()
+                                                .add(new Paragraph(header)
+                                                        .setTextAlignment(TextAlignment.CENTER))
+                                                .setBackgroundColor(ColorConstants.GREEN)
+                                                .setFont(font)
+                                                .setFontSize(12);
+
+                                        table.addHeaderCell(headerCell);
+                                    }
+
+                                    ArrayList<order_details_DTO> ods = new order_details_DAO().selectAll();
+                                    for (order_details_DTO od : ods) {
+                                        if(od.getMadon().equals(ord.getMadon())) {
+                                            table.addCell(new Paragraph(od.getMactdh()));
+                                            table.addCell(new Paragraph(od.getDonvi()));
+                                            table.addCell(new Paragraph(String.valueOf(od.getSl())));
+                                            table.addCell(new Paragraph(String.valueOf(od.getDongia())));
+                                            table.addCell(new Paragraph(String.valueOf(od.getThanhtien())));
+                                        }
+                                    }
+
+                                    document.add(table);
+                                    document.close();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    document.close();
+                                    return 6;
+                                }
+                            } else if (data.getSelectedIndex() == 1) {
                                 Document document = new Document(pdf, PageSize.A3);
                                 document.setLeftMargin(10);
                                 document.setRightMargin(10);
 
                                 document.add(new Paragraph("Nhà Thuốc Thiện Tâm")
-                                .setFont(font).setFontSize(18)
-                                .setTextAlignment(TextAlignment.CENTER))
-                                .setBackgroundColor(ColorConstants.GREEN);
+                                        .setFont(font).setFontSize(18)
+                                        .setTextAlignment(TextAlignment.CENTER))
+                                        .setBackgroundColor(ColorConstants.GREEN);
 
                                 document.add(new Paragraph("Danh Sách Thuốc")
-                                .setFont(font).setFontSize(14));
+                                        .setFont(font).setFontSize(14));
 
                                 document.add(new Paragraph("Thời gian: " + advance.currentTime())
-                                .setFont(font).setFontSize(12));
+                                        .setFont(font).setFontSize(12));
 
                                 Table table = new Table(12);
                                 table.setFont(font2).setFontSize(12);
 
-                                //tiêu đề
+                                // tiêu đề
                                 String[] headers = {
-                                    "Mã thuốc", "Tên thuốc", "Đơn vị", "Thành phần", 
-                                    "Thông tin", "Xuất xứ", "Danh mục", "Giá Bán", 
-                                    "Mã tồn", "Đối tượng sử dụng", "Hạn sử dụng", 
-                                    "Tình trạng"
+                                        "Mã thuốc", "Tên thuốc", "Đơn vị", "Thành phần",
+                                        "Thông tin", "Xuất xứ", "Danh mục", "Giá Bán",
+                                        "Mã tồn", "Đối tượng sử dụng", "Hạn sử dụng",
+                                        "Tình trạng"
                                 };
-                                
+
                                 for (String header : headers) {
                                     Cell headerCell = new Cell()
-                                        .add(new Paragraph(header).setTextAlignment(TextAlignment.CENTER))
-                                        .setBackgroundColor(ColorConstants.GREEN) 
-                                        .setFont(font)
-                                        .setFontSize(12); 
-                                
-                                    table.addHeaderCell(headerCell); 
-                                }                                
+                                            .add(new Paragraph(header).setTextAlignment(TextAlignment.CENTER))
+                                            .setBackgroundColor(ColorConstants.GREEN)
+                                            .setFont(font)
+                                            .setFontSize(12);
 
-                                //lưu dữ liệu thành từng dòng
+                                    table.addHeaderCell(headerCell);
+                                }
+
+                                // lưu dữ liệu thành từng dòng
                                 ArrayList<medicine_DTO> meds = new medicine_DAO().selectAll();
                                 for (medicine_DTO med : meds) {
                                     table.addCell(med.getMathuoc());
@@ -257,104 +405,105 @@ public class export_BUS {
                                     table.addCell(med.getHansudung());
                                     table.addCell(String.valueOf(med.getTinhtrang()));
                                 }
-                                
+
                                 document.add(table);
                                 document.close();
-                            }
-                            else if(data.getSelectedIndex() == 1) {
+                            } else if (data.getSelectedIndex() == 2) {
                                 Document document = new Document(pdf, PageSize.A3);
                                 document.setLeftMargin(10);
                                 document.setRightMargin(10);
-                                
+
                                 document.add(new Paragraph("Nhà Thuốc Thiện Tâm")
-                                .setFont(font).setFontSize(18)
-                                .setTextAlignment(TextAlignment.CENTER))
-                                .setBackgroundColor(ColorConstants.GREEN);
+                                        .setFont(font).setFontSize(18)
+                                        .setTextAlignment(TextAlignment.CENTER))
+                                        .setBackgroundColor(ColorConstants.GREEN);
 
                                 document.add(new Paragraph("Danh Sách Đơn Hàng")
-                                .setFont(font).setFontSize(14));
+                                        .setFont(font).setFontSize(14));
 
                                 document.add(new Paragraph("Thời gian: " + advance.currentTime())
-                                .setFont(font).setFontSize(12));
+                                        .setFont(font).setFontSize(12));
 
                                 Table table = new Table(11);
                                 table.setFont(font2).setFontSize(12);
 
-                                //tiêu đề
+                                // tiêu đề
                                 String[] headers = {
-                                    "Mã đơn hàng", "Mã khách hàng", "Mã nhân viên", "Địa chỉ",
-                                    "Thời gian đặt", "Phương thức thanh toán", "Tình trạng", 
-                                    "Tổng tiền", "Ghi chú", "Người nhận", "Số điện thoại người nhận"
+                                        "Mã đơn hàng", "Mã khách hàng", "Mã nhân viên", "Địa chỉ",
+                                        "Thời gian đặt", "Phương thức thanh toán", "Tình trạng",
+                                        "Tổng tiền", "Ghi chú", "Người nhận", "Số điện thoại người nhận"
                                 };
 
                                 for (String header : headers) {
                                     Cell headerCell = new Cell()
-                                        .add(new Paragraph(header)
-                                        .setTextAlignment(TextAlignment.CENTER))
-                                        .setBackgroundColor(ColorConstants.GREEN)
-                                        .setFont(font)
-                                        .setFontSize(12);
+                                            .add(new Paragraph(header)
+                                                    .setTextAlignment(TextAlignment.CENTER))
+                                            .setBackgroundColor(ColorConstants.GREEN)
+                                            .setFont(font)
+                                            .setFontSize(12);
 
                                     table.addHeaderCell(headerCell);
                                 }
 
-                                //lưu dữ liệu thành từng dòng
+                                // lưu dữ liệu thành từng dòng
                                 ArrayList<order_DTO> ords = new order_DAO().selectAll();
                                 for (order_DTO ord : ords) {
                                     table.addCell(new Paragraph(ord.getMadon()));
                                     table.addCell(new Paragraph(ord.getMakh() == null ? "Không có" : ord.getMakh()));
                                     table.addCell(new Paragraph(ord.getManv()));
                                     table.addCell(new Paragraph(ord.getDiachicuthe() + ", " + ord.getPhuong()
-                                    + ", " + ord.getQuan() + ", " + ord.getTinh()));
+                                            + ", " + ord.getQuan() + ", " + ord.getTinh()));
                                     table.addCell(new Paragraph(ord.getNgaydat()));
                                     table.addCell(new Paragraph(ord.getPttt()));
                                     table.addCell(new Paragraph(ord.getTinhtrang()));
                                     table.addCell(new Paragraph(String.valueOf(ord.getTongtien())));
-                                    table.addCell(new Paragraph(ord.getGhichu() == null ? "Không có" : ord.getGhichu()));
-                                    table.addCell(new Paragraph(ord.getNguoinhan() == null ? "Không có" : ord.getNguoinhan()));
-                                    table.addCell(new Paragraph(ord.getSdt_nguoinhan() == null ? "Không có" : ord.getSdt_nguoinhan()));
+                                    table.addCell(
+                                            new Paragraph(ord.getGhichu() == null ? "Không có" : ord.getGhichu()));
+                                    table.addCell(new Paragraph(
+                                            ord.getNguoinhan() == null ? "Không có" : ord.getNguoinhan()));
+                                    table.addCell(new Paragraph(
+                                            ord.getSdt_nguoinhan() == null ? "Không có" : ord.getSdt_nguoinhan()));
                                 }
-                                
+
                                 document.add(table);
                                 document.close();
-                            }
-                            else if(data.getSelectedIndex() == 2) {
+                            } else if (data.getSelectedIndex() == 3) {
                                 Document document = new Document(pdf, PageSize.A4);
                                 document.setLeftMargin(10);
                                 document.setRightMargin(10);
-                                
+
                                 document.add(new Paragraph("Nhà Thuốc Thiện Tâm")
-                                .setFont(font).setFontSize(18)
-                                .setTextAlignment(TextAlignment.CENTER))
-                                .setBackgroundColor(ColorConstants.GREEN);
+                                        .setFont(font).setFontSize(18)
+                                        .setTextAlignment(TextAlignment.CENTER))
+                                        .setBackgroundColor(ColorConstants.GREEN);
 
                                 document.add(new Paragraph("Danh Sách Đơn Hàng Nhập")
-                                .setFont(font).setFontSize(14));
+                                        .setFont(font).setFontSize(14));
 
                                 document.add(new Paragraph("Thời gian: " + advance.currentTime())
-                                .setFont(font).setFontSize(12));
+                                        .setFont(font).setFontSize(12));
 
                                 Table table = new Table(6);
                                 table.setFont(font2).setFontSize(12);
 
-                                //tiêu đề
+                                // tiêu đề
                                 String[] headers = {
-                                    "Mã đơn hàng nhập", "Mã nhà cung cấp", "Số loại thuốc", 
-                                    "Thời gian nhập", "Tổng tiền", "Tình trạng"
+                                        "Mã đơn hàng nhập", "Mã nhà cung cấp", "Số loại thuốc",
+                                        "Thời gian nhập", "Tổng tiền", "Tình trạng"
                                 };
 
                                 for (String header : headers) {
                                     Cell headerCell = new Cell()
-                                        .add(new Paragraph(header)
-                                        .setTextAlignment(TextAlignment.CENTER))
-                                        .setBackgroundColor(ColorConstants.GREEN)
-                                        .setFont(font)
-                                        .setFontSize(12);
+                                            .add(new Paragraph(header)
+                                                    .setTextAlignment(TextAlignment.CENTER))
+                                            .setBackgroundColor(ColorConstants.GREEN)
+                                            .setFont(font)
+                                            .setFontSize(12);
 
                                     table.addHeaderCell(headerCell);
                                 }
 
-                                //lưu dữ liệu thành từng dòng
+                                // lưu dữ liệu thành từng dòng
                                 ArrayList<orderSupply_DTO> oss = new orderSupply_DAO().selectAll();
                                 for (orderSupply_DTO os : oss) {
                                     table.addCell(os.getMahdnhap());
@@ -364,24 +513,545 @@ public class export_BUS {
                                     table.addCell(String.valueOf(os.getTongtien()));
                                     table.addCell(String.valueOf(os.getTinhtrang()));
                                 }
-                                
+
                                 document.add(table);
-                                document.close();   
+                                document.close();
                             }
 
                             filename.setText("");
                             path.setText("");
-                            
+
                             return 0;
                         } catch (Exception e) {
                             e.printStackTrace();
                             return 4;
                         }
-                    } else return 3;
+                    } else
+                        return 3;
                 }
-            } else return 2;
-        } else return 1;
+            } else
+                return 2;
+        } else
+            return 1;
 
         return -1;
     }
+
+    public static int exportFile1(JComboBox xuatas, JComboBox data, JTextField filename,
+            JTextField path) {
+        if (!filename.getText().isEmpty()) {
+            if (!path.getText().isEmpty()) {
+                String exportPath = path.getText() + File.separator + filename.getText();
+
+                // Xuất excel
+                if (xuatas.getSelectedIndex() == 0) {
+                    exportPath += ".xlsx";
+                    File isexist = new File(exportPath);
+                    if (!isexist.exists()) {
+                        try {
+                            XSSFWorkbook workbook = new XSSFWorkbook();
+
+                            if (data.getSelectedIndex() == 0) {
+                                XSSFSheet sheet = workbook.createSheet("Danh sách nhà cung cấp");
+
+                                // tiêu đề
+                                Row row = sheet.createRow(0);
+                                row.createCell(0).setCellValue("Mã NCC");
+                                row.createCell(1).setCellValue("Tên NCC");
+                                row.createCell(2).setCellValue("SĐT");
+                                row.createCell(3).setCellValue("Địa chỉ");
+                                row.createCell(4).setCellValue("Tình trạng");
+
+                                // lưu dữ liệu thành từng dòng
+                                ArrayList<supplier_DTO> suplist = supplier_BUS.getAll();
+                                int i = 1;
+                                for (supplier_DTO sup : suplist) {
+                                    row = sheet.createRow(i);
+                                    row.createCell(0).setCellValue(sup.getMancc());
+                                    row.createCell(1).setCellValue(sup.getTenncc());
+                                    row.createCell(2).setCellValue(sup.getSdt());
+                                    String dc = sup.getMasonha() + "," + sup.getDuong() + "," + sup.getPhuong()
+                                            + ","
+                                            + sup.getQuan() + "," + sup.getTinh();
+                                    row.createCell(3).setCellValue(dc);
+                                    row.createCell(4).setCellValue(sup.getTinhtrang());
+                                    i++;
+                                }
+                            } else if (data.getSelectedIndex() == 1) {
+                                XSSFSheet sheet = workbook.createSheet("Danh sách khách hàng");
+
+                                // tiêu đề
+                                Row row = sheet.createRow(0);
+                                row.createCell(0).setCellValue("Mã KH");
+                                row.createCell(1).setCellValue("Tên KH");
+                                row.createCell(2).setCellValue("SĐT");
+                                row.createCell(3).setCellValue("Email");
+                                row.createCell(4).setCellValue("Địa chỉ");
+                                row.createCell(5).setCellValue("Mật khẩu");
+                                row.createCell(6).setCellValue("Điểm khuyến mãi");
+                                row.createCell(7).setCellValue("Tình trạng");
+
+                                // lưu dữ liệu thành từng dòng
+                                ArrayList<customer_DTO> cuslist = customer_BUS.getAll();
+                                int i = 1;
+                                for (customer_DTO cus : cuslist) {
+                                    row = sheet.createRow(i);
+                                    row.createCell(0).setCellValue(cus.getMakh());
+                                    row.createCell(1).setCellValue(cus.getTenkh());
+                                    row.createCell(2).setCellValue(cus.getSdt());
+                                    row.createCell(3).setCellValue(cus.getEmail());
+                                    String dc = cus.getMasonha() + "," + cus.getDuong() + "," + cus.getPhuong()
+                                            + ","
+                                            + cus.getQuan() + "," + cus.getTinh();
+                                    row.createCell(4).setCellValue(dc);
+                                    row.createCell(5).setCellValue(cus.getPassword());
+                                    row.createCell(6).setCellValue(cus.getDiemKM());
+                                    row.createCell(7).setCellValue(cus.getTinhtrang());
+                                    i++;
+                                }
+                            } else if (data.getSelectedIndex() == 2) {
+                                XSSFSheet sheet = workbook.createSheet("Danh sách nhân viên");
+
+                                // tiêu đề
+                                Row row = sheet.createRow(0);
+                                row.createCell(0).setCellValue("Mã NV");
+                                row.createCell(1).setCellValue("Tên NV");
+                                row.createCell(2).setCellValue("Chức vụ");
+                                row.createCell(3).setCellValue("Giới tính");
+                                row.createCell(4).setCellValue("CCCD");
+                                row.createCell(5).setCellValue("SĐT");
+                                row.createCell(6).setCellValue("Địa chỉ");
+                                row.createCell(7).setCellValue("Tài khoản");
+                                row.createCell(8).setCellValue("Mật khẩu");
+                                row.createCell(9).setCellValue("Công tác tại");
+
+                                // lưu dữ liệu thành từng dòng
+                                ArrayList<employee_DTO> emplist = employee_BUS.getAll();
+                                int i = 1;
+                                for (employee_DTO emp : emplist) {
+                                    row = sheet.createRow(i);
+                                    row.createCell(0).setCellValue(emp.getManv());
+                                    row.createCell(1).setCellValue(emp.getTennv());
+                                    row.createCell(2).setCellValue(emp.getChucvu());
+                                    row.createCell(3).setCellValue(emp.getGioitinh());
+                                    row.createCell(4).setCellValue(emp.getCccd());
+                                    row.createCell(5).setCellValue(emp.getSdt());
+                                    String dc = emp.getMasonha() + "," + emp.getDuong() + "," + emp.getPhuong()
+                                            + ","
+                                            + emp.getQuan() + "," + emp.getTinh();
+                                    row.createCell(6).setCellValue(dc);
+                                    row.createCell(7).setCellValue(emp.getUsername());
+                                    row.createCell(8).setCellValue(emp.getPassword());
+                                    String dc1 = null;
+                                    ArrayList<store_DTO> stolist = store_BUS.getAll();
+                                    for (store_DTO sto : stolist) {
+                                        if (sto.getMant().equals(emp.getManhathuoc())) {
+                                            dc1 = sto.getMasonha() + "," + sto.getDuong() + ","
+                                                    + sto.getPhuong()
+                                                    + ","
+                                                    + sto.getQuan() + "," + sto.getTinh();
+                                        }
+                                    }
+                                    row.createCell(9).setCellValue(dc1);
+                                    i++;
+                                }
+                            } else if (data.getSelectedIndex() == 3) {
+                                XSSFSheet sheet = workbook.createSheet("Danh sách khuyến mãi");
+
+                                // tiêu đề
+                                Row row = sheet.createRow(0);
+                                row.createCell(0).setCellValue("Mã KM");
+                                row.createCell(1).setCellValue("Tên KM");
+                                row.createCell(2).setCellValue("Ngày bắt đầu");
+                                row.createCell(3).setCellValue("Ngày kết thúc");
+                                row.createCell(4).setCellValue("Giảm");
+                                row.createCell(5).setCellValue("Nội dung");
+                                row.createCell(6).setCellValue("Điểm yêu cầu");
+
+                                // lưu dữ liệu thành từng dòng
+                                ArrayList<promotion_DTO> prolist = promotion_BUS.getAll();
+                                int i = 1;
+                                for (promotion_DTO pro : prolist) {
+                                    row = sheet.createRow(i);
+                                    row.createCell(0).setCellValue(pro.getMakm());
+                                    row.createCell(1).setCellValue(pro.getTenkm());
+                                    row.createCell(2).setCellValue(pro.getNgaybatdau());
+                                    row.createCell(3).setCellValue(pro.getNgayketthuc());
+                                    row.createCell(4).setCellValue(pro.getGiam());
+                                    row.createCell(5).setCellValue(pro.getNoidung());
+                                    row.createCell(6).setCellValue(pro.getDiem());
+                                    i++;
+                                }
+                            } else if (data.getSelectedIndex() == 4) {
+                                XSSFSheet sheet = workbook.createSheet("Danh sách nhà thuốc");
+
+                                // tiêu đề
+                                Row row = sheet.createRow(0);
+                                row.createCell(0).setCellValue("Mã NT");
+                                row.createCell(1).setCellValue("Địa chỉ");
+                                row.createCell(2).setCellValue("Tên người quản lí");
+
+                                // lưu dữ liệu thành từng dòng
+                                ArrayList<store_DTO> stolist = store_BUS.getAll();
+                                int i = 1;
+                                for (store_DTO sto : stolist) {
+                                    row = sheet.createRow(i);
+                                    row.createCell(0).setCellValue(sto.getMant());
+                                    String dc = sto.getMasonha() + "," + sto.getDuong() + "," + sto.getPhuong()
+                                            + ","
+                                            + sto.getQuan() + "," + sto.getTinh();
+                                    row.createCell(1).setCellValue(dc);
+                                    String tenql = null;
+                                    ArrayList<employee_DTO> emplist = employee_BUS.getAll();
+                                    for (employee_DTO emp : emplist) {
+                                        if (sto.getManql().equals(emp.getManv())) {
+                                            tenql = emp.getTennv();
+                                        }
+                                    }
+                                    row.createCell(2).setCellValue(tenql);
+                                    i++;
+                                }
+                            }
+
+                            // xuất file
+                            try {
+                                System.out.println(exportPath);
+                                FileOutputStream fileOut = new FileOutputStream(exportPath);
+                                workbook.write(fileOut);
+                            } finally {
+                                workbook.close();
+                            }
+
+                            filename.setText("");
+                            path.setText("");
+
+                            return 0;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return 4;
+                        }
+                    } else
+                        return 3;
+                }
+
+                // Xuất PDF
+                if (xuatas.getSelectedIndex() == 1) {
+                    exportPath += ".pdf";
+                    File isexist = new File(exportPath);
+                    if (!isexist.exists()) {
+                        try {
+                            PdfWriter writer = new PdfWriter(exportPath);
+                            PdfDocument pdf = new PdfDocument(writer);
+
+                            PdfFont font = PdfFontFactory.createFont(advance.data_path +
+                                    "dejavu-sans\\ttf\\DejaVuSans-Bold.ttf", PdfEncodings.IDENTITY_H,
+                                    pdf);
+
+                            PdfFont font2 = PdfFontFactory.createFont(advance.data_path +
+                                    "dejavu-sans\\ttf\\DejaVuSans.ttf", PdfEncodings.IDENTITY_H,
+                                    pdf);
+
+                            if (data.getSelectedIndex() == 0) {
+                                Document document = new Document(pdf, PageSize.A4);
+                                document.setLeftMargin(10);
+                                document.setRightMargin(10);
+
+                                document.add(new Paragraph("Nhà Thuốc Thiện Tâm")
+                                        .setFont(font).setFontSize(18)
+                                        .setTextAlignment(TextAlignment.CENTER))
+                                        .setBackgroundColor(ColorConstants.GREEN);
+
+                                document.add(new Paragraph("Danh Sách Nhà Cung Cấp")
+                                        .setFont(font).setFontSize(14));
+
+                                document.add(new Paragraph("Thời gian: " + advance.currentTime())
+                                        .setFont(font).setFontSize(12));
+
+                                Table table = new Table(4);
+                                table.setWidth(UnitValue.createPercentValue(100));
+                                table.setFont(font2).setFontSize(12);
+
+                                // tiêu đề
+                                String[] headers = {
+                                        "Mã NCC", "Tên NCC", "SĐT", "Địa chỉ"
+                                };
+
+                                for (String header : headers) {
+                                    Cell headerCell = new Cell()
+                                            .add(new Paragraph(header).setTextAlignment(TextAlignment.CENTER))
+                                            .setBackgroundColor(ColorConstants.GREEN)
+                                            .setFont(font)
+                                            .setFontSize(12);
+
+                                    table.addHeaderCell(headerCell);
+                                }
+
+                                // lưu dữ liệu thành từng dòng
+                                ArrayList<supplier_DTO> suplist = supplier_BUS.getAll();
+                                for (supplier_DTO sup : suplist) {
+                                    if (sup.getTinhtrang()) {
+                                        String dc = sup.getMasonha() + "," + sup.getDuong() + "," + sup.getPhuong()
+                                                + ","
+                                                + sup.getQuan() + "," + sup.getTinh();
+                                        table.addCell(new Paragraph(sup.getMancc()));
+                                        table.addCell(new Paragraph(sup.getTenncc()));
+                                        table.addCell(new Paragraph(sup.getSdt()));
+                                        table.addCell(new Paragraph(dc));
+                                    }
+                                }
+
+                                document.add(table);
+                                document.close();
+                            } else if (data.getSelectedIndex() == 1) {
+                                Document document = new Document(pdf, PageSize.A3);
+                                document.setLeftMargin(10);
+                                document.setRightMargin(10);
+
+                                document.add(new Paragraph("Nhà Thuốc Thiện Tâm")
+                                        .setFont(font).setFontSize(18)
+                                        .setTextAlignment(TextAlignment.CENTER))
+                                        .setBackgroundColor(ColorConstants.GREEN);
+
+                                document.add(new Paragraph("Danh Sách Khách Hàng")
+                                        .setFont(font).setFontSize(14));
+
+                                document.add(new Paragraph("Thời gian: " + advance.currentTime())
+                                        .setFont(font).setFontSize(12));
+
+                                Table table = new Table(7);
+                                table.setWidth(UnitValue.createPercentValue(100));
+                                table.setFont(font2).setFontSize(12);
+
+                                // tiêu đề
+                                String[] headers = {
+                                        "Mã KH", "Tên KH", "SĐT", "Email", "Địa chỉ", "Mật khẩu", "Điểm khuyến mãi"
+                                };
+
+                                for (String header : headers) {
+                                    Cell headerCell = new Cell()
+                                            .add(new Paragraph(header).setTextAlignment(TextAlignment.CENTER))
+                                            .setBackgroundColor(ColorConstants.GREEN)
+                                            .setFont(font)
+                                            .setFontSize(12);
+
+                                    table.addHeaderCell(headerCell);
+                                }
+
+                                // lưu dữ liệu thành từng dòng
+                                ArrayList<customer_DTO> cuslist = customer_BUS.getAll();
+                                for (customer_DTO cus : cuslist) {
+                                    if (cus.getTinhtrang()) {
+                                        String dc = cus.getMasonha() + "," + cus.getDuong() + "," + cus.getPhuong()
+                                                + ","
+                                                + cus.getQuan() + "," + cus.getTinh();
+                                        table.addCell(new Paragraph(cus.getMakh()));
+                                        table.addCell(new Paragraph(cus.getTenkh()));
+                                        table.addCell(new Paragraph(cus.getSdt()));
+                                        table.addCell(new Paragraph(cus.getEmail()));
+                                        table.addCell(new Paragraph(dc));
+                                        table.addCell(new Paragraph(cus.getPassword()));
+                                        table.addCell(new Paragraph(String.valueOf(cus.getDiemKM())));
+                                    }
+                                }
+
+                                document.add(table);
+                                document.close();
+                            } else if (data.getSelectedIndex() == 2) {
+                                Document document = new Document(pdf, PageSize.A2);
+                                document.setLeftMargin(10);
+                                document.setRightMargin(10);
+
+                                document.add(new Paragraph("Nhà Thuốc Thiện Tâm")
+                                        .setFont(font).setFontSize(18)
+                                        .setTextAlignment(TextAlignment.CENTER))
+                                        .setBackgroundColor(ColorConstants.GREEN);
+
+                                document.add(new Paragraph("Danh Sách Nhân Viên")
+                                        .setFont(font).setFontSize(14));
+
+                                document.add(new Paragraph("Thời gian: " + advance.currentTime())
+                                        .setFont(font).setFontSize(12));
+
+                                Table table = new Table(10);
+                                table.setWidth(UnitValue.createPercentValue(100));
+                                table.setFont(font2).setFontSize(12);
+
+                                // tiêu đề
+                                String[] headers = {
+                                        "Mã NV", "Tên NV", "Chức vụ", "Giới tính", "CCCD", "SĐT", "Địa chỉ",
+                                        "Tài khoản", "Mật khẩu", "Công tác tại"
+                                };
+
+                                for (String header : headers) {
+                                    Cell headerCell = new Cell()
+                                            .add(new Paragraph(header).setTextAlignment(TextAlignment.CENTER))
+                                            .setBackgroundColor(ColorConstants.GREEN)
+                                            .setFont(font)
+                                            .setFontSize(12);
+
+                                    table.addHeaderCell(headerCell);
+                                }
+
+                                // lưu dữ liệu thành từng dòng
+                                ArrayList<employee_DTO> emplist = employee_BUS.getAll();
+                                for (employee_DTO emp : emplist) {
+                                    if (emp.getTinhtrang()) {
+                                        String dc = emp.getMasonha() + "," + emp.getDuong() + "," + emp.getPhuong()
+                                                + ","
+                                                + emp.getQuan() + "," + emp.getTinh();
+                                        table.addCell(new Paragraph(emp.getManv()));
+                                        table.addCell(new Paragraph(emp.getTennv()));
+                                        table.addCell(new Paragraph(emp.getChucvu()));
+                                        table.addCell(new Paragraph(emp.getGioitinh()));
+                                        table.addCell(new Paragraph(emp.getCccd()));
+                                        table.addCell(new Paragraph(emp.getSdt()));
+                                        table.addCell(new Paragraph(dc));
+                                        table.addCell(new Paragraph(emp.getUsername()));
+                                        table.addCell(new Paragraph(emp.getPassword()));
+                                        String dc1 = null;
+                                        ArrayList<store_DTO> stolist = store_BUS.getAll();
+                                        for (store_DTO sto : stolist) {
+                                            if (sto.getMant().equals(emp.getManhathuoc())) {
+                                                dc1 = sto.getMasonha() + "," + sto.getDuong() + ","
+                                                        + sto.getPhuong()
+                                                        + ","
+                                                        + sto.getQuan() + "," + sto.getTinh();
+                                            }
+                                        }
+                                        table.addCell(new Paragraph(dc1));
+                                    }
+                                }
+
+                                document.add(table);
+                                document.close();
+                            } else if (data.getSelectedIndex() == 3) {
+                                Document document = new Document(pdf, PageSize.A3);
+                                document.setLeftMargin(10);
+                                document.setRightMargin(10);
+
+                                document.add(new Paragraph("Nhà Thuốc Thiện Tâm")
+                                        .setFont(font).setFontSize(18)
+                                        .setTextAlignment(TextAlignment.CENTER))
+                                        .setBackgroundColor(ColorConstants.GREEN);
+
+                                document.add(new Paragraph("Danh Sách Khuyến Mãi")
+                                        .setFont(font).setFontSize(14));
+
+                                document.add(new Paragraph("Thời gian: " + advance.currentTime())
+                                        .setFont(font).setFontSize(12));
+
+                                Table table = new Table(7);
+                                table.setWidth(UnitValue.createPercentValue(100));
+                                table.setFont(font2).setFontSize(12);
+
+                                // tiêu đề
+                                String[] headers = {
+                                        "Mã KM", "Tên KM", "Ngày bắt đầu", "Ngày kết thúc", "Giảm", "Nội dung",
+                                        "Điểm yêu cầu"
+                                };
+
+                                for (String header : headers) {
+                                    Cell headerCell = new Cell()
+                                            .add(new Paragraph(header).setTextAlignment(TextAlignment.CENTER))
+                                            .setBackgroundColor(ColorConstants.GREEN)
+                                            .setFont(font)
+                                            .setFontSize(12);
+
+                                    table.addHeaderCell(headerCell);
+                                }
+
+                                // lưu dữ liệu thành từng dòng
+                                ArrayList<promotion_DTO> prolist = promotion_BUS.getAll();
+                                for (promotion_DTO pro : prolist) {
+                                    if (pro.getTinhtrang()) {
+                                        table.addCell(new Paragraph(pro.getMakm()));
+                                        table.addCell(new Paragraph(pro.getTenkm()));
+                                        table.addCell(new Paragraph(pro.getNgaybatdau()));
+                                        table.addCell(new Paragraph(pro.getNgayketthuc()));
+                                        table.addCell(new Paragraph(String.valueOf(pro.getGiam())));
+                                        table.addCell(new Paragraph(pro.getNoidung()));
+                                        table.addCell(new Paragraph(String.valueOf(pro.getDiem())));
+                                    }
+                                }
+
+                                document.add(table);
+                                document.close();
+                            } else if (data.getSelectedIndex() == 4) {
+                                Document document = new Document(pdf, PageSize.A4);
+                                document.setLeftMargin(10);
+                                document.setRightMargin(10);
+
+                                document.add(new Paragraph("Nhà Thuốc Thiện Tâm")
+                                        .setFont(font).setFontSize(18)
+                                        .setTextAlignment(TextAlignment.CENTER))
+                                        .setBackgroundColor(ColorConstants.GREEN);
+
+                                document.add(new Paragraph("Danh Sách Nhà Thuốc")
+                                        .setFont(font).setFontSize(14));
+
+                                document.add(new Paragraph("Thời gian: " + advance.currentTime())
+                                        .setFont(font).setFontSize(12));
+
+                                Table table = new Table(3);
+                                table.setWidth(UnitValue.createPercentValue(100));
+                                table.setFont(font2).setFontSize(12);
+
+                                // tiêu đề
+                                String[] headers = {
+                                        "Mã NT", "Địa chỉ", "Tên người quản lý"
+                                };
+
+                                for (String header : headers) {
+                                    Cell headerCell = new Cell()
+                                            .add(new Paragraph(header).setTextAlignment(TextAlignment.CENTER))
+                                            .setBackgroundColor(ColorConstants.GREEN)
+                                            .setFont(font)
+                                            .setFontSize(12);
+
+                                    table.addHeaderCell(headerCell);
+                                }
+
+                                // lưu dữ liệu thành từng dòng
+                                ArrayList<store_DTO> storelist = store_BUS.getAll();
+                                for (store_DTO sto : storelist) {
+                                    if (sto.getTinhtrang()) {
+                                        String dc = sto.getMasonha() + "," + sto.getDuong() + "," + sto.getPhuong()
+                                                + ","
+                                                + sto.getQuan() + "," + sto.getTinh();
+                                        table.addCell(new Paragraph(sto.getMant()));
+                                        table.addCell(new Paragraph(dc));
+                                        String tenql = null;
+                                        ArrayList<employee_DTO> emplist = employee_BUS.getAll();
+                                        for (employee_DTO emp : emplist) {
+                                            if (sto.getManql().equals(emp.getManv())) {
+                                                tenql = emp.getTennv();
+                                            }
+                                        }
+                                        table.addCell(new Paragraph(tenql));
+                                    }
+                                }
+
+                                document.add(table);
+                                document.close();
+                            }
+
+                            filename.setText("");
+                            path.setText("");
+
+                            return 0;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return 4;
+                        }
+                    } else
+                        return 3;
+                }
+            } else
+                return 2;
+        } else
+            return 1;
+
+        return -1;
+    }
+
 }

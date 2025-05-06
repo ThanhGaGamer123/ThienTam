@@ -55,7 +55,24 @@ public class order_BUS {
         }
     }
 
-    public static int cancelOrder(DefaultTableModel model, JTable table) {
+    public static void loadDataByEmployee(DefaultTableModel model, employee_DTO em) {
+        ArrayList<order_DTO> ords = new order_DAO().selectAll();
+        model.setRowCount(0);
+        for (order_DTO ord : ords) {
+            customer_DTO cus = new customer_DTO();
+            cus.setMakh(ord.getMakh());
+            cus = new customer_DAO().selectByID(cus);
+
+            JButton eyeButton = new JButton(data.imagePath.resize_eye);
+
+            if(!ord.getTinhtrang().equals("Đã hủy")
+            && (ord.getManv().isEmpty() || ord.getManv().equals(em.getManv())))
+                model.addRow(new Object[]{ord.getMadon(), cus.getTenkh(), em.getTennv(),
+                ord.getNgaydat(), ord.getTongtien(), ord.getTinhtrang(), eyeButton});
+        }
+    }
+
+    public static int cancelOrder(DefaultTableModel model, JTable table, employee_DTO em) {
         int selectedRow = table.getSelectedRow();
         if(selectedRow != -1) {
             String mahd = model.getValueAt(selectedRow, 0).toString();
@@ -71,7 +88,7 @@ public class order_BUS {
                     if(choice == 0) {
                         ord.setTinhtrang("Đã hủy");
                         ordDAO.update(ord);
-                        loadData(model);
+                        loadDataByEmployee(model, em);
     
                         return 0;
                     } else return -1;
@@ -82,7 +99,8 @@ public class order_BUS {
         return 1;
     }
 
-    public static void findOrder(JTextField search, DefaultTableModel model) {
+    public static void findOrder(JTextField search, DefaultTableModel model,
+    employee_DTO em) {
         model.setRowCount(0);
         if(!search.getText().isEmpty()) {
             ArrayList<order_DTO> ord = new order_DAO().selectByCondition("madon like N'%" + search.getText() + "%'");
@@ -91,14 +109,14 @@ public class order_BUS {
             cus.setMakh(ord.get(0).getMakh());
             cus = new customer_DAO().selectByID(cus);
 
-            employee_DTO em = new employee_DTO();
-            em.setManv(ord.get(0).getManv());
-            em = new employee_DAO().selectByID(em);
-
             JButton eyeButton = new JButton(data.imagePath.resize_eye);
 
-            model.addRow(new Object[]{ord.get(0).getMadon(), cus.getTenkh(), em.getTennv(),
-            ord.get(0).getNgaydat(), ord.get(0).getTongtien(), ord.get(0).getTinhtrang(), eyeButton});
+            if(ord.get(0).getManv().isEmpty() 
+            || ord.get(0).getManv().equals(em.getManv())) {
+                model.addRow(new Object[]{ord.get(0).getMadon(), cus.getTenkh(), 
+                em.getTennv(), ord.get(0).getNgaydat(), ord.get(0).getTongtien(),
+                ord.get(0).getTinhtrang(), eyeButton});
+            }
         }
     }
 
@@ -188,7 +206,7 @@ public class order_BUS {
                 cusDAO.update(cus);
             }
 
-            loadData(modelOrder);
+            loadDataByEmployee(modelOrder, em);
 
             return true;
         } else return false;
@@ -329,7 +347,8 @@ public class order_BUS {
         tinhtrang.setSelectedIndex(0);
     }
 
-    public static void filter(ArrayList<order_DTO> ords, DefaultTableModel model, int loc) {
+    public static void filter(ArrayList<order_DTO> ords, DefaultTableModel model, int loc,
+    employee_DTO em) {
         ArrayList<order_DTO> temp = new ArrayList<>();
         if(!ords.isEmpty()) {
             temp.addAll(ords);
@@ -390,14 +409,23 @@ public class order_BUS {
             cus.setMakh(ord.getMakh());
             cus = new customer_DAO().selectByID(cus);
 
-            employee_DTO em = new employee_DTO();
-            em.setManv(ord.getManv());
-            em = new employee_DAO().selectByID(em);
-
             JButton eyeButton = new JButton(data.imagePath.resize_eye);
 
-            model.addRow(new Object[]{ord.getMadon(), cus.getTenkh(), em.getTennv(),
-            ord.getNgaydat(), ord.getTongtien(), ord.getTinhtrang(), eyeButton});
+            if(ords.isEmpty()) {
+                if (ord.getManv().isEmpty() || ord.getManv().equals(em.getManv())) {
+                    model.addRow(new Object[]{ord.getMadon(), cus.getTenkh(), em.getTennv(),
+                    ord.getNgaydat(), ord.getTongtien(), ord.getTinhtrang(), eyeButton});
+                    System.out.println(1);
+                }
+            } else {
+                employee_DTO em2 = new employee_DTO();
+                em2.setManv(ord.getManv());
+                em2 = new employee_DAO().selectByID(em2);
+
+                model.addRow(new Object[]{ord.getMadon(), cus.getTenkh(), em2.getTennv(),
+                ord.getNgaydat(), ord.getTongtien(), ord.getTinhtrang(), eyeButton});
+                System.out.println(2);
+            }
         }
     }
 
@@ -431,8 +459,10 @@ public class order_BUS {
         employee_DAO emDAO = new employee_DAO();
         em = emDAO.selectByID(em);
 
-        manv.setText(em.getManv());
-        tennv.setText(em.getTennv());
+        if(em.getManv() != null && !em.getManv().isEmpty()) manv.setText(em.getManv());
+        else manv.setText("Không có");
+        if(em.getTennv() != null && !em.getTennv().isEmpty()) tennv.setText(em.getTennv());
+        else tennv.setText("Không có");
 
         diachi.setText(ord.getDiachicuthe() + ", " + ord.getPhuong()
         + ", " + ord.getQuan() + ", " + ord.getTinh());

@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -16,15 +17,31 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
+import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 import BUS.customer_BUS;
 import BUS.employee_BUS;
@@ -37,19 +54,88 @@ import DTO.employee_DTO;
 import DTO.promotion_DTO;
 import DTO.store_DTO;
 import DTO.supplier_DTO;
+import GUI.menu_GUI.export1_GUI;
+import GUI.menu_GUI.import1_GUI;
 import advanceMethod.advance;
 
 public class admin_GUI extends JFrame {
     DefaultTableModel modelSupplier, modelStorage, modelCustomer, modelEmployee, modelPromotion, modelStore;
     JTable tableSupplier, tableStorage, tableCustomer, tableEmployee, tablePromotion, tableStore;
 
+    private void searchTableSupplier(String query) {
+        DefaultTableModel model = (DefaultTableModel) tableSupplier.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        tableSupplier.setRowSorter(sorter);
+        if (query.trim().isEmpty()) {
+            sorter.setRowFilter(null); // Hiển thị tất cả nếu không có từ khóa
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + query)); // Lọc theo từ khóa (không phân biệt hoa thường)
+        }
+    }
+
+    private void searchTableStorage(String query) {
+        DefaultTableModel model = (DefaultTableModel) tableStorage.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        tableStorage.setRowSorter(sorter);
+        if (query.trim().isEmpty()) {
+            sorter.setRowFilter(null); // Hiển thị tất cả nếu không có từ khóa
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + query)); // Lọc theo từ khóa (không phân biệt hoa thường)
+        }
+    }
+
+    private void searchTableCustomer(String query) {
+        DefaultTableModel model = (DefaultTableModel) tableCustomer.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        tableCustomer.setRowSorter(sorter);
+        if (query.trim().isEmpty()) {
+            sorter.setRowFilter(null); // Hiển thị tất cả nếu không có từ khóa
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + query)); // Lọc theo từ khóa (không phân biệt hoa thường)
+        }
+    }
+
+    private void searchTableEmployee(String query) {
+        DefaultTableModel model = (DefaultTableModel) tableEmployee.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        tableEmployee.setRowSorter(sorter);
+        if (query.trim().isEmpty()) {
+            sorter.setRowFilter(null); // Hiển thị tất cả nếu không có từ khóa
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + query)); // Lọc theo từ khóa (không phân biệt hoa thường)
+        }
+    }
+
+    private void searchTablePromotion(String query) {
+        DefaultTableModel model = (DefaultTableModel) tablePromotion.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        tablePromotion.setRowSorter(sorter);
+        if (query.trim().isEmpty()) {
+            sorter.setRowFilter(null); // Hiển thị tất cả nếu không có từ khóa
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + query)); // Lọc theo từ khóa (không phân biệt hoa thường)
+        }
+    }
+
+    private void searchTableStore(String query) {
+        DefaultTableModel model = (DefaultTableModel) tableStore.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        tableStore.setRowSorter(sorter);
+        if (query.trim().isEmpty()) {
+            sorter.setRowFilter(null); // Hiển thị tất cả nếu không có từ khóa
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + query)); // Lọc theo từ khóa (không phân biệt hoa thường)
+        }
+    }
+
     public admin_GUI(employee_DTO nv) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(true);
 
-        this.setTitle("Nhân viên");
+        this.setTitle("Quản lý");
         ImageIcon logo = new ImageIcon(advance.img + "logo.png");
         this.setIconImage(logo.getImage());
         this.getContentPane().setBackground(Color.WHITE);
@@ -63,21 +149,20 @@ public class admin_GUI extends JFrame {
         // tab.setBounds(0, 10, 1280, 710);
         this.add(tab, BorderLayout.CENTER);
 
-        // Panel Thông tin nhân viên
+        // Panel Thông tin quản lý
         JPanel employeeStatus = new JPanel();
         employeeStatus.setBackground(Color.white);
         employeeStatus.setLayout(new GridBagLayout());
 
         JScrollPane employeeScroll = new JScrollPane();
         employeeScroll.setViewportView(employeeStatus);
-        tab.addTab("Thông tin", data.imagePath.resize_statusIcon, employeeScroll);
 
         GridBagConstraints gdc_employee = new GridBagConstraints();
 
         gdc_employee.gridwidth = 1;
         gdc_employee.gridheight = 1;
 
-        JLabel title = new JLabel("Thông Tin Nhân Viên");
+        JLabel title = new JLabel("Thông Tin Quản Lý");
         title.setForeground(Color.BLACK);
         title.setFont(new Font(null, Font.BOLD, 40));
         // title.setBounds(200,80,500,50);
@@ -92,7 +177,7 @@ public class admin_GUI extends JFrame {
         gdc_employee.gridwidth = 1;
         gdc_employee.anchor = GridBagConstraints.NONE;
 
-        JLabel manv = new JLabel("Mã nhân viên: ");
+        JLabel manv = new JLabel("Mã quản lý: ");
         manv.setForeground(Color.BLACK);
         manv.setFont(new Font(null, Font.PLAIN, 22));
         // manv.setBounds(200,140,300,30);
@@ -102,7 +187,7 @@ public class admin_GUI extends JFrame {
         gdc_employee.insets = new Insets(0, 0, 30, 0);
         employeeStatus.add(manv, gdc_employee);
 
-        JLabel tennv = new JLabel("Tên nhân viên: ");
+        JLabel tennv = new JLabel("Tên quản lý: ");
         tennv.setForeground(Color.BLACK);
         tennv.setFont(new Font(null, Font.PLAIN, 22));
         // tennv.setBounds(200,180,300,30);
@@ -181,13 +266,12 @@ public class admin_GUI extends JFrame {
 
         // Panel nha cung cap
         JPanel supplier = new JPanel();
-        supplier.setBackground(Color.red);
+        supplier.setBackground(Color.white);
         supplier.setLayout(new GridBagLayout());
 
         JScrollPane supplierScroll = new JScrollPane();
         supplierScroll.setViewportView(supplier);
-        tab.addTab("Nhà cung cấp", null, supplierScroll);
-
+        
         GridBagConstraints gdc_supplier = new GridBagConstraints();
 
         JLabel titleSup = new JLabel("Danh Sách Nhà Cung Cấp");
@@ -223,6 +307,24 @@ public class admin_GUI extends JFrame {
         panel_btn_supplier_2.setLayout(new GridLayout(1, 4));
 
         JTextField search_bar_sup = new JTextField("Tìm kiếm");
+        search_bar_sup.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchTableSupplier(search_bar_sup.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchTableSupplier(search_bar_sup.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchTableSupplier(search_bar_sup.getText());
+            }
+
+        });
         search_bar_sup.setForeground(Color.BLACK);
         search_bar_sup.setFont(new Font(null, Font.PLAIN, 18));
         panel_btn_supplier_1.add(search_bar_sup, BorderLayout.CENTER);
@@ -271,6 +373,11 @@ public class admin_GUI extends JFrame {
         tableSupplier.getTableHeader().setForeground(Color.WHITE);
         tableSupplier.getTableHeader().setFont(new Font(null, Font.BOLD, 18));
 
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < tableSupplier.getColumnCount(); i++) {
+            tableSupplier.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
         JScrollPane scrollSup = new JScrollPane(tableSupplier);
         gdc_supplier.gridx = 0;
         gdc_supplier.gridy = 2;
@@ -286,13 +393,12 @@ public class admin_GUI extends JFrame {
 
         // Panel kho
         JPanel storage = new JPanel();
-        storage.setBackground(Color.red);
+        storage.setBackground(Color.white);
         storage.setLayout(new GridBagLayout());
 
         JScrollPane storageScroll = new JScrollPane();
         storageScroll.setViewportView(storage);
-        tab.addTab("Kho", null, storageScroll);
-
+        
         GridBagConstraints gdc_storage = new GridBagConstraints();
 
         JLabel titleStorage = new JLabel("Danh sách tồn kho");
@@ -304,6 +410,40 @@ public class admin_GUI extends JFrame {
         gdc_storage.anchor = GridBagConstraints.CENTER;
         gdc_storage.insets = new Insets(20, 0, 20, 0);
         storage.add(titleStorage, gdc_storage);
+
+        JPanel panel_btn_storage = new JPanel();
+        panel_btn_storage.setPreferredSize(new Dimension(0, 50));
+        panel_btn_storage.setBackground(Color.white);
+        panel_btn_storage.setLayout(new BorderLayout());
+        gdc_storage.gridx = 0;
+        gdc_storage.gridy = 1;
+        gdc_storage.gridwidth = 5;
+        gdc_storage.fill = GridBagConstraints.HORIZONTAL;
+        gdc_storage.weightx = 1.0;
+        storage.add(panel_btn_storage, gdc_storage);
+
+        JTextField search_bar_storage = new JTextField("Tìm kiếm");
+        search_bar_storage.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchTableStorage(search_bar_storage.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchTableStorage(search_bar_storage.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchTableStorage(search_bar_storage.getText());
+            }
+
+        });
+        search_bar_storage.setForeground(Color.BLACK);
+        search_bar_storage.setFont(new Font(null, Font.PLAIN, 18));
+        panel_btn_storage.add(search_bar_storage, BorderLayout.CENTER);
 
         String columnsStorage[] = { "Mã tồn", "Tên sản phẩm", "Hộp", "Vỉ", "Viên" };
         modelStorage = new DefaultTableModel(columnsStorage, 0) {
@@ -333,13 +473,12 @@ public class admin_GUI extends JFrame {
 
         // Panel khach hang
         JPanel panel_customer = new JPanel();
-        panel_customer.setBackground(Color.red);
+        panel_customer.setBackground(Color.white);
         panel_customer.setLayout(new GridBagLayout());
 
         JScrollPane customerScroll = new JScrollPane();
         customerScroll.setViewportView(panel_customer);
-        tab.addTab("Khách hàng", null, customerScroll);
-
+        
         GridBagConstraints gdc_customer = new GridBagConstraints();
 
         JLabel titleCustomer = new JLabel("Danh sách khách hàng");
@@ -375,6 +514,24 @@ public class admin_GUI extends JFrame {
         panel_btn_supplier_2_kh.setLayout(new GridLayout(1, 4));
 
         JTextField search_bar_sup_kh = new JTextField("Tìm kiếm");
+        search_bar_sup_kh.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchTableCustomer(search_bar_sup_kh.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchTableCustomer(search_bar_sup_kh.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchTableCustomer(search_bar_sup_kh.getText());
+            }
+
+        });
         search_bar_sup_kh.setForeground(Color.BLACK);
         search_bar_sup_kh.setFont(new Font(null, Font.PLAIN, 18));
         panel_btn_supplier_1_kh.add(search_bar_sup_kh, BorderLayout.CENTER);
@@ -423,6 +580,12 @@ public class admin_GUI extends JFrame {
         tableCustomer.getTableHeader().setBackground(new Color(0, 154, 102)); // Màu nền tiêu đề
         tableCustomer.getTableHeader().setForeground(Color.WHITE);
         tableCustomer.getTableHeader().setFont(new Font(null, Font.BOLD, 18));
+
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < tableCustomer.getColumnCount(); i++) {
+            tableCustomer.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
         JScrollPane scrollCustomer = new JScrollPane(tableCustomer);
         gdc_customer.gridx = 0;
         gdc_customer.gridy = 2;
@@ -438,13 +601,12 @@ public class admin_GUI extends JFrame {
 
         // Panel nhan vien
         JPanel panel_employee = new JPanel();
-        panel_employee.setBackground(Color.red);
+        panel_employee.setBackground(Color.white);
         panel_employee.setLayout(new GridBagLayout());
 
         JScrollPane employeeScroll_1 = new JScrollPane();
         employeeScroll_1.setViewportView(panel_employee);
-        tab.addTab("Nhân viên", null, employeeScroll_1);
-
+        
         GridBagConstraints gdc_employee_1 = new GridBagConstraints();
 
         JLabel titleEmployee = new JLabel("Danh sách nhân viên");
@@ -480,6 +642,24 @@ public class admin_GUI extends JFrame {
         panel_btn_supplier_2_nv.setLayout(new GridLayout(1, 4));
 
         JTextField search_bar_sup_nv = new JTextField("Tìm kiếm");
+        search_bar_sup_nv.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchTableEmployee(search_bar_sup_nv.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchTableEmployee(search_bar_sup_nv.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchTableEmployee(search_bar_sup_nv.getText());
+            }
+
+        });
         search_bar_sup_nv.setForeground(Color.BLACK);
         search_bar_sup_nv.setFont(new Font(null, Font.PLAIN, 18));
         panel_btn_supplier_1_nv.add(search_bar_sup_nv, BorderLayout.CENTER);
@@ -528,6 +708,12 @@ public class admin_GUI extends JFrame {
         tableEmployee.getTableHeader().setBackground(new Color(0, 154, 102)); // Màu nền tiêu đề
         tableEmployee.getTableHeader().setForeground(Color.WHITE);
         tableEmployee.getTableHeader().setFont(new Font(null, Font.BOLD, 18));
+
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < tableEmployee.getColumnCount(); i++) {
+            tableEmployee.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
         JScrollPane scrollEmployee = new JScrollPane(tableEmployee);
         gdc_employee_1.gridx = 0;
         gdc_employee_1.gridy = 2;
@@ -543,13 +729,12 @@ public class admin_GUI extends JFrame {
 
         // Panel khuyen mai
         JPanel panel_promotion = new JPanel();
-        panel_promotion.setBackground(Color.red);
+        panel_promotion.setBackground(Color.white);
         panel_promotion.setLayout(new GridBagLayout());
 
         JScrollPane promotionScroll = new JScrollPane();
         promotionScroll.setViewportView(panel_promotion);
-        tab.addTab("Khuyến mãi", null, promotionScroll);
-
+        
         GridBagConstraints gdc_promotion = new GridBagConstraints();
 
         JLabel titlePromotion = new JLabel("Danh sách khuyến mãi");
@@ -585,6 +770,24 @@ public class admin_GUI extends JFrame {
         panel_btn_promotion_2.setLayout(new GridLayout(1, 4));
 
         JTextField search_bar_promotion = new JTextField("Tìm kiếm");
+        search_bar_promotion.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchTablePromotion(search_bar_promotion.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchTablePromotion(search_bar_promotion.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchTablePromotion(search_bar_promotion.getText());
+            }
+
+        });
         search_bar_promotion.setForeground(Color.BLACK);
         search_bar_promotion.setFont(new Font(null, Font.PLAIN, 18));
         panel_btn_promotion_1.add(search_bar_promotion, BorderLayout.CENTER);
@@ -633,6 +836,12 @@ public class admin_GUI extends JFrame {
         tablePromotion.getTableHeader().setBackground(new Color(0, 154, 102)); // Màu nền tiêu đề
         tablePromotion.getTableHeader().setForeground(Color.WHITE);
         tablePromotion.getTableHeader().setFont(new Font(null, Font.BOLD, 18));
+
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < tablePromotion.getColumnCount(); i++) {
+            tablePromotion.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
         JScrollPane scrollPromotion = new JScrollPane(tablePromotion);
         gdc_promotion.gridx = 0;
         gdc_promotion.gridy = 2;
@@ -648,13 +857,12 @@ public class admin_GUI extends JFrame {
 
         // Panel nha thuoc
         JPanel panel_store = new JPanel();
-        panel_store.setBackground(Color.red);
+        panel_store.setBackground(Color.white);
         panel_store.setLayout(new GridBagLayout());
 
         JScrollPane storeScroll = new JScrollPane();
         storeScroll.setViewportView(panel_store);
-        tab.addTab("Nhà thuốc", null, storeScroll);
-
+        
         GridBagConstraints gdc_store = new GridBagConstraints();
 
         JLabel titleStore = new JLabel("Danh sách nhà thuốc");
@@ -690,6 +898,24 @@ public class admin_GUI extends JFrame {
         panel_btn_store_2.setLayout(new GridLayout(1, 4));
 
         JTextField search_bar_store = new JTextField("Tìm kiếm");
+        search_bar_store.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchTableStore(search_bar_store.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchTableStore(search_bar_store.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchTableStore(search_bar_store.getText());
+            }
+
+        });
         search_bar_store.setForeground(Color.BLACK);
         search_bar_store.setFont(new Font(null, Font.PLAIN, 18));
         panel_btn_store_1.add(search_bar_store, BorderLayout.CENTER);
@@ -737,6 +963,12 @@ public class admin_GUI extends JFrame {
         tableStore.getTableHeader().setBackground(new Color(0, 154, 102)); // Màu nền tiêu đề
         tableStore.getTableHeader().setForeground(Color.WHITE);
         tableStore.getTableHeader().setFont(new Font(null, Font.BOLD, 18));
+
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < tableStore.getColumnCount(); i++) {
+            tableStore.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
         JScrollPane scrollStore = new JScrollPane(tableStore);
         gdc_store.gridx = 0;
         gdc_store.gridy = 2;
@@ -750,10 +982,334 @@ public class admin_GUI extends JFrame {
         store_BUS.loadTable(modelStore);
         tableStore.setModel(modelStore);
 
+        // panel thong ke
+        JPanel panel_tk = new JPanel();
+        panel_tk.setBackground(Color.white);
+        panel_tk.setLayout(new GridBagLayout());
+
+        JScrollPane tkScroll = new JScrollPane();
+        tkScroll.setViewportView(panel_tk);
+        
+        GridBagConstraints gdc_tk = new GridBagConstraints();
+
+        JLabel titlepanel_tk = new JLabel("Thống Kê Quản lý");
+        titlepanel_tk.setForeground(Color.BLACK);
+        titlepanel_tk.setFont(new Font(null, Font.BOLD, 36));
+        gdc_tk.gridx = 0;
+        gdc_tk.gridy = 0;
+        gdc_tk.gridwidth = 12;
+        gdc_tk.anchor = GridBagConstraints.CENTER;
+        gdc_tk.insets = new Insets(20, 0, 20, 0);
+        panel_tk.add(titlepanel_tk, gdc_tk);
+
+        // reset
+        gdc_tk.gridwidth = 1;
+
+        JLabel ngaybatdau = new JLabel("Từ ngày:");
+        ngaybatdau.setForeground(Color.BLACK);
+        ngaybatdau.setFont(new Font(null, Font.PLAIN, 20));
+        gdc_tk.gridx = 0;
+        gdc_tk.gridy = 1;
+        gdc_tk.gridwidth = 1;
+        gdc_tk.anchor = GridBagConstraints.CENTER;
+        gdc_tk.fill = GridBagConstraints.HORIZONTAL;
+        gdc_tk.weightx = 0;
+        gdc_tk.insets = new Insets(0, 20, 30, 0);
+        panel_tk.add(ngaybatdau, gdc_tk);
+
+        JTextField tf_ngaybatdau = new JTextField("dd/MM/yyyy");
+        tf_ngaybatdau.setForeground(Color.BLACK);
+        tf_ngaybatdau.setFont(new Font(null, Font.PLAIN, 20));
+        gdc_tk.gridx = 1;
+        gdc_tk.gridy = 1;
+        gdc_tk.gridwidth = 2;
+        gdc_tk.anchor = GridBagConstraints.CENTER;
+        gdc_tk.fill = GridBagConstraints.HORIZONTAL;
+        gdc_tk.weightx = 1;
+        gdc_tk.insets = new Insets(0, 20, 30, 10);
+        panel_tk.add(tf_ngaybatdau, gdc_tk);
+
+        JLabel ngayketthuc = new JLabel("Đến ngày:");
+        ngayketthuc.setForeground(Color.BLACK);
+        ngayketthuc.setFont(new Font(null, Font.PLAIN, 20));
+        gdc_tk.gridx = 3;
+        gdc_tk.gridy = 1;
+        gdc_tk.gridwidth = 1;
+        gdc_tk.anchor = GridBagConstraints.CENTER;
+        gdc_tk.fill = GridBagConstraints.HORIZONTAL;
+        gdc_tk.weightx = 0;
+        gdc_tk.insets = new Insets(0, 20, 30, 0);
+        panel_tk.add(ngayketthuc, gdc_tk);
+
+        JTextField tf_ngayketthuc = new JTextField("dd/MM/yyyy");
+        tf_ngayketthuc.setForeground(Color.BLACK);
+        tf_ngayketthuc.setFont(new Font(null, Font.PLAIN, 20));
+        gdc_tk.gridx = 4;
+        gdc_tk.gridy = 1;
+        gdc_tk.gridwidth = 2;
+        gdc_tk.anchor = GridBagConstraints.CENTER;
+        gdc_tk.fill = GridBagConstraints.HORIZONTAL;
+        gdc_tk.weightx = 1;
+        gdc_tk.insets = new Insets(0, 20, 30, 10);
+        panel_tk.add(tf_ngayketthuc, gdc_tk);
+
+        String[] options = { "Không có", "Theo doanh thu", "Theo lượng khách hàng"
+        , "Theo đơn hàng nhập"};
+        JComboBox loai = new JComboBox(options);
+        loai.setForeground(Color.BLACK);
+        loai.setFont(new Font(null, Font.PLAIN, 20));
+        gdc_tk.gridx = 6;
+        gdc_tk.gridy = 1;
+        gdc_tk.gridwidth = 2;
+        gdc_tk.anchor = GridBagConstraints.CENTER;
+        gdc_tk.fill = GridBagConstraints.HORIZONTAL;
+        gdc_tk.weightx = 1;
+        gdc_tk.insets = new Insets(0, 20, 30, 10);
+        panel_tk.add(loai, gdc_tk);
+
+        String[] options2 = { "Không có", "Biểu đồ cột", "Biều đồ miền"
+        , "Biểu đồ tròn"};
+        JComboBox bieudo = new JComboBox(options2);
+        bieudo.setForeground(Color.BLACK);
+        bieudo.setFont(new Font(null, Font.PLAIN, 20));
+        gdc_tk.gridx = 8;
+        gdc_tk.gridy = 1;
+        gdc_tk.gridwidth = 2;
+        gdc_tk.anchor = GridBagConstraints.CENTER;
+        gdc_tk.fill = GridBagConstraints.HORIZONTAL;
+        gdc_tk.weightx = 1;
+        gdc_tk.insets = new Insets(0, 20, 30, 10);
+        panel_tk.add(bieudo, gdc_tk);
+
+        JButton chon = new JButton("Chọn");
+        chon.setForeground(Color.BLACK);
+        chon.setFont(new Font(null, Font.PLAIN, 20));
+        gdc_tk.gridx = 10;
+        gdc_tk.gridy = 1;
+        gdc_tk.gridwidth = 1;
+        gdc_tk.anchor = GridBagConstraints.CENTER;
+        gdc_tk.fill = GridBagConstraints.HORIZONTAL;
+        gdc_tk.insets = new Insets(0, 20, 30, 70);
+        panel_tk.add(chon, gdc_tk);
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        JFreeChart chart = ChartFactory.createAreaChart("", "", "", dataset,
+        PlotOrientation.VERTICAL, true, false, false);
+
+        ChartPanel columnStatistic = new ChartPanel(chart, false);
+        columnStatistic.setMouseWheelEnabled(false);
+        columnStatistic.setMouseZoomable(false);
+        columnStatistic.setBackground(Color.white);
+        gdc_tk.gridx = 0;
+        gdc_tk.gridy = 2;
+        gdc_tk.gridwidth = 12;
+        gdc_tk.gridheight = 2;
+        gdc_tk.fill = GridBagConstraints.BOTH;
+        gdc_tk.weightx = 1;
+        gdc_tk.weighty = 1;
+        gdc_tk.insets = new Insets(0, 100, 20, 100);
+        panel_tk.add(columnStatistic, gdc_tk);
+        
+        tab.addTab("Thông tin", data.imagePath.resize_statusIcon, employeeScroll);
+        tab.addTab("Nhà thuốc", data.imagePath.resize_storeIcon, storeScroll);
+        tab.addTab("Nhân viên", data.imagePath.resize_employeeIcon, employeeScroll_1);
+        tab.addTab("Khách hàng", data.imagePath.resize_customer_adminIcon, customerScroll);
+        tab.addTab("Nhà cung cấp", data.imagePath.resize_supplierIcon, supplierScroll);
+        tab.addTab("Kho", data.imagePath.resize_storageIcon, storageScroll);
+        tab.addTab("Khuyến mãi", data.imagePath.resize_promotionIcon, promotionScroll);
+        tab.addTab("Thống kê", data.imagePath.resize_statistic_adminIcon, tkScroll);
+
+        // menu
+        JMenuBar menuBar = new JMenuBar();
+        JMenu file = new JMenu("Tập tin");
+        file.setForeground(Color.BLACK);
+        file.setFont(new Font(null, Font.BOLD, 16));
+        file.setMnemonic('T');
+        file.setIcon(data.imagePath.resize_fileIcon);
+        JMenu system = new JMenu("Hệ thống");
+        system.setForeground(Color.BLACK);
+        system.setFont(new Font(null, Font.BOLD, 16));
+        system.setMnemonic('H');
+        system.setIcon(data.imagePath.resize_systemIcon);
+        JMenuItem importData = new JMenuItem("Nhập");
+        importData.setForeground(Color.BLACK);
+        importData.setFont(new Font(null, Font.PLAIN, 16));
+        importData.setMnemonic('N');
+        importData.setIcon(data.imagePath.resize_importIcon);
+        JMenuItem export = new JMenuItem("Xuất");
+        export.setForeground(Color.BLACK);
+        export.setFont(new Font(null, Font.PLAIN, 16));
+        export.setMnemonic('X');
+        export.setIcon(data.imagePath.resize_exportIcon);
+        JMenuItem log_out = new JMenuItem("Đăng xuất");
+        log_out.setForeground(Color.BLACK);
+        log_out.setFont(new Font(null, Font.PLAIN, 16));
+        log_out.setMnemonic('X');
+        log_out.setIcon(data.imagePath.resize_logOut);
+        JMenuItem exit = new JMenuItem("Thoát");
+        exit.setForeground(Color.BLACK);
+        exit.setFont(new Font(null, Font.PLAIN, 16));
+        exit.setMnemonic('T');
+        exit.setIcon(data.imagePath.resize_exitIcon);
+        file.add(importData);
+        file.add(export);
+        system.add(log_out);
+        system.add(exit);
+        menuBar.add(file);
+        menuBar.add(system);
+        this.setJMenuBar(menuBar);
+
         this.setVisible(true);
 
         employee_BUS.loadData(nv, manv, tennv, chucvu, gioitinh, cccd, sdt, diachi, nhathuoc, tinhtrang);
 
+        // đăng xuất
+        log_out.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int choice = JOptionPane.showConfirmDialog(null,
+                        "Bạn có chắc muốn đăng xuất không?");
+                if (choice == 0) {
+                    new login_GUI();
+                    dispose();
+                }
+            }
+        });
+
+        // thoát
+        exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+        // chuc nang thong ke
+        chon.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int ketQua = employee_BUS.loadMapAdmin(dataset, loai, tf_ngaybatdau, tf_ngayketthuc, 
+                nv, columnStatistic, bieudo);
+                if(ketQua == 1) {
+                    JOptionPane.showMessageDialog(null, 
+                    "Biểu đồ tròn yêu cầu thống kê trong năm.");
+                }
+                if(ketQua == -1) {
+                    JOptionPane.showMessageDialog(null, 
+                    "Chưa có dữ liệu để thống kê.");
+                }
+            }
+        });
+
+        // xuat file
+        export.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new export1_GUI();
+            }
+        });
+
+        // nhap file
+        importData.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new import1_GUI(modelSupplier, modelCustomer, modelEmployee, 
+                modelPromotion, modelStore);
+            }
+        });
+
+        // cell tinh trang
+        tableEmployee.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                JLabel label = (value instanceof JLabel) ? (JLabel) value : new JLabel();
+
+                // Thiết lập màu nền khi được chọn
+                if (isSelected) {
+                    label.setBackground(new Color(173, 216, 230)); // Màu nền sáng
+                    label.setOpaque(true); // Để màu nền có hiệu lực
+                } else {
+                    label.setBackground(Color.WHITE); // Màu nền mặc định
+                    label.setOpaque(true);
+                }
+
+                return label;
+            }
+        });
+        tableSupplier.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                JLabel label = (value instanceof JLabel) ? (JLabel) value : new JLabel();
+
+                // Thiết lập màu nền khi được chọn
+                if (isSelected) {
+                    label.setBackground(new Color(173, 216, 230)); // Màu nền sáng
+                    label.setOpaque(true); // Để màu nền có hiệu lực
+                } else {
+                    label.setBackground(Color.WHITE); // Màu nền mặc định
+                    label.setOpaque(true);
+                }
+
+                return label;
+            }
+        });
+        tableCustomer.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                JLabel label = (value instanceof JLabel) ? (JLabel) value : new JLabel();
+
+                // Thiết lập màu nền khi được chọn
+                if (isSelected) {
+                    label.setBackground(new Color(173, 216, 230)); // Màu nền sáng
+                    label.setOpaque(true); // Để màu nền có hiệu lực
+                } else {
+                    label.setBackground(Color.WHITE); // Màu nền mặc định
+                    label.setOpaque(true);
+                }
+
+                return label;
+            }
+        });
+        tablePromotion.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                JLabel label = (value instanceof JLabel) ? (JLabel) value : new JLabel();
+
+                // Thiết lập màu nền khi được chọn
+                if (isSelected) {
+                    label.setBackground(new Color(173, 216, 230)); // Màu nền sáng
+                    label.setOpaque(true); // Để màu nền có hiệu lực
+                } else {
+                    label.setBackground(Color.WHITE); // Màu nền mặc định
+                    label.setOpaque(true);
+                }
+
+                return label;
+            }
+        });
+        tableStore.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                JLabel label = (value instanceof JLabel) ? (JLabel) value : new JLabel();
+
+                // Thiết lập màu nền khi được chọn
+                if (isSelected) {
+                    label.setBackground(new Color(173, 216, 230)); // Màu nền sáng
+                    label.setOpaque(true); // Để màu nền có hiệu lực
+                } else {
+                    label.setBackground(Color.WHITE); // Màu nền mặc định
+                    label.setOpaque(true);
+                }
+
+                return label;
+            }
+        });
         // chuc nang nha thuoc
         add_store.addActionListener(new ActionListener() {
             @Override
@@ -794,7 +1350,14 @@ public class admin_GUI extends JFrame {
                             manql = st.getManv();
                         }
                     }
-                    Boolean tinhTrang = Boolean.parseBoolean(String.valueOf(tableStore.getValueAt(row, 3)));
+                    Boolean tinhTrang = false;
+
+                    ArrayList<store_DTO> emlist = store_BUS.getAll();
+                    for (store_DTO em : emlist) {
+                        if (em.getMant().equals(maNT) && em.getTinhtrang()) {
+                            tinhTrang = true;
+                        }
+                    }
                     store_DTO sto = new store_DTO(maNT, maSoNha, duong, phuong, quan, tinh, manql, tinhTrang);
                     new GUI.store1_GUI.edit(sto);
                 }
@@ -898,7 +1461,14 @@ public class admin_GUI extends JFrame {
                     int giam = Integer.parseInt(String.valueOf(tablePromotion.getValueAt(row, 4)));
                     String noidung = String.valueOf(tablePromotion.getValueAt(row, 5));
                     int diemyc = Integer.parseInt(String.valueOf(tablePromotion.getValueAt(row, 6)));
-                    Boolean tinhTrang = Boolean.parseBoolean(String.valueOf(tablePromotion.getValueAt(row, 7)));
+                    Boolean tinhTrang = false;
+
+                    ArrayList<promotion_DTO> emlist = promotion_BUS.getAll();
+                    for (promotion_DTO em : emlist) {
+                        if (em.getMakm().equals(maKM) && em.getTinhtrang()) {
+                            tinhTrang = true;
+                        }
+                    }
                     promotion_DTO pro = new promotion_DTO(maKM, tenKM, ngaybd, ngaykt, noidung, giam, diemyc,
                             tinhTrang);
                     try {
@@ -1003,7 +1573,14 @@ public class admin_GUI extends JFrame {
                     String phuong = diaChiParts[2];
                     String quan = diaChiParts[3];
                     String tinh = diaChiParts[4];
-                    Boolean tinhTrang = Boolean.parseBoolean(String.valueOf(tableSupplier.getValueAt(row, 4)));
+                    Boolean tinhTrang = false;
+
+                    ArrayList<supplier_DTO> emlist = supplier_BUS.getAll();
+                    for (supplier_DTO em : emlist) {
+                        if (em.getMancc().equals(maNCC) && em.getTinhtrang()) {
+                            tinhTrang = true;
+                        }
+                    }
                     supplier_DTO sup = new supplier_DTO(maNCC, tenNCC, sdt, maSoNha, duong, phuong, quan, tinh,
                             tinhTrang);
                     new GUI.supplier_GUI.edit(sup);
@@ -1109,7 +1686,14 @@ public class admin_GUI extends JFrame {
                     String tinh = diaChiParts[4];
                     String pass = String.valueOf(tableCustomer.getValueAt(row, 5));
                     String diemKM = String.valueOf(tableCustomer.getValueAt(row, 6));
-                    Boolean tinhTrang = Boolean.parseBoolean(String.valueOf(tableCustomer.getValueAt(row, 7)));
+                    Boolean tinhTrang = false;
+
+                    ArrayList<customer_DTO> emlist = customer_BUS.getAll();
+                    for (customer_DTO em : emlist) {
+                        if (em.getMakh().equals(maKH) && em.getTinhtrang()) {
+                            tinhTrang = true;
+                        }
+                    }
                     customer_DTO kh = new customer_DTO(maKH, tenKH, sdt, maSoNha, duong, phuong, quan, tinh, email,
                             pass,
                             Integer.parseInt(diemKM), tinhTrang);
@@ -1223,8 +1807,27 @@ public class admin_GUI extends JFrame {
                     String tinh = diaChiParts[4];
                     String tk = String.valueOf(tableEmployee.getValueAt(row, 7));
                     String pass = String.valueOf(tableEmployee.getValueAt(row, 8));
-                    String mant = String.valueOf(tableEmployee.getValueAt(row, 9));
-                    Boolean tinhTrang = Boolean.parseBoolean(String.valueOf(tableEmployee.getValueAt(row, 10)));
+                    String dcnt = String.valueOf(tableEmployee.getValueAt(row, 9));
+                    String mant = null;
+                    ArrayList<store_DTO> storelist = new ArrayList<>();
+                    storelist = store_BUS.getAll();
+                    for (store_DTO st : storelist) {
+                        String dc = st.getMasonha() + "," + st.getDuong() + "," + st.getPhuong() + "," + st.getQuan()
+                                + ","
+                                + st.getTinh();
+                        if (dc.equals(dcnt)) {
+                            mant = st.getMant();
+                        }
+                    }
+                    Boolean tinhTrang = false;
+
+                    ArrayList<employee_DTO> emlist = employee_BUS.getAll();
+                    for (employee_DTO em : emlist) {
+                        if (em.getManv().equals(maNV) && em.getTinhtrang()) {
+                            tinhTrang = true;
+                        }
+                    }
+
                     employee_DTO nv = new employee_DTO(maNV, tenNV, cv, gioitinh, cccd, sdt, maSoNha, duong, phuong,
                             quan,
                             tinh, tk, pass, mant, tinhTrang);
@@ -1303,7 +1906,6 @@ public class admin_GUI extends JFrame {
 
         });
         btn_nhathuoc.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!employee_BUS.showStore(nv)) {

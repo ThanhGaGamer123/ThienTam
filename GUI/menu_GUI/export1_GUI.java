@@ -22,11 +22,11 @@ import javax.swing.JTextField;
 import BUS.export_BUS;
 import advanceMethod.advance;
 
-public class export_GUI extends JFrame {
-    public export_GUI() {
+public class export1_GUI extends JFrame {
+    public export1_GUI() {
         this.setSize(700, 400);
         this.setTitle("Xuất dữ liệu");
-        ImageIcon logo = new ImageIcon(advance.img+"logo.png");
+        ImageIcon logo = new ImageIcon(advance.img + "logo.png");
         this.setIconImage(logo.getImage());
         this.getContentPane().setBackground(Color.white);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -56,7 +56,7 @@ public class export_GUI extends JFrame {
         gdc.insets = new Insets(0, 50, 30, 0);
         main.add(xuatas, gdc);
 
-        String[] option1 = {"Excel", "PDF"};
+        String[] option1 = { "Excel", "PDF" };
         JComboBox cb_xuatas = new JComboBox(option1);
         cb_xuatas.setForeground(Color.BLACK);
         cb_xuatas.setFont(new Font(null, Font.PLAIN, 20));
@@ -81,8 +81,8 @@ public class export_GUI extends JFrame {
         gdc.insets = new Insets(0, 50, 30, 0);
         main.add(data, gdc);
 
-        String[] option2 = {"Hóa đơn bán", "Danh sách thuốc", "Danh sách đơn hàng", 
-        "Danh sách đơn hàng nhập"};
+        String[] option2 = { "Danh sách nhà cung cấp", "Danh sách khách hàng", "Danh sách nhân viên",
+                "Danh sách khuyến mãi", "Danh sách nhà thuốc" };
         JComboBox cb_data = new JComboBox(option2);
         cb_data.setForeground(Color.BLACK);
         cb_data.setFont(new Font(null, Font.PLAIN, 20));
@@ -95,35 +95,11 @@ public class export_GUI extends JFrame {
         gdc.insets = new Insets(0, 10, 30, 50);
         main.add(cb_data, gdc);
 
-        JLabel mahd = new JLabel("Nhập mã đơn: ");
-        mahd.setForeground(Color.BLACK);
-        mahd.setFont(new Font(null, Font.PLAIN, 20));
-        gdc.gridx = 0;
-        gdc.gridy = 2;
-        gdc.gridwidth = 1;
-        gdc.anchor = GridBagConstraints.WEST;
-        gdc.fill = GridBagConstraints.HORIZONTAL;
-        gdc.weightx = 0;
-        gdc.insets = new Insets(0, 50, 30, 0);
-        main.add(mahd, gdc);
-
-        JTextField tf_mahd = new JTextField();
-        tf_mahd.setForeground(Color.BLACK);
-        tf_mahd.setFont(new Font(null, Font.PLAIN, 20));
-        gdc.gridx = 1;
-        gdc.gridy = 2;
-        gdc.gridwidth = 2;
-        gdc.anchor = GridBagConstraints.CENTER;
-        gdc.fill = GridBagConstraints.HORIZONTAL;
-        gdc.weightx = 1;
-        gdc.insets = new Insets(0, 10, 30, 50);
-        main.add(tf_mahd, gdc);
-
         JLabel filename = new JLabel("Nhập tên file: ");
         filename.setForeground(Color.BLACK);
         filename.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 3;
+        gdc.gridy = 2;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -135,7 +111,7 @@ public class export_GUI extends JFrame {
         tf_filename.setForeground(Color.BLACK);
         tf_filename.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 3;
+        gdc.gridy = 2;
         gdc.gridwidth = 2;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -147,7 +123,7 @@ public class export_GUI extends JFrame {
         path.setForeground(Color.BLACK);
         path.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 0;
-        gdc.gridy = 4;
+        gdc.gridy = 3;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.WEST;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -159,7 +135,7 @@ public class export_GUI extends JFrame {
         tf_path.setForeground(Color.BLACK);
         tf_path.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 4;
+        gdc.gridy = 3;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -171,7 +147,7 @@ public class export_GUI extends JFrame {
         btn_path.setForeground(Color.BLACK);
         btn_path.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 2;
-        gdc.gridy = 4;
+        gdc.gridy = 3;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -183,7 +159,7 @@ public class export_GUI extends JFrame {
         finish.setForeground(Color.BLACK);
         finish.setFont(new Font(null, Font.PLAIN, 20));
         gdc.gridx = 1;
-        gdc.gridy = 5;
+        gdc.gridy = 4;
         gdc.gridwidth = 1;
         gdc.anchor = GridBagConstraints.CENTER;
         gdc.fill = GridBagConstraints.HORIZONTAL;
@@ -193,62 +169,42 @@ public class export_GUI extends JFrame {
 
         this.setVisible(true);
 
-        //xử lý tính năng
+        // xử lý tính năng
 
-        //chọn export path
+        // chọn export path
         btn_path.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 export_BUS.pathData(tf_path);
             }
         });
-        
-        //chọn xuất hóa đơn thì hiện nhập mã
-        cb_data.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(cb_data.getSelectedIndex() == 0) {
-                    mahd.setVisible(true);
-                    tf_mahd.setVisible(true);
-                } else {
-                    mahd.setVisible(false);
-                    tf_mahd.setVisible(false);
-                }
-            }
-        });
 
-        //export file
+        // export file
         finish.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int ketQua = export_BUS.exportFile(cb_xuatas, cb_data, 
-                tf_filename, tf_path, tf_mahd);
-                if(ketQua == 0) 
-                    JOptionPane.showMessageDialog(null, 
-                    "Xuất file thành công.");
-                if(ketQua == 1) 
-                    JOptionPane.showMessageDialog(null, 
-                    "Vui lòng nhập tên file.");
-                if(ketQua == 2) 
-                    JOptionPane.showMessageDialog(null, 
-                    "Vui lòng chọn đường dẫn.");
-                if(ketQua == 3) 
-                    JOptionPane.showMessageDialog(null, 
-                    "File đã tồn tại.");
-                if(ketQua == 4) 
-                    JOptionPane.showMessageDialog(null, 
-                    "Xuất file không thành công.");
-                if(ketQua == 5) 
-                    JOptionPane.showMessageDialog(null, 
-                    "Không hỗ trợ xuất hóa đơn dưới dạng excel.");
-                if(ketQua == 6) 
-                    JOptionPane.showMessageDialog(null, 
-                    "Không tìm thấy mã hóa đơn.");
+                int ketQua = export_BUS.exportFile1(cb_xuatas, cb_data,
+                        tf_filename, tf_path);
+                if (ketQua == 0)
+                    JOptionPane.showMessageDialog(null,
+                            "Xuất file thành công.");
+                if (ketQua == 1)
+                    JOptionPane.showMessageDialog(null,
+                            "Vui lòng nhập tên file.");
+                if (ketQua == 2)
+                    JOptionPane.showMessageDialog(null,
+                            "Vui lòng chọn đường dẫn.");
+                if (ketQua == 3)
+                    JOptionPane.showMessageDialog(null,
+                            "File đã tồn tại.");
+                if (ketQua == 4)
+                    JOptionPane.showMessageDialog(null,
+                            "Xuất file không thành công.");
             }
         });
     }
 
     public static void main(String[] args) {
-        new export_GUI();
+        new export1_GUI();
     }
 }

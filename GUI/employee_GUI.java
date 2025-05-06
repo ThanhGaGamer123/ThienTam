@@ -68,14 +68,14 @@ public class employee_GUI extends JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setResizable(true);
-        
+
         this.setTitle("Nhân viên");
-        ImageIcon logo = new ImageIcon(advance.img+"logo.png");
+        ImageIcon logo = new ImageIcon(advance.img + "logo.png");
         this.setIconImage(logo.getImage());
         this.getContentPane().setBackground(Color.WHITE);
         this.setLayout(new BorderLayout());
 
-        //Tạo Tab Panel
+        // Tạo Tab Panel
         JTabbedPane tab = new JTabbedPane();
         tab.setForeground(Color.BLACK);
         tab.setFont(new Font(null, Font.BOLD, 20));
@@ -83,8 +83,7 @@ public class employee_GUI extends JFrame {
         // tab.setBounds(0, 10, 1280, 710);
         this.add(tab, BorderLayout.CENTER);
 
-        
-        //Panel Thông tin nhân viên
+        // Panel Thông tin nhân viên
         JPanel employeeStatus = new JPanel();
         employeeStatus.setBackground(Color.white);
         employeeStatus.setLayout(new GridBagLayout());
@@ -198,7 +197,7 @@ public class employee_GUI extends JFrame {
         gdc_employee.gridx = 0;
         gdc_employee.insets = new Insets(0, 0, 50, 0);
         employeeStatus.add(tinhtrang, gdc_employee);
-        
+
         // JLabel background = new JLabel();
         // background.setIcon(new ImageIcon(advance.img+"backgrounds.jpg"));
         // gdc_employee.gridx = 0;
@@ -207,11 +206,11 @@ public class employee_GUI extends JFrame {
         // gdc_employee.gridheight = 9;
         // employeeStatus.add(background, gdc_employee);
 
-        //Panel Hóa đơn bán
+        // Panel Hóa đơn bán
         JPanel orderSell = new JPanel();
         orderSell.setBackground(Color.white);
         orderSell.setLayout(new GridBagLayout());
-        
+
         JScrollPane orderScroll = new JScrollPane();
         orderScroll.setViewportView(orderSell);
 
@@ -264,8 +263,8 @@ public class employee_GUI extends JFrame {
         gdc_ordersell.insets = new Insets(0, 5, 30, 5);
         orderSell.add(search_advance, gdc_ordersell);
 
-        String[] option = {"Tùy chọn", "Tổng tiền từ cao tới thấp", "Tổng tiền từ thấp tới cao",
-        "Thời gian gần nhất", "Thời gian xa nhất"};
+        String[] option = { "Tùy chọn", "Tổng tiền từ cao tới thấp", "Tổng tiền từ thấp tới cao",
+                "Thời gian gần nhất", "Thời gian xa nhất" };
         JComboBox loc = new JComboBox<>(option);
         loc.setForeground(Color.BLACK);
         loc.setFont(new Font(null, Font.PLAIN, 18));
@@ -293,9 +292,9 @@ public class employee_GUI extends JFrame {
         gdc_ordersell.fill = GridBagConstraints.NONE;
         gdc_ordersell.weightx = 0;
 
-        String columns[] = {"Mã đơn", "Tên khách hàng", "Tên nhân viên", "Thời gian lập", 
-        "Tổng tiền", "Tình trạng", "Xem chi tiết"};
-        DefaultTableModel model = new DefaultTableModel(columns,0) {
+        String columns[] = { "Mã đơn", "Tên khách hàng", "Tên nhân viên", "Thời gian lập",
+                "Tổng tiền", "Tình trạng", "Xem chi tiết" };
+        DefaultTableModel model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -354,7 +353,7 @@ public class employee_GUI extends JFrame {
         gdc_ordersell.insets = new Insets(0, 5, 30, 50);
         orderSell.add(xoaSell, gdc_ordersell);
 
-        //Panel Hóa đơn nhập
+        // Panel Hóa đơn nhập
         JPanel orderCollect = new JPanel();
         orderCollect.setBackground(Color.white);
         orderCollect.setLayout(new GridBagLayout());
@@ -411,8 +410,8 @@ public class employee_GUI extends JFrame {
         gdc_ordercollect.insets = new Insets(0, 5, 30, 5);
         orderCollect.add(search_advance_2, gdc_ordercollect);
 
-        String[] option_2 = {"Tùy chọn", "Tổng tiền từ cao tới thấp", "Tổng tiền từ thấp tới cao",
-        "Thời gian gần nhất", "Thời gian xa nhất"};
+        String[] option_2 = { "Tùy chọn", "Tổng tiền từ cao tới thấp", "Tổng tiền từ thấp tới cao",
+                "Thời gian gần nhất", "Thời gian xa nhất" };
         JComboBox loc_2 = new JComboBox<>(option_2);
         loc_2.setForeground(Color.BLACK);
         loc_2.setFont(new Font(null, Font.PLAIN, 18));
@@ -423,7 +422,7 @@ public class employee_GUI extends JFrame {
         gdc_ordercollect.weightx = 1;
         gdc_ordercollect.insets = new Insets(0, 5, 30, 5);
         orderCollect.add(loc_2, gdc_ordercollect);
-        
+
         JButton reset_2 = new JButton();
         reset_2.setForeground(Color.BLACK);
         reset_2.setFont(new Font(null, Font.PLAIN, 18));
@@ -435,14 +434,14 @@ public class employee_GUI extends JFrame {
         gdc_ordercollect.weightx = 0.2;
         gdc_ordercollect.insets = new Insets(0, 5, 30, 50);
         orderCollect.add(reset_2, gdc_ordercollect);
-        
+
         // reset
         gdc_ordercollect.fill = GridBagConstraints.NONE;
         gdc_ordercollect.weightx = 0;
 
-        String columnsCollect[] = {"Mã đơn", "Tên nhà cung cấp", "Số loại thuốc", "Thời gian nhập", 
-        "Tổng tiền", "Tình trạng", "Xem chi tiết"};
-        DefaultTableModel modelCollect = new DefaultTableModel(columnsCollect,0) {
+        String columnsCollect[] = { "Mã đơn", "Tên nhà cung cấp", "Số loại thuốc", "Thời gian nhập",
+                "Tổng tiền", "Tình trạng", "Xem chi tiết" };
+        DefaultTableModel modelCollect = new DefaultTableModel(columnsCollect, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -503,7 +502,7 @@ public class employee_GUI extends JFrame {
         // backgroundCollect.setBounds(0,0, 1280, 720);
         // orderCollect.add(backgroundCollect);
 
-        //Panel Thuốc
+        // Panel Thuốc
         JPanel medic = new JPanel();
         medic.setBackground(Color.white);
         medic.setLayout(new GridBagLayout());
@@ -571,14 +570,14 @@ public class employee_GUI extends JFrame {
         gdc_medic.weightx = 0.2;
         gdc_medic.insets = new Insets(0, 5, 30, 50);
         medic.add(reset_3, gdc_medic);
-        
+
         // reset
         gdc_medic.fill = GridBagConstraints.NONE;
         gdc_medic.weightx = 0;
 
-        String columnsMedic[] = {"Mã thuốc", "Tên thuốc", "Danh mục", "Tình trạng", 
-        "Xem chi tiết"};
-        DefaultTableModel modelMedic = new DefaultTableModel(columnsMedic,0) {
+        String columnsMedic[] = { "Mã thuốc", "Tên thuốc", "Danh mục", "Tình trạng",
+                "Xem chi tiết" };
+        DefaultTableModel modelMedic = new DefaultTableModel(columnsMedic, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -651,7 +650,7 @@ public class employee_GUI extends JFrame {
         // backgroundMedic.setBounds(0,0, 1280, 720);
         // medic.add(backgroundMedic);
 
-        //Panel Thống kê
+        // Panel Thống kê
         JPanel statistic = new JPanel();
         statistic.setBackground(Color.white);
         statistic.setLayout(new GridBagLayout());
@@ -674,7 +673,7 @@ public class employee_GUI extends JFrame {
 
         // reset
         gdc_statistic.gridwidth = 1;
-        
+
         JLabel ngaybatdau = new JLabel("Từ ngày:");
         ngaybatdau.setForeground(Color.BLACK);
         ngaybatdau.setFont(new Font(null, Font.PLAIN, 20));
@@ -723,7 +722,7 @@ public class employee_GUI extends JFrame {
         gdc_statistic.insets = new Insets(0, 20, 30, 10);
         statistic.add(tf_ngayketthuc, gdc_statistic);
 
-        String[] options = {"Không có", "Theo doanh thu", "Theo lượng khách hàng"};
+        String[] options = { "Không có", "Theo doanh thu", "Theo lượng khách hàng" };
         JComboBox loai = new JComboBox(options);
         loai.setForeground(Color.BLACK);
         loai.setFont(new Font(null, Font.PLAIN, 20));
@@ -771,7 +770,7 @@ public class employee_GUI extends JFrame {
 
         JPanel customerStatistic = new JPanel();
         customerStatistic.setBackground(Color.white);
-        customerStatistic.setBorder(new LineBorder(Color.blue,3));
+        customerStatistic.setBorder(new LineBorder(Color.blue, 3));
         customerStatistic.setLayout(new BorderLayout());
         // customerStatistic.setBounds(100, 340, 300, 200);
         gdc_statistic.gridx = 0;
@@ -792,9 +791,9 @@ public class employee_GUI extends JFrame {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        JFreeChart chart = ChartFactory.createBarChart3D("", "", "", dataset, 
-        PlotOrientation.VERTICAL, true, false, false);
-        
+        JFreeChart chart = ChartFactory.createBarChart3D("", "", "", dataset,
+                PlotOrientation.VERTICAL, true, false, false);
+
         ChartPanel columnStatistic = new ChartPanel(chart, false);
         columnStatistic.setMouseWheelEnabled(false);
         columnStatistic.setMouseZoomable(false);
@@ -808,14 +807,14 @@ public class employee_GUI extends JFrame {
         gdc_statistic.weighty = 1;
         gdc_statistic.insets = new Insets(0, 20, 20, 70);
         statistic.add(columnStatistic, gdc_statistic);
-        
+
         tab.addTab("Thông tin", data.imagePath.resize_statusIcon, employeeScroll);
         tab.addTab("Thuốc", data.imagePath.resize_medic, medicScroll);
         tab.addTab("Hóa đơn nhập", data.imagePath.resize_package, orderCollectScroll);
         tab.addTab("Hóa đơn bán", data.imagePath.resize_orderSell, orderScroll);
         tab.addTab("Thống kê", data.imagePath.resize_statistic, statisticScroll);
 
-        //Menu
+        // Menu
         JMenuBar menuBar = new JMenuBar();
         JMenu file = new JMenu("Tập tin");
         file.setForeground(Color.BLACK);
@@ -854,31 +853,32 @@ public class employee_GUI extends JFrame {
         menuBar.add(file);
         menuBar.add(system);
         this.setJMenuBar(menuBar);
-        
+
         this.setVisible(true);
 
-        //xử lý các tính năng
+        // xử lý các tính năng
 
         employee_BUS.loadData(nv, manv, tennv, chucvu, gioitinh, cccd, sdt, diachi, nhathuoc, tinhtrang);
 
-        //Hiển thị thông tin nhà thuốc
+        // Hiển thị thông tin nhà thuốc
         btn_nhathuoc.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!employee_BUS.showStore(nv)) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Không tìm thấy thông tin nhà thuốc.");
+                if (!employee_BUS.showStore(nv)) {
+                    JOptionPane.showMessageDialog(null,
+                            "Không tìm thấy thông tin nhà thuốc.");
                 }
             }
         });
 
-        //Xử lý đơn hàng
-        //Tự động cập nhật thông tin hóa đơn bán
-        order_BUS.loadData(model);
+        // Xử lý đơn hàng
+        // Tự động cập nhật thông tin hóa đơn bán
+        order_BUS.loadDataByEmployee(model, nv);
 
         table.getColumn("Xem chi tiết").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
                 JButton button = (value instanceof JButton) ? (JButton) value : new JButton();
 
                 if (isSelected) {
@@ -886,14 +886,14 @@ public class employee_GUI extends JFrame {
                 } else {
                     button.setBackground(Color.WHITE); // Màu nền mặc định
                 }
-        
+
                 button.setOpaque(true);
                 button.setBorderPainted(false); // Ẩn viền nút
                 return button;
-            }   
+            }
         });
 
-        //Thêm đơn hàng
+        // Thêm đơn hàng
         themSell.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -901,31 +901,31 @@ public class employee_GUI extends JFrame {
             }
         });
 
-        //Hủy đơn hàng
+        // Hủy đơn hàng
         xoaSell.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int ketQua = order_BUS.cancelOrder(model, table);
-                if(ketQua == 1) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Đơn hàng này đã hủy.");
+                int ketQua = order_BUS.cancelOrder(model, table, nv);
+                if (ketQua == 1) {
+                    JOptionPane.showMessageDialog(null,
+                            "Đơn hàng này đã hủy.");
                 }
-                if(ketQua == 2) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Đơn hàng này đã giao.");
+                if (ketQua == 2) {
+                    JOptionPane.showMessageDialog(null,
+                            "Đơn hàng này đã giao.");
                 }
             }
         });
 
-        //tìm kiếm
+        // tìm kiếm
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                order_BUS.findOrder(search_bar, model);
+                order_BUS.findOrder(search_bar, model, nv);
             }
         });
 
-        //tìm kiếm nâng cao
+        // tìm kiếm nâng cao
         ArrayList<order_DTO> ords = new ArrayList<>();
         search_advance.addActionListener(new ActionListener() {
             @Override
@@ -934,33 +934,33 @@ public class employee_GUI extends JFrame {
             }
         });
 
-        //lọc
+        // lọc
         loc.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                order_BUS.filter(ords, model, loc.getSelectedIndex());
+                order_BUS.filter(ords, model, loc.getSelectedIndex(), nv);
             }
         });
 
-        //reset
+        // reset
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 search_bar.setText("Nhập mã đơn...");
                 loc.setSelectedIndex(0);
                 ords.clear();
-                order_BUS.loadData(model);
+                order_BUS.loadDataByEmployee(model, nv);
             }
         });
 
-        //xem chi tiết
+        // xem chi tiết
         table.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int selectedColumn = table.getSelectedColumn();
-                if(selectedColumn == 6) {
+                if (selectedColumn == 6) {
                     int selectedRow = table.getSelectedRow();
-                    if(selectedRow != -1) {
+                    if (selectedRow != -1) {
                         String madh = model.getValueAt(selectedRow, 0).toString();
                         new orderGUI(madh, model, modelCollect);
                     }
@@ -970,47 +970,48 @@ public class employee_GUI extends JFrame {
             @Override
             public void mouseEntered(MouseEvent e) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 // TODO Auto-generated method stub
-                
+
             }
         });
 
-        //load lại thống kê khi bảng thay đổi
+        // load lại thống kê khi bảng thay đổi
         model.addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
-                employee_BUS.loadStatistic(tf_ngaybatdau, tf_ngayketthuc, wallet, 
-                customer, nv, loai);
+                employee_BUS.loadStatistic(tf_ngaybatdau, tf_ngayketthuc, wallet,
+                        customer, nv, loai);
             }
         });
 
-        //xử lý đơn hàng nhập
-        //cập nhật thông tin đơn hàng nhập
+        // xử lý đơn hàng nhập
+        // cập nhật thông tin đơn hàng nhập
         orderSupply_BUS.loadData(modelCollect, true);
 
-        //kiểm tra hạn chi tiết đơn hàng nhập
+        // kiểm tra hạn chi tiết đơn hàng nhập
         orderSupply_details_BUS.autoCheckExpired(modelCollect);
 
         tableCollect.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
                 JLabel label = (value instanceof JLabel) ? (JLabel) value : new JLabel();
 
                 // Thiết lập màu nền khi được chọn
@@ -1023,12 +1024,13 @@ public class employee_GUI extends JFrame {
                 }
 
                 return label;
-            }   
+            }
         });
 
         tableCollect.getColumn("Xem chi tiết").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
                 JButton button = (value instanceof JButton) ? (JButton) value : new JButton();
 
                 if (isSelected) {
@@ -1036,14 +1038,14 @@ public class employee_GUI extends JFrame {
                 } else {
                     button.setBackground(Color.WHITE); // Màu nền mặc định
                 }
-        
+
                 button.setOpaque(true);
                 button.setBorderPainted(false); // Ẩn viền nút
                 return button;
-            }   
+            }
         });
 
-        //thêm đơn hàng nhập
+        // thêm đơn hàng nhập
         themCollect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1051,20 +1053,20 @@ public class employee_GUI extends JFrame {
             }
         });
 
-        //xóa đơn hàng nhập
+        // xóa đơn hàng nhập
         xoaCollect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!orderSupply_BUS.deleteOrderSupply(tableCollect, modelCollect)) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Đơn hàng nhập này đã ngừng hoạt động!");
+                if (!orderSupply_BUS.deleteOrderSupply(tableCollect, modelCollect)) {
+                    JOptionPane.showMessageDialog(null,
+                            "Đơn hàng nhập này đã ngừng hoạt động!");
                 }
             }
         });
 
         ArrayList<orderSupply_DTO> orderSupplies = new ArrayList<>();
 
-        //tìm kiếm
+        // tìm kiếm
         search_2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1072,7 +1074,7 @@ public class employee_GUI extends JFrame {
             }
         });
 
-        //tìm kiếm nâng cao
+        // tìm kiếm nâng cao
         search_advance_2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1080,7 +1082,7 @@ public class employee_GUI extends JFrame {
             }
         });
 
-        //lọc
+        // lọc
         loc_2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1088,7 +1090,7 @@ public class employee_GUI extends JFrame {
             }
         });
 
-        //reset
+        // reset
         reset_2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1096,7 +1098,7 @@ public class employee_GUI extends JFrame {
             }
         });
 
-        //xem chi tiết
+        // xem chi tiết
         tableCollect.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -1106,30 +1108,30 @@ public class employee_GUI extends JFrame {
             @Override
             public void mouseEntered(MouseEvent e) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 // TODO Auto-generated method stub
-                
+
             }
         });
 
-        //Xử lý thuốc
-        //Tự động cập nhật thông tin thuốc
+        // Xử lý thuốc
+        // Tự động cập nhật thông tin thuốc
         medicine_BUS.autoUpdateSellPrice();
 
         medicine_BUS.loadData(modelMedic, true);
@@ -1138,7 +1140,8 @@ public class employee_GUI extends JFrame {
 
         tableMedic.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
                 JLabel label = (value instanceof JLabel) ? (JLabel) value : new JLabel();
 
                 // Thiết lập màu nền khi được chọn
@@ -1151,12 +1154,13 @@ public class employee_GUI extends JFrame {
                 }
 
                 return label;
-            }   
+            }
         });
 
         tableMedic.getColumn("Xem chi tiết").setCellRenderer(new DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
                 JButton button = (value instanceof JButton) ? (JButton) value : new JButton();
 
                 if (isSelected) {
@@ -1164,27 +1168,27 @@ public class employee_GUI extends JFrame {
                 } else {
                     button.setBackground(Color.WHITE); // Màu nền mặc định
                 }
-        
+
                 button.setOpaque(true);
                 button.setBorderPainted(false); // Ẩn viền nút
                 return button;
-            }   
+            }
         });
 
-        //đăng xuất
+        // đăng xuất
         log_out.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int choice = JOptionPane.showConfirmDialog(null, 
-                "Bạn có chắc muốn đăng xuất không?");
-                if(choice == 0) {
+                int choice = JOptionPane.showConfirmDialog(null,
+                        "Bạn có chắc muốn đăng xuất không?");
+                if (choice == 0) {
                     new login_GUI();
                     dispose();
                 }
             }
         });
 
-        //thoát
+        // thoát
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1192,7 +1196,7 @@ public class employee_GUI extends JFrame {
             }
         });
 
-        //xem thuốc
+        // xem thuốc
         tableMedic.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -1214,10 +1218,10 @@ public class employee_GUI extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
             }
-            
+
         });
 
-        //thêm thuốc
+        // thêm thuốc
         themMedic.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1225,29 +1229,29 @@ public class employee_GUI extends JFrame {
             }
         });
 
-        //sửa thuốc
+        // sửa thuốc
         suaMedic.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!medicine_BUS.rectifyMedicine(tableMedic, modelMedic)) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Thông tin thuốc này đã ngừng hoạt động!");
+                if (!medicine_BUS.rectifyMedicine(tableMedic, modelMedic)) {
+                    JOptionPane.showMessageDialog(null,
+                            "Thông tin thuốc này đã ngừng hoạt động!");
                 }
             }
         });
 
-        //xóa thuốc
+        // xóa thuốc
         xoaMedic.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!medicine_BUS.deleteMedicine(tableMedic, modelMedic, modelCollect)) {
-                    JOptionPane.showMessageDialog(null, 
-                    "Thông tin thuốc này đã ngừng hoạt động!");
+                if (!medicine_BUS.deleteMedicine(tableMedic, modelMedic, modelCollect)) {
+                    JOptionPane.showMessageDialog(null,
+                            "Thông tin thuốc này đã ngừng hoạt động!");
                 }
             }
         });
 
-        //tìm kiếm
+        // tìm kiếm
         search_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1255,7 +1259,7 @@ public class employee_GUI extends JFrame {
             }
         });
 
-        //tìm kiếm nâng cao
+        // tìm kiếm nâng cao
         search_advance_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1263,50 +1267,50 @@ public class employee_GUI extends JFrame {
             }
         });
 
-        //reset thuốc
+        // reset thuốc
         reset_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 medicine_BUS.reset(search_bar_3, modelMedic);
             }
         });
-    
-        //kiểm tra hạn ctr khuyến mãi
+
+        // kiểm tra hạn ctr khuyến mãi
         promotion_BUS.autoCheckExpired();
-        
-        //tự động thống kê
-        employee_BUS.loadStatistic(tf_ngaybatdau, tf_ngayketthuc, wallet, 
+
+        // tự động thống kê
+        employee_BUS.loadStatistic(tf_ngaybatdau, tf_ngayketthuc, wallet,
         customer, nv, loai);
 
-        //thống kê
+        // thống kê
         chon.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int ketQua = employee_BUS.loadStatistic(tf_ngaybatdau, tf_ngayketthuc, 
-                wallet, customer, nv, loai);
-                if(ketQua == 0)
+                int ketQua = employee_BUS.loadStatistic(tf_ngaybatdau, tf_ngayketthuc,
+                        wallet, customer, nv, loai);
+                if (ketQua == 0)
                     employee_BUS.loadMap(dataset, loai, tf_ngaybatdau, tf_ngayketthuc, nv);
-                if(ketQua == 1)
-                    JOptionPane.showMessageDialog(null, 
-                    "Ngày bắt đầu không hợp lệ.");
-                if(ketQua == 2)
-                    JOptionPane.showMessageDialog(null, 
-                    "Ngày kết thúc không hợp lệ.");
+                if (ketQua == 1)
+                    JOptionPane.showMessageDialog(null,
+                            "Ngày bắt đầu không hợp lệ.");
+                if (ketQua == 2)
+                    JOptionPane.showMessageDialog(null,
+                            "Ngày kết thúc không hợp lệ.");
             }
         });
-    
-        //load biểu đồ
+
+        // load biểu đồ
         employee_BUS.loadMap(dataset, loai, tf_ngaybatdau, tf_ngayketthuc, nv);
-    
-        //xuất dữ liệu
+
+        // xuất dữ liệu
         export.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new export_GUI();
             }
         });
-    
-        //nhập dữ liệu
+
+        // nhập dữ liệu
         importData.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1318,4 +1322,4 @@ public class employee_GUI extends JFrame {
     public static void main(String[] args) {
         new employee_GUI(null);
     }
-} 
+}

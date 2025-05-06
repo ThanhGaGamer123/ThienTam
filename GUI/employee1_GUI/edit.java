@@ -325,17 +325,14 @@ public class edit extends JFrame implements ActionListener {
         }
         cb_nhathuoc = new JComboBox<>(nhathuoc);
         cb_nhathuoc.setFont(new Font(null, Font.PLAIN, 20));
-
         String mant = nv.getManhathuoc();
-        ArrayList<store_DTO> ntlist = store_BUS.getAll();
-        for (store_DTO st : ntlist) {
+        for (store_DTO st : storelist) {
             String dc = st.getMasonha() + "," + st.getDuong() + "," + st.getPhuong() + "," + st.getQuan() + ","
                     + st.getTinh();
             if (mant.equals(st.getMant())) {
                 cb_nhathuoc.setSelectedItem(dc);
             }
         }
-
         gbc.gridx = 1;
         gbc.gridy = 13;
         gbc.gridwidth = 1;
