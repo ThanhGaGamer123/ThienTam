@@ -1,4 +1,5 @@
 package data;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -13,7 +14,7 @@ public class SQL {
             System.out.println("Create connect to SQL Server completed!");
             System.out.println(sql);
             return sql;
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -21,7 +22,7 @@ public class SQL {
 
     public static void closeConnection(Connection sql) {
         try {
-            if(sql != null) {
+            if (sql != null) {
                 sql.close();
                 System.out.println("Close connection to SQL Server completed!");
             }

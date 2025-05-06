@@ -6,10 +6,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class advance {
-    public static final String img = "D:\\IT\\GitHub Projects\\ThienTam\\img\\";
-    public static final String medIMG = "D:\\IT\\GitHub Projects\\ThienTam\\img\\medIMG\\";
+    public static final String img = "D:\\IT\\GitHub Projects\\kkk\\img\\";
+    public static final String medIMG = "D:\\IT\\GitHub Projects\\kkk\\img\\medIMG\\";
     public static final String file_path = "C:\\Users\\thanh\\Downloads\\";
-    public static final String data_path = "D:\\IT\\GitHub Projects\\ThienTam\\data\\";
+    public static final String data_path = "D:\\IT\\GitHub Projects\\kkk\\data\\";
 
     public static ArrayList<Double> StringArrayListToDoubleArrayList(ArrayList<String> stringArray) {
         try {
@@ -106,7 +106,7 @@ public class advance {
         try {
             String[] temp = StringconvertToStringArray(string);
             ArrayList<String> result = new ArrayList<>();
-            for (int i=0;i<temp.length;i++) {
+            for (int i = 0; i < temp.length; i++) {
                 result.add(temp[i]);
             }
             return result;
@@ -127,23 +127,26 @@ public class advance {
 
     public static String calculateID(int size) {
         size++;
-        if(size < 10) return "000"+size;
-        if(size < 100) return "00"+size;
-        if(size < 1000) return "0"+size;
+        if (size < 10)
+            return "000" + size;
+        if (size < 100)
+            return "00" + size;
+        if (size < 1000)
+            return "0" + size;
         return String.valueOf(size);
     }
 
     public static String currentTime() {
         LocalDateTime currentTime = LocalDateTime.now();
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
-        
+
         return currentTime.format(format);
     }
 
     public static String currentDate() {
         LocalDate currenDate = LocalDate.now();
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        
+
         return currenDate.format(format);
     }
 
@@ -161,8 +164,8 @@ public class advance {
     public static Boolean date1BeforeDate2(String date1, String date2) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {
-            LocalDate parse_date1 = LocalDate.parse(date1,format);
-            LocalDate parse_date2 = LocalDate.parse(date2,format);
+            LocalDate parse_date1 = LocalDate.parse(date1, format);
+            LocalDate parse_date2 = LocalDate.parse(date2, format);
             return parse_date1.isBefore(parse_date2);
         } catch (Exception e) {
             e.printStackTrace();
@@ -173,8 +176,8 @@ public class advance {
     public static Boolean date1EqualDate2(String date1, String date2) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {
-            LocalDate parse_date1 = LocalDate.parse(date1,format);
-            LocalDate parse_date2 = LocalDate.parse(date2,format);
+            LocalDate parse_date1 = LocalDate.parse(date1, format);
+            LocalDate parse_date2 = LocalDate.parse(date2, format);
             return parse_date1.isEqual(parse_date2);
         } catch (Exception e) {
             e.printStackTrace();
@@ -185,8 +188,8 @@ public class advance {
     public static Boolean fulldate1BeforeFullDate2(String date1, String date2) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
         try {
-            LocalDateTime parse_date1 = LocalDateTime.parse(date1,format);
-            LocalDateTime parse_date2 = LocalDateTime.parse(date2,format);
+            LocalDateTime parse_date1 = LocalDateTime.parse(date1, format);
+            LocalDateTime parse_date2 = LocalDateTime.parse(date2, format);
             return parse_date1.isBefore(parse_date2);
         } catch (Exception e) {
             e.printStackTrace();
@@ -199,7 +202,7 @@ public class advance {
         try {
             LocalDate parse_date = LocalDate.parse(date, format);
             LocalDate current_date = LocalDate.now();
-            LocalDate parse_current = LocalDate.parse(current_date.format(format),format);
+            LocalDate parse_current = LocalDate.parse(current_date.format(format), format);
             LocalDate expiredDate = parse_date.plusMonths(time);
             System.out.println(expiredDate);
 
@@ -215,7 +218,7 @@ public class advance {
         try {
             LocalDate parse_date = LocalDate.parse(date, format);
             LocalDate current_date = LocalDate.now();
-            LocalDate parse_current = LocalDate.parse(current_date.format(format),format);
+            LocalDate parse_current = LocalDate.parse(current_date.format(format), format);
             LocalDate expiredDate = parse_date.plusYears(time);
             System.out.println(expiredDate);
 
@@ -231,7 +234,7 @@ public class advance {
             String so = String.valueOf(number);
             String result = new String();
             for (int i = 0; i < so.length(); i++) {
-                if(i > 0 && i % 3 == 0) {
+                if (i > 0 && i % 3 == 0) {
                     result = result + ",";
                 }
                 result = result + so.charAt(i);
