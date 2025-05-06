@@ -6,7 +6,9 @@ import java.awt.Image;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -766,4 +768,19 @@ public class medicine_BUS {
         }
     }
 
+    //xt
+    public static void radioDonVi_xt(medicine_DTO med, JLabel giaban, int index) {
+        med = throwMedicineObj(med.getMathuoc());
+        updateSellPrice(med);
+        storage_DTO str = throwStorageObj(med.getMaton());
+
+        NumberFormat nf = NumberFormat.getInstance(Locale.FRANCE); // Use Locale for formatting
+
+        if (str.getSlton().get(index) != 0) {
+            String formattedPrice = nf.format(med.getGiaban().get(index)) + " VND"; // Format the price
+            giaban.setText(formattedPrice);
+        } else {
+            giaban.setText("0.0");
+        }
+    }
 }

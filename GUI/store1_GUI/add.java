@@ -16,10 +16,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import BUS.employee_BUS;
 import BUS.store_BUS;
+import DAO.employee_DAO;
 import DTO.employee_DTO;
 import DTO.store_DTO;
 
@@ -28,8 +31,12 @@ public class add extends JFrame implements ActionListener {
     JTextField tf_mant, tf_sonha, tf_duong, tf_phuong, tf_quan, tf_tinh;
     JButton btn_xacnhan, btn_huy;
     JComboBox<String> cb_nql;
+    DefaultTableModel model;
+    JTable table;
 
-    public add() {
+    public add(DefaultTableModel modelStore, JTable tableStore) {
+        this.model = modelStore;
+        this.table = tableStore;
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new GridBagLayout());
@@ -165,7 +172,7 @@ public class add extends JFrame implements ActionListener {
         ArrayList<employee_DTO> employeelist = new ArrayList<>();
         employeelist = employee_BUS.getAll();
         for (employee_DTO st : employeelist) {
-            if (st.getChucvu().equals("Quản lý")) {
+            if (st.getChucvu().equals("Quản lý") && st.getManhathuoc() == null) {
                 ql = Arrays.copyOf(ql, ql.length + 1);
                 ql[ql.length - 1] = st.getTennv();
             }
@@ -229,15 +236,20 @@ public class add extends JFrame implements ActionListener {
                 }
             }
             store_BUS.insert(new store_DTO(mant, masonha, duong, phuong, quan, tinh, manql, true));
+            employee_DTO temp = new employee_DTO();
+            temp.setManv(manql);
+            employee_DAO empdao = new employee_DAO();
+            temp = empdao.selectByID(temp);
+            temp.setManhathuoc(mant);
+            empdao.update(temp);
+
             JOptionPane.showMessageDialog(null, "Thêm thành công", "Thêm nhà thuốc", JOptionPane.PLAIN_MESSAGE);
+            store_BUS.loadTable(model);
+            table.setModel(model);
             dispose();
 
         } else if (e.getSource() == btn_huy) {
             dispose();
         }
-    }
-
-    public static void main(String[] args) {
-        new add();
     }
 }

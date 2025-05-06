@@ -1,9 +1,14 @@
 package GUI;
 
+import BUS.medicine_BUS;
+import DAO.cartDAO;
 import DTO.customer_DTO;
 import DTO.medicine_DTO;
 import advanceMethod.advance;
-
+import data.Arr_xt.cartArr;
+import data.Arr_xt.customer_DTOArr;
+import data.Arr_xt.medicineArr;
+import data.MyConnection;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
@@ -11,12 +16,10 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import javax.swing.*;
-
-import data.Arr_xt.cartArr;
-import data.Arr_xt.customer_DTOArr;
-import data.Arr_xt.medicineArr;
 
 public class customer_GUI extends JFrame implements MouseListener, ActionListener {
 
@@ -40,6 +43,8 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
     private medicineArr sanpham;
     private customer_DTO khachCurrent;
     private cartArr giohang;
+
+    private int selectedUnitIndex = -1;
 
     public customer_GUI(customer_DTO kh) {
 
@@ -359,57 +364,78 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
         top_panel.add(p3, BorderLayout.SOUTH);
     }
 
-    private void themVaoGioHang(medicine_DTO thuoc) {
+    private void themVaoGioHang(medicine_DTO thuoc, int selectedUnitIndex) {
+
         String makh = khachCurrent.getMakh();
         int sl = 1;
 
-        int dongia = (int) Math.round(thuoc.getGiaban().get(0));
+        int dongia = (int) Math.round(thuoc.getGiaban().get(selectedUnitIndex));
+        String donvi = "";
 
-        try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String url = "jdbc:sqlserver://localhost:1433;databaseName=Thientam;encrypt=true;trustServerCertificate=true";
-            String username = "sa";
-            String password = "123";
+        if (selectedUnitIndex == 0) {
+            donvi = "hộp";
+        } else if (selectedUnitIndex == 1) {
+            donvi = "vỉ";
+        } else if (selectedUnitIndex == 2) {
+            donvi = "viên";
+        }
 
-            try (Connection con = DriverManager.getConnection(url, username, password)) {
+        // Lấy mã chi tiết hóa đơn nhập cho sản phẩm
+        String macthdnhap = cartDAO.getMacthdnhapByMathuoc(thuoc.getMathuoc());
 
-                String checkSql = "SELECT SoLuong FROM GioHang WHERE MaKH = ? AND MaThuoc = ?";
-                PreparedStatement checkStmt = con.prepareStatement(checkSql);
+        if (macthdnhap == null) {
+            JOptionPane.showMessageDialog(null, "Không tìm thấy mã chi tiết hóa đơn nhập.");
+            return; // Kết thúc nếu không tìm được mã
+        }
+
+        try (Connection con = MyConnection.createConnection()) {
+            if (con == null) {
+                System.out.println("Không thể kết nối đến SQL Server.");
+                return;
+            }
+
+            String newMaGH = cartDAO.taoMaGHMoi();
+
+            String checkSql = "SELECT SoLuong FROM GioHang WHERE MaKH = ? AND MaThuoc = ? AND Donvi = ?";
+            try (PreparedStatement checkStmt = con.prepareStatement(checkSql)) {
                 checkStmt.setString(1, makh);
                 checkStmt.setString(2, thuoc.getMathuoc());
+                checkStmt.setString(3, donvi);
                 ResultSet rs = checkStmt.executeQuery();
 
                 if (rs.next()) {
-
                     int currentSL = rs.getInt("SoLuong");
                     int newSL = currentSL + sl;
                     int newThanhTien = newSL * dongia;
 
-                    String updateSql = "UPDATE GioHang SET SoLuong = ?, ThanhTien = ? WHERE MaKH = ? AND MaThuoc = ?";
-                    PreparedStatement updateStmt = con.prepareStatement(updateSql);
-                    updateStmt.setInt(1, newSL);
-                    updateStmt.setInt(2, newThanhTien);
-                    updateStmt.setString(3, makh);
-                    updateStmt.setString(4, thuoc.getMathuoc());
-                    updateStmt.executeUpdate();
+                    String updateSql = "UPDATE GioHang SET SoLuong = ?, ThanhTien = ? WHERE MaKH = ? AND MaThuoc = ? AND Donvi = ?";
+                    try (PreparedStatement updateStmt = con.prepareStatement(updateSql)) {
+                        updateStmt.setInt(1, newSL);
+                        updateStmt.setInt(2, newThanhTien);
+                        updateStmt.setString(3, makh);
+                        updateStmt.setString(4, thuoc.getMathuoc());
+                        updateStmt.setString(5, donvi);
+                        updateStmt.executeUpdate();
+                    }
 
                     JOptionPane.showMessageDialog(null, "Đã thêm vào giỏ hàng!");
                 } else {
-
                     int thanhtien = sl * dongia;
-                    String insertSql = "INSERT INTO GioHang (MaKH, MaThuoc, SoLuong, ThanhTien, DonGia) VALUES (?, ?, ?, ?, ?)";
-                    PreparedStatement insertStmt = con.prepareStatement(insertSql);
-                    insertStmt.setString(1, makh); // Sử dụng MaKH
-                    insertStmt.setString(2, thuoc.getMathuoc());
-                    insertStmt.setInt(3, sl);
-                    insertStmt.setInt(4, thanhtien);
-                    insertStmt.setInt(5, dongia);
-
-                    insertStmt.executeUpdate();
+                    String insertSql = "INSERT INTO GioHang (MaGH, MaKH, MaThuoc, Donvi, SoLuong, ThanhTien, DonGia, macthdnhap) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    try (PreparedStatement insertStmt = con.prepareStatement(insertSql)) {
+                        insertStmt.setString(1, newMaGH);
+                        insertStmt.setString(2, makh);
+                        insertStmt.setString(3, thuoc.getMathuoc());
+                        insertStmt.setString(4, donvi);
+                        insertStmt.setInt(5, sl);
+                        insertStmt.setInt(6, thanhtien);
+                        insertStmt.setInt(7, dongia);
+                        insertStmt.setString(8, macthdnhap); // Sử dụng mã chi tiết hóa đơn nhập
+                        insertStmt.executeUpdate();
+                    }
 
                     JOptionPane.showMessageDialog(null, "Đã thêm vào giỏ hàng!");
                 }
-
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -417,14 +443,26 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
         }
     }
 
+    private void themVaoGioHangAuto(medicine_DTO thuoc, String macthdnhap) {
+        int selectedUnitIndex = 0;
+        themVaoGioHang(thuoc, selectedUnitIndex);
+    }
+
     public void createProductGrid(ArrayList<medicine_DTO> foundProductsFilter) {
         ArrayList<medicine_DTO> productArr = foundProductsFilter;
+
+        String macthdnhap = "";
 
         mid_panel.removeAll();
         mid_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         int productCount = productArr.size();
 
         for (int i = 0; i < productCount; i++) {
+            medicine_DTO product = foundProductsFilter.get(i);
+
+            if (!product.getTinhtrang()) {
+                continue; // Bỏ qua sản phẩm này nếu tinhtrang = false
+            }
 
             JPanel productPanel = new JPanel();
             productPanel.setLayout(new BorderLayout());
@@ -440,20 +478,32 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
             JPanel main_center = new JPanel();
             main_center.setBackground(hong);
             main_center.setLayout(new BorderLayout());
-            main_center.setPreferredSize(new Dimension(0, 0));
+            main_center.setPreferredSize(new Dimension(250, 250));
             main_center.setBorder(BorderFactory.createLineBorder(xanhla, 1));
             chinhgiua.add(main_center, BorderLayout.CENTER);
 
-            JLabel test = new JLabel("" + (i + 1), SwingConstants.CENTER);
-            test.setFont(new Font("Bookman", Font.PLAIN, 60));
-            test.setForeground(xanhla);
-            main_center.add(test, BorderLayout.CENTER);
+            String maSanPham = product.getMathuoc();
+            String imagePath = advance.medIMG + maSanPham + ".png";
+            ImageIcon productImage = new ImageIcon(imagePath);
+
+            Image img = productImage.getImage();
+            Image scaledImg = img.getScaledInstance(250, 180, Image.SCALE_SMOOTH);
+            productImage = new ImageIcon(scaledImg);
+
+            JLabel imageLabel = new JLabel(productImage);
+            imageLabel.setHorizontalAlignment(JLabel.CENTER);
+            imageLabel.setVerticalAlignment(JLabel.CENTER);
+            main_center.add(imageLabel, BorderLayout.CENTER);
+
+            main_center.revalidate();
+            main_center.repaint();
 
             chinhgiua.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     chinhgiua.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Chuyển thành bàn tay
                     main_center.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                    System.out.println("Image Path: " + imagePath);
 
                     main_center.setBorder(BorderFactory.createLineBorder(hong, 2));
 
@@ -512,16 +562,65 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
             chinhgiua.add(main_south, BorderLayout.SOUTH);
 
             NumberFormat nf = NumberFormat.getInstance(Locale.FRANCE);
-            medicine_DTO product = foundProductsFilter.get(i);
+            // medicine_DTO product = foundProductsFilter.get(i);
 
             // Lấy giá đầu tiên trong danh sách giá bán (nếu có)
-            double price = product.getGiaban().get(0);
+            // double price = product.getGiaban().get(0);
 
-            String donvi = product.getDonvi().get(0);
+            // String donvi = product.getDonvi().get(0);
 
-            String formattedPrice = nf.format(price) + " / " + donvi;
+            // String formattedPrice = nf.format(price) + " / " + donvi;
 
+            // System.out.println(formattedPrice);
+            // JLabel price_sp = new JLabel(formattedPrice, SwingConstants.LEFT);
+            // price_sp.setFont(new Font("Bookman", Font.PLAIN | Font.BOLD, 17));
+            // price_sp.setForeground(dodo);
+            // main_south.add(price_sp);
+            double priceToDisplay = 0;
+            String unitToDisplay = "";
+
+            // Định nghĩa chuẩn thứ tự đơn vị gốc
+            String[] allUnits = { "hộp", "vỉ", "viên" };
+
+            ArrayList<String> donviList = product.getDonvi();
+            ArrayList<Double> giabanList = product.getGiaban();
+
+            // Tạo map <unit, price> cho chắc chắn đúng cặp
+            Map<String, Double> unitPriceMap = new HashMap<>();
+            for (int z = 0; z < donviList.size(); z++) {
+                String unit = donviList.get(z).trim().toLowerCase();
+
+                // Tìm index của đơn vị đó trong allUnits
+                int indexInAllUnits = -1;
+                for (int j = 0; j < allUnits.length; j++) {
+                    if (allUnits[j].equals(unit)) {
+                        indexInAllUnits = j;
+                        break;
+                    }
+                }
+
+                if (indexInAllUnits != -1 && indexInAllUnits < giabanList.size()) {
+                    double gia = giabanList.get(indexInAllUnits);
+                    unitPriceMap.put(unit, gia);
+                }
+            }
+
+            if (unitPriceMap.containsKey("hộp") && unitPriceMap.get("hộp") > 0) {
+                priceToDisplay = unitPriceMap.get("hộp");
+                unitToDisplay = "hộp";
+            } else if (unitPriceMap.containsKey("vỉ") && unitPriceMap.get("vỉ") > 0) {
+                priceToDisplay = unitPriceMap.get("vỉ");
+                unitToDisplay = "vỉ";
+            } else if (unitPriceMap.containsKey("viên") && unitPriceMap.get("viên") > 0) {
+                priceToDisplay = unitPriceMap.get("viên");
+                unitToDisplay = "viên";
+            } else {
+                unitToDisplay = "Không có giá";
+            }
+
+            String formattedPrice = priceToDisplay > 0 ? nf.format(priceToDisplay) + " / " + unitToDisplay : "Hết hàng";
             System.out.println(formattedPrice);
+
             JLabel price_sp = new JLabel(formattedPrice, SwingConstants.LEFT);
             price_sp.setFont(new Font("Bookman", Font.PLAIN | Font.BOLD, 17));
             price_sp.setForeground(dodo);
@@ -545,36 +644,21 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
             buy_btn.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    buy_btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Chuyển thành bàn tay
+                    buy_btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    buy_btn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+                    buy_btn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
             });
-
-            // main_center.addMouseListener(new MouseAdapter() {
-            // @Override
-            // public void mouseEntered(MouseEvent e) {
-            // main_center.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-            // main_center.setBorder(BorderFactory.createLineBorder(hong, 2));
-            // }
-
-            // @Override
-            // public void mouseExited(MouseEvent e) {
-            // main_center.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
-            // main_center.setBorder(BorderFactory.createLineBorder(xanhla, 1));
-            // }
-            // });
-
-            final medicine_DTO thuoc = productArr.get(i);
-
             buy_btn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    themVaoGioHang(thuoc);
+                    System.out.println("Nút Mua đã được nhấn!");
+
+                    themVaoGioHangAuto(product, macthdnhap);
+
                 }
             });
 
@@ -626,7 +710,6 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
                     close_btn.setPreferredSize(new Dimension(30, 30));
                     o_chua_nut_thoat.add(close_btn, BorderLayout.EAST);
 
-                    // Panel chứa nội dung phía dưới và các panel khác
                     JPanel test_duoi = new JPanel();
                     test_duoi.setPreferredSize(new Dimension(400, 0));
                     o_ben_phai_detail.add(test_duoi, BorderLayout.SOUTH);
@@ -658,8 +741,9 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
                     tensp_detail.setFont(new Font("Bookman", Font.BOLD, 19));
                     gbc.gridy = 1; // Dòng đầu tiên
                     phai_content_pn.add(tensp_detail, gbc);
+                    /////////////////////////////////////////////////////////////////////////////////////
 
-                    // Giá sản phẩm
+                    // Định dạng giá
                     JPanel pricePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
                     pricePanel.setBackground(xamnhat);
                     JLabel giaLB = new JLabel("Giá: ");
@@ -667,16 +751,69 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
                     giaLB.setForeground(Color.BLACK);
                     pricePanel.add(giaLB);
 
-                    // Định dạng giá
+                    // Price formatting
                     int price = (int) Math.round(productArr.get(index).getGiaban().get(0));
-                    String formattedPrice = nf.format(price) + " / " + productArr.get(index).getDonvi().get(0);
+                    String formattedPrice = nf.format(price) + " VND ";
                     JLabel price_detail = new JLabel(formattedPrice);
                     price_detail.setFont(new Font("Bookman", Font.PLAIN, 25));
                     price_detail.setForeground(dodo);
                     pricePanel.add(price_detail);
 
-                    gbc.gridy = 2;
+                    gbc.gridy++;
                     phai_content_pn.add(pricePanel, gbc);
+                    JPanel donvi = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+                    donvi.setBackground(xamnhat);
+                    JLabel tieudedonvi = new JLabel("Đơn vị : ");
+                    tieudedonvi.setFont(new Font("Bookman", Font.BOLD, 17));
+
+                    tieudedonvi.setForeground(Color.BLACK);
+
+                    JRadioButton hop = new JRadioButton("Hộp");
+                    JRadioButton vi = new JRadioButton("Vỉ");
+                    JRadioButton vien = new JRadioButton("Viên");
+                    donvi.add(tieudedonvi);
+                    donvi.add(hop);
+                    donvi.add(vi);
+                    donvi.add(vien);
+
+                    ButtonGroup buttonGroup = new ButtonGroup();
+                    buttonGroup.add(hop);
+                    buttonGroup.add(vi);
+                    buttonGroup.add(vien);
+
+                    medicine_DTO medicine = productArr.get(index);
+
+                    hop.addActionListener(event -> {
+                        selectedUnitIndex = 0;
+
+                        medicine_BUS.radioDonVi_xt(medicine, price_detail, selectedUnitIndex);
+                    });
+
+                    vi.addActionListener(event -> {
+                        selectedUnitIndex = 1;
+                        medicine_BUS.radioDonVi_xt(medicine, price_detail, selectedUnitIndex);
+                    });
+
+                    vien.addActionListener(event -> {
+                        selectedUnitIndex = 2;
+                        System.out.println(selectedUnitIndex);
+                        medicine_BUS.radioDonVi_xt(medicine, price_detail, selectedUnitIndex);
+                    });
+
+                    if (medicine.getGiaban().get(0) <= 0) {
+                        hop.setEnabled(false);
+                    }
+                    if (medicine.getGiaban().size() > 1 && medicine.getGiaban().get(1) <= 0) {
+                        vi.setEnabled(false);
+                    }
+                    if (medicine.getGiaban().size() > 2 && medicine.getGiaban().get(2) <= 0) {
+                        vien.setEnabled(false);
+                    }
+
+                    gbc.gridy++;
+                    phai_content_pn.add(donvi, gbc);
+
+                    ////////////////////////////////////////////////////////////////////////////////////
 
                     // Thành phần
                     JPanel thanhphanPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -693,14 +830,14 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
                     thanhphanPanel.add(thanhphan_detail);
 
                     // Thêm panel thành phần vào phai_content_pn
-                    gbc.gridy = 3;
+                    gbc.gridy++;
                     phai_content_pn.add(thanhphanPanel, gbc);
 
                     // Thông tin sản phẩm
                     JLabel ttspLB = new JLabel("Mô tả sản phẩm: ");
                     ttspLB.setFont(new Font("Bookman", Font.BOLD, 17));
                     ttspLB.setForeground(Color.BLACK);
-                    gbc.gridy = 4;
+                    gbc.gridy++;
                     phai_content_pn.add(ttspLB, gbc);
 
                     // Thông tin sản phẩm chi tiết
@@ -714,7 +851,7 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
                     ttsp_detail.setPreferredSize(new Dimension(380, 100));
                     ttsp_detail.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
 
-                    gbc.gridy = 5;
+                    gbc.gridy++;
                     phai_content_pn.add(ttsp_detail, gbc);
 
                     JPanel sanxuatPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -730,7 +867,7 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
                     sanxuat_detail.setForeground(Color.BLACK);
                     sanxuatPanel.add(sanxuat_detail);
 
-                    gbc.gridy = 6;
+                    gbc.gridy++;
                     phai_content_pn.add(sanxuatPanel, gbc);
 
                     // cach dung
@@ -746,7 +883,7 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
                     cachdung_detail.setFont(new Font("Bookman", Font.PLAIN, 17));
                     cachdung_detail.setForeground(Color.BLACK);
                     cachdungPanel.add(cachdung_detail);
-                    gbc.gridy = 7;
+                    gbc.gridy++;
                     phai_content_pn.add(cachdungPanel, gbc);
 
                     // nut chon mua
@@ -756,7 +893,7 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
                     buy_btn_detail.setFocusPainted(false);
                     buy_btn_detail.setPreferredSize(new Dimension(170, 35));
                     buy_btn_detail.setBackground(xanhla);
-                    gbc.gridy = 8;
+                    gbc.gridy++;
                     phai_content_pn.add(buy_btn_detail, gbc);
 
                     buy_btn_detail.addMouseListener(new MouseAdapter() {
@@ -774,7 +911,21 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
                     buy_btn_detail.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            themVaoGioHang(thuoc);
+                            // Kiểm tra xem người dùng đã chọn đơn vị chưa
+                            if (selectedUnitIndex == -1) {
+                                JOptionPane.showMessageDialog(null, "Vui lòng chọn đơn vị bán!");
+                                return;
+                            }
+
+                            // Lấy sản phẩm hiện tại
+                            medicine_DTO thuoc = productArr.get(index);
+                            if (thuoc == null) {
+                                JOptionPane.showMessageDialog(null, "Sản phẩm không hợp lệ.");
+                                return;
+                            }
+
+                            // Thêm vào giỏ hàng
+                            themVaoGioHang(thuoc, selectedUnitIndex);
                         }
                     });
 
@@ -790,6 +941,27 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
                     JPanel img_medicine = new JPanel();
                     img_medicine.setBackground(linen);
                     trai_content_pn.add(img_medicine, BorderLayout.CENTER);
+                    //
+                    String maSanPham = product.getMathuoc();
+                    String imagePath = advance.medIMG + maSanPham + ".png";
+                    ImageIcon productImage = new ImageIcon(imagePath);
+
+                    int chieurong = 450;
+                    int chieucao = 320;
+
+                    Image img = productImage.getImage();
+                    Image scaledImg = img.getScaledInstance(chieurong, chieucao, Image.SCALE_SMOOTH);
+                    productImage = new ImageIcon(scaledImg);
+
+                    JLabel imageLabel = new JLabel(productImage);
+                    imageLabel.setHorizontalAlignment(JLabel.CENTER);
+                    imageLabel.setVerticalAlignment(JLabel.CENTER);
+                    img_medicine.add(imageLabel, BorderLayout.CENTER);
+
+                    img_medicine.revalidate();
+                    img_medicine.repaint();
+
+                    //
 
                     JPanel img_tren = new JPanel();
                     img_tren.setBackground(xamnhat);

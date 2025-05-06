@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class orderDAO {
 
     public static String taoMaHDMoi() {
-        String newMaHD = "HD001"; // Mặc định nếu bảng rỗng
+        String newMaHD = "DH0001"; // Mặc định nếu bảng rỗng
         String sql = "SELECT TOP 1 madon FROM DonHang ORDER BY CAST(SUBSTRING(madon, 3, LEN(madon)) AS INT) DESC";
 
         try (Connection con = MyConnection.createConnection();
@@ -22,7 +22,7 @@ public class orderDAO {
                 String lastMaHD = rs.getString("madon"); // Ví dụ: "HD999"
                 int num = Integer.parseInt(lastMaHD.substring(2)); // Lấy phần số
                 num++;
-                newMaHD = String.format("HD%03d", num); // Định dạng lại mã đơn hàng, ví dụ: "HD002"
+                newMaHD = String.format("DH0%03d", num); // Định dạng lại mã đơn hàng, ví dụ: "HD002"
             }
 
         } catch (SQLException e) {

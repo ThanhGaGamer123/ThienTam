@@ -2,7 +2,9 @@
 package DTO;
 
 public class sanphamchonmua_DTO {
+
     private String mathuoc;
+    private String magio;
     private String tenthuoc;
     private int soLuong;
     private String donvi;
@@ -11,12 +13,21 @@ public class sanphamchonmua_DTO {
     public sanphamchonmua_DTO() {
     }
 
-    public sanphamchonmua_DTO(String mathuoc, String tenthuoc, int soLuong, String donvi, int donGia) {
+    public sanphamchonmua_DTO(String mathuoc, String magio, String tenthuoc, int soLuong, String donvi, int donGia) {
         this.mathuoc = mathuoc;
+        this.magio = magio;
         this.tenthuoc = tenthuoc;
         this.soLuong = soLuong;
         this.donvi = donvi;
         this.donGia = donGia;
+    }
+
+    public String getMagio() {
+        return magio;
+    }
+
+    public void setMagio(String magio) {
+        this.magio = magio;
     }
 
     public String getMathuoc() {

@@ -21,8 +21,8 @@ public class cartArr {
 
     public void readDatabase(String makh) {
         try {
-            cartDAO dao = new cartDAO(); // Bước 1: Tạo DAO
-            a = dao.readCartDatabase(makh); // Bước 2: Gọi DAO (đúng là dùng 'dao.', không phải 'cartDAO.')
+            cartDAO dao = new cartDAO(); 
+            a = dao.readCartDatabase(makh);
 
             System.out.println("Dữ liệu giỏ hàng đã tải từ bảng GioHang cho khách hàng: " + makh);
         } catch (Exception e) {
@@ -33,8 +33,8 @@ public class cartArr {
 
     public void updateCartDatabase(ArrayList<cart_DTO> cartList) {
         try {
-            cartDAO dao = new cartDAO(); // Bước 1: Tạo DAO
-            dao.updateCart(cartList); // Bước 2: Gọi DAO để cập nhật giỏ hàng
+            cartDAO dao = new cartDAO(); 
+            dao.updateCart(cartList); 
 
             if (!cartList.isEmpty()) {
                 System.out.println("Đã cập nhật giỏ hàng cho khách hàng: " + cartList.get(0).getMakh());

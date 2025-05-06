@@ -16,10 +16,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import BUS.employee_BUS;
 import BUS.store_BUS;
+import DAO.employee_DAO;
 import DTO.employee_DTO;
 import DTO.store_DTO;
 
@@ -28,8 +31,14 @@ public class edit extends JFrame implements ActionListener {
     JTextField tf_mant, tf_sonha, tf_duong, tf_phuong, tf_quan, tf_tinh;
     JButton btn_xacnhan, btn_huy;
     JComboBox<String> cb_nql, cb_tinhtrang;
+    DefaultTableModel model;
+    JTable table;
+    store_DTO nhathuoc;
 
-    public edit(store_DTO sto) {
+    public edit(store_DTO sto, DefaultTableModel modelStore, JTable tableStore) {
+        this.nhathuoc = sto;
+        this.model = modelStore;
+        this.table = tableStore;
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new GridBagLayout());
@@ -171,7 +180,7 @@ public class edit extends JFrame implements ActionListener {
         ArrayList<employee_DTO> employeelist = new ArrayList<>();
         employeelist = employee_BUS.getAll();
         for (employee_DTO st : employeelist) {
-            if (st.getChucvu().equals("Quản lý")) {
+            if (st.getChucvu().equals("Quản lý") && st.getManhathuoc() == null) {
                 ql = Arrays.copyOf(ql, ql.length + 1);
                 ql[ql.length - 1] = st.getTennv();
             }
@@ -279,14 +288,32 @@ public class edit extends JFrame implements ActionListener {
             }
 
             store_BUS.edit(new store_DTO(mant, masonha, duong, phuong, quan, tinh, manql, tt));
+            if (nql == "Không") {
+                employee_DTO temp = new employee_DTO();
+                temp.setManv(nhathuoc.getManql());
+                employee_DAO empdao = new employee_DAO();
+                temp = empdao.selectByID(temp);
+                temp.setManhathuoc(null);
+                empdao.update(temp);
+            }
+            employee_DTO temp = new employee_DTO();
+            temp.setManv(manql);
+            employee_DAO empdao = new employee_DAO();
+            temp = empdao.selectByID(temp);
+            temp.setManhathuoc(mant);
+            empdao.update(temp);
+            employee_DTO temp1 = new employee_DTO();
+            temp1.setManv(nhathuoc.getManql());
+            temp1 = empdao.selectByID(temp1);
+            temp1.setManhathuoc(null);
+            empdao.update(temp1);
+            
             JOptionPane.showMessageDialog(null, "Sửa thành công", "Sửa nhà thuốc", JOptionPane.PLAIN_MESSAGE);
+            store_BUS.loadTable(model);
+            table.setModel(model);
             dispose();
         } else if (e.getSource() == btn_huy) {
             dispose();
         }
-    }
-
-    public static void main(String[] args) {
-        new add();
     }
 }

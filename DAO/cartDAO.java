@@ -10,6 +10,31 @@ import java.util.ArrayList;
 
 public class cartDAO {
 
+    public static String taoMaGHMoi() {
+        String newMaGH = "GH001";
+        String sql = "SELECT TOP 1 MaGH FROM GioHang ORDER BY CAST(SUBSTRING(MaGH, 3, LEN(MaGH)) AS INT) DESC";
+
+        try (Connection con = MyConnection.createConnection();
+                PreparedStatement pst = con.prepareStatement(sql)) {
+
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                String lastMaGH = rs.getString("MaGH");
+                int num = Integer.parseInt(lastMaGH.substring(2));
+                num++;
+                newMaGH = String.format("GH%03d", num);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Lỗi SQL khi tạo mã giỏ hàng mới: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return newMaGH;
+    }
+
     public ArrayList<cart_DTO> readCartDatabase(String makh) {
         ArrayList<cart_DTO> cartList = new ArrayList<>();
 
@@ -23,16 +48,26 @@ public class cartDAO {
 
             while (rs.next()) {
                 cart_DTO c = new cart_DTO(
+                        rs.getString("MaGH"),
                         rs.getString("MaKH"),
                         rs.getString("MaThuoc"),
+                        rs.getString("Donvi"),
                         rs.getInt("SoLuong"),
-                        rs.getInt("ThanhTien"),
-                        rs.getInt("DonGia"));
+                        rs.getDouble("ThanhTien"),
+                        rs.getDouble("DonGia"),
+                        rs.getString("macthdnhap"));
                 cartList.add(c);
             }
 
-            System.out.println("Đã tải giỏ hàng cho khách hàng: " + makh);
+            if (cartList.isEmpty()) {
+                System.out.println("Giỏ hàng trống cho khách hàng: " + makh);
+            } else {
+                System.out.println("Đã tải giỏ hàng cho khách hàng: " + makh);
+            }
 
+        } catch (SQLException e) {
+            System.out.println("Lỗi SQL khi đọc giỏ hàng: " + e.getMessage());
+            e.printStackTrace();
         } catch (Exception e) {
             System.out.println("Lỗi khi đọc giỏ hàng: " + e.getMessage());
             e.printStackTrace();
@@ -41,17 +76,16 @@ public class cartDAO {
         return cartList;
     }
 
-    public void xoaSanPhamTrongGio(String makh, String mathuoc) {
+    public void xoaSanPhamTrongGio(String magh) {
         try (Connection con = MyConnection.createConnection()) {
-            String sql = "DELETE FROM GioHang WHERE MaKH = ? AND MaThuoc = ?";
+            String sql = "DELETE FROM GioHang WHERE MaGH = ?";
             try (PreparedStatement pst = con.prepareStatement(sql)) {
-                pst.setString(1, makh);
-                pst.setString(2, mathuoc);
+                pst.setString(1, magh);
 
                 int affectedRows = pst.executeUpdate();
 
                 if (affectedRows > 0) {
-                    System.out.println("Đã xoá sản phẩm " + mathuoc + " trong giỏ hàng của khách " + makh);
+                    System.out.println("Đã xoá sản phẩm trong giỏ hàng với mã giỏ: " + magh);
                 } else {
                     System.out.println("Không tìm thấy sản phẩm để xoá.");
                 }
@@ -65,13 +99,12 @@ public class cartDAO {
         }
     }
 
-    public void capNhatSoLuong(String makh, String mathuoc, int soluong) {
+    public void capNhatSoLuong(String magh, int soluong) {
         try (Connection con = MyConnection.createConnection()) {
-            String sql = "UPDATE GioHang SET soluong = ? WHERE MaKH = ? AND MaThuoc = ?";
+            String sql = "UPDATE GioHang SET SoLuong = ? WHERE MaGH = ?";
             try (PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setInt(1, soluong);
-                ps.setString(2, makh);
-                ps.setString(3, mathuoc);
+                ps.setString(2, magh); // Sử dụng MaGH để xác định sản phẩm
 
                 int rows = ps.executeUpdate();
                 if (rows > 0) {
@@ -98,7 +131,7 @@ public class cartDAO {
 
             System.out.println("Kết nối SQL Server thành công để cập nhật giỏ hàng!");
 
-            // Bước 1: Xoá toàn bộ giỏ hàng cũ cho khách hàng (chỉ nếu cartList không rỗng)
+            // Step 1: Delete old cart for the customer (only if cartList is not empty)
             String deleteQuery = "DELETE FROM GioHang WHERE MaKH = ?";
             try (PreparedStatement deleteStmt = con.prepareStatement(deleteQuery)) {
                 if (!cartList.isEmpty()) {
@@ -107,20 +140,23 @@ public class cartDAO {
                 }
             }
 
-            // Bước 2: Chèn lại các mục trong giỏ hàng
-            String insertQuery = "INSERT INTO GioHang (MaKH, MaThuoc, SoLuong, ThanhTien, DonGia) VALUES (?, ?, ?, ?, ?)";
+            // Step 2: Insert new items into the cart
+            String insertQuery = "INSERT INTO GioHang (MaGH, MaKH, MaThuoc, Donvi, SoLuong, ThanhTien, DonGia, macthdnhap) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement insertStmt = con.prepareStatement(insertQuery)) {
                 for (cart_DTO c : cartList) {
-                    insertStmt.setString(1, c.getMakh());
-                    insertStmt.setString(2, c.getMathuoc());
-                    insertStmt.setInt(3, c.getSl());
-                    insertStmt.setDouble(4, c.getThanhtien());
-                    insertStmt.setDouble(5, c.getDongia());
+                    insertStmt.setString(1, c.getMagh()); // Set MaGH
+                    insertStmt.setString(2, c.getMakh()); // Set MaKH
+                    insertStmt.setString(3, c.getMathuoc()); // Set MaThuoc
+                    insertStmt.setString(4, c.getDonvi()); // Set Donvi
+                    insertStmt.setInt(5, c.getSl()); // Set SoLuong
+                    insertStmt.setDouble(6, c.getThanhtien()); // Set ThanhTien
+                    insertStmt.setDouble(7, c.getDongia()); // Set DonGia
+                    insertStmt.setString(8, c.getMacthdnhap()); // Set macthdnhap
 
-                    insertStmt.addBatch(); // Thêm vào batch
+                    insertStmt.addBatch(); // Add to batch
                 }
 
-                insertStmt.executeBatch(); // Thực thi tất cả câu lệnh
+                insertStmt.executeBatch(); // Execute all statements
             }
 
             System.out.println("Đã cập nhật giỏ hàng thành công!");
@@ -129,6 +165,50 @@ public class cartDAO {
             System.out.println("Lỗi khi cập nhật giỏ hàng: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public static String getMacthdnhapByMathuoc(String mathuoc) {
+        String macthdnhap = null;
+
+        String query = "SELECT TOP 1 macthdnhap FROM ChiTietHoaDonNhap WHERE mathuoc = ? AND tinhtrang = 1";
+
+        try (Connection con = MyConnection.createConnection();
+                PreparedStatement stmt = con.prepareStatement(query)) {
+
+            stmt.setString(1, mathuoc);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                macthdnhap = rs.getString("macthdnhap");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return macthdnhap; // Trả về mã tìm được (null nếu không có)
+    }
+
+    public static String laythongtinMacthdnhap(String makh, String mathuoc) {
+        String macthdnhap = null;
+        Connection sql = data.SQL.createConnection();
+
+        String query = "SELECT macthdnhap FROM GioHang WHERE makh = ? AND mathuoc = ?";
+
+        try (PreparedStatement pst = sql.prepareStatement(query)) {
+            pst.setString(1, makh);
+            pst.setString(2, mathuoc);
+
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                macthdnhap = rs.getString("macthdnhap");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
+        }
+
+        return macthdnhap; // Trả về macthdnhap hoặc null nếu không tìm thấy
     }
 
 }

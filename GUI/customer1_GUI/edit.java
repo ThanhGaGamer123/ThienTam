@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -14,7 +15,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.table.DefaultTableModel;
 
 import BUS.customer_BUS;
 import DTO.customer_DTO;
@@ -22,12 +28,16 @@ import DTO.customer_DTO;
 public class edit extends JFrame implements ActionListener {
     JLabel lb_makh, lb_tenkh, lb_sdt, lb_sonha, lb_duong, lb_phuong, lb_quan, lb_tinh, lb_tt, lb_email, lb_pass,
             lb_diemkm;
-    JTextField tf_makh, tf_tenkh, tf_sdt, tf_sonha, tf_duong, tf_phuong, tf_quan, tf_tinh, tf_email, tf_pass,
-            tf_diemkm;
+    JTextField tf_makh, tf_tenkh, tf_sdt, tf_sonha, tf_duong, tf_phuong, tf_quan, tf_tinh, tf_email, tf_pass;
     JButton btn_xacnhan, btn_huy;
     JComboBox<String> cb_tinhtrang;
+    JSpinner spinner_diemkm = null;
+    DefaultTableModel model;
+    JTable table;
 
-    public edit(customer_DTO kh) {
+    public edit(customer_DTO kh, DefaultTableModel modelCustomer, JTable tableCustomer) {
+        this.model = modelCustomer;
+        this.table = tableCustomer;
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new GridBagLayout());
@@ -269,16 +279,17 @@ public class edit extends JFrame implements ActionListener {
         gbc.weightx = 0;
         gbc.weighty = 1;
         add(lb_diemkm, gbc);
-        tf_diemkm = new JTextField(30);
-        tf_diemkm.setText(String.valueOf(kh.getDiemKM()));
-        tf_diemkm.setFont(new Font(null, Font.PLAIN, 20));
+        SpinnerModel listModel = new SpinnerNumberModel(0, 0, null, 100);
+        spinner_diemkm = new JSpinner(listModel);
+        spinner_diemkm.setFont(new Font(null, Font.PLAIN, 20));
+        spinner_diemkm.setValue(kh.getDiemKM());
         gbc.gridx = 1;
         gbc.gridy = 11;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.weightx = 1;
         gbc.weighty = 1;
-        add(tf_diemkm, gbc);
+        add(spinner_diemkm, gbc);
 
         JPanel panel_btn = new JPanel();
         panel_btn.setLayout(new GridLayout(1, 2));
@@ -313,8 +324,16 @@ public class edit extends JFrame implements ActionListener {
             String quan = tf_quan.getText();
             String tinh = tf_tinh.getText();
             String email = tf_email.getText();
+            ArrayList<customer_DTO> cuslist = customer_BUS.getAll();
+            for (customer_DTO cus : cuslist) {
+                if (cus.getEmail().equals(email)) {
+                    JOptionPane.showMessageDialog(this, "Email khách hàng đã tồn tại", "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
             String pass = tf_pass.getText();
-            String diemKM = tf_diemkm.getText();
+            String diemKM = String.valueOf(spinner_diemkm.getValue());
             Boolean tt = false;
             if (cb_tinhtrang.getSelectedItem().equals("Đang hoạt động")) {
                 tt = true;
@@ -331,6 +350,8 @@ public class edit extends JFrame implements ActionListener {
             customer_BUS.edit(new customer_DTO(makh, tenkh, sdt, masonha, duong, phuong, quan, tinh, email, pass,
                     Integer.parseInt(diemKM), tt));
             JOptionPane.showMessageDialog(null, "Sửa thành công", "Sửa khách hàng", JOptionPane.PLAIN_MESSAGE);
+            customer_BUS.loadTable(model);
+            table.setModel(model);
             dispose();
         } else if (e.getSource() == btn_huy) {
             dispose();

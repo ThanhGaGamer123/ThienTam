@@ -1,27 +1,25 @@
 package GUI;
 
+import DAO.cartDAO;
+import DAO.employee_DAO;
+import DAO.orderDAO;
+import DAO.orderDetailsDAO;
 import DTO.customer_DTO;
+import DTO.employee_DTO;
 import DTO.order_details_DTO;
 import DTO.sanphamchonmua_DTO;
 import advanceMethod.advance;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import javax.swing.*;
-import javax.swing.border.LineBorder;
-
-import java.awt.event.MouseEvent;
-
-import DAO.orderDAO;
-import DAO.orderDetailsDAO;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Locale;
+import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListener {
 
@@ -162,8 +160,15 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
 
         giua = new JPanel();
         giua.setBackground(Color.white);
-        giua.setLayout(new GridBagLayout()); // Sử dụng GridBagLayout để bố cục gọn gàng
-        body.add(giua, BorderLayout.CENTER);
+        giua.setLayout(new GridBagLayout());
+
+        JScrollPane scrollpane_giua = new JScrollPane();
+        // scrollpane_giua.setPreferredSize(new Dimension(400, 200));
+        // scrollpane_giua.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        // scrollpane_giua.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        // scrollpane_giua.getVerticalScrollBar().setUnitIncrement(16);
+        scrollpane_giua.setViewportView(giua);
+        body.add(scrollpane_giua, BorderLayout.CENTER);
 
         GridBagConstraints gbc1 = new GridBagConstraints();
         gbc1.insets = new Insets(5, 10, 5, 10); // Khoảng cách giữa các thành phần
@@ -199,10 +204,16 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         panelNguoiDat.add(sdtNguoiDat);
         giua.add(panelNguoiDat, gbc1);
 
+        // JScrollPane scollpane_giuaPN = new JScrollPane(giua);
+        // scollpane_giuaPN.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        // scollpane_giuaPN.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        // scollpane_giuaPN.getVerticalScrollBar().setUnitIncrement(16);
+
         // ===== ĐỊA CHỈ NHẬN HÀNG =====
         gbc1.gridy++;
         gbc1.gridwidth = 2;
         JLabel diaChiLabel = new JLabel("                     ĐỊA CHỈ NHẬN HÀNG:");
+        // diaChiLabel.setPreferredSize(new Dimension(0, 200));
         diaChiLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         giua.add(diaChiLabel, gbc1);
 
@@ -685,6 +696,7 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         JPanel danhsach_sp_pn = new JPanel();
 
         danhsach_sp_pn.setLayout(new BoxLayout(danhsach_sp_pn, BoxLayout.Y_AXIS));
+        // danhsach_sp_pn.setPreferredSize(new Dimension(0, 1050));
         danhsach_sp_pn.setBackground(Color.WHITE);
 
         for (int i = 0; i < selectedProducts.size(); i++) {
@@ -692,14 +704,15 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
 
             JPanel rowsp = new JPanel(new GridLayout(1, 3)); // 1 dòng 3 cột bằng nhau
             rowsp.setBorder(new LineBorder(xam, 1));
-            rowsp.setPreferredSize(new Dimension(500, 22));
+            // rowsp.setPreferredSize(new Dimension(500, ));
 
-            JLabel tenthuoc = new JLabel("             " + (i + 1) + ")    " + temp_medicine.getTenthuoc(),
-                    SwingConstants.LEFT);
+            JLabel tenthuoc = new JLabel(
+                    "             " + (i + 1) + ")    " + temp_medicine.getTenthuoc(), SwingConstants.LEFT);
             tenthuoc.setFont(new Font("Bookmap", Font.PLAIN, 13));
             JLabel dongia = new JLabel(String.valueOf(temp_medicine.getDonGia()) + " đ", SwingConstants.CENTER);
             dongia.setFont(new Font("Bookmap", Font.BOLD, 12));
-            JLabel soluong = new JLabel("x" + temp_medicine.getSoLuong(), SwingConstants.CENTER);
+            JLabel soluong = new JLabel(temp_medicine.getDonvi() + "x" + temp_medicine.getSoLuong(),
+                    SwingConstants.CENTER);
             soluong.setFont(new Font("Arial", Font.BOLD, 12));
 
             rowsp.add(tenthuoc);
@@ -709,20 +722,11 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
             danhsach_sp_pn.add(rowsp);
         }
 
-        JScrollPane scrollPane = new JScrollPane(danhsach_sp_pn);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(danhsach_sp_pn);
+        scrollPane.setPreferredSize(new Dimension(0, 200));
 
-        // Panel bao ngoài có kích thước 500x50
-        JPanel sp_pn = new JPanel(new BorderLayout());
-
-        sp_pn.setPreferredSize(new Dimension(500, 55));
-        sp_pn.setBackground(hong); // Màu nền tùy ý
-        sp_pn.add(scrollPane, BorderLayout.CENTER);
-
-        // Thêm vào bố cục chính
-        giua.add(sp_pn, gbc1);
+        giua.add(scrollPane, gbc1);
 
         // Ghi chú
         gbc1.gridy++;
@@ -884,6 +888,8 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
             }
         });
 
+        // body.add(scrollpane_giua, BorderLayout.CENTER);
+
     }
 
     private void create_footer() {
@@ -939,7 +945,12 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         String makh = khachDangNhap.getMakh();
         String sdtnguoidat = khachDangNhap.getSdt();
 
-        String manv = "NV0001"; // Mã nhân viên giả định
+        employee_DTO em = new employee_DTO();
+        em.setManv(em.getManv());
+        employee_DAO emDAO = new employee_DAO();
+        em = emDAO.selectByID(em);
+
+        String manv = em.getManv(); // Mã nhân viên giả định
         String tennguoinhan = tenNguoiNhan.getText().trim();
         String sdtnguoinhan = sdtNguoiNhan.getText().trim();
         String phuong = phuongXa.getSelectedItem().toString().trim();
@@ -948,11 +959,11 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         String diachicuthe = diaChiCuThe.getText().trim();
         String ghichu = ghiChu.getText().trim();
         String pttt = getSelectedPaymentMethod();
-        String ngaydat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
+        String ngaydat = advance.currentTime();
 
         // Tạo mã đơn hàng
         String madon = orderDAO.taoMaHDMoi();
-        String tinhtrang = "Chờ xác nhận";
+        String tinhtrang = "Đang xử lý";
 
         // Tạo đơn hàng chính
         boolean isSuccess = orderDAO.taodonhangmoi(madon, makh, sdtnguoidat, manv, diachicuthe, phuong, quan, tinh,
@@ -973,35 +984,39 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
     }
 
     public double taoChiTietDonHang(String madon) {
-        double tongtien = 0; // Khởi tạo tổng tiền
+        double tongtien = 0;
+        customer_DTO khachDangNhap = getKhachHangDangNhap();
 
-        // Thêm từng sản phẩm vào chi tiết đơn hàng
         for (sanphamchonmua_DTO sp : selectedProducts) {
             double thanhTienSanPham = sp.getDonGia() * sp.getSoLuong(); // Tính thành tiền cho sản phẩm
-
-            // Cộng dồn vào tổng tiền
             tongtien += thanhTienSanPham;
 
-            // Tạo mã chi tiết đơn hàng
             String macthd = orderDetailsDAO.taoMaCTHDMoi();
 
-            // Tạo đối tượng chi tiết đơn hàng
+            String macthdnhap = cartDAO.laythongtinMacthdnhap(khachDangNhap.getMakh(), sp.getMathuoc());
+
+            // Kiểm tra xem macthdnhap có hợp lệ không
+            if (macthdnhap == null) {
+                System.out.println("Không tìm thấy mã chi tiết hóa đơn nhập cho sản phẩm: " + sp.getMathuoc());
+                continue; // Bỏ qua sản phẩm này
+            }
+
+            // Khởi tạo đối tượng order_details_DTO với đúng thứ tự tham số
             order_details_DTO ct = new order_details_DTO(
-                    macthd, // Mã chi tiết đơn hàng
-                    madon, // Mã đơn hàng
-                    sp.getMathuoc(), // Mã sản phẩm
-                    sp.getSoLuong(), // Số lượng
-                    sp.getDonvi(), // Đơn vị
-                    sp.getDonGia(), // Giá đơn vị
-                    thanhTienSanPham, // Tổng giá cho sản phẩm này
-                    true // Trạng thái
+                    macthd,
+                    madon,
+                    macthdnhap,
+                    sp.getSoLuong(),
+                    sp.getDonvi(),
+                    sp.getDonGia(),
+                    thanhTienSanPham,
+                    true // 8. tinhtrang
             );
 
-            // Thêm chi tiết đơn hàng vào cơ sở dữ liệu
             orderDetailsDAO.themChiTietDonHang(ct);
         }
 
-        return tongtien; // Trả về tổng tiền
+        return tongtien;
     }
 
     private void updateSummary() {

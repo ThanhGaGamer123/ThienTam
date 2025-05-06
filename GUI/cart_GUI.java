@@ -41,8 +41,6 @@ public class cart_GUI extends JFrame {
     private ArrayList<sanphamchonmua_DTO> selectedProducts = new ArrayList<>();
     private ArrayList<JRadioButton> checkboxes = new ArrayList<>();
 
-    private double dongia;
-
     public cart_GUI(customer_GUI khach, customer_DTO khachCurrent) {
         this.khach = khach;
         this.khachCurrent = khachCurrent;
@@ -262,6 +260,7 @@ public class cart_GUI extends JFrame {
                 System.out.println("Các sản phẩm đã chọn để thanh toán:");
                 for (sanphamchonmua_DTO product : selectedProducts) {
                     System.out.println("Mã thuốc: " + product.getMathuoc() +
+                            " magio hang " + product.getMagio() + " đơn vị tính : " + product.getDonvi() +
                             ", Tên thuốc: " + product.getTenthuoc() +
                             ", Số lượng: " + product.getSoLuong());
                 }
@@ -357,20 +356,39 @@ public class cart_GUI extends JFrame {
                 hinhsp.setPreferredSize(new Dimension(60, 50));
                 hinhsp.setBackground(vang);
 
+                String maSanPham = c.getMathuoc();
+                String imagePath = advance.medIMG + maSanPham + ".png";
+                ImageIcon productImage = new ImageIcon(imagePath);
+
+                int chieurong = 120;
+                int chieucao = 90;
+
+                Image img = productImage.getImage();
+                Image scaledImg = img.getScaledInstance(chieurong, chieucao, Image.SCALE_SMOOTH);
+                productImage = new ImageIcon(scaledImg);
+
+                JLabel imageLabel = new JLabel(productImage);
+                imageLabel.setHorizontalAlignment(JLabel.CENTER);
+                imageLabel.setVerticalAlignment(JLabel.CENTER);
+                hinhsp.add(imageLabel, BorderLayout.CENTER);
+
+                hinhsp.revalidate();
+                hinhsp.repaint();
+
                 cot1.add(Box.createHorizontalStrut(5));
                 cot1.add(checkbuy);
                 cot1.add(Box.createHorizontalStrut(10));
                 cot1.add(hinhsp);
                 cot1.add(Box.createHorizontalGlue());
 
-                // Sự kiện cho checkbox
                 checkbuy.addActionListener(e -> {
                     if (checkbuy.isSelected()) {
                         selectedProducts.add(new sanphamchonmua_DTO(
                                 c.getMathuoc(),
+                                c.getMagh(),
                                 thuoc.getTenthuoc(),
                                 c.getSl(),
-                                String.join(", ", thuoc.getDonvi()),
+                                c.getDonvi(),
                                 (int) c.getDongia()));
                     } else {
                         selectedProducts.removeIf(product -> product.getMathuoc().equals(c.getMathuoc()));
@@ -384,6 +402,13 @@ public class cart_GUI extends JFrame {
                 JLabel tenThuoc = new JLabel(thuoc.getTenthuoc(), SwingConstants.LEFT);
                 tenThuoc.setPreferredSize(new Dimension(220, 50));
                 cot2.add(tenThuoc);
+
+                // ---- Cột 2.2: đơn vị ----
+                JPanel cotdonvi = new JPanel(new GridBagLayout());
+                cotdonvi.setOpaque(false);
+                JLabel donvi = new JLabel(c.getDonvi(), SwingConstants.LEFT); // Display the correct unit
+                donvi.setPreferredSize(new Dimension(100, 50));
+                cotdonvi.add(donvi);
 
                 // ---- Cột 3: Số lượng ----
                 JPanel cot3 = new JPanel(new GridBagLayout());
@@ -401,21 +426,26 @@ public class cart_GUI extends JFrame {
                             int newSL = Integer.parseInt(soluongnhap.getText());
                             if (newSL <= 0) {
                                 JOptionPane.showMessageDialog(null, "Số lượng phải lớn hơn 0.");
-                                soluongnhap.setText(String.valueOf(tempSL));
+                                soluongnhap.setText(String.valueOf(tempSL)); // Khôi phục giá trị cũ
                                 return;
                             }
+                            if (checkbuy.isSelected()) {
+                                selectedProducts.stream()
+                                        .filter(product -> product.getMathuoc().equals(c.getMathuoc()))
+                                        .forEach(product -> product.setSoLuong(newSL)); // Cập nhật số lượng
+                            }
 
-                            // Cập nhật số lượng vào cơ sở dữ liệu
                             if (newSL != tempSL) {
                                 cartDAO dao = new cartDAO();
-                                dao.capNhatSoLuong(khachCurrent.getMakh(), c.getMathuoc(), newSL);
+                                dao.capNhatSoLuong(c.getMagh(), newSL);
 
                                 giohang.readDatabase(khachCurrent.getMakh());
-                                updateTongTien();
+                                updateTongTien(); // Cập nhật tổng tiền ngay sau khi thay đổi
                             }
+
                         } catch (NumberFormatException ex) {
                             JOptionPane.showMessageDialog(null, "Số lượng nhập không hợp lệ!");
-                            soluongnhap.setText(String.valueOf(tempSL));
+                            soluongnhap.setText(String.valueOf(tempSL)); // Khôi phục giá trị cũ
                         }
                     }
                 });
@@ -436,7 +466,7 @@ public class cart_GUI extends JFrame {
 
                         : String.format("Đơn giá: %sđ", formattedNumber);
 
-                JLabel donGiaLabel = new JLabel(formattedPrice);
+                JLabel donGiaLabel = new JLabel(formattedPrice, SwingConstants.LEFT);
                 cot4.add(donGiaLabel);
 
                 // Nút xóa
@@ -458,7 +488,7 @@ public class cart_GUI extends JFrame {
 
                     if (result == JOptionPane.YES_OPTION) {
                         cartDAO dao = new cartDAO();
-                        dao.xoaSanPhamTrongGio(khachCurrent.getMakh(), c.getMathuoc());
+                        dao.xoaSanPhamTrongGio(c.getMagh());
                         selectedProducts.removeIf(product -> product.getMathuoc().equals(c.getMathuoc()));
                         giohang.readDatabase(khachCurrent.getMakh());
                         if (giohang.getA().isEmpty()) {
@@ -486,6 +516,7 @@ public class cart_GUI extends JFrame {
                 // Thêm các cột vào spPanel
                 spPanel.add(cot1);
                 spPanel.add(cot2);
+                spPanel.add(cotdonvi);
                 spPanel.add(cot3);
                 spPanel.add(cot4);
 
@@ -506,13 +537,19 @@ public class cart_GUI extends JFrame {
                     medicine_DTO thuoc = medicineDAO.timThuocTheoMa(c.getMathuoc());
 
                     if (allSelected[0]) {
-                        selectedProducts.add(new sanphamchonmua_DTO(
-                                c.getMathuoc(),
-                                thuoc.getTenthuoc(),
-                                c.getSl(),
-                                String.join(", ", thuoc.getDonvi()),
-                                (int) c.getDongia()));
+
+                        if (selectedProducts.stream()
+                                .noneMatch(product -> product.getMathuoc().equals(c.getMagh()))) {
+                            selectedProducts.add(new sanphamchonmua_DTO(
+                                    c.getMathuoc(),
+                                    c.getMagh(),
+                                    thuoc.getTenthuoc(),
+                                    c.getSl(),
+                                    c.getDonvi(),
+                                    (int) c.getDongia()));
+                        }
                     } else {
+                        // Loại bỏ sản phẩm nếu checkbox không được chọn
                         selectedProducts.removeIf(product -> product.getMathuoc().equals(c.getMathuoc()));
                     }
                 }
@@ -521,17 +558,17 @@ public class cart_GUI extends JFrame {
 
                 if (allSelected[0]) {
                     select_all_btn.setText("Bỏ chọn tất cả");
-                    select_all_btn.setPreferredSize(new Dimension(180, 18));
                 } else {
                     select_all_btn.setText("Chọn tất cả");
-                    select_all_btn.setPreferredSize(new Dimension(120, 18));
                 }
             });
 
             giua.setPreferredSize(new Dimension(400, danhsachSPtronggio.size() * 90));
             giua.revalidate(); // Cập nhật lại giao diện
             giua.repaint();
-        } else {
+        } else
+
+        {
             JLabel emptyCartLabel = new JLabel("Giỏ hàng của bạn đang trống.", SwingConstants.CENTER);
             emptyCartLabel.setFont(new Font("Bookman", Font.ITALIC, 16));
             emptyCartLabel.setForeground(Color.GRAY);
@@ -558,78 +595,42 @@ public class cart_GUI extends JFrame {
     }
 
     private void updateTongTien() {
-        int tongTien = 0;
+        double tongTien = 0; // Tổng tiền
+        int sumsp = 0; // Tổng số sản phẩm
 
-        int sumsp = 0;
+        // Duyệt qua danh sách sản phẩm trong giỏ hàng
+        for (int i = 0; i < checkboxes.size(); i++) {
+            JRadioButton checkbox = checkboxes.get(i);
+            cart_DTO c = giohang.getA().get(i); // Lấy sản phẩm từ giỏ hàng
 
-        Component[] components = giua.getComponents();
-        for (Component comp : components) {
-            if (comp instanceof JPanel spPanel) {
-                Component[] columns = spPanel.getComponents();
-                if (columns.length == 4) {
-                    JPanel cot1 = (JPanel) columns[0];
-                    JPanel cot3 = (JPanel) columns[2];
-                    JPanel cot4 = (JPanel) columns[3];
-
-                    // Lấy checkbox
-                    JRadioButton checkbox = null;
-                    for (Component child : cot1.getComponents()) {
-                        if (child instanceof JRadioButton cb) {
-                            checkbox = cb;
-                            break;
-                        }
-                    }
-
-                    // Lấy số lượng từ JTextField
-                    JTextField soluongField = null;
-                    for (Component child : cot3.getComponents()) {
-                        if (child instanceof JTextField tf) {
-                            soluongField = tf;
-                            break;
-                        }
-                    }
-
-                    // Lấy đơn giá từ JLabel
-                    dongia = 0;
-                    for (Component child : cot4.getComponents()) {
-                        if (child instanceof JLabel label && label.getText().startsWith("Đơn giá: ")) {
-                            String text = label.getText().replaceAll("[^0-9]", "");
-                            if (!text.isEmpty())
-                                dongia = Integer.parseInt(text);
-                            break;
-                        }
-                    }
-
-                    // Nếu checkbox được chọn -> tính tiền
-                    if (checkbox != null && checkbox.isSelected() && soluongField != null) {
-                        try {
-                            int sl = Integer.parseInt(soluongField.getText());
-                            tongTien += sl * dongia;
-                            sumsp += sl;
-                        } catch (NumberFormatException ex) {
-                            // Bỏ qua nếu người dùng nhập không hợp lệ
-                        }
-                    }
-                }
+            if (checkbox.isSelected()) { // Kiểm tra xem checkbox có được chọn không
+                double dongia = c.getDongia();
+                int sl = c.getSl();
+                double thanhTien = sl * dongia; // Tính tiền cho từng sản phẩm
+                tongTien += thanhTien; // Cộng dồn vào tổng tiền
+                sumsp += sl; // Cộng dồn số lượng sản phẩm
             }
         }
 
+        // Định dạng số tiền
+        String formattedTongTien = formatCurrency(tongTien);
+
+        // Cập nhật giao diện
+        cost.setText(formattedTongTien + " đ");
+        costreal.setText(formattedTongTien + " đ");
+        sosp.setText(String.valueOf(sumsp)); // Cập nhật tổng số sản phẩm
+    }
+
+    // Hàm định dạng tiền tệ
+    private String formatCurrency(double amount) {
         NumberFormat nf = NumberFormat.getInstance(Locale.FRANCE);
         nf.setMaximumFractionDigits(2); // Tối đa 2 chữ số sau dấu phẩy
-
-        String formattedTongTien = (tongTien % 1 == 0)
-                ? nf.format((long) tongTien)
-                : nf.format(tongTien);
-
-        cost.setText(formattedTongTien + " đ");
-        costreal.setText(formattedTongTien + "đ");
-        costreal.setFont(new Font("Bookman", Font.PLAIN, 17));
-        sosp.setText(Integer.toString(sumsp));
-
+        return nf.format(amount);
     }
 
     public void refreshCart(String makh) {
         giohang.readDatabase(makh);
         showSP_incart();
     }
+
 }

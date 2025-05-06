@@ -1,7 +1,5 @@
 package GUI.employee1_GUI;
 
-import java.util.Arrays;
-
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -17,10 +15,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import BUS.employee_BUS;
 import BUS.store_BUS;
+import DAO.store_DAO;
 import DTO.employee_DTO;
 import DTO.store_DTO;
 
@@ -31,8 +32,12 @@ public class add extends JFrame implements ActionListener {
             tf_pass;
     JButton btn_xacnhan, btn_huy;
     JComboBox<String> cb_cv, cb_gioitinh, cb_nhathuoc;
+    DefaultTableModel model;
+    JTable table;
 
-    public add() {
+    public add(DefaultTableModel modelEmployee, JTable tableEmployee, String dcct) {
+        this.model = modelEmployee;
+        this.table = tableEmployee;
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new GridBagLayout());
@@ -92,6 +97,7 @@ public class add extends JFrame implements ActionListener {
         cb_cv = new JComboBox<>(cv);
         cb_cv.setFont(new Font(null, Font.PLAIN, 20));
         cb_cv.setSelectedItem("Nhân viên");
+
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
@@ -301,18 +307,37 @@ public class add extends JFrame implements ActionListener {
         gbc.weightx = 0;
         gbc.weighty = 1;
         add(lb_nhathuoc, gbc);
-        String[] nhathuoc = new String[0];
-        ArrayList<store_DTO> storelist = new ArrayList<>();
-        storelist = store_BUS.getAll();
-        for (store_DTO st : storelist) {
-            String dc = st.getMasonha() + "," + st.getDuong() + "," + st.getPhuong() + "," + st.getQuan() + ","
-                    + st.getTinh();
-            nhathuoc = Arrays.copyOf(nhathuoc, nhathuoc.length + 1);
-            nhathuoc[nhathuoc.length - 1] = dc;
-        }
-        cb_nhathuoc = new JComboBox<>(nhathuoc);
+
+        cb_nhathuoc = new JComboBox<>();
+        cb_nhathuoc.addItem("Vui lòng chọn chức vụ");
         cb_nhathuoc.setFont(new Font(null, Font.PLAIN, 20));
-        cb_nhathuoc.setSelectedIndex(0);
+
+        cb_cv.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ArrayList<store_DTO> storelist = store_BUS.getAll();
+                if (cb_cv.getSelectedItem().equals("Quản lý")) {
+                    cb_nhathuoc.removeAllItems();
+                    cb_nhathuoc.setEnabled(true);
+                    for (store_DTO st1 : storelist) {
+                        String dc1 = st1.getMasonha() + "," + st1.getDuong() + "," + st1.getPhuong() + ","
+                                + st1.getQuan() + ","
+                                + st1.getTinh();
+                        System.out.println("hello");
+                        if (st1.getManql() == null) {
+                            cb_nhathuoc.addItem(dc1);
+                        }
+                    }
+                } else {
+                    cb_nhathuoc.removeAllItems();
+                    cb_nhathuoc.addItem(dcct);
+                    cb_nhathuoc.setSelectedItem(dcct);
+                    cb_nhathuoc.setEnabled(false);
+                }
+            }
+
+        });
         gbc.gridx = 1;
         gbc.gridy = 13;
         gbc.gridwidth = 1;
@@ -357,6 +382,14 @@ public class add extends JFrame implements ActionListener {
             String quan = tf_quan.getText();
             String tinh = tf_tinh.getText();
             String tk = tf_username.getText();
+            ArrayList<employee_DTO> emplis = employee_BUS.getAll();
+            for (employee_DTO emp : emplis) {
+                if (emp.getUsername().equals(tk)) {
+                    JOptionPane.showMessageDialog(this, "Tài khoản nhân viên đã tồn tại", "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
             String pass = tf_pass.getText();
             String nhathuoc = (String) cb_nhathuoc.getSelectedItem();
 
@@ -380,14 +413,20 @@ public class add extends JFrame implements ActionListener {
 
             employee_BUS.insert(new employee_DTO(manv, tennv, chucvu, gioitinh, cccd, sdt, masonha, duong, phuong, quan,
                     tinh, tk, pass, mant, true));
+            
+            store_DTO temp = new store_DTO();
+            temp.setMant(mant);
+            temp = new store_DAO().selectByID(temp);
+            temp.setManql(manv);
+            store_DAO stodao = new store_DAO();
+            stodao.update(temp);
+            
             JOptionPane.showMessageDialog(null, "Thêm thành công", "Thêm nhân viên", JOptionPane.PLAIN_MESSAGE);
+            employee_BUS.loadTable(model);
+            table.setModel(model);
             dispose();
         } else if (e.getSource() == btn_huy) {
             dispose();
         }
-    }
-
-    public static void main(String[] args) {
-        new add();
     }
 }

@@ -15,8 +15,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
+import javax.swing.table.DefaultTableModel;
 
 import BUS.promotion_BUS;
 import DTO.promotion_DTO;
@@ -26,8 +28,12 @@ public class add extends JFrame implements ActionListener {
     JTextField tf_makm, tf_tenkm, tf_giam, tf_noidung, tf_diemyc;
     JButton btn_xacnhan, btn_huy;
     JSpinner dateSpinner, dateSpinner_1;
+    DefaultTableModel model;
+    JTable table;
 
-    public add() {
+    public add(DefaultTableModel modelPromotion, JTable tablePromotion) {
+        this.model = modelPromotion;
+        this.table = tablePromotion;
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new GridBagLayout());
@@ -219,6 +225,8 @@ public class add extends JFrame implements ActionListener {
                 int diemyc = Integer.parseInt(tf_diemyc.getText());
                 promotion_BUS.insert(new promotion_DTO(makm, tenkm, ngaybd, ngaykt, noidung, giam, diemyc, true));
                 JOptionPane.showMessageDialog(null, "Thêm thành công", "Thêm khuyến mãi", JOptionPane.PLAIN_MESSAGE);
+                promotion_BUS.loadTable(model);
+                table.setModel(model);
             } catch (Exception e1) {
                 JOptionPane.showMessageDialog(this, "Giá trị giảm và điểm yêu cầu phải là số", "Lỗi",
                         JOptionPane.ERROR_MESSAGE);
@@ -230,9 +238,5 @@ public class add extends JFrame implements ActionListener {
             dispose();
         }
 
-    }
-
-    public static void main(String[] args) {
-        new add();
     }
 }

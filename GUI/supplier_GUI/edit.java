@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -14,9 +15,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import BUS.supplier_BUS;
+import DTO.employee_DTO;
 import DTO.supplier_DTO;
 
 public class edit extends JFrame implements ActionListener {
@@ -24,8 +28,13 @@ public class edit extends JFrame implements ActionListener {
     JTextField tf_mancc, tf_tenncc, tf_sdt, tf_sonha, tf_duong, tf_phuong, tf_quan, tf_tinh;
     JButton btn_xacnhan, btn_huy;
     JComboBox<String> cb_tinhtrang;
+    DefaultTableModel model;
+    JTable table;
 
-    public edit(supplier_DTO sup) {
+    employee_DTO nhanvien;
+    public edit(supplier_DTO sup, DefaultTableModel modelSupplier, JTable tableSupplier) {
+        this.model = modelSupplier;
+        this.table = tableSupplier;
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new GridBagLayout());
@@ -244,6 +253,14 @@ public class edit extends JFrame implements ActionListener {
         if (e.getSource() == btn_xacnhan) {
             String mancc = tf_mancc.getText();
             String tenncc = tf_tenncc.getText();
+            ArrayList<supplier_DTO> suplis = supplier_BUS.getAll();
+            for (supplier_DTO sup : suplis) {
+                if (sup.getTenncc().equals(tenncc)) {
+                    JOptionPane.showMessageDialog(this, "Tên nhà cung cấp đã tồn tại", "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
             String sdt = tf_sdt.getText();
             String masonha = tf_sonha.getText();
             String duong = tf_duong.getText();
@@ -264,6 +281,8 @@ public class edit extends JFrame implements ActionListener {
 
             supplier_BUS.edit(new supplier_DTO(mancc, tenncc, sdt, masonha, duong, phuong, quan, tinh, tt));
             JOptionPane.showMessageDialog(null, "Sửa thành công", "Sửa nhà cung cấp", JOptionPane.PLAIN_MESSAGE);
+            supplier_BUS.loadTable(model);
+            table.setModel(model);
             dispose();
         } else if (e.getSource() == btn_huy) {
             dispose();

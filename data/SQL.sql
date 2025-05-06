@@ -52,18 +52,20 @@ CREATE TABLE KhachHang (
 	tinhtrang BIT,
 );
 insert into KhachHang values ('KH0001', N'Tran Linh C', '0904221123', 'tranlinhchi@gmail.com', '267',
-N'Mã Lò', N'Bình Trị Đông A', N'Bình Tân', N'TPHCM', 9999, '123', 1);
+N'Mã Lò', N'Bình Trị Đông A', N'Bình Tân', N'TPHCM', 0, '123', 1);
 insert into KhachHang values ('KH0002', N'Vu Dinh T', '0904221123', 'vudinhT@gmail.com', '267',
-N'Mã Lò', N'Bình Trị Đông A', N'Bình Tân', N'TPHCM', 9999, '123', 1);
+N'Mã Lò', N'Bình Trị Đông A', N'Bình Tân', N'TPHCM', 0, '123', 1);
 select * from KhachHang where tinhtrang = 'True'
 
 CREATE TABLE GioHang (
+	MaGH VARCHAR(10) PRIMARY KEY,
     MaKH VARCHAR(10) NOT NULL,
     MaThuoc VARCHAR(10) NOT NULL,
+	Donvi NVARCHAR(10),
     SoLuong INT NOT NULL,
     ThanhTien DECIMAL NOT NULL,
     DonGia DECIMAL NOT NULL,
-    PRIMARY KEY (MaKH, MaThuoc)
+    macthdnhap VARCHAR(10)
 );
 
 CREATE TABLE ChiTietKM (
@@ -99,9 +101,9 @@ CREATE TABLE DonHang (
 	sdt_nguoidat VARCHAR(11),
     manv VARCHAR(10),   
 	diachicuthe NVARCHAR(100),
-	phuong NVARCHAR(20),
-	quan NVARCHAR(20),
-	tinh NVARCHAR(20),                   
+	phuong NVARCHAR(100),
+	quan NVARCHAR(100),
+	tinh NVARCHAR(100),                   
     ngaydat VARCHAR(100),                 
     pttt NVARCHAR(50),            
     tinhtrang NVARCHAR(50),       
@@ -190,13 +192,17 @@ ALTER TABLE HoaDonNhap ADD CONSTRAINT FK_HDN_NCC FOREIGN KEY (mancc) REFERENCES 
 ALTER TABLE ChiTietHoaDonNhap ADD CONSTRAINT FK_CTHDN_HDN FOREIGN KEY (mahdnhap) REFERENCES HoaDonNhap(mahdnhap); 
 ALTER TABLE ChiTietHoaDonNhap ADD CONSTRAINT FK_CTHDN_Thuoc FOREIGN KEY (mathuoc) REFERENCES Thuoc(mathuoc);
 ALTER TABLE Thuoc ADD CONSTRAINT FK_Thuoc_Kho FOREIGN KEY (maton) REFERENCES Kho(maton);
-ALTER TABLE GioHang ADD CONSTRAINT FK_GioHang_KhachHang FOREIGN KEY (MaKH) REFERENCES KhachHang(maKH);
-ALTER TABLE GioHang ADD CONSTRAINT FK_GioHang_Thuoc FOREIGN KEY (MaThuoc) REFERENCES Thuoc(mathuoc);
 
 delete from ChiTietDonHang
 delete from ChiTietKM
+delete from ChuongTrinhKhuyenMai
 delete from DonHang
 delete from ChiTietHoaDonNhap
 delete from HoaDonNhap
+delete from NhaCungCap
 delete from Thuoc
 delete from Kho
+delete from KhachHang
+update NhaThuoc set manql = null
+delete from NhaThuoc
+delete from NhanVien

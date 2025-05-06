@@ -17,8 +17,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
+import javax.swing.table.DefaultTableModel;
 
 import BUS.promotion_BUS;
 import DTO.promotion_DTO;
@@ -29,8 +31,12 @@ public class edit extends JFrame implements ActionListener {
     JButton btn_xacnhan, btn_huy;
     JSpinner dateSpinner, dateSpinner_1;
     JComboBox<String> cb_tinhtrang;
+    DefaultTableModel model;
+    JTable table;
 
-    public edit(promotion_DTO pro) throws ParseException {
+    public edit(promotion_DTO pro, DefaultTableModel modelPromotion, JTable tablePromotion) throws ParseException {
+        this.model = modelPromotion;
+        this.table = tablePromotion;
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new GridBagLayout());
@@ -259,6 +265,8 @@ public class edit extends JFrame implements ActionListener {
 
                 promotion_BUS.edit(new promotion_DTO(makm, tenkm, ngaybd, ngaykt, noidung, giam, diemyc, tt));
                 JOptionPane.showMessageDialog(null, "Sửa thành công", "Thêm khuyến mãi", JOptionPane.PLAIN_MESSAGE);
+                promotion_BUS.loadTable(model);
+                table.setModel(model);
             } catch (Exception e1) {
                 JOptionPane.showMessageDialog(this, "Giá trị giảm và điểm yêu cầu phải là số", "Lỗi",
                         JOptionPane.ERROR_MESSAGE);

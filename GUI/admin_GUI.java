@@ -61,6 +61,7 @@ import advanceMethod.advance;
 public class admin_GUI extends JFrame {
     DefaultTableModel modelSupplier, modelStorage, modelCustomer, modelEmployee, modelPromotion, modelStore;
     JTable tableSupplier, tableStorage, tableCustomer, tableEmployee, tablePromotion, tableStore;
+    String diachicongtac = null;
 
     private void searchTableSupplier(String query) {
         DefaultTableModel model = (DefaultTableModel) tableSupplier.getModel();
@@ -129,6 +130,16 @@ public class admin_GUI extends JFrame {
     }
 
     public admin_GUI(employee_DTO nv) {
+        ArrayList<store_DTO> stolist = store_BUS.getAll();
+        for (store_DTO sto : stolist) {
+            if (sto.getMant().equals(nv.getManhathuoc())) {
+                this.diachicongtac = sto.getMasonha() + "," + sto.getDuong() + "," + sto.getPhuong() + ","
+                        + sto.getQuan()
+                        + ","
+                        + sto.getTinh();
+            }
+        }
+
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
@@ -328,12 +339,6 @@ public class admin_GUI extends JFrame {
         search_bar_sup.setForeground(Color.BLACK);
         search_bar_sup.setFont(new Font(null, Font.PLAIN, 18));
         panel_btn_supplier_1.add(search_bar_sup, BorderLayout.CENTER);
-
-        JButton search_advance_sup = new JButton("Tìm Kiếm Nâng Cao");
-        search_advance_sup.setPreferredSize(new Dimension(200, 50));
-        search_advance_sup.setForeground(Color.BLACK);
-        search_advance_sup.setFont(new Font(null, Font.PLAIN, 18));
-        panel_btn_supplier_1.add(search_advance_sup, BorderLayout.EAST);
 
         JButton reset_sup = new JButton();
         reset_sup.setIcon(data.imagePath.resize_reset);
@@ -536,12 +541,6 @@ public class admin_GUI extends JFrame {
         search_bar_sup_kh.setFont(new Font(null, Font.PLAIN, 18));
         panel_btn_supplier_1_kh.add(search_bar_sup_kh, BorderLayout.CENTER);
 
-        JButton search_advance_sup_kh = new JButton("Tìm Kiếm Nâng Cao");
-        search_advance_sup_kh.setPreferredSize(new Dimension(200, 50));
-        search_advance_sup_kh.setForeground(Color.BLACK);
-        search_advance_sup_kh.setFont(new Font(null, Font.PLAIN, 18));
-        panel_btn_supplier_1_kh.add(search_advance_sup_kh, BorderLayout.EAST);
-
         JButton reset_sup_kh = new JButton();
         reset_sup_kh.setIcon(data.imagePath.resize_reset);
         reset_sup_kh.setForeground(Color.BLACK);
@@ -663,12 +662,6 @@ public class admin_GUI extends JFrame {
         search_bar_sup_nv.setForeground(Color.BLACK);
         search_bar_sup_nv.setFont(new Font(null, Font.PLAIN, 18));
         panel_btn_supplier_1_nv.add(search_bar_sup_nv, BorderLayout.CENTER);
-
-        JButton search_advance_sup_nv = new JButton("Tìm Kiếm Nâng Cao");
-        search_advance_sup_nv.setPreferredSize(new Dimension(200, 50));
-        search_advance_sup_nv.setForeground(Color.BLACK);
-        search_advance_sup_nv.setFont(new Font(null, Font.PLAIN, 18));
-        panel_btn_supplier_1_nv.add(search_advance_sup_nv, BorderLayout.EAST);
 
         JButton reset_sup_nv = new JButton();
         reset_sup_nv.setIcon(data.imagePath.resize_reset);
@@ -792,12 +785,6 @@ public class admin_GUI extends JFrame {
         search_bar_promotion.setFont(new Font(null, Font.PLAIN, 18));
         panel_btn_promotion_1.add(search_bar_promotion, BorderLayout.CENTER);
 
-        JButton search_advance_promotion = new JButton("Tìm Kiếm Nâng Cao");
-        search_advance_promotion.setPreferredSize(new Dimension(200, 50));
-        search_advance_promotion.setForeground(Color.BLACK);
-        search_advance_promotion.setFont(new Font(null, Font.PLAIN, 18));
-        panel_btn_promotion_1.add(search_advance_promotion, BorderLayout.EAST);
-
         JButton reset_promotion = new JButton();
         reset_promotion.setIcon(data.imagePath.resize_reset);
         reset_promotion.setForeground(Color.BLACK);
@@ -919,12 +906,6 @@ public class admin_GUI extends JFrame {
         search_bar_store.setForeground(Color.BLACK);
         search_bar_store.setFont(new Font(null, Font.PLAIN, 18));
         panel_btn_store_1.add(search_bar_store, BorderLayout.CENTER);
-
-        JButton search_advance_store = new JButton("Tìm Kiếm Nâng Cao");
-        search_advance_store.setPreferredSize(new Dimension(200, 50));
-        search_advance_store.setForeground(Color.BLACK);
-        search_advance_store.setFont(new Font(null, Font.PLAIN, 18));
-        panel_btn_store_1.add(search_advance_store, BorderLayout.EAST);
 
         JButton reset_store = new JButton();
         reset_store.setIcon(data.imagePath.resize_reset);
@@ -1314,7 +1295,7 @@ public class admin_GUI extends JFrame {
         add_store.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUI.store1_GUI.add();
+                new GUI.store1_GUI.add(modelStore, tableStore);
             }
         });
         reset_store.addActionListener(new ActionListener() {
@@ -1358,8 +1339,14 @@ public class admin_GUI extends JFrame {
                             tinhTrang = true;
                         }
                     }
-                    store_DTO sto = new store_DTO(maNT, maSoNha, duong, phuong, quan, tinh, manql, tinhTrang);
-                    new GUI.store1_GUI.edit(sto);
+                    if (tinhTrang) {
+                        store_DTO sto = new store_DTO(maNT, maSoNha, duong, phuong, quan, tinh, manql, tinhTrang);
+                        new GUI.store1_GUI.edit(sto, modelStore, tableStore);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Không thể chỉnh sửa nhà thuốc đã tạm dừng",
+                                "Sửa nhà thuốc",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -1388,7 +1375,14 @@ public class admin_GUI extends JFrame {
                                 manql = st.getManv();
                             }
                         }
-                        Boolean tinhTrang = Boolean.parseBoolean(String.valueOf(tableStore.getValueAt(row, 3)));
+                        Boolean tinhTrang = false;
+
+                        ArrayList<store_DTO> stolist = store_BUS.getAll();
+                        for (store_DTO sto : stolist) {
+                            if (sto.getMant().equals(maNT) && sto.getTinhtrang()) {
+                                tinhTrang = true;
+                            }
+                        }
                         if (tinhTrang == false) {
                             continue;
                         } else {
@@ -1435,7 +1429,7 @@ public class admin_GUI extends JFrame {
         add_promotion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUI.promotion_GUI.add();
+                new GUI.promotion_GUI.add(modelPromotion, tablePromotion);
             }
         });
         reset_promotion.addActionListener(new ActionListener() {
@@ -1469,13 +1463,19 @@ public class admin_GUI extends JFrame {
                             tinhTrang = true;
                         }
                     }
-                    promotion_DTO pro = new promotion_DTO(maKM, tenKM, ngaybd, ngaykt, noidung, giam, diemyc,
-                            tinhTrang);
-                    try {
-                        new GUI.promotion_GUI.edit(pro);
-                    } catch (ParseException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
+                    if (tinhTrang) {
+                        promotion_DTO pro = new promotion_DTO(maKM, tenKM, ngaybd, ngaykt, noidung, giam, diemyc,
+                                tinhTrang);
+                        try {
+                            new GUI.promotion_GUI.edit(pro, modelPromotion, tablePromotion);
+                        } catch (ParseException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Không thể chỉnh sửa khuyến mãi đã tạm dừng",
+                                "Sửa khuyến mãi",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -1495,7 +1495,14 @@ public class admin_GUI extends JFrame {
                         int giam = Integer.parseInt(String.valueOf(tablePromotion.getValueAt(row, 4)));
                         String noidung = String.valueOf(tablePromotion.getValueAt(row, 5));
                         int diemyc = Integer.parseInt(String.valueOf(tablePromotion.getValueAt(row, 6)));
-                        Boolean tinhTrang = Boolean.parseBoolean(String.valueOf(tablePromotion.getValueAt(row, 7)));
+                        Boolean tinhTrang = false;
+
+                        ArrayList<promotion_DTO> prolist = promotion_BUS.getAll();
+                        for (promotion_DTO pro : prolist) {
+                            if (pro.getMakm().equals(maKM) && pro.getTinhtrang()) {
+                                tinhTrang = true;
+                            }
+                        }
                         if (tinhTrang == false) {
                             continue;
                         } else {
@@ -1544,7 +1551,7 @@ public class admin_GUI extends JFrame {
         add_sup.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUI.supplier_GUI.add();
+                new GUI.supplier_GUI.add(modelSupplier, tableSupplier);
             }
         });
         reset_sup.addActionListener(new ActionListener() {
@@ -1581,9 +1588,15 @@ public class admin_GUI extends JFrame {
                             tinhTrang = true;
                         }
                     }
-                    supplier_DTO sup = new supplier_DTO(maNCC, tenNCC, sdt, maSoNha, duong, phuong, quan, tinh,
-                            tinhTrang);
-                    new GUI.supplier_GUI.edit(sup);
+                    if (tinhTrang) {
+                        supplier_DTO sup = new supplier_DTO(maNCC, tenNCC, sdt, maSoNha, duong, phuong, quan, tinh,
+                                tinhTrang);
+                        new GUI.supplier_GUI.edit(sup, modelSupplier, tableSupplier);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Không thể chỉnh sửa nhà cung cấp đã tạm dừng",
+                                "Sửa nhà cung cấp",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -1605,7 +1618,14 @@ public class admin_GUI extends JFrame {
                         String phuong = diaChiParts[2];
                         String quan = diaChiParts[3];
                         String tinh = diaChiParts[4];
-                        Boolean tinhTrang = Boolean.parseBoolean(String.valueOf(tableSupplier.getValueAt(row, 4)));
+                        Boolean tinhTrang = false;
+
+                        ArrayList<supplier_DTO> suplist = supplier_BUS.getAll();
+                        for (supplier_DTO sup : suplist) {
+                            if (sup.getMancc().equals(maNCC) && sup.getTinhtrang()) {
+                                tinhTrang = true;
+                            }
+                        }
                         if (tinhTrang == false) {
                             continue;
                         } else {
@@ -1654,7 +1674,7 @@ public class admin_GUI extends JFrame {
         add_sup_kh.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUI.customer1_GUI.add();
+                new GUI.customer1_GUI.add(modelCustomer, tableCustomer);
             }
         });
         reset_sup_kh.addActionListener(new ActionListener() {
@@ -1694,10 +1714,16 @@ public class admin_GUI extends JFrame {
                             tinhTrang = true;
                         }
                     }
-                    customer_DTO kh = new customer_DTO(maKH, tenKH, sdt, maSoNha, duong, phuong, quan, tinh, email,
-                            pass,
-                            Integer.parseInt(diemKM), tinhTrang);
-                    new GUI.customer1_GUI.edit(kh);
+                    if (tinhTrang) {
+                        customer_DTO kh = new customer_DTO(maKH, tenKH, sdt, maSoNha, duong, phuong, quan, tinh, email,
+                                pass,
+                                Integer.parseInt(diemKM), tinhTrang);
+                        new GUI.customer1_GUI.edit(kh, modelCustomer, tableCustomer);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Không thể chỉnh sửa khách hàng đã tạm dừng",
+                                "Sửa khách hàng",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -1722,7 +1748,14 @@ public class admin_GUI extends JFrame {
                         String tinh = diaChiParts[4];
                         String pass = String.valueOf(tableCustomer.getValueAt(row, 5));
                         String diemKM = String.valueOf(tableCustomer.getValueAt(row, 6));
-                        Boolean tinhTrang = Boolean.parseBoolean(String.valueOf(tableCustomer.getValueAt(row, 7)));
+                        Boolean tinhTrang = false;
+
+                        ArrayList<customer_DTO> cuslist = customer_BUS.getAll();
+                        for (customer_DTO cus : cuslist) {
+                            if (cus.getMakh().equals(maKH) && cus.getTinhtrang()) {
+                                tinhTrang = true;
+                            }
+                        }
                         if (tinhTrang == false) {
                             continue;
                         } else {
@@ -1773,7 +1806,7 @@ public class admin_GUI extends JFrame {
         add_sup_nv.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUI.employee1_GUI.add();
+                new GUI.employee1_GUI.add(modelEmployee, tableEmployee, diachicongtac);
             }
         });
         reset_sup_nv.addActionListener(new ActionListener() {
@@ -1808,6 +1841,13 @@ public class admin_GUI extends JFrame {
                     String tk = String.valueOf(tableEmployee.getValueAt(row, 7));
                     String pass = String.valueOf(tableEmployee.getValueAt(row, 8));
                     String dcnt = String.valueOf(tableEmployee.getValueAt(row, 9));
+                    if (!dcnt.equals(diachicongtac)) {
+                        JOptionPane.showMessageDialog(null,
+                                "Chỉ được sửa nhân viên đang làm việc tại " + diachicongtac,
+                                "Sửa khách hàng",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                     String mant = null;
                     ArrayList<store_DTO> storelist = new ArrayList<>();
                     storelist = store_BUS.getAll();
@@ -1828,10 +1868,17 @@ public class admin_GUI extends JFrame {
                         }
                     }
 
-                    employee_DTO nv = new employee_DTO(maNV, tenNV, cv, gioitinh, cccd, sdt, maSoNha, duong, phuong,
-                            quan,
-                            tinh, tk, pass, mant, tinhTrang);
-                    new GUI.employee1_GUI.edit(nv);
+                    if (tinhTrang) {
+                        employee_DTO nv = new employee_DTO(maNV, tenNV, cv, gioitinh, cccd, sdt, maSoNha, duong,
+                                phuong,
+                                quan,
+                                tinh, tk, pass, mant, tinhTrang);
+                        new GUI.employee1_GUI.edit(nv, modelEmployee, tableEmployee);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Không thể chỉnh sửa nhân viên đã tạm dừng",
+                                "Sửa nhân viên",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -1843,23 +1890,41 @@ public class admin_GUI extends JFrame {
                 ArrayList<employee_DTO> dsxoa = new ArrayList<>();
                 if (selectRow.length > 0) {
                     for (int row : selectRow) {
-                        String maNV = String.valueOf(tableCustomer.getValueAt(row, 0));
-                        String tenNV = String.valueOf(tableCustomer.getValueAt(row, 1));
-                        String cv = String.valueOf(tableCustomer.getValueAt(row, 2));
-                        String gioitinh = String.valueOf(tableCustomer.getValueAt(row, 3));
-                        String cccd = String.valueOf(tableCustomer.getValueAt(row, 4));
-                        String sdt = String.valueOf(tableCustomer.getValueAt(row, 5));
-                        String diaChi = String.valueOf(tableCustomer.getValueAt(row, 6));
+                        String maNV = String.valueOf(tableEmployee.getValueAt(row, 0));
+                        String tenNV = String.valueOf(tableEmployee.getValueAt(row, 1));
+                        String cv = String.valueOf(tableEmployee.getValueAt(row, 2));
+                        String gioitinh = String.valueOf(tableEmployee.getValueAt(row, 3));
+                        String cccd = String.valueOf(tableEmployee.getValueAt(row, 4));
+                        String sdt = String.valueOf(tableEmployee.getValueAt(row, 5));
+                        String diaChi = String.valueOf(tableEmployee.getValueAt(row, 6));
                         String diaChiParts[] = diaChi.split(",");
                         String maSoNha = diaChiParts[0];
                         String duong = diaChiParts[1];
                         String phuong = diaChiParts[2];
                         String quan = diaChiParts[3];
                         String tinh = diaChiParts[4];
-                        String tk = String.valueOf(tableCustomer.getValueAt(row, 7));
-                        String pass = String.valueOf(tableCustomer.getValueAt(row, 8));
-                        String mant = String.valueOf(tableCustomer.getValueAt(row, 9));
-                        Boolean tinhTrang = Boolean.parseBoolean(String.valueOf(tableCustomer.getValueAt(row, 10)));
+                        String tk = String.valueOf(tableEmployee.getValueAt(row, 7));
+                        String pass = String.valueOf(tableEmployee.getValueAt(row, 8));
+                        String tennt = String.valueOf(tableEmployee.getValueAt(row, 9));
+                        String mant = null;
+                        ArrayList<store_DTO> stolist = store_BUS.getAll();
+                        for (store_DTO sto : stolist) {
+                            String dc = sto.getMasonha() + "," + sto.getDuong() + "," + sto.getPhuong() + ","
+                                    + sto.getQuan()
+                                    + ","
+                                    + sto.getTinh();
+                            if (dc.equals(tennt)) {
+                                mant = sto.getMant();
+                            }
+                        }
+                        Boolean tinhTrang = false;
+
+                        ArrayList<employee_DTO> emlist = employee_BUS.getAll();
+                        for (employee_DTO em : emlist) {
+                            if (em.getManv().equals(maNV) && em.getTinhtrang()) {
+                                tinhTrang = true;
+                            }
+                        }
                         if (tinhTrang == false) {
                             continue;
                         } else {
@@ -1893,6 +1958,7 @@ public class admin_GUI extends JFrame {
 
                     if (confirm == JOptionPane.YES_OPTION) {
                         for (employee_DTO nv : dsxoa) {
+                            System.out.println(nv.getTinhtrang());
                             employee_BUS.delete(nv);
                         }
                         employee_BUS.loadTable(modelEmployee);
@@ -1914,6 +1980,8 @@ public class admin_GUI extends JFrame {
                 }
             }
         });
+
+        storage_BUS.autoLoadQuantity();
     }
 
     public static void main(String[] args) {

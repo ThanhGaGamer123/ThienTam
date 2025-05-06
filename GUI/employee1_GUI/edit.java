@@ -18,10 +18,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import BUS.employee_BUS;
 import BUS.store_BUS;
+import DAO.store_DAO;
 import DTO.employee_DTO;
 import DTO.store_DTO;
 
@@ -32,8 +35,14 @@ public class edit extends JFrame implements ActionListener {
             tf_pass;
     JButton btn_xacnhan, btn_huy;
     JComboBox<String> cb_cv, cb_gioitinh, cb_nhathuoc, cb_tinhtrang;
+    DefaultTableModel model;
+    JTable table;
+    employee_DTO nhanvien;
 
-    public edit(employee_DTO nv) {
+    public edit(employee_DTO nv, DefaultTableModel modelEmployee, JTable tableEmployee) {
+        this.nhanvien = nv;
+        this.model = modelEmployee;
+        this.table = tableEmployee;
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridBagLayout());
         setSize(800, 600);
@@ -387,6 +396,7 @@ public class edit extends JFrame implements ActionListener {
 
         setLocationRelativeTo(null);
         setVisible(true);
+
     }
 
     @Override
@@ -428,9 +438,25 @@ public class edit extends JFrame implements ActionListener {
                 }
             }
 
+            store_DTO temp1 = new store_DTO();
+            temp1.setMant(nhanvien.getManhathuoc());
+            store_DAO storedao = new store_DAO();
+            temp1 = storedao.selectByID(temp1);
+            temp1.setManql(null);
+            storedao.update(temp1);
+
             employee_BUS.edit(new employee_DTO(manv, tennv, chucvu, gioitinh, cccd, sdt, masonha, duong, phuong, quan,
                     tinh, tk, pass, mant, tt));
+
+            store_DTO temp = new store_DTO();
+            temp.setMant(mant);
+            temp = storedao.selectByID(temp);
+            temp.setManql(manv);
+            storedao.update(temp);
+
             JOptionPane.showMessageDialog(null, "Sửa thành công", "Sửa nhân viên", JOptionPane.PLAIN_MESSAGE);
+            employee_BUS.loadTable(model);
+            table.setModel(model);
             dispose();
         } else if (e.getSource() == btn_huy) {
             dispose();

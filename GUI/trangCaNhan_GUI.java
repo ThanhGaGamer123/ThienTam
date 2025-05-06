@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-
 public class trangCaNhan_GUI extends JFrame {
     private JPanel header, tail, body, tab1_left, tab1_right, tab1_center, tab1_tren, tab1_duoi, tab2_left, tab2_right,
             tab2_center, tab2_tren, tab2_duoi;
@@ -899,6 +898,7 @@ public class trangCaNhan_GUI extends JFrame {
                         DefaultTableModel model = new DefaultTableModel();
                         model.addColumn("Tên Sản Phẩm");
                         model.addColumn("Số Lượng Mua");
+                        model.addColumn("Đơn vị");
                         model.addColumn("Đơn Giá");
                         model.addColumn("Thành Tiền");
 
@@ -936,15 +936,12 @@ public class trangCaNhan_GUI extends JFrame {
                         gbc.gridy++;
                         centerPanel.add(new JLabel("Người đặt: " + khachCurrent.getTenkh()), gbc);
 
-                        // Thêm địa chỉ đặt vé
                         gbc.gridy++;
-                        centerPanel.add(new JLabel("Địa chỉ: " + od.getDiachicuthe()), gbc);
+                        centerPanel.add(new JLabel("Địa chỉ: " + od.getDiachicuthe() + "," + od.getQuan()), gbc);
 
-                        // Thêm mã đơn
                         gbc.gridy++;
                         centerPanel.add(new JLabel("Mã đơn: " + od.getMadon()), gbc);
 
-                        // Thêm ngày đặt
                         gbc.gridy++;
                         centerPanel.add(new JLabel("Ngày đặt: " + od.getNgaydat()), gbc);
 
@@ -972,6 +969,7 @@ public class trangCaNhan_GUI extends JFrame {
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             scrollPane.setPreferredSize(new Dimension((int) (chieurong - 400), 400)); // Điều chỉnh kích thước
+            scrollPane.getVerticalScrollBar().setUnitIncrement(18);
 
             tab2_right.add(scrollPane, gbc);
 

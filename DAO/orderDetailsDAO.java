@@ -11,37 +11,72 @@ import javax.swing.table.DefaultTableModel;
 
 public class orderDetailsDAO {
 
-    public static void themChiTietDonHang(order_details_DTO ct) {
-        if (ct.getMadon() == null || ct.getMadon().isEmpty()) {
-            System.err.println("Mã đơn hàng không hợp lệ. Không thể thêm chi tiết đơn hàng.");
-            return;
+    // public static void themChiTietDonHang(order_details_DTO ct) {
+    // if (ct.getMadon() == null || ct.getMadon().isEmpty()) {
+    // System.err.println("Mã đơn hàng không hợp lệ. Không thể thêm chi tiết đơn
+    // hàng.");
+    // return;
+    // }
+
+    // String sql = "INSERT INTO ChiTietDonHang (mactdh, sl, thanhtien, madon,
+    // donvi, dongia, macthdnhap, tinhtrang) "
+    // + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+    // try (Connection con = MyConnection.createConnection();
+    // PreparedStatement stmt = con.prepareStatement(sql)) {
+
+    // stmt.setString(1, ct.getMactdh());
+    // stmt.setInt(2, ct.getSl());
+    // stmt.setDouble(3, ct.getThanhtien());
+    // stmt.setString(4, ct.getMadon());
+    // stmt.setString(5, ct.getDonvi());
+    // stmt.setDouble(6, ct.getDongia());
+    // stmt.setString(7, ct.getMacthdnhap());
+    // stmt.setBoolean(8, ct.getTinhtrang() != null ? ct.getTinhtrang() : false); //
+    // Status
+
+    // int rowsInserted = stmt.executeUpdate();
+    // if (rowsInserted > 0) {
+    // System.out.println("Thêm chi tiết đơn hàng thành công!");
+    // } else {
+    // System.out.println("Không thêm được chi tiết đơn hàng.");
+    // }
+
+    // } catch (SQLException e) {
+    // System.err.println("Lỗi khi thêm chi tiết đơn hàng: " + e.getMessage());
+    // e.printStackTrace();
+    // }
+    // }
+    public static void themChiTietDonHang(order_details_DTO t) {
+        Connection sql = data.SQL.createConnection();
+
+        // Kiểm tra mã chi tiết hóa đơn nhập
+        if (t.getMacthdnhap() == null || t.getMacthdnhap().isEmpty()) {
+            System.out.println("Mã chi tiết hóa đơn nhập không hợp lệ!");
+            return; // Kết thúc nếu không có mã hợp lệ
         }
 
-        String sql = "INSERT INTO ChiTietDonHang (mactdh, sl, thanhtien, madon, donvi, dongia, macthdnhap, tinhtrang) "
+        String command = "INSERT INTO ChiTietDonHang (mactdh, donvi, sl, thanhtien, madon, dongia, macthdnhap, tinhtrang) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection con = MyConnection.createConnection();
-                PreparedStatement stmt = con.prepareStatement(sql)) {
+        try (PreparedStatement pst = sql.prepareStatement(command)) {
+            pst.setString(1, t.getMactdh());
+            pst.setString(2, t.getDonvi());
+            pst.setInt(3, t.getSl());
+            pst.setDouble(4, t.getThanhtien());
+            pst.setString(5, t.getMadon());
+            pst.setDouble(6, t.getDongia());
+            pst.setString(7, t.getMacthdnhap());
+            pst.setBoolean(8, t.getTinhtrang());
 
-            stmt.setString(1, ct.getMactdh());
-            stmt.setInt(2, ct.getSl());
-            stmt.setDouble(3, ct.getThanhtien());
-            stmt.setString(4, ct.getMadon());
-            stmt.setString(5, ct.getDonvi());
-            stmt.setDouble(6, ct.getDongia());
-            stmt.setString(7, ct.getMacthdnhap());
-            stmt.setBoolean(8, ct.getTinhtrang() != null ? ct.getTinhtrang() : false); // Status
+            int ketQua = pst.executeUpdate();
+            System.out.println("Bạn đã thực thi: " + command);
+            System.out.println("Có " + ketQua + " dòng bị thay đổi");
 
-            int rowsInserted = stmt.executeUpdate();
-            if (rowsInserted > 0) {
-                System.out.println("Thêm chi tiết đơn hàng thành công!");
-            } else {
-                System.out.println("Không thêm được chi tiết đơn hàng.");
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Lỗi khi thêm chi tiết đơn hàng: " + e.getMessage());
+        } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            data.SQL.closeConnection(sql);
         }
     }
 
@@ -114,10 +149,12 @@ public class orderDetailsDAO {
     }
 
     public static void hienThiChiTietDonHang(String mahd, DefaultTableModel model) {
-        String sql = "SELECT ctdh.*, t.tenthuoc " +
-                "FROM ChiTietDonHang ctdh " +
-                "JOIN Thuoc t ON ctdh.macthdnhap = t.mathuoc " +
-                "WHERE ctdh.madon = ?";
+        String sql = "SELECT CHITIETDONHANG.*, Thuoc.tenthuoc " +
+                "FROM CHITIETDONHANG " +
+                "JOIN GIOHANG ON GIOHANG.MACTHDNHAP = CHITIETDONHANG.MACTHDNHAP " +
+                "JOIN THUOC ON GIOHANG.MATHUOC = THUOC.MATHUOC " +
+                "JOIN donhang ON CHITIETDONHANG.madon = donhang.madon " +
+                "WHERE donhang.madon = ?";
 
         try (Connection con = MyConnection.createConnection();
                 PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -130,11 +167,12 @@ public class orderDetailsDAO {
             while (rs.next()) {
                 String tenSanPham = rs.getString("tenthuoc");
                 int sl = rs.getInt("sl");
+                String dvi = rs.getString("donvi");
                 double dongia = rs.getDouble("dongia");
                 double thanhtien = rs.getDouble("thanhtien");
 
                 // Thêm trực tiếp vào bảng
-                model.addRow(new Object[] { tenSanPham, sl, dongia, thanhtien });
+                model.addRow(new Object[] { tenSanPham, sl, dvi, dongia, thanhtien });
             }
 
             System.out.println("Đã load chi tiết đơn hàng thành công!");

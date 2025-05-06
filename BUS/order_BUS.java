@@ -65,10 +65,15 @@ public class order_BUS {
 
             JButton eyeButton = new JButton(data.imagePath.resize_eye);
 
-            if(!ord.getTinhtrang().equals("Đã hủy")
-            && (ord.getManv().isEmpty() || ord.getManv().equals(em.getManv())))
-                model.addRow(new Object[]{ord.getMadon(), cus.getTenkh(), em.getTennv(),
-                ord.getNgaydat(), ord.getTongtien(), ord.getTinhtrang(), eyeButton});
+            if(!ord.getTinhtrang().equals("Đã hủy")) {
+                if (ord.getManv() == null) {
+                    model.addRow(new Object[]{ord.getMadon(), cus.getTenkh(), null,
+                    ord.getNgaydat(), ord.getTongtien(), ord.getTinhtrang(), eyeButton});
+                } else if (ord.getManv().equals(em.getManv())) {
+                    model.addRow(new Object[]{ord.getMadon(), cus.getTenkh(), em.getTennv(),
+                    ord.getNgaydat(), ord.getTongtien(), ord.getTinhtrang(), eyeButton});
+                }
+            }
         }
     }
 
@@ -111,11 +116,12 @@ public class order_BUS {
 
             JButton eyeButton = new JButton(data.imagePath.resize_eye);
 
-            if(ord.get(0).getManv().isEmpty() 
-            || ord.get(0).getManv().equals(em.getManv())) {
-                model.addRow(new Object[]{ord.get(0).getMadon(), cus.getTenkh(), 
-                em.getTennv(), ord.get(0).getNgaydat(), ord.get(0).getTongtien(),
-                ord.get(0).getTinhtrang(), eyeButton});
+            if (ord.get(0).getManv() == null) {
+                model.addRow(new Object[]{ord.get(0).getMadon(), cus.getTenkh(), null,
+                ord.get(0).getNgaydat(), ord.get(0).getTongtien(), ord.get(0).getTinhtrang(), eyeButton});
+            } else if (ord.get(0).getManv().equals(em.getManv())) {
+                model.addRow(new Object[]{ord.get(0).getMadon(), cus.getTenkh(), em.getTennv(),
+                ord.get(0).getNgaydat(), ord.get(0).getTongtien(), ord.get(0).getTinhtrang(), eyeButton});
             }
         }
     }
@@ -412,10 +418,12 @@ public class order_BUS {
             JButton eyeButton = new JButton(data.imagePath.resize_eye);
 
             if(ords.isEmpty()) {
-                if (ord.getManv().isEmpty() || ord.getManv().equals(em.getManv())) {
+                if (ord.getManv() == null) {
+                    model.addRow(new Object[]{ord.getMadon(), cus.getTenkh(), null,
+                    ord.getNgaydat(), ord.getTongtien(), ord.getTinhtrang(), eyeButton});
+                } else if (ord.getManv().equals(em.getManv())) {
                     model.addRow(new Object[]{ord.getMadon(), cus.getTenkh(), em.getTennv(),
                     ord.getNgaydat(), ord.getTongtien(), ord.getTinhtrang(), eyeButton});
-                    System.out.println(1);
                 }
             } else {
                 employee_DTO em2 = new employee_DTO();

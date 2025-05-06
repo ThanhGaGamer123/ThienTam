@@ -64,6 +64,7 @@ public class employee_BUS {
 
         for (order_DTO ord : ords) {
             if (ord.getTinhtrang().equals("Đã giao")
+                    && ord.getManv() != null
                     && ord.getManv().equals(em.getManv())) {
                 if (ngaybatdau.getText().isEmpty() || ngaybatdau.getText().equals("dd/MM/yyyy")
                         || advance.checkDate(ngaybatdau.getText())) {
@@ -131,8 +132,9 @@ public class employee_BUS {
                                 || ngayketthuc.getText().equals("dd/MM/yyyy"))) {
                     ArrayList<order_DTO> ords = new order_DAO().selectAll();
                     for (order_DTO ord : ords) {
-                        if (ord.getTinhtrang().equals("Đã giao") &&
-                                ord.getManv().equals(em.getManv())) {
+                        if (ord.getTinhtrang().equals("Đã giao") 
+                                && ord.getManv() != null
+                                && ord.getManv().equals(em.getManv())) {
                             String[] time = ord.getNgaydat().split(" ");
                             String[] time2 = time[1].split("/");
                             ngaybd = time2[0];
@@ -277,6 +279,7 @@ public class employee_BUS {
                 ArrayList<order_DTO> ords = new order_DAO().selectAll();
                 for (order_DTO ord : ords) {
                     if (ord.getTinhtrang().equals("Đã giao")
+                            && ord.getManv() != null
                             && ord.getManv().equals(em.getManv())) {
                         String[] time = ord.getNgaydat().split(" ");
                         if (((advance.date1BeforeDate2(start, time[1])
