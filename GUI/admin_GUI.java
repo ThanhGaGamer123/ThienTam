@@ -1108,7 +1108,11 @@ public class admin_GUI extends JFrame {
         gdc_tk.fill = GridBagConstraints.BOTH;
         gdc_tk.weightx = 1;
         gdc_tk.weighty = 1;
+<<<<<<< HEAD
         gdc_tk.insets = new Insets(0, 100, 20, 100);
+=======
+        gdc_tk.insets = new Insets(0, 20, 20, 70);
+>>>>>>> 43074a5857b63fc51a49c426f310f4a3fa70521a
         panel_tk.add(columnStatistic, gdc_tk);
         
         tab.addTab("Thông tin", data.imagePath.resize_statusIcon, employeeScroll);
@@ -1202,6 +1206,7 @@ public class admin_GUI extends JFrame {
             }
         });
 
+<<<<<<< HEAD
         // xuat file
         export.addActionListener(new ActionListener() {
             @Override
@@ -1219,6 +1224,8 @@ public class admin_GUI extends JFrame {
             }
         });
 
+=======
+>>>>>>> 43074a5857b63fc51a49c426f310f4a3fa70521a
         // cell tinh trang
         tableEmployee.getColumn("Tình trạng").setCellRenderer(new DefaultTableCellRenderer() {
             @Override

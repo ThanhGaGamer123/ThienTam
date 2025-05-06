@@ -1274,6 +1274,7 @@ public class employee_GUI extends JFrame {
                 medicine_BUS.reset(search_bar_3, modelMedic);
             }
         });
+<<<<<<< HEAD
 
         // kiểm tra hạn ctr khuyến mãi
         promotion_BUS.autoCheckExpired();
@@ -1282,6 +1283,16 @@ public class employee_GUI extends JFrame {
         employee_BUS.loadStatistic(tf_ngaybatdau, tf_ngayketthuc, wallet,
         customer, nv, loai);
 
+=======
+
+        // kiểm tra hạn ctr khuyến mãi
+        promotion_BUS.autoCheckExpired();
+
+        // tự động thống kê
+        employee_BUS.loadStatistic(tf_ngaybatdau, tf_ngayketthuc, wallet,
+                customer, nv, loai);
+
+>>>>>>> 43074a5857b63fc51a49c426f310f4a3fa70521a
         // thống kê
         chon.addActionListener(new ActionListener() {
             @Override

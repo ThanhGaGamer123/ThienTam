@@ -31,13 +31,19 @@ import DAO.employee_DAO;
 import DAO.medicine_DAO;
 import DAO.orderSupply_DAO;
 import DAO.order_DAO;
+<<<<<<< HEAD
 import DAO.order_details_DAO;
+=======
+>>>>>>> 43074a5857b63fc51a49c426f310f4a3fa70521a
 import DTO.customer_DTO;
 import DTO.employee_DTO;
 import DTO.medicine_DTO;
 import DTO.orderSupply_DTO;
 import DTO.order_DTO;
+<<<<<<< HEAD
 import DTO.order_details_DTO;
+=======
+>>>>>>> 43074a5857b63fc51a49c426f310f4a3fa70521a
 import DTO.promotion_DTO;
 import DTO.store_DTO;
 import DTO.supplier_DTO;
@@ -57,7 +63,11 @@ public class export_BUS {
     }
 
     public static int exportFile(JComboBox xuatas, JComboBox data, JTextField filename,
+<<<<<<< HEAD
             JTextField path, JTextField mahd) {
+=======
+            JTextField path) {
+>>>>>>> 43074a5857b63fc51a49c426f310f4a3fa70521a
         if (!filename.getText().isEmpty()) {
             if (!path.getText().isEmpty()) {
                 String exportPath = path.getText() + File.separator + filename.getText();
@@ -71,9 +81,12 @@ public class export_BUS {
                             XSSFWorkbook workbook = new XSSFWorkbook();
 
                             if (data.getSelectedIndex() == 0) {
+<<<<<<< HEAD
                                 workbook.close();
                                 return 5;
                             } else if (data.getSelectedIndex() == 1) {
+=======
+>>>>>>> 43074a5857b63fc51a49c426f310f4a3fa70521a
                                 XSSFSheet sheet = workbook.createSheet("Danh sách thuốc");
 
                                 // tiêu đề
@@ -111,7 +124,11 @@ public class export_BUS {
                                     row.createCell(11).setCellValue(med.getTinhtrang());
                                     i++;
                                 }
+<<<<<<< HEAD
                             } else if (data.getSelectedIndex() == 2) {
+=======
+                            } else if (data.getSelectedIndex() == 1) {
+>>>>>>> 43074a5857b63fc51a49c426f310f4a3fa70521a
                                 XSSFSheet sheet = workbook.createSheet("Danh sách đơn hàng");
 
                                 // tiêu đề
@@ -152,7 +169,11 @@ public class export_BUS {
                                     row.createCell(13).setCellValue(ord.getSdt_nguoinhan());
                                     i++;
                                 }
+<<<<<<< HEAD
                             } else if (data.getSelectedIndex() == 3) {
+=======
+                            } else if (data.getSelectedIndex() == 2) {
+>>>>>>> 43074a5857b63fc51a49c426f310f4a3fa70521a
                                 XSSFSheet sheet = workbook.createSheet("Danh sách đơn hàng nhập");
 
                                 // tiêu đề
@@ -218,6 +239,7 @@ public class export_BUS {
                                     pdf);
 
                             if (data.getSelectedIndex() == 0) {
+<<<<<<< HEAD
                                 Document document = new Document(pdf, PageSize.A4);
                                 document.setLeftMargin(10);
                                 document.setRightMargin(10);
@@ -353,6 +375,8 @@ public class export_BUS {
                                     return 6;
                                 }
                             } else if (data.getSelectedIndex() == 1) {
+=======
+>>>>>>> 43074a5857b63fc51a49c426f310f4a3fa70521a
                                 Document document = new Document(pdf, PageSize.A3);
                                 document.setLeftMargin(10);
                                 document.setRightMargin(10);
@@ -408,7 +432,11 @@ public class export_BUS {
 
                                 document.add(table);
                                 document.close();
+<<<<<<< HEAD
                             } else if (data.getSelectedIndex() == 2) {
+=======
+                            } else if (data.getSelectedIndex() == 1) {
+>>>>>>> 43074a5857b63fc51a49c426f310f4a3fa70521a
                                 Document document = new Document(pdf, PageSize.A3);
                                 document.setLeftMargin(10);
                                 document.setRightMargin(10);
@@ -467,7 +495,11 @@ public class export_BUS {
 
                                 document.add(table);
                                 document.close();
+<<<<<<< HEAD
                             } else if (data.getSelectedIndex() == 3) {
+=======
+                            } else if (data.getSelectedIndex() == 2) {
+>>>>>>> 43074a5857b63fc51a49c426f310f4a3fa70521a
                                 Document document = new Document(pdf, PageSize.A4);
                                 document.setLeftMargin(10);
                                 document.setRightMargin(10);
