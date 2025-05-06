@@ -7,12 +7,19 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
 import DAO.employee_DAO;
+import DAO.orderSupply_DAO;
 import DAO.order_DAO;
 import DAO.store_DAO;
 import DTO.employee_DTO;
+import DTO.orderSupply_DTO;
 import DTO.order_DTO;
 import DTO.store_DTO;
 import GUI.store_GUI;
@@ -356,5 +363,264 @@ public class employee_BUS {
     public static ArrayList<employee_DTO> getAll() {
         employee_DAO dao = new employee_DAO();
         return dao.selectAll();
+    }
+
+    public static int loadMapAdmin(DefaultCategoryDataset dataset, JComboBox loai,
+        JTextField ngaybatdau, JTextField ngayketthuc, employee_DTO em,
+        ChartPanel chartpanel, JComboBox bieudo) {
+        String ngaybd = "-1", ngaykt = "-1";
+        String thangbatdau = "-1", thangketthuc = "-1";
+        String nambatdau = "-1", namketthuc = "-1";
+
+        if (ngaybatdau.getText().isEmpty()
+                || ngaybatdau.getText().equals("dd/MM/yyyy")
+                || advance.checkDate(ngaybatdau.getText())) {
+            System.out.println(1);
+            if (ngayketthuc.getText().isEmpty()
+                    || ngayketthuc.getText().equals("dd/MM/yyyy")
+                    || advance.checkDate(ngayketthuc.getText())) {
+                System.out.println(2);
+
+                System.out.println(ngaybatdau.getText());
+                System.out.println(ngayketthuc.getText());
+
+                if ((ngaybatdau.getText().isEmpty()
+                        || ngaybatdau.getText().equals("dd/MM/yyyy"))
+                        && (ngayketthuc.getText().isEmpty()
+                                || ngayketthuc.getText().equals("dd/MM/yyyy"))) {
+                    ArrayList<order_DTO> ords = new order_DAO().selectAll();
+                    for (order_DTO ord : ords) {
+                        if (ord.getTinhtrang().equals("Đã giao")) {
+                            String[] time = ord.getNgaydat().split(" ");
+                            String[] time2 = time[1].split("/");
+                            ngaybd = time2[0];
+                            thangbatdau = time2[1];
+                            nambatdau = time2[2];
+
+                            break;
+                        }
+                    }
+
+                    String[] time = advance.currentDate().split("/");
+                    ngaykt = time[0];
+                    thangketthuc = time[1];
+                    namketthuc = time[2];
+
+                    System.out.println(3);
+                    System.out.println(ngaybd + "/" + thangbatdau + "/" + nambatdau);
+                    System.out.println(ngaykt + "/" + thangketthuc + "/" + namketthuc);
+                } else if ((!ngaybatdau.getText().isEmpty()
+                        || !ngaybatdau.getText().equals("dd/MM/yyyy"))
+                        && (ngayketthuc.getText().isEmpty()
+                                || ngayketthuc.getText().equals("dd/MM/yyyy"))) {
+                    String[] time = ngaybatdau.getText().split("/");
+                    ngaybd = time[0];
+                    thangbatdau = time[1];
+                    nambatdau = time[2];
+
+                    String[] time2 = advance.currentDate().split("/");
+                    ngaykt = time2[0];
+                    thangketthuc = time2[1];
+                    namketthuc = time2[2];
+
+                    System.out.println(4);
+                    System.out.println(ngaybd + "/" + thangbatdau + "/" + nambatdau);
+                    System.out.println(ngaykt + "/" + thangketthuc + "/" + namketthuc);
+                } else if ((!ngayketthuc.getText().isEmpty()
+                        || !ngayketthuc.getText().equals("dd/MM/yyyy"))
+                        && (ngaybatdau.getText().isEmpty()
+                                || ngaybatdau.getText().equals("dd/MM/yyyy"))) {
+                    ArrayList<order_DTO> ords = new order_DAO().selectAll();
+                    for (order_DTO ord : ords) {
+                        if (ord.getTinhtrang().equals("Đã giao")) {
+                            String[] time = ord.getNgaydat().split(" ");
+                            String[] time2 = time[1].split("/");
+                            ngaybd = time2[0];
+                            thangbatdau = time2[1];
+                            nambatdau = time2[2];
+
+                            break;
+                        }
+                    }
+
+                    String[] time = ngayketthuc.getText().split("/");
+                    ngaykt = time[0];
+                    thangketthuc = time[1];
+                    namketthuc = time[2];
+
+                    System.out.println(5);
+                    System.out.println(ngaybd + "/" + thangbatdau + "/" + nambatdau);
+                    System.out.println(ngaykt + "/" + thangketthuc + "/" + namketthuc);
+                } else if ((!ngaybatdau.getText().isEmpty()
+                        || !ngaybatdau.getText().equals("dd/MM/yyyy"))
+                        && (!ngayketthuc.getText().isEmpty()
+                                || !ngayketthuc.getText().equals("dd/MM/yyyy"))) {
+                    String[] time = ngaybatdau.getText().split("/");
+                    ngaybd = time[0];
+                    thangbatdau = time[1];
+                    nambatdau = time[2];
+
+                    String[] time2 = ngayketthuc.getText().split("/");
+                    ngaykt = time2[0];
+                    thangketthuc = time2[1];
+                    namketthuc = time2[2];
+
+                    System.out.println(6);
+                    System.out.println(ngaybd + "/" + thangbatdau + "/" + nambatdau);
+                    System.out.println(ngaykt + "/" + thangketthuc + "/" + namketthuc);
+                }
+            }
+        }
+
+        dataset.clear();
+        if (ngaybd.equals("-1")) {
+            loai.setSelectedIndex(0);
+            bieudo.setSelectedIndex(0);
+            ngaybatdau.setText("dd/MM/yyyy");
+            ngayketthuc.setText("dd/MM/yyyy");
+            return -1;
+        }
+
+        DefaultPieDataset dataset2 = new DefaultPieDataset();
+        for (int i = Integer.parseInt(nambatdau); i <= Integer.parseInt(namketthuc); i++) {
+            String thang = "12";
+            if (nambatdau.equals(namketthuc))
+                thang = thangketthuc;
+            int batdauthang = 1;
+            if (i == Integer.parseInt(nambatdau))
+                batdauthang = Integer.parseInt(thangbatdau);
+            for (int j = batdauthang; j <= Integer.parseInt(thang); j++) {
+                int batdaungay = 1;
+                if (j == Integer.parseInt(thangbatdau))
+                    batdaungay = Integer.parseInt(ngaybd);
+                String ketthucngay = new String();
+                switch (j) {
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 10:
+                    case 12:
+                        ketthucngay = "31";
+                        break;
+                    case 4:
+                    case 6:
+                    case 9:
+                    case 11:
+                        ketthucngay = "30";
+                        break;
+                    case 2:
+                        if ((i % 4 == 0 && i % 100 != 0) || (i % 400 == 0)) {
+                            ketthucngay = "29";
+                        } else {
+                            ketthucngay = "28";
+                        }
+                        break;
+                    default:
+                        ketthucngay = "01";
+                        break;
+                }
+
+                if (j == Integer.parseInt(thangketthuc))
+                    ketthucngay = ngaykt;
+
+                String start = String.format("%02d/%02d/%d", batdaungay, j, i);
+                String end = String.format("%s/%02d/%d", ketthucngay, j, i);
+
+                System.out.println(start);
+                System.out.println(end);
+
+                double money = 0.0;
+                int slkhach = 0;
+                int hoadonnhap = 0;
+                ArrayList<order_DTO> ords = new order_DAO().selectAll();
+                for (order_DTO ord : ords) {
+                    if (ord.getTinhtrang().equals("Đã giao")) {
+                        String[] time = ord.getNgaydat().split(" ");
+                        if (((advance.date1BeforeDate2(start, time[1])
+                                || advance.date1EqualDate2(start, time[1]))
+                                && (advance.date1BeforeDate2(time[1], end)
+                                        || advance.date1EqualDate2(end, time[1])))) {
+                            slkhach++;
+                            money += ord.getTongtien();
+                        }
+                    }
+                }
+
+                ArrayList<orderSupply_DTO> oss = new orderSupply_DAO().selectAll();
+                for (orderSupply_DTO os : oss) {
+                    if (os.getTinhtrang()) {
+                        String[] time = os.getNgaynhap().split(" ");
+                        if (((advance.date1BeforeDate2(start, time[1])
+                                || advance.date1EqualDate2(start, time[1]))
+                                && (advance.date1BeforeDate2(time[1], end)
+                                        || advance.date1EqualDate2(end, time[1])))) {
+                            hoadonnhap++;
+                        }
+                    }
+                }
+
+                System.out.println(slkhach);
+                System.out.println(hoadonnhap);
+                System.out.println(loai.getSelectedItem());
+                System.out.println(bieudo.getSelectedItem());
+
+                if(bieudo.getSelectedItem().equals("Biểu đồ cột")) {
+                    JFreeChart chart = ChartFactory.createBarChart3D("", "", "", dataset,
+                    PlotOrientation.VERTICAL, true, false, false);
+                    
+                    if (loai.getSelectedItem().equals("Theo đơn hàng nhập")) {
+                        dataset.addValue(hoadonnhap, "Đơn hàng nhập năm " + i, "Tháng " + j);
+                    } else if (loai.getSelectedItem().equals("Theo doanh thu")) {
+                        dataset.addValue(money, "Doanh thu năm " + i, "Tháng " + j);
+                    } else {
+                        dataset.addValue(slkhach, "Lượng khách năm " + i, "Tháng " + j);
+                    }
+
+                    chartpanel.setChart(chart);
+                } else if(bieudo.getSelectedItem().equals("Biều đồ miền")) {
+                    JFreeChart chart = ChartFactory.createAreaChart("", "", "", dataset,
+                    PlotOrientation.VERTICAL, true, false, false);
+
+                    if (loai.getSelectedItem().equals("Theo đơn hàng nhập")) {
+                        dataset.addValue(hoadonnhap, "Đơn hàng nhập năm " + i, "Tháng " + j);
+                    } else if (loai.getSelectedItem().equals("Theo doanh thu")) {
+                        dataset.addValue(money, "Doanh thu năm " + i, "Tháng " + j);
+                    } else {
+                        dataset.addValue(slkhach, "Lượng khách năm " + i, "Tháng " + j);
+                    }
+
+                    chartpanel.setChart(chart);
+                } else if(bieudo.getSelectedItem().equals("Biểu đồ tròn")) {
+                    if(Integer.parseInt(namketthuc) - i + 1 > 1) {
+                        loai.setSelectedIndex(0);
+                        bieudo.setSelectedIndex(0);
+                        ngaybatdau.setText("dd/MM/yyyy");
+                        ngayketthuc.setText("dd/MM/yyyy");
+                        return 1;
+                    }
+                
+                    if (loai.getSelectedItem().equals("Theo đơn hàng nhập")) {
+                        dataset2.setValue("Đơn hàng nhập tháng " + j, hoadonnhap);
+                    } else if (loai.getSelectedItem().equals("Theo doanh thu")) {
+                        dataset2.setValue("Doanh thu tháng " + j, money);
+                    } else {
+                        dataset2.setValue("Lượng khách tháng " + j, slkhach);
+                    }
+                
+                    JFreeChart chart = ChartFactory.createPieChart("", dataset2, true, false, false);
+                    
+                    chartpanel.setChart(chart);
+                }
+            }
+        }
+
+        loai.setSelectedIndex(0);
+        bieudo.setSelectedIndex(0);
+        ngaybatdau.setText("dd/MM/yyyy");
+        ngayketthuc.setText("dd/MM/yyyy");
+
+        return 0;
     }
 }
