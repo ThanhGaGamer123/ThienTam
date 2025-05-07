@@ -1,6 +1,7 @@
 package DAO;
 
 import DTO.order_DTO;
+import advanceMethod.advance;
 import data.MyConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class orderDAO {
-
     public static String taoMaHDMoi() {
         String newMaHD = "DH0001"; // Mặc định nếu bảng rỗng
         String sql = "SELECT TOP 1 madon FROM DonHang ORDER BY CAST(SUBSTRING(madon, 3, LEN(madon)) AS INT) DESC";
@@ -19,10 +19,11 @@ public class orderDAO {
 
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                String lastMaHD = rs.getString("madon"); // Ví dụ: "HD999"
-                int num = Integer.parseInt(lastMaHD.substring(2)); // Lấy phần số
-                num++;
-                newMaHD = String.format("DH0%03d", num); // Định dạng lại mã đơn hàng, ví dụ: "HD002"
+                String lastMaHD = rs.getString("madon"); // Ví dụ: "DH0009"
+                int num = Integer.parseInt(lastMaHD.substring(2)); // Lấy phần số (9)
+                num++; // Tăng lên 10
+                String soMoi = advance.calculateID(num); // Tính chuỗi số mới (0010)
+                newMaHD = "DH" + soMoi; // Ghép thành "DH0010"
             }
 
         } catch (SQLException e) {

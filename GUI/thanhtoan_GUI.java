@@ -2,6 +2,7 @@ package GUI;
 
 import DAO.cartDAO;
 import DAO.employee_DAO;
+import DAO.khoDAO;
 import DAO.orderDAO;
 import DAO.orderDetailsDAO;
 import DTO.customer_DTO;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 
 public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListener {
 
@@ -37,8 +39,8 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
 
     // Màu sắc tùy chỉnh
     // Màu sắc tùy chỉnh
-    private static final Color xanhla = new Color(76, 181, 81);
-    private static final Color hong = new Color(234, 185, 170);
+    private static final Color xanhla = new Color(76, 201, 81);
+    private static final Color hong = new Color(234, 205, 170);
     private static final Color xam = new Color(207, 207, 207);
     private static final Color linen = new Color(250, 240, 230);
     private static final Color xamnhat = new Color(237, 240, 243);
@@ -54,6 +56,7 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         this.cart = cart;
         this.khachhang = khachCurrent;
         this.selectedProducts = selectedProducts;
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         setTitle("Trang thanh toán");
         setSize(1280, 720);
@@ -123,9 +126,9 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
     }
 
     private void create_body() {
-        // Panel chính chứa cả body và pay
+
         JPanel mainPanel = new JPanel(new BorderLayout());
-        add(mainPanel, BorderLayout.CENTER); // Thêm vào frame
+        add(mainPanel, BorderLayout.CENTER);
 
         // ========= Body =========
         body = new JPanel();
@@ -167,13 +170,14 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         // scrollpane_giua.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         // scrollpane_giua.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         // scrollpane_giua.getVerticalScrollBar().setUnitIncrement(16);
+        scrollpane_giua.getVerticalScrollBar().setUnitIncrement(20);
         scrollpane_giua.setViewportView(giua);
         body.add(scrollpane_giua, BorderLayout.CENTER);
 
         GridBagConstraints gbc1 = new GridBagConstraints();
-        gbc1.insets = new Insets(5, 10, 5, 10); // Khoảng cách giữa các thành phần
-        gbc1.fill = GridBagConstraints.HORIZONTAL; // Giúp các ô giãn theo chiều ngang
-        gbc1.weightx = 1; // Giúp các thành phần kéo dài theo chiều ngang
+        gbc1.insets = new Insets(5, 10, 5, 10);
+        gbc1.fill = GridBagConstraints.HORIZONTAL;
+        gbc1.weightx = 1;
 
         // ===== THÔNG TIN NGƯỜI ĐẶT =====
         customer_DTO khachDangNhap = getKhachHangDangNhap();
@@ -181,7 +185,7 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         gbc1.gridy = 0;
         gbc1.gridwidth = 2; // Dài hết hàng
         JLabel thongTinLabel = new JLabel("                     THÔNG TIN NGƯỜI ĐẶT:");
-        thongTinLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        thongTinLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         giua.add(thongTinLabel, gbc1);
 
         // Tạo panel chứa 2 text field cùng 1 hàng
@@ -190,13 +194,24 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         JPanel panelNguoiDat = new JPanel(new GridLayout(1, 2, 10, 0)); // GridLayout: 1 hàng, 2 cột
         panelNguoiDat.setBackground(Color.WHITE);
         tenNguoiDat = new JTextField();
-        tenNguoiDat.setBorder(BorderFactory.createTitledBorder("Tên người đặt"));
+
+        TitledBorder border22 = BorderFactory.createTitledBorder("Họ và tên người đặt");
+        border22.setTitleFont(new Font("Arial", Font.PLAIN, 16));
+
+        tenNguoiDat.setBorder(border22);
+
+        tenNguoiDat.setPreferredSize(new Dimension(500, 60));
+        tenNguoiDat.setFont(new Font("Arial", Font.PLAIN, 18));
 
         String temp = khachDangNhap.getTenkh();
         tenNguoiDat.setText(temp);
 
         sdtNguoiDat = new JTextField();
-        sdtNguoiDat.setBorder(BorderFactory.createTitledBorder("SDT người đặt"));
+        TitledBorder border44 = BorderFactory.createTitledBorder("SĐT người đặt");
+        border44.setTitleFont(new Font("Arial", Font.PLAIN, 16));
+        sdtNguoiDat.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        sdtNguoiDat.setBorder(border44);
         String tempsdtsdt = String.valueOf(khachDangNhap.getSdt());
         sdtNguoiDat.setText(tempsdtsdt);
 
@@ -214,19 +229,29 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         gbc1.gridwidth = 2;
         JLabel diaChiLabel = new JLabel("                     ĐỊA CHỈ NHẬN HÀNG:");
         // diaChiLabel.setPreferredSize(new Dimension(0, 200));
-        diaChiLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        diaChiLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         giua.add(diaChiLabel, gbc1);
 
-        // Người nhận và số điện thoại cùng 1 hàng
         gbc1.gridy++;
         gbc1.gridwidth = 1;
         JPanel panelNguoiNhan = new JPanel(new GridLayout(1, 2, 10, 0));
         panelNguoiNhan.setBackground(Color.WHITE);
         tenNguoiNhan = new JTextField();
+        tenNguoiNhan.setFont(new Font("Arial", Font.PLAIN, 18));
+        TitledBorder border11 = BorderFactory.createTitledBorder("Họ và tên người nhận");
+        border11.setTitleFont(new Font("Arial", Font.PLAIN, 16));
+
+        tenNguoiNhan.setBorder(border11);
+        tenNguoiNhan.setPreferredSize(new Dimension(500, 60));
         tenNguoiNhan.setText(temp);
-        tenNguoiNhan.setBorder(BorderFactory.createTitledBorder("Họ và tên người nhận"));
+
         sdtNguoiNhan = new JTextField();
-        sdtNguoiNhan.setBorder(BorderFactory.createTitledBorder("SDT người nhận"));
+        sdtNguoiNhan.setFont(new Font("Arial", Font.PLAIN, 18));
+        sdtNguoiNhan.setPreferredSize(new Dimension(500, 60));
+        TitledBorder border33 = BorderFactory.createTitledBorder("SĐT người nhận");
+        border33.setTitleFont(new Font("Arial", Font.PLAIN, 16));
+
+        sdtNguoiNhan.setBorder(border33);
 
         String sdtnguoinhan = String.valueOf(khachDangNhap.getSdt());
         sdtNguoiNhan.setText(sdtnguoinhan);
@@ -235,7 +260,6 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         panelNguoiNhan.add(sdtNguoiNhan);
         giua.add(panelNguoiNhan, gbc1);
 
-        // 3 Combobox cùng 1 hàng
         gbc1.gridy++;
         JPanel panelDiaChi = new JPanel(new GridLayout(1, 3, 10, 0));
         Font comboBoxFont = new Font("Arial", Font.PLAIN, 16);
@@ -252,7 +276,6 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         phuongXa = new JComboBox<>(new String[] { "Chọn phường/xã" });
         phuongXa.setFont(comboBoxFont);
 
-        // Action listener cho tỉnh/thành phố
         tinhThanh.addActionListener(e -> {
             if (tinhThanh.getSelectedItem().equals("TP Hồ Chí Minh")) {
                 quanHuyen.removeAllItems();
@@ -288,7 +311,6 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
             phuongXa.addItem("Chọn phường/xã");
         });
 
-        // Action listener cho quận/huyện
         quanHuyen.addActionListener(e -> {
             phuongXa.removeAllItems();
             phuongXa.addItem("Chọn phường/xã");
@@ -349,7 +371,7 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
                         phuongXa.addItem("Phường 14");
                         phuongXa.addItem("Phường 15");
                         phuongXa.addItem("Phường 16");
-                        phuongXa.addItem("Phường 18");
+                        phuongXa.addItem("Phường 20");
 
                         break;
                     case "Quận 5":
@@ -677,34 +699,36 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
             }
         });
 
-        // Thêm các combo box vào panel
         panelDiaChi.add(tinhThanh);
         panelDiaChi.add(quanHuyen);
         panelDiaChi.add(phuongXa);
         giua.add(panelDiaChi, gbc1);
 
-        // Địa chỉ cụ thể
         gbc1.gridy++;
         gbc1.gridwidth = 2;
         diaChiCuThe = new JTextField();
-        diaChiCuThe.setBorder(BorderFactory.createTitledBorder("Nhập địa chỉ cụ thể (Số nhà + Tên đường)"));
+        diaChiCuThe.setPreferredSize(new Dimension(500, 60));
+        TitledBorder border = BorderFactory.createTitledBorder("Nhập địa chỉ cụ thể (Số nhà + Tên đường)");
+        border.setTitleFont(new Font("Arial", Font.PLAIN, 16));
+
+        diaChiCuThe.setBorder(border);
+
+        diaChiCuThe.setFont(new Font("Arial", Font.PLAIN, 18));
         giua.add(diaChiCuThe, gbc1);
 
-        // o hien thi san pham
         gbc1.gridy++;
 
         JPanel danhsach_sp_pn = new JPanel();
 
         danhsach_sp_pn.setLayout(new BoxLayout(danhsach_sp_pn, BoxLayout.Y_AXIS));
-        // danhsach_sp_pn.setPreferredSize(new Dimension(0, 1050));
+
         danhsach_sp_pn.setBackground(Color.WHITE);
 
         for (int i = 0; i < selectedProducts.size(); i++) {
             sanphamchonmua_DTO temp_medicine = selectedProducts.get(i);
 
-            JPanel rowsp = new JPanel(new GridLayout(1, 3)); // 1 dòng 3 cột bằng nhau
+            JPanel rowsp = new JPanel(new GridLayout(1, 3));
             rowsp.setBorder(new LineBorder(xam, 1));
-            // rowsp.setPreferredSize(new Dimension(500, ));
 
             JLabel tenthuoc = new JLabel(
                     "             " + (i + 1) + ")    " + temp_medicine.getTenthuoc(), SwingConstants.LEFT);
@@ -786,9 +810,9 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         JPanel totalPanel = new JPanel(new GridLayout(1, 2));
         totalPanel.setBackground(xamnhat);
         JLabel tt = new JLabel("Tổng tiền: ");
-        tt.setFont(new Font("Arial", Font.PLAIN, 14));
+        tt.setFont(new Font("Arial", Font.PLAIN, 16));
         cost = new JLabel("---");
-        cost.setFont(new Font("Arial", Font.PLAIN, 14));
+        cost.setFont(new Font("Arial", Font.PLAIN, 16));
         totalPanel.add(tt);
         totalPanel.add(cost);
         gbc2.gridy = 1;
@@ -798,9 +822,9 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         JPanel voucherPanel = new JPanel(new GridLayout(1, 2));
         voucherPanel.setBackground(xamnhat);
         JLabel vc = new JLabel("Giảm giá voucher: ");
-        vc.setFont(new Font("Arial", Font.PLAIN, 14));
+        vc.setFont(new Font("Arial", Font.PLAIN, 16));
         costvc = new JLabel("---");
-        costvc.setFont(new Font("Arial", Font.PLAIN, 14));
+        costvc.setFont(new Font("Arial", Font.PLAIN, 16));
         voucherPanel.add(vc);
         voucherPanel.add(costvc);
         gbc2.gridy = 2;
@@ -810,9 +834,9 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         JPanel tongspPanel = new JPanel(new GridLayout(1, 2));
         tongspPanel.setBackground(xamnhat);
         JLabel count = new JLabel("Tổng số sản phẩm: ");
-        count.setFont(new Font("Arial", Font.PLAIN, 14));
+        count.setFont(new Font("Arial", Font.PLAIN, 16));
         sosp = new JLabel("---");
-        sosp.setFont(new Font("Arial", Font.PLAIN, 14));
+        sosp.setFont(new Font("Arial", Font.PLAIN, 16));
         tongspPanel.add(count);
         tongspPanel.add(sosp);
         gbc2.gridy = 3;
@@ -822,10 +846,10 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         JPanel thanhtienPanel = new JPanel(new GridLayout(1, 2));
         thanhtienPanel.setBackground(xamnhat);
         JLabel thantienthantien = new JLabel("Thành tiền: ");
-        thantienthantien.setFont(new Font("Arial", Font.BOLD, 18));
+        thantienthantien.setFont(new Font("Arial", Font.BOLD, 20));
 
         costreal = new JLabel("---");
-        // costreal.setFont(new Font("Arial", Font.BOLD, 18));
+        // costreal.setFont(new Font("Arial", Font.BOLD, 20));
         costreal.setFont(new Font("Arial", Font.PLAIN, 17));
 
         thanhtienPanel.add(thantienthantien);
@@ -888,8 +912,6 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
             }
         });
 
-        // body.add(scrollpane_giua, BorderLayout.CENTER);
-
     }
 
     private void create_footer() {
@@ -911,11 +933,13 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
     }
 
     public void xacNhanThanhToan() {
-
         String madon = taoDonHang();
 
         if (madon != null) {
 
+            capNhatKho();
+
+            xoaTatCaSanPhamDaMuaTrongGio();
             updateSummary();
 
             selectedProducts.clear();
@@ -988,20 +1012,18 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         customer_DTO khachDangNhap = getKhachHangDangNhap();
 
         for (sanphamchonmua_DTO sp : selectedProducts) {
-            double thanhTienSanPham = sp.getDonGia() * sp.getSoLuong(); // Tính thành tiền cho sản phẩm
+            double thanhTienSanPham = sp.getDonGia() * sp.getSoLuong();
             tongtien += thanhTienSanPham;
 
             String macthd = orderDetailsDAO.taoMaCTHDMoi();
 
             String macthdnhap = cartDAO.laythongtinMacthdnhap(khachDangNhap.getMakh(), sp.getMathuoc());
 
-            // Kiểm tra xem macthdnhap có hợp lệ không
             if (macthdnhap == null) {
                 System.out.println("Không tìm thấy mã chi tiết hóa đơn nhập cho sản phẩm: " + sp.getMathuoc());
-                continue; // Bỏ qua sản phẩm này
+                continue;
             }
 
-            // Khởi tạo đối tượng order_details_DTO với đúng thứ tự tham số
             order_details_DTO ct = new order_details_DTO(
                     macthd,
                     madon,
@@ -1010,8 +1032,7 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
                     sp.getDonvi(),
                     sp.getDonGia(),
                     thanhTienSanPham,
-                    true // 8. tinhtrang
-            );
+                    true);
 
             orderDetailsDAO.themChiTietDonHang(ct);
         }
@@ -1038,6 +1059,36 @@ public class thanhtoan_GUI extends JFrame implements MouseListener, ActionListen
         cost.setText(fmTongtien + " đ"); // Hiển thị tổng tiền
         sosp.setText(String.valueOf(totalProducts)); // Hiển thị tổng số sản phẩm
         costreal.setText(fmTongtien + " đ"); // Hiển thị thành tiền (nếu cần)
+    }
+
+    public void xoaTatCaSanPhamDaMuaTrongGio() {
+        customer_DTO khachDangNhap = getKhachHangDangNhap();
+        String makh = khachDangNhap.getMakh();
+
+        for (sanphamchonmua_DTO sp : selectedProducts) {
+            String magh = cartDAO.laythongtinMaGH(makh, sp.getMathuoc()); // Hàm này bạn cần viết nếu chưa có
+            if (magh != null) {
+                new cartDAO().xoaSanPhamTrongGio(magh);
+            } else {
+                System.out.println("Không tìm thấy MaGH cho sản phẩm: " + sp.getMathuoc());
+            }
+        }
+    }
+
+    public void capNhatKho() {
+        for (sanphamchonmua_DTO sp : selectedProducts) {
+            String mathuoc = sp.getMathuoc();
+            int soLuongMua = sp.getSoLuong();
+            String donvi = sp.getDonvi();
+
+            String maton = khoDAO.layMaTonKho(mathuoc);
+            if (maton != null) {
+
+                khoDAO.truSoLuong(maton, soLuongMua, donvi);
+            } else {
+                System.out.println("Không tìm thấy mã tồn kho cho sản phẩm: " + mathuoc);
+            }
+        }
     }
 
     @Override

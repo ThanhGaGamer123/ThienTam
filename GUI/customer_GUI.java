@@ -70,6 +70,7 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
     }
 
     public void create(ArrayList<medicine_DTO> foundProductsFilter) {
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setTitle("Trang chủ - Nhà thuốc Thiện Tâm ");
         setSize(1280, 720);
         setResizable(true);
@@ -126,6 +127,10 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
     }
 
     public void createPanel_1() {
+
+        // p1.repaint();
+        // p1.revalidate();
+
         p1 = new JPanel();
         p1.setLayout(new BorderLayout());
         p1.setPreferredSize(new Dimension(1280, 90)); // Đặt chiều rộng bằng với frame
@@ -185,7 +190,7 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
 
             @Override
             public void mouseExited(MouseEvent e) {
-                logout.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+                logout.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
 
@@ -253,7 +258,7 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
 
             @Override
             public void mouseExited(MouseEvent e) {
-                search.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+                search.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
 
@@ -277,7 +282,7 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
 
             @Override
             public void mouseExited(MouseEvent e) {
-                cart.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+                cart.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
 
@@ -301,7 +306,7 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
 
             @Override
             public void mouseExited(MouseEvent e) {
-                user.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+                user.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
 
@@ -511,8 +516,8 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    chinhgiua.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
-                    main_center.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+                    chinhgiua.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    main_center.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     main_center.setBorder(BorderFactory.createLineBorder(xanhla, 1));
                 }
             });
@@ -579,18 +584,14 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
             double priceToDisplay = 0;
             String unitToDisplay = "";
 
-            // Định nghĩa chuẩn thứ tự đơn vị gốc
             String[] allUnits = { "hộp", "vỉ", "viên" };
 
             ArrayList<String> donviList = product.getDonvi();
             ArrayList<Double> giabanList = product.getGiaban();
 
-            // Tạo map <unit, price> cho chắc chắn đúng cặp
             Map<String, Double> unitPriceMap = new HashMap<>();
             for (int z = 0; z < donviList.size(); z++) {
                 String unit = donviList.get(z).trim().toLowerCase();
-
-                // Tìm index của đơn vị đó trong allUnits
                 int indexInAllUnits = -1;
                 for (int j = 0; j < allUnits.length; j++) {
                     if (allUnits[j].equals(unit)) {
@@ -1005,7 +1006,7 @@ public class customer_GUI extends JFrame implements MouseListener, ActionListene
 
                         @Override
                         public void mouseExited(MouseEvent e) {
-                            close_btn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Trở về mặc định
+                            close_btn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                         }
                     });
 

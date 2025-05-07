@@ -236,6 +236,7 @@ public class medicine_BUS {
         Image anh_scale = anh.getImage().getScaledInstance(khung_anh.getWidth(), khung_anh.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon anh_scaled = new ImageIcon(anh_scale);
         khung_anh.setIcon(anh_scaled);
+        System.out.println(advance.medIMG + mathuoc + ".png");
 
         ArrayList<String> giaban = advance.DoubleArrayListToStringArrayList(med.getGiaban());
         tf_giahop.setText(giaban.get(0));
@@ -346,7 +347,7 @@ public class medicine_BUS {
         khung_anh.setIcon(null);
     }
 
-    public static void uploadImage(JLabel khung_anh) {
+    public static void uploadImage(JLabel khung_anh, String mathuoc) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Chọn ảnh");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -359,7 +360,12 @@ public class medicine_BUS {
             File selectedFile = fileChooser.getSelectedFile();
             medicine_DAO medDAO = new medicine_DAO();
             ArrayList<medicine_DTO> temp = medDAO.selectAll();
-            String imgPath = advance.medIMG + "MTH" + advance.calculateID(temp.size()) + ".png";
+            String imgPath = new String();
+            if(mathuoc != null) {
+                imgPath = advance.medIMG + mathuoc + ".png";
+            }
+            else 
+                imgPath = advance.medIMG + "MTH" + advance.calculateID(temp.size()) + ".png";
             
             try {
                 Files.copy(selectedFile.toPath(), new File(imgPath).toPath(), StandardCopyOption.REPLACE_EXISTING);

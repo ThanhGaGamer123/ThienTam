@@ -447,7 +447,7 @@ public class medicineAdd_GUI extends JFrame {
         chon_anh.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                medicine_BUS.uploadImage(khung_anh);
+                medicine_BUS.uploadImage(khung_anh, null);
             }
         });
     }

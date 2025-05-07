@@ -41,6 +41,8 @@ public class trangCaNhan_GUI extends JFrame {
         this.khach = khach;
         this.khachCurrent = khachCurrent;
 
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         setTitle("Cá nhân");
         setSize(1280, 720);
         setLocationRelativeTo(null);
@@ -99,7 +101,7 @@ public class trangCaNhan_GUI extends JFrame {
 
         // ========= Body =========
         body = new JPanel();
-        body.setBackground(xam);
+        body.setBackground(linen);
         body.setPreferredSize(new Dimension(400, 400));
         body.setLayout(new BorderLayout());
         mainPanel.add(body, BorderLayout.CENTER);
@@ -126,7 +128,7 @@ public class trangCaNhan_GUI extends JFrame {
         tab1_center = new JPanel();
         tab1_center.setPreferredSize(new Dimension(0, 0));
         tab1_center.setLayout(new GridBagLayout());
-        tab1_center.setBackground(xam);
+        tab1_center.setBackground(linen);
         tab1.add(tab1_center, BorderLayout.CENTER);
 
         tab1_tren = new JPanel();
@@ -307,7 +309,6 @@ public class trangCaNhan_GUI extends JFrame {
                         return;
                     }
 
-                    // Gọi hàm cập nhật
                     DAO.customerDAO.capNhatThongtinKH(tenkh, sdt, email, makh);
                     JOptionPane.showMessageDialog(null, "Thông tin đã được cập nhật thành công.");
                 }

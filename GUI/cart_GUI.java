@@ -42,6 +42,7 @@ public class cart_GUI extends JFrame {
     private ArrayList<JRadioButton> checkboxes = new ArrayList<>();
 
     public cart_GUI(customer_GUI khach, customer_DTO khachCurrent) {
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.khach = khach;
         this.khachCurrent = khachCurrent;
         this.giohang = new cartArr();
@@ -276,9 +277,9 @@ public class cart_GUI extends JFrame {
     private void showSP_incart() {
         // refreshCart(khachCurrent.getMakh());
 
-        giua.removeAll(); // Xóa tất cả các thành phần hiện có trong panel giua
-        checkboxes.clear(); // Xóa danh sách checkboxes đã chọn
-        ArrayList<cart_DTO> danhsachSPtronggio = giohang.getA(); // Lấy danh sách sản phẩm từ giỏ hàng
+        giua.removeAll();
+        checkboxes.clear();
+        ArrayList<cart_DTO> danhsachSPtronggio = giohang.getA();
         System.out.println("Số sản phẩm trong giỏ: " + danhsachSPtronggio.size());
 
         JPanel pn_contain_btn = new JPanel();
@@ -290,9 +291,8 @@ public class cart_GUI extends JFrame {
         pn_contain_btn.setMaximumSize(fixedSize);
         pn_contain_btn.setMinimumSize(new Dimension(0, 20));
 
-        // Chỉ hiển thị nút "Chọn tất cả" nếu giỏ hàng không rỗng
         if (!danhsachSPtronggio.isEmpty()) {
-            // showSP_incart();
+
             JPanel nutChonTatCa = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 1));
             JButton select_all_btn = new JButton("Chọn tất cả");
             select_all_btn.setBackground(hong);
@@ -393,7 +393,7 @@ public class cart_GUI extends JFrame {
                     } else {
                         selectedProducts.removeIf(product -> product.getMathuoc().equals(c.getMathuoc()));
                     }
-                    updateTongTien(); // Cập nhật tổng tiền
+                    updateTongTien(); 
                 });
 
                 // ---- Cột 2: Tên thuốc ----
@@ -406,7 +406,7 @@ public class cart_GUI extends JFrame {
                 // ---- Cột 2.2: đơn vị ----
                 JPanel cotdonvi = new JPanel(new GridBagLayout());
                 cotdonvi.setOpaque(false);
-                JLabel donvi = new JLabel(c.getDonvi(), SwingConstants.LEFT); // Display the correct unit
+                JLabel donvi = new JLabel(c.getDonvi(), SwingConstants.LEFT); 
                 donvi.setPreferredSize(new Dimension(100, 50));
                 cotdonvi.add(donvi);
 
@@ -426,13 +426,13 @@ public class cart_GUI extends JFrame {
                             int newSL = Integer.parseInt(soluongnhap.getText());
                             if (newSL <= 0) {
                                 JOptionPane.showMessageDialog(null, "Số lượng phải lớn hơn 0.");
-                                soluongnhap.setText(String.valueOf(tempSL)); // Khôi phục giá trị cũ
+                                soluongnhap.setText(String.valueOf(tempSL)); 
                                 return;
                             }
                             if (checkbuy.isSelected()) {
                                 selectedProducts.stream()
                                         .filter(product -> product.getMathuoc().equals(c.getMathuoc()))
-                                        .forEach(product -> product.setSoLuong(newSL)); // Cập nhật số lượng
+                                        .forEach(product -> product.setSoLuong(newSL)); 
                             }
 
                             if (newSL != tempSL) {
@@ -440,12 +440,12 @@ public class cart_GUI extends JFrame {
                                 dao.capNhatSoLuong(c.getMagh(), newSL);
 
                                 giohang.readDatabase(khachCurrent.getMakh());
-                                updateTongTien(); // Cập nhật tổng tiền ngay sau khi thay đổi
+                                updateTongTien();
                             }
 
                         } catch (NumberFormatException ex) {
                             JOptionPane.showMessageDialog(null, "Số lượng nhập không hợp lệ!");
-                            soluongnhap.setText(String.valueOf(tempSL)); // Khôi phục giá trị cũ
+                            soluongnhap.setText(String.valueOf(tempSL)); 
                         }
                     }
                 });
@@ -469,7 +469,7 @@ public class cart_GUI extends JFrame {
                 JLabel donGiaLabel = new JLabel(formattedPrice, SwingConstants.LEFT);
                 cot4.add(donGiaLabel);
 
-                // Nút xóa
+        
                 ImageIcon icon_delete = new ImageIcon(advance.img + "\\img_xt\\icons8-waste-40.png");
                 Image img_delete = icon_delete.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
                 ImageIcon delete_btn = new ImageIcon(img_delete);
@@ -478,7 +478,7 @@ public class cart_GUI extends JFrame {
                 xoasp.setPreferredSize(new Dimension(40, 40));
                 cot4.add(xoasp);
 
-                // Sự kiện cho nút xóa
+               
                 xoasp.addActionListener(e -> {
                     int result = JOptionPane.showConfirmDialog(
                             null,
@@ -495,7 +495,10 @@ public class cart_GUI extends JFrame {
                             System.out.println("Giỏ hàng đã trống.");
                         }
 
-                        showSP_incart(); // Refresh giao diện
+                        giua.repaint();
+
+                        giua.revalidate();
+                        showSP_incart();
                         updateTongTien();
                         refreshCart(khachCurrent.getMakh());
                     }

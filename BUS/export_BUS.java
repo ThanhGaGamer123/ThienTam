@@ -450,7 +450,7 @@ public class export_BUS {
                                 for (order_DTO ord : ords) {
                                     table.addCell(new Paragraph(ord.getMadon()));
                                     table.addCell(new Paragraph(ord.getMakh() == null ? "Không có" : ord.getMakh()));
-                                    table.addCell(new Paragraph(ord.getManv()));
+                                    table.addCell(new Paragraph(ord.getManv() == null ? "Không có" : ord.getMakh()));
                                     table.addCell(new Paragraph(ord.getDiachicuthe() + ", " + ord.getPhuong()
                                             + ", " + ord.getQuan() + ", " + ord.getTinh()));
                                     table.addCell(new Paragraph(ord.getNgaydat()));
@@ -896,9 +896,12 @@ public class export_BUS {
                                 ArrayList<employee_DTO> emplist = employee_BUS.getAll();
                                 for (employee_DTO emp : emplist) {
                                     if (emp.getTinhtrang()) {
-                                        String dc = emp.getMasonha() + "," + emp.getDuong() + "," + emp.getPhuong()
-                                                + ","
-                                                + emp.getQuan() + "," + emp.getTinh();
+                                        String dc = new String();
+                                        if(emp.getMasonha() != null) {
+                                            dc = emp.getMasonha() + "," + emp.getDuong() + "," + emp.getPhuong()
+                                            + ","
+                                            + emp.getQuan() + "," + emp.getTinh();
+                                        }  else dc = "Không có";
                                         table.addCell(new Paragraph(emp.getManv()));
                                         table.addCell(new Paragraph(emp.getTennv()));
                                         table.addCell(new Paragraph(emp.getChucvu()));

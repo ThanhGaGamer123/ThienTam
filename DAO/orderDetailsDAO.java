@@ -1,6 +1,7 @@
 package DAO;
 
 import DTO.order_details_DTO;
+import advanceMethod.advance;
 import data.MyConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -81,7 +82,7 @@ public class orderDetailsDAO {
     }
 
     public static String taoMaCTHDMoi() {
-        String newMaCTHD = "CTHD001"; // Default if the table is empty
+        String newMaCTHD = "CTHD0001"; // Default if table is empty
         String sql = "SELECT TOP 1 mactdh FROM ChiTietDonHang ORDER BY CAST(SUBSTRING(mactdh, 5, LEN(mactdh) - 4) AS INT) DESC";
 
         try (Connection con = MyConnection.createConnection();
@@ -89,10 +90,11 @@ public class orderDetailsDAO {
 
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                String lastMaCTHD = rs.getString("mactdh"); // Example: "CTHD999"
+                String lastMaCTHD = rs.getString("mactdh"); // Example: "CTHD0009"
                 int num = Integer.parseInt(lastMaCTHD.substring(4)); // Get the numeric part
-                num++;
-                newMaCTHD = String.format("CTHD%03d", num); // Format to "CTHD002"
+                num++; // Increment
+                String soMoi = advance.calculateID(num); // Calculate padded number
+                newMaCTHD = "CTHD" + soMoi; // Combine into new ID
             }
 
         } catch (SQLException e) {
@@ -149,12 +151,12 @@ public class orderDetailsDAO {
     }
 
     public static void hienThiChiTietDonHang(String mahd, DefaultTableModel model) {
-        String sql = "SELECT CHITIETDONHANG.*, Thuoc.tenthuoc " +
+        String sql = "SELECT DISTINCT CHITIETDONHANG.*, THUOC.tenthuoc " +
                 "FROM CHITIETDONHANG " +
-                "JOIN GIOHANG ON GIOHANG.MACTHDNHAP = CHITIETDONHANG.MACTHDNHAP " +
-                "JOIN THUOC ON GIOHANG.MATHUOC = THUOC.MATHUOC " +
-                "JOIN donhang ON CHITIETDONHANG.madon = donhang.madon " +
-                "WHERE donhang.madon = ?";
+                "JOIN CHITIETHOADONNHAP ON CHITIETHOADONNHAP.macthdnhap = CHITIETDONHANG.macthdnhap " +
+                "JOIN DONHANG ON CHITIETDONHANG.madon = DONHANG.madon " +
+                "JOIN THUOC ON CHITIETHOADONNHAP.mathuoc = THUOC.mathuoc " +
+                "WHERE DONHANG.madon = ?";
 
         try (Connection con = MyConnection.createConnection();
                 PreparedStatement stmt = con.prepareStatement(sql)) {

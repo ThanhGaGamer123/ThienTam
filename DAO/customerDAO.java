@@ -30,7 +30,7 @@ public class customerDAO {
         return newMaKH;
     }
 
-    public static void themKhachhang(String tenkh, String email, String sdt, String masonha, String duong,
+    public void themKhachhang(String tenkh, String email, String sdt, String masonha, String duong,
             String phuong, String quan, String tinh, String password) {
 
         // Gọi hàm tạo mã khách hàng mới
