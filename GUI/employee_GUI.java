@@ -897,7 +897,7 @@ public class employee_GUI extends JFrame {
         themSell.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new orderAdd_GUI(modelCollect, nv, model);
+                new orderAdd_GUI(modelCollect, nv, model, modelMedic);
             }
         });
 

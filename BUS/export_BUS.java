@@ -32,6 +32,8 @@ import DAO.medicine_DAO;
 import DAO.orderSupply_DAO;
 import DAO.order_DAO;
 import DAO.order_details_DAO;
+import DAO.promotion_DAO;
+import DAO.promotion_details_DAO;
 import DTO.customer_DTO;
 import DTO.employee_DTO;
 import DTO.medicine_DTO;
@@ -39,6 +41,7 @@ import DTO.orderSupply_DTO;
 import DTO.order_DTO;
 import DTO.order_details_DTO;
 import DTO.promotion_DTO;
+import DTO.promotion_details_DTO;
 import DTO.store_DTO;
 import DTO.supplier_DTO;
 import advanceMethod.advance;
@@ -228,7 +231,8 @@ public class export_BUS {
                                         .setBackgroundColor(ColorConstants.GREEN);
 
                                 document.add(new Paragraph("Hóa Đơn Bán Hàng")
-                                        .setFont(font).setFontSize(14));
+                                        .setFont(font).setFontSize(14)
+                                        .setTextAlignment(TextAlignment.CENTER));
 
                                 document.add(new Paragraph("Thời gian: " + advance.currentTime())
                                         .setFont(font).setFontSize(12));
@@ -317,10 +321,11 @@ public class export_BUS {
                                     //lưu từng chi tiết đơn hàng
                                     // tiêu đề
                                     String[] headers = {
-                                            "Mã chi tiết đơn hàng", "Đơn vị", "Số lượng", "Đơn giá", "Thành tiền"
+                                            "Mã chi tiết đơn hàng", "Đơn vị", "Số lượng", "Đơn giá"
+                                            , "Mã khuyến mãi", "Thành tiền"
                                     };
 
-                                    Table table = new Table(UnitValue.createPercentArray(new float[]{1,1,1,1,1}));
+                                    Table table = new Table(UnitValue.createPercentArray(new float[]{1,1,1,1,1,1}));
                                     table.setFont(font2).setFontSize(12);
 
                                     for (String header : headers) {
@@ -341,6 +346,19 @@ public class export_BUS {
                                             table.addCell(new Paragraph(od.getDonvi()));
                                             table.addCell(new Paragraph(String.valueOf(od.getSl())));
                                             table.addCell(new Paragraph(String.valueOf(od.getDongia())));
+
+                                            //thêm mã khuyến mãi
+                                            Boolean flag = false;
+                                            ArrayList<promotion_details_DTO> prods = new promotion_details_DAO().selectAll();
+                                            for (promotion_details_DTO prod : prods) {
+                                                if(prod.getMadon().equals(ord.getMadon())) {
+                                                    table.addCell(new Paragraph(prod.getMakm()));
+                                                    flag = true;
+                                                }
+                                            }
+                                            if(!flag) 
+                                                table.addCell(new Paragraph("Không có"));
+
                                             table.addCell(new Paragraph(String.valueOf(od.getThanhtien())));
                                         }
                                     }

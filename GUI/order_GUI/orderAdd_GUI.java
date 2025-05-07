@@ -40,6 +40,8 @@ import BUS.medicine_BUS;
 import BUS.order_BUS;
 import BUS.order_details_BUS;
 import BUS.promotion_BUS;
+import DAO.medicineDAO;
+import DAO.medicine_DAO;
 import DTO.customer_DTO;
 import DTO.employee_DTO;
 import DTO.medicine_DTO;
@@ -50,7 +52,8 @@ import GUI.medicine_GUI.medicineSearch_GUI;
 import advanceMethod.advance;
 
 public class orderAdd_GUI extends JFrame {
-    public orderAdd_GUI(DefaultTableModel modelCollect, employee_DTO em, DefaultTableModel modelOrder) {
+    public orderAdd_GUI(DefaultTableModel modelCollect, employee_DTO em, 
+    DefaultTableModel modelOrder, DefaultTableModel modelMed) {
         this.setSize(1500, 800);
         this.setTitle("Lập hóa đơn");
         ImageIcon logo = new ImageIcon(advance.img+"logo.png");
@@ -1410,7 +1413,8 @@ public class orderAdd_GUI extends JFrame {
         finish.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!order_BUS.completeOrder(customer, em, tf_tongtien, ods, tf_km, modelOrder)) {
+                if(!order_BUS.completeOrder(customer, em, tf_tongtien, ods, tf_km, 
+                modelOrder, modelMed)) {
                     JOptionPane.showMessageDialog(null, 
                     "Danh sách mua thuốc đang rỗng!");
                 }
@@ -1501,6 +1505,6 @@ public class orderAdd_GUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        new orderAdd_GUI(null, null, null);
+        new orderAdd_GUI(null, null, null, null);
     }
 }

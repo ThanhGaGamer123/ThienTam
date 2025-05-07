@@ -150,7 +150,8 @@ public class order_BUS {
     }
 
     public static Boolean completeOrder(customer_DTO cus, employee_DTO em, JTextField tongtien, 
-    ArrayList<order_details_DTO> ods, JTextField adkm, DefaultTableModel modelOrder) {
+    ArrayList<order_details_DTO> ods, JTextField adkm, DefaultTableModel modelOrder,
+    DefaultTableModel modelMed) {
         if(!ods.isEmpty()) {
             //đơn hàng
             order_DTO ord = new order_DTO();
@@ -213,6 +214,7 @@ public class order_BUS {
             }
 
             loadDataByEmployee(modelOrder, em);
+            medicine_BUS.loadData(modelMed, true);
 
             return true;
         } else return false;
